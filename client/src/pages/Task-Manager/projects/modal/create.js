@@ -203,7 +203,7 @@ const Create = ({ modal, closeModal }) => {
                                         variant="info"
                                         type="submit"
                                         className="btn btn-sm  text-white pt-1 pb-1 mt-3 web_button ">
-                                        Submit
+                                        Add
                                     </Button>
                                 </Col>
                             </Row>

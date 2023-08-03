@@ -21,7 +21,7 @@ const Update = ({modal,closeModal}) => {
                         <Row>
                             <Col lg={7} className="text-end">
                                 <Modal.Title id="" className="mx-auto">
-                                    Create Project
+                                    Update Project Details
                                 </Modal.Title>
                             </Col>
                             <Col lg={5} className="text-end pt-2">
@@ -200,7 +200,7 @@ const Update = ({modal,closeModal}) => {
                                         variant="info"
                                         type="submit"
                                         className="btn btn-sm  text-white pt-1 pb-1 mt-3 web_button ">
-                                        Submit
+                                        Update
                                     </Button>
                                 </Col>
                             </Row>
