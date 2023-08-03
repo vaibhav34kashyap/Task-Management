@@ -1,38 +1,55 @@
 const MENU_ITEMS = [
-    { key: 'navigation', label: 'Navigation', isTitle: true },
+    // { key: 'navigation', label: 'Navigation', isTitle: true },
+
+    // {
+    //     key: 'dashboards',
+    //     label: 'Dashboards',
+    //     isTitle: false,
+    //     icon: 'uil-home-alt',
+    //     badge: { variant: 'success', text: '4' },
+    //     children: [
+    //         {
+    //             key: 'ds-analytics',
+    //             label: 'Analytics',
+    //             url: '/dashboard/analytics',
+    //             parentKey: 'dashboards',
+    //         },
+    //         {
+    //             key: 'ds-ecommerce',
+    //             label: 'Ecommerce',
+    //             url: '/dashboard/ecommerce',
+    //             parentKey: 'dashboards',
+    //         },
+    //         {
+    //             key: 'ds-project',
+    //             label: 'Projects',
+    //             url: '/dashboard/project',
+    //             parentKey: 'dashboards',
+    //         },
+    //         {
+    //             key: 'ds-ewallet',
+    //             label: 'E-Wallet',
+    //             url: '/dashboard/e-wallet',
+    //             parentKey: 'dashboards',
+    //             badge: { variant: 'danger', text: 'New' },
+    //         },
+    //     ],
+    // },
     {
-        key: 'dashboards',
-        label: 'Dashboards',
-        isTitle: false,
+
+        key: 'projectsss',
+        label: 'Projects',
+        url: '/projects',
         icon: 'uil-home-alt',
-        badge: { variant: 'success', text: '4' },
-        children: [
-            {
-                key: 'ds-analytics',
-                label: 'Analytics',
-                url: '/dashboard/analytics',
-                parentKey: 'dashboards',
-            },
-            {
-                key: 'ds-ecommerce',
-                label: 'Ecommerce',
-                url: '/dashboard/ecommerce',
-                parentKey: 'dashboards',
-            },
-            {
-                key: 'ds-project',
-                label: 'Projects',
-                url: '/dashboard/project',
-                parentKey: 'dashboards',
-            },
-            {
-                key: 'ds-ewallet',
-                label: 'E-Wallet',
-                url: '/dashboard/e-wallet',
-                parentKey: 'dashboards',
-                badge: { variant: 'danger', text: 'New' },
-            },
-        ],
+
+    },
+    {
+
+        key: 'boards',
+        label: 'Boards',
+        url: '/boards',
+        icon: 'uil-home-alt',
+
     },
     // { key: 'apps', label: 'Apps', isTitle: true },
     // {

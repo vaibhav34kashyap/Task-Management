@@ -30,14 +30,19 @@ const ForgetPassword2 = React.lazy(() => import('../pages/account2/ForgetPasswor
 const LockScreen2 = React.lazy(() => import('../pages/account2/LockScreen2'));
 
 // dashboard
+const Projects = React.lazy(() => import('../pages/Task-Manager/projects/projects'));
 const AnalyticsDashboard = React.lazy(() => import('../pages/dashboard/Analytics'));
 const EcommerceDashboard = React.lazy(() => import('../pages/dashboard/Ecommerce'));
 const ProjectDashboard = React.lazy(() => import('../pages/dashboard/Project'));
 const EWalletDashboard = React.lazy(() => import('../pages/dashboard/E-Wallet'));
 
+
+// Boards 
+const Boards = React.lazy(()=>import('../pages/Task-Manager/Boards'))
+
 // apps
 const CalendarApp = React.lazy(() => import('../pages/apps/Calendar'));
-const Projects = React.lazy(() => import('../pages/apps/Projects'));
+// const Projects = React.lazy(() => import('../pages/apps/Projects'));
 const ProjectDetail = React.lazy(() => import('../pages/apps/Projects/Detail'));
 const ProjectGannt = React.lazy(() => import('../pages/apps/Projects/Gantt'));
 const ProjectForm = React.lazy(() => import('../pages/apps/Projects/ProjectForm'));
@@ -247,15 +252,23 @@ const AllRoutes = () => {
                             path: 'ecommerce',
                             element: <LoadComponent component={EcommerceDashboard} />,
                         },
-                        {
-                            path: 'project',
-                            element: <LoadComponent component={ProjectDashboard} />,
-                        },
+                        // {
+                        //     path: 'project',
+                        //     element: <LoadComponent component={ProjectDashboard} />,
+                        // },
                         {
                             path: 'e-wallet',
                             element: <LoadComponent component={EWalletDashboard} />,
                         },
                     ],
+                },
+                {
+                    path:"projects",
+                    element: <LoadComponent component={Projects} />,
+                },
+                {
+                    path:"boards",
+                    element: <LoadComponent component={Boards} />,
                 },
                 {
                     path: 'apps',
