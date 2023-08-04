@@ -21,7 +21,8 @@ import avatar1 from '../assets/images/users/avatar-2.jpg';
 import avatar2 from '../assets/images/users/avatar-4.jpg';
 import logoSmDark from '../assets/images/logo_sm_dark.png';
 import logoSmLight from '../assets/images/logo_sm.png';
-import logo from '../assets/images/logo-light.png';
+// import logo from '../assets/images/logo-light.png';
+import logoImg from '../assets/images/logo/rowthtech.jpg';
 
 //constants
 import * as layoutConstants from '../constants/layout';
@@ -172,12 +173,12 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
     return (
         <>
-            <div className={classNames('navbar-custom', navbarCssClasses)}>
+            <div className={classNames('stom', navbarCssClasses)}>
                 <div className={containerCssClasses}>
                     {!hideLogo && (
                         <Link to="/" className="topnav-logo">
                             <span className="topnav-logo-lg">
-                                <img src={logo} alt="logo" height="16" />
+                                <img src={logoImg} alt="logo" height="30" />
                             </span>
                             <span className="topnav-logo-sm">
                                 <img src={topbarDark ? logoSmLight : logoSmDark} alt="logo" height="16" />

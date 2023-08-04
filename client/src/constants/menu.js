@@ -36,20 +36,40 @@ const MENU_ITEMS = [
     //     ],
     // },
     {
-
         key: 'projectsss',
         label: 'Projects',
         url: '/projects',
         icon: 'uil-home-alt',
-
     },
     {
-
         key: 'boards',
         label: 'Boards',
         url: '/boards',
         icon: 'uil-home-alt',
-
+    },
+    {
+        key: 'allmillstone',
+        label: 'All-MillStone',
+        url: '/allmillstones',
+        icon: 'uil-home-alt',
+    },
+    {
+        key: 'allsprint',
+        label: 'All Sprint',
+        url: '/allsprint',
+        icon: 'uil-home-alt',
+    },
+    {
+        key: 'alluser',
+        label: 'All Users',
+        url: '/alluser',
+        icon: 'uil-home-alt',
+    },
+    {
+        key: 'inviteuser',
+        label: 'Invite Users',
+        url: '/inviteUser',
+        icon: 'uil-home-alt',
     },
     // { key: 'apps', label: 'Apps', isTitle: true },
     // {

@@ -11,6 +11,7 @@ import VerticalLayout from '../layouts/Vertical';
 import DetachedLayout from '../layouts/Detached';
 import HorizontalLayout from '../layouts/Horizontal';
 import FullLayout from '../layouts/Full';
+import All_Sprint from '../pages/Task-Manager/All-Sprint';
 
 // lazy load all the views
 
@@ -36,9 +37,20 @@ const EcommerceDashboard = React.lazy(() => import('../pages/dashboard/Ecommerce
 const ProjectDashboard = React.lazy(() => import('../pages/dashboard/Project'));
 const EWalletDashboard = React.lazy(() => import('../pages/dashboard/E-Wallet'));
 
+// Boards
+const Boards = React.lazy(() => import('../pages/Task-Manager/Boards'));
 
-// Boards 
-const Boards = React.lazy(()=>import('../pages/Task-Manager/Boards'))
+// AllMillStone
+const AllMillStone = React.lazy(() => import('../pages/Task-Manager/All-Millstones'));
+
+// AllSprint
+const AllSprint = React.lazy(() => import('../pages/Task-Manager/All-Sprint'));
+
+// AllUsers
+const AllUsers = React.lazy(() => import('../pages/Task-Manager/AllUsers'));
+
+// InviteUsers
+const InviteUsers = React.lazy(() => import('../pages/Task-Manager/inviteUser'));
 
 // apps
 const CalendarApp = React.lazy(() => import('../pages/apps/Calendar'));
@@ -263,12 +275,28 @@ const AllRoutes = () => {
                     ],
                 },
                 {
-                    path:"projects",
+                    path: 'projects',
                     element: <LoadComponent component={Projects} />,
                 },
                 {
-                    path:"boards",
+                    path: 'boards',
                     element: <LoadComponent component={Boards} />,
+                },
+                {
+                    path: 'allmillstones',
+                    element: <LoadComponent component={AllMillStone} />,
+                },
+                {
+                    path: 'allsprint',
+                    element: <LoadComponent component={AllSprint} />,
+                },
+                {
+                    path: 'alluser',
+                    element: <LoadComponent component={AllUsers} />,
+                },
+                {
+                    path: 'inviteuser',
+                    element: <LoadComponent component={InviteUsers} />,
                 },
                 {
                     path: 'apps',
