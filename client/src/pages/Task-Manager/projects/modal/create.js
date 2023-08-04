@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
+import { addProject } from '../../../../redux/projects/action';
+import ToastHandle from '../../../../constants/toaster/toaster'
 const Create = ({ modal, closeModal }) => {
+    const dispatch = useDispatch();
+    const store = useSelector((state) => state);
     const {
         register,
         handleSubmit,
@@ -11,10 +16,26 @@ const Create = ({ modal, closeModal }) => {
         watch,
         reset,
         formState: { errors },} = useForm();
-    const onSubmit = () => {};
-    useEffect(() => {
+    const onSubmit = (data) => {
+        let body={
+            projectName : data?.projectName,
+            clientName: data?.clientName,
+            projectAccess: data?.access,
+            key: data?.key,
+            startDate: data?.startDate,
+            endDate: data?.endDate,
+            CompilationDate: data?.expectedEndDate,
+            projectType: data?.projecttype,
+            technology: data?.technology,
+            projectIcon: data?.uploadicons[0],
+        }
+console.log(data,"bbb")
+        dispatch(addProject(body))
+    };
+    useEffect(() => {        
       reset()
     }, [modal])
+    
     
     return (
         <>
@@ -77,9 +98,9 @@ const Create = ({ modal, closeModal }) => {
                                         </Form.Label>
                                         <Form.Select {...register('access', { required: true })}>
                                             <option>Choose an access level </option>
-                                            <option>Private</option>
-                                            <option>Limited</option>
-                                            <option>Open</option>
+                                            <option value="0">Private</option>
+                                            <option value="1">Limited</option>
+                                            <option value="2">Open</option>
                                            
                                         </Form.Select>
                                         {errors.access?.type === 'required' && (
@@ -158,8 +179,8 @@ const Create = ({ modal, closeModal }) => {
                                         </Form.Label>
                                         <Form.Select {...register('projecttype', { required: true })}>
                                             <option>Choose an Project Type </option>
-                                            <option>T&M</option>
-                                            <option>Fixed</option>
+                                            <option value="T&M">T&M</option>
+                                            <option value="Fixed">Fixed</option>
                                         </Form.Select>
                                         {errors.projecttype?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
@@ -176,8 +197,8 @@ const Create = ({ modal, closeModal }) => {
                                         </Form.Label>
                                         <Form.Select {...register('technology', { required: true })}>
                                             <option>Choose Technology</option>
-                                            <option>Web</option>
-                                            <option>Mobile</option>
+                                            <option value="Web">Web</option>
+                                            <option value="Mobile">Mobile</option>
                                         </Form.Select>
                                         {errors.technology?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>

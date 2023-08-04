@@ -23,6 +23,7 @@ const Projects = () => {
     const closeupdatemodal = () => {
         setOpenEditModal(false);
     };
+    
     return (
         <>
             <div>
