@@ -73,7 +73,7 @@ const Projects = () => {
                                         <Row>
                                             <Col>
                                                 <p className="action-icon m-0 p-0 ">
-                                                <Link to="">
+                                                <Link to="/projects/546754356754">
                                                     <i className="mdi mdi-eye m-0 p-0"></i>
                                                      </Link>
                                                 </p>

@@ -39,6 +39,7 @@ const EWalletDashboard = React.lazy(() => import('../pages/dashboard/E-Wallet'))
 
 // Boards 
 const Boards = React.lazy(()=>import('../pages/Task-Manager/Boards'))
+const MileStone = React.lazy(()=>import('../pages/Task-Manager/projects/milestone/milestone'))
 
 // apps
 const CalendarApp = React.lazy(() => import('../pages/apps/Calendar'));
@@ -265,6 +266,10 @@ const AllRoutes = () => {
                 {
                     path:"projects",
                     element: <LoadComponent component={Projects} />,
+                },
+                {
+                    path:"projects/:id",
+                    element: <LoadComponent component={MileStone} />,
                 },
                 {
                     path:"boards",
