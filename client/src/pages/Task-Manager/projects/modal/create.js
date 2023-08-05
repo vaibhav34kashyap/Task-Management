@@ -9,6 +9,8 @@ import ToastHandle from '../../../../constants/toaster/toaster'
 const Create = ({ modal, closeModal }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    const errorhandel = store?.addProject
+    
     const {
         register,
         handleSubmit,
@@ -27,14 +29,26 @@ const Create = ({ modal, closeModal }) => {
             CompilationDate: data?.expectedEndDate,
             projectType: data?.projecttype,
             technology: data?.technology,
-            projectIcon: data?.uploadicons[0],
+            // projectIcon: data?.uploadicons[0],
         }
 console.log(data,"bbb")
         dispatch(addProject(body))
     };
-    useEffect(() => {        
+    useEffect(() => {  
+        if (errorhandel?.data?.status == 200) {
+            ToastHandle('success', 'Successfully added');
+        } else if (errorhandel?.data?.status == 400) {
+            ToastHandle('error', errorhandel?.data?.message);
+        } 
+        else if (errorhandel?.data?.status == 500) {
+            ToastHandle('error', errorhandel?.data?.message);
+        } 
+        closeModal()
+    }, [errorhandel])
+    useEffect(() => {
       reset()
     }, [modal])
+    
     
     
     return (
@@ -210,7 +224,7 @@ console.log(data,"bbb")
                                         <Form.Label>
                                             Upload Icons <span className="text-danger">*</span>:
                                         </Form.Label>
-                                        <Form.Control type="file" {...register('uploadicons', { required: true })} />
+                                        <Form.Control type="file" {...register('uploadicons', { required: false })} />
                                         {errors.uploadicons?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
                                         )}

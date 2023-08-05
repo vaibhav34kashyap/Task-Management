@@ -3,19 +3,61 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
+import { updateProject } from '../../../../redux/projects/action';
+import {useDispatch,useSelector} from "react-redux"
 
-const Update = ({modal,closeModal}) => {
+const Update = ({ modal, closeModal, editData }) => {
+    const dispatch = useDispatch()
+    const store = useSelector(state=>state)
     const {
         register,
         handleSubmit,
         control,
         watch,
         reset,
-        formState: { errors },} = useForm();
-    const onSubmit = () => {};
-  return (
-    <>
-     <Modal show={modal} onHide={closeModal} size="lg">
+        formState: { errors },
+    } = useForm();
+    
+    const handleDate = (data) => {
+        let date = new Date(data);
+        let year = date.toLocaleString('default', { year: 'numeric' });
+        let month = date.toLocaleString('default', { month: '2-digit' });
+        let day = date.toLocaleString('default', { day: '2-digit' });
+        let formattedDate = year + '-' + month + '-' + day;
+        return formattedDate;
+    };
+    useEffect(() => {
+        reset({
+            projectName: editData?.projectName,
+            clientName: editData?.clientName,
+            access: editData?.projectAccess,
+            key: editData?.key,
+            startDate: handleDate(editData?.startDate),
+            endDate:handleDate( editData?.endDate),
+            expectedEndDate: handleDate(editData?.CompilationDate),
+            projecttype: editData?.projectType,
+            technology: editData?.technology,
+        });
+    }, [modal]);
+    console.log(editData, 'pppppp');
+    const onSubmit = (data) => {
+        let body = {
+            _id:editData?._id,
+            projectName:data?.projectName,
+            projectAccess:data?.access,
+            startDate:data?.startDate,
+            endDate:data?.endDate,
+            CompilationDate:data?.expectedEndDate,
+            clientName:data?.clientName,
+            projectType:data?.projecttype,
+            technology:data?.technology,
+            key:data?.key
+        }
+        dispatch(updateProject(body))
+    };
+    return (
+        <>
+            <Modal show={modal} onHide={closeModal} size="lg">
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
@@ -34,7 +76,7 @@ const Update = ({modal,closeModal}) => {
                     <Card className="p-3">
                         <Form onSubmit={handleSubmit(onSubmit)}>
                             <Row>
-                                <Col lg={6}>
+                                <Col lg={6}> 
                                     <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                         <Form.Label>
                                             Project Name <span className="text-danger">*</span>:
@@ -74,10 +116,9 @@ const Update = ({modal,closeModal}) => {
                                         </Form.Label>
                                         <Form.Select {...register('access', { required: true })}>
                                             <option>Choose an access level </option>
-                                            <option>Private</option>
-                                            <option>Limited</option>
-                                            <option>Open</option>
-                                           
+                                            <option value="0">Private</option>
+                                            <option value="1">Limited</option>
+                                            <option value="2"> Open</option>
                                         </Form.Select>
                                         {errors.access?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
@@ -155,8 +196,8 @@ const Update = ({modal,closeModal}) => {
                                         </Form.Label>
                                         <Form.Select {...register('projecttype', { required: true })}>
                                             <option>Choose an Project Type </option>
-                                            <option>T&M</option>
-                                            <option>Fixed</option>
+                                            <option value="T&M">T&M</option>
+                                            <option value="Fixed">Fixed</option>
                                         </Form.Select>
                                         {errors.projecttype?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
@@ -173,8 +214,8 @@ const Update = ({modal,closeModal}) => {
                                         </Form.Label>
                                         <Form.Select {...register('technology', { required: true })}>
                                             <option>Choose Technology</option>
-                                            <option>Web</option>
-                                            <option>Mobile</option>
+                                            <option Value="Web">Web</option>
+                                            <option Value="Mobile">Mobile</option>
                                         </Form.Select>
                                         {errors.technology?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
@@ -186,7 +227,7 @@ const Update = ({modal,closeModal}) => {
                                         <Form.Label>
                                             Upload Icons <span className="text-danger">*</span>:
                                         </Form.Label>
-                                        <Form.Control type="file" {...register('uploadicons', { required: true })} />
+                                        <Form.Control type="file" {...register('uploadicons', { required: false })} />
                                         {errors.uploadicons?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
                                         )}
@@ -208,8 +249,8 @@ const Update = ({modal,closeModal}) => {
                     </Card>
                 </Modal.Body>
             </Modal>
-    </>
-  )
-}
+        </>
+    );
+};
 
-export default Update
+export default Update;

@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Button, Col, Form, Card, Table, CloseButton } from 'react-bootstrap';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Create from './modal/create';
 import Update from './modal/update';
+import { getAllProjects } from '../../../redux/projects/action';
+import { useDispatch, useSelector } from 'react-redux';
+import moment from "moment";
 const Projects = () => {
+    const store = useSelector((state) => state);
     const [openModal, setOpenModal] = useState(false);
+    const [render, setRender] = useState(false);
+    const dispatch = useDispatch();
+
     const [openEditModal, setOpenEditModal] = useState(false);
     const [deletemodal, setDeleteModal] = useState(false);
+    const [editData, setEditData] = useState();
     const handeldelete = () => {
         setDeleteModal(true);
     };
@@ -17,13 +25,18 @@ const Projects = () => {
     const closeModal = () => {
         setOpenModal(false);
     };
-    const handelUpdate = () => {
+    const handelUpdate = (data) => {
+        setEditData(data);
         setOpenEditModal(true);
+        
     };
     const closeupdatemodal = () => {
         setOpenEditModal(false);
     };
-    
+    useEffect(() => {
+        dispatch(getAllProjects());
+    }, [render]);
+
     return (
         <>
             <div>
@@ -53,51 +66,54 @@ const Projects = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr className="align-middle">
-                                    <th scope="row"> 1</th>
-                                    <td className="cp">
-                                        <span className="namelink"> Shivam </span>
-                                    </td>
-                                    <td className="w-20">
-                                        <span className="namelink"> Neha</span>
-                                    </td>
-                                    <td>
-                                        <span className="namelink"> Fixed Type</span>
-                                    </td>
-                                    <td>
-                                        <span className="namelink"> 2-04-2023</span>
-                                    </td>
-                                    <td>
-                                        <span className="namelink"> 2-06-2023</span>
-                                    </td>
-                                    <td>
-                                        <Row>
-                                            <Col>
-                                                <p className="action-icon m-0 p-0 ">
-                                                <Link to="/projects/546754356754">
-                                                    <i className="mdi mdi-eye m-0 p-0"></i>
-                                                     </Link>
-                                                </p>
-                                                <p className="action-icon m-0 p-0  ">
-                                                    
-                                                        <i className="uil-edit-alt m-0 p-0" onClick={handelUpdate}></i>
-                                                   
-                                                </p>
-                                                <p className="action-icon m-0 p-0  ">
-                                                    <i className="mdi mdi-delete m-0 p-0" onClick={handeldelete}></i>
-                                                </p>
-                                               
-                                            </Col>
-                                        </Row>
-                                    </td>
-                                </tr>
+                                {store?.getProject?.data?.project?.map((ele, ind) => {
+                                    return (
+                                    <tr className="align-middle">
+                                        <th scope="row">{ind+1}</th>
+                                        <td className="cp">
+                                            <span className="namelink"> {ele?.projectName} </span>
+                                        </td>
+                                        <td className="w-20">
+                                            <span className="namelink"> {ele?.clientName}</span>
+                                        </td>
+                                        <td>
+                                            <span className="namelink"> {ele?.projectType}</span>
+                                        </td>
+                                        <td>
+                                            <span className="namelink">{moment(ele?.startDate).format('L')}</span>
+                                        </td>
+                                        <td>
+                                            <span className="namelink"> {moment(ele?.endDate).format('L')}</span>
+                                        </td>
+                                        <td>
+                                            <Row>
+                                                <Col>
+                                                    <p className="action-icon m-0 p-0 ">
+                                                        <Link to="/projects/546754356754">
+                                                            <i className="mdi mdi-eye m-0 p-0"></i>
+                                                        </Link>
+                                                    </p>
+                                                    <p className="action-icon m-0 p-0  ">
+                                                        <i className="uil-edit-alt m-0 p-0" onClick={()=>{handelUpdate(ele)}}></i>
+                                                    </p>
+                                                    <p className="action-icon m-0 p-0  ">
+                                                        <i
+                                                            className="mdi mdi-delete m-0 p-0"
+                                                            onClick={handeldelete}></i>
+                                                    </p>
+                                                </Col>
+                                            </Row>
+                                        </td>
+                                    </tr>
+                                    )
+                                })}
                             </tbody>
                         </Table>
                     </Card.Body>
                 </Card>
 
                 <Create modal={openModal} closeModal={closeModal} />
-                <Update modal={openEditModal} closeModal={closeupdatemodal} />
+                <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData}  />
                 {/* delete modal */}
                 <Modal show={deletemodal} onHide={() => setDeleteModal(false)}>
                     <Row>
