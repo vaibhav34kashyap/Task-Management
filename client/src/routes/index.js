@@ -42,6 +42,7 @@ const Boards = React.lazy(() => import('../pages/Task-Manager/Boards'));
 
 // AllMillStone
 const AllMillStone = React.lazy(() => import('../pages/Task-Manager/All-Millstones'));
+const MileStone = React.lazy(() => import('../pages/Task-Manager/projects/milestone/milestone'));
 
 // AllSprint
 const AllSprint = React.lazy(() => import('../pages/Task-Manager/All-Sprint'));
@@ -277,6 +278,10 @@ const AllRoutes = () => {
                 {
                     path: 'projects',
                     element: <LoadComponent component={Projects} />,
+                },
+                {
+                    path: 'projects/:id',
+                    element: <LoadComponent component={MileStone} />,
                 },
                 {
                     path: 'boards',

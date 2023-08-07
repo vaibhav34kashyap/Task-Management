@@ -183,7 +183,7 @@ const TopbarSearch = (props: TopbarSearchProps): React$Element<any> => {
 
     return (
         <>
-            <Select
+            {/* <Select
                 {...props}
                 components={{ Control, IndicatorsContainer, MenuList }}
                 placeholder={'Search...'}
@@ -197,7 +197,7 @@ const TopbarSearch = (props: TopbarSearchProps): React$Element<any> => {
                 name="search-app"
                 className="app-search dropdown"
                 classNamePrefix="react-select"
-            />
+            /> */}
         </>
     );
 };

@@ -21,8 +21,7 @@ import avatar1 from '../assets/images/users/avatar-2.jpg';
 import avatar2 from '../assets/images/users/avatar-4.jpg';
 import logoSmDark from '../assets/images/logo_sm_dark.png';
 import logoSmLight from '../assets/images/logo_sm.png';
-// import logo from '../assets/images/logo-light.png';
-import logoImg from '../assets/images/logo/rowthtech.jpg';
+import logo from '../assets/images/logo-light.png';
 
 //constants
 import * as layoutConstants from '../constants/layout';
@@ -173,12 +172,12 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
     return (
         <>
-            <div className={classNames('stom', navbarCssClasses)}>
+            <div className={classNames('navbar-custom', navbarCssClasses)}>
                 <div className={containerCssClasses}>
                     {!hideLogo && (
                         <Link to="/" className="topnav-logo">
                             <span className="topnav-logo-lg">
-                                <img src={logoImg} alt="logo" height="30" />
+                                <img src={logo} alt="logo" height="16" />
                             </span>
                             <span className="topnav-logo-sm">
                                 <img src={topbarDark ? logoSmLight : logoSmDark} alt="logo" height="16" />
@@ -190,15 +189,15 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                         <li className="notification-list topbar-dropdown d-xl-none">
                             <SearchDropdown />
                         </li>
-                        <li className="dropdown notification-list topbar-dropdown d-none d-lg-block">
+                        {/* <li className="dropdown notification-list topbar-dropdown d-none d-lg-block">
                             <LanguageDropdown />
-                        </li>
-                        <li className="dropdown notification-list">
+                        </li> */}
+                        {/* <li className="dropdown notification-list">
                             <NotificationDropdown notifications={Notifications} />
-                        </li>
-                        <li className="dropdown notification-list d-none d-sm-inline-block">
+                        </li> */}
+                        {/* <li className="dropdown notification-list d-none d-sm-inline-block">
                             <AppsDropdown />
-                        </li>
+                        </li> */}
                         <li className="notification-list">
                             <button
                                 className="nav-link dropdown-toggle end-bar-toggle arrow-none btn btn-link shadow-none"
@@ -216,14 +215,14 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                         </li>
                     </ul>
 
-                    {/* toggle for vertical layout */}
+                    {/* {/ toggle for vertical layout /} */}
                     {(layoutType === layoutConstants.LAYOUT_VERTICAL || layoutType === layoutConstants.LAYOUT_FULL) && (
                         <button className="button-menu-mobile open-left" onClick={handleLeftMenuCallBack}>
                             <i className="mdi mdi-menu" />
                         </button>
                     )}
 
-                    {/* toggle for horizontal layout */}
+                    {/* {/ toggle for horizontal layout /} */}
                     {layoutType === layoutConstants.LAYOUT_HORIZONTAL && (
                         <Link
                             to="#"
@@ -237,7 +236,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                         </Link>
                     )}
 
-                    {/* toggle for detached layout */}
+                    {/* {/ toggle for detached layout /} */}
                     {layoutType === layoutConstants.LAYOUT_DETACHED && (
                         <Link to="#" className="button-menu-mobile disable-btn" onClick={handleLeftMenuCallBack}>
                             <div className="lines">
