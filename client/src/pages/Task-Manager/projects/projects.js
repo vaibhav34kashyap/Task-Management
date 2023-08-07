@@ -6,6 +6,7 @@ import Create from './modal/create';
 import Update from './modal/update';
 import { getAllProjects } from '../../../redux/projects/action';
 import { useDispatch, useSelector } from 'react-redux';
+import MainLoader from '../../../constants/Loader/loader';
 import moment from "moment";
 const Projects = () => {
     const store = useSelector((state) => state);
@@ -16,13 +17,17 @@ const Projects = () => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [deletemodal, setDeleteModal] = useState(false);
     const [editData, setEditData] = useState();
+    const getProjectList = store?.getProject
     const handeldelete = () => {
         setDeleteModal(true);
     };
     const handelCreate = () => {
         setOpenModal(true);
     };
-    const closeModal = () => {
+    const closeModal = (val) => {
+        if (val == "render") {
+            setRender(!render);
+        }
         setOpenModal(false);
     };
     const handelUpdate = (data) => {
@@ -30,7 +35,10 @@ const Projects = () => {
         setOpenEditModal(true);
         
     };
-    const closeupdatemodal = () => {
+    const closeupdatemodal = (val) => {
+        if (val == "render") {
+            setRender(!render);
+        }
         setOpenEditModal(false);
     };
     useEffect(() => {
@@ -47,12 +55,12 @@ const Projects = () => {
                                 <h4 className="header-title heading_data"> Projects</h4>
                             </div>
                             <div className="col-6 d-flex align-items-center justify-content-end pe-0">
-                                <Button className="web_button" variant="info" onClick={handelCreate}>
+                                <Button className="web_button" variant="info" onClick={()=>{handelCreate()}}>
                                     Add Projects
                                 </Button>
                             </div>
                         </div>
-
+{getProjectList?.loading ?(<><MainLoader/></>):(
                         <Table className="mb-0 add_Color_font" striped>
                             <thead>
                                 <tr>
@@ -108,7 +116,7 @@ const Projects = () => {
                                     )
                                 })}
                             </tbody>
-                        </Table>
+                        </Table>)}
                     </Card.Body>
                 </Card>
 

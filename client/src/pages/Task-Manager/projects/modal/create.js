@@ -6,11 +6,12 @@ import { useForm } from 'react-hook-form';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 import { addProject } from '../../../../redux/projects/action';
 import ToastHandle from '../../../../constants/toaster/toaster'
+import MainLoader from '../../../../constants/Loader/loader';
 const Create = ({ modal, closeModal }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const errorhandel = store?.addProject
-    
+    const loaderhandel = store?.addProject
     const {
         register,
         handleSubmit,
@@ -37,13 +38,14 @@ console.log(data,"bbb")
     useEffect(() => {  
         if (errorhandel?.data?.status == 200) {
             ToastHandle('success', 'Successfully added');
+            closeModal("render")
         } else if (errorhandel?.data?.status == 400) {
             ToastHandle('error', errorhandel?.data?.message);
         } 
         else if (errorhandel?.data?.status == 500) {
             ToastHandle('error', errorhandel?.data?.message);
         } 
-        closeModal()
+    
     }, [errorhandel])
     useEffect(() => {
       reset()
@@ -69,7 +71,8 @@ console.log(data,"bbb")
                     </Col>
                 </Row>
                 <Modal.Body className="py-0">
-                    <Card className="p-3">
+{loaderhandel?.loading?(<><MainLoader/></>):
+                   (<Card className="p-3">
                         <Form onSubmit={handleSubmit(onSubmit)}>
                             <Row>
                                 <Col lg={6}>
@@ -243,7 +246,7 @@ console.log(data,"bbb")
                                 </Col>
                             </Row>
                         </Form>
-                    </Card>
+                    </Card>)}
                 </Modal.Body>
             </Modal>
         </>
