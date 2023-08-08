@@ -215,14 +215,14 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                         </li>
                     </ul>
 
-                    {/* toggle for vertical layout */}
+                    {/* {/ toggle for vertical layout /} */}
                     {(layoutType === layoutConstants.LAYOUT_VERTICAL || layoutType === layoutConstants.LAYOUT_FULL) && (
                         <button className="button-menu-mobile open-left" onClick={handleLeftMenuCallBack}>
                             <i className="mdi mdi-menu" />
                         </button>
                     )}
 
-                    {/* toggle for horizontal layout */}
+                    {/* {/ toggle for horizontal layout /} */}
                     {layoutType === layoutConstants.LAYOUT_HORIZONTAL && (
                         <Link
                             to="#"
@@ -236,7 +236,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                         </Link>
                     )}
 
-                    {/* toggle for detached layout */}
+                    {/* {/ toggle for detached layout /} */}
                     {layoutType === layoutConstants.LAYOUT_DETACHED && (
                         <Link to="#" className="button-menu-mobile disable-btn" onClick={handleLeftMenuCallBack}>
                             <div className="lines">

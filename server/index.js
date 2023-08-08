@@ -38,6 +38,8 @@ app.use("/recenttask", recentTaskRoute);
 app.use("/searchuser", searchUserRoute);
 app.use("/milestone", milestoneRoute);
 app.use("/roles", rolesRoute);
+
+mongoose.set('strictQuery', false);
 mongoose.connect(
  process.env.MONGO_URI,
   {

@@ -100,8 +100,10 @@ const deleteMilestone = async (req, res) => {
     // }
 
     try {
-        const _id = req.body._id
-        let result = await milestoneModel.findByIdAndUpdate({ _id: _id }, { deleteStatus: false });
+        // const _id = req.body._id
+        console.log(req.params.id,"====")
+        let result = await milestoneModel.findByIdAndUpdate({ _id: req.params.id }, { deleteStatus: false });
+        console.log(result,"===working here===")
         if (result) {
             return res.status(200).json({ status: '200', message: 'Milestone Deleted' });
         } else {

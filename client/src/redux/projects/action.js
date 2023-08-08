@@ -14,3 +14,11 @@ export const updateProject = (data): AuthAction => ({
     type: ProjectTypes.UPDATE_PROJECT_DETAILS,
     payload: data
 })
+export const deleteProject = (data): AuthAction => ({
+    type: ProjectTypes.DELETE_PROJECT_DETAILS,
+    payload: data
+})
+export const getProjectsById= (data): AuthAction => ({
+    type: ProjectTypes. GET_PROJECT_BY_ID,
+    payload: data
+})

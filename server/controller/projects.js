@@ -20,7 +20,7 @@ const getProjectById = async (req, res) => {
 
     try {
         const _id = req.body._id
-        let data = await projectModel.findById({ _id: _id });
+        let data = await projectModel.findById({ _id: req.params.id });
 
         if (data) {
             return res.status(200).json({ status: '200', project: data, message: 'Success' })
@@ -33,10 +33,9 @@ const getProjectById = async (req, res) => {
 }
 
 const getProjectMilestone = async (req, res) => {
-
     try {
-        const project_id = req.body.project_id
-        let data = await milestoneModel.find({ project_id: project_id });
+        // const project_id = req.body.project_id
+        let data = await milestoneModel.find({ project_id: req.params.id });
         if (data) {
             return res.status(200).json({ status: '200', project: data, message: 'Success' })
         }
@@ -113,8 +112,8 @@ const updateProjectStatus = async (req, res) => {
 
 const deleteProject = async (req, res) => {
     try {
-        const _id = req.body._id
-        let result = await projectModel.findByIdAndUpdate({ _id: _id }, { deleteStatus: false });
+        // const _id = req.body._id
+        let result = await projectModel.findByIdAndUpdate({ _id: req.params.id }, { deleteStatus: false });
         if (result) {
             return res.status(200).json({ status: '200', message: 'Project Deleted Successfully' });
         } else {
