@@ -17,7 +17,8 @@ const getSprint = async (req, res) => {
 const getSprintById = async (req, res) => {
     const id = req.body._id
     try {
-        const result = await sprintModel.findById({ _id: id });
+        const result = await sprintModel.findById({ _id: req.params.id });
+        console.log(result,"====")
         if (result) {
             return res.status(200).json({ status: '200', data: result, message: 'Success' });
         } else {
@@ -103,7 +104,7 @@ const updateSprint = async (req, res) => {
 const deleteSprint = async (req, res) => {
     try {
         let _id = req.body._id;
-        const result = await sprintModel.findByIdAndUpdate({ _id: _id }, { deleteStatus: false })
+        const result = await sprintModel.findByIdAndUpdate({ _id: req.params.id }, { deleteStatus: false })
         return res.status(200).json({ status: '200', message: 'Sprint Deleted' });
     } catch (err) {
         console.log(err);

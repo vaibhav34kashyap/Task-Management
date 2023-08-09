@@ -126,7 +126,7 @@ const MileStone = () => {
                     </Col>
               
             </Row>
-            <Create modal={openModal} CloseModal={CloseModal} id={id} />
+            <Create modal={openModal} CloseModal={CloseModal} id={id} data={data}/>
         </>
     );
 };

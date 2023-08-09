@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/Modal';
 import { deleteMileStone, getallMileStones } from '../../../redux/milestone/action';
 import MainLoader from '../../../constants/Loader/loader';
 import ToastHandle from '../../../constants/toaster/toaster';
+import Update from './update';
 const AllMillStones = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -14,7 +15,10 @@ const AllMillStones = () => {
     const loaderhandle = store?.getAllMileStones;
     const deletemessagehandle = store?.deleteMileStone;
     const [deletemodal, setDeleteModal] = useState(false);
+    const [render, setRender] = useState(false);
     const [deleteId, setdeleteId] = useState();
+    const [editData, setEditData] = useState();
+    const [openEditModal, setOpenEditModal] = useState(false);
     const handeldelete = (ele) => {
         setdeleteId(ele?._id);
         setDeleteModal(true);
@@ -22,6 +26,16 @@ const AllMillStones = () => {
     const handeldYes = () => {
         dispatch(deleteMileStone(deleteId));
         setDeleteModal(false);
+    };
+    const handelUpdate = (data) => {
+        setEditData(data);
+        setOpenEditModal(true);
+    };
+    const closeupdatemodal = (val) => {
+        if (val == 'render') {
+            setRender(!render);
+        }
+        setOpenEditModal(false);
     };
     useEffect(() => {
         dispatch(getallMileStones());
@@ -93,9 +107,9 @@ const AllMillStones = () => {
                                                         <p className="action-icon m-0 p-0  ">
                                                             <i
                                                                 className="uil-edit-alt m-0 p-0"
-                                                                // onClick={() => {
-                                                                //     handelUpdate(ele);
-                                                                // }}
+                                                                onClick={() => {
+                                                                    handelUpdate(ele);
+                                                                }}
                                                             ></i>
                                                         </p>
                                                         <p className="action-icon m-0 p-0  ">
@@ -149,6 +163,7 @@ const AllMillStones = () => {
                     </>
                 )}
             </Modal>
+            <Update modal ={openEditModal} closeModal={closeupdatemodal}  editData={editData} />
         </>
     );
 };

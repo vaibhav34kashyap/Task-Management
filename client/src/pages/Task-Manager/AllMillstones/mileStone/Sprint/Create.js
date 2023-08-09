@@ -6,9 +6,12 @@ import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
 import { addSprint } from '../../../../../redux/sprint/action';
-const Create = ({modal,CloseModal ,id}) => {
+import ToastHandle from '../../../../../constants/toaster/toaster';
+import MainLoader from '../../../../../constants/Loader/loader';
+const Create = ({modal,CloseModal ,id,data}) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    const successHandle= store?.addSprint
     const {
         register,
         handleSubmit,
@@ -18,14 +21,15 @@ const Create = ({modal,CloseModal ,id}) => {
         formState: { errors },
     } = useForm();
 
-    const onSubmit = (data) => {
+    const onSubmit = (val) => {
       let body={
+        project_id: data?.project_id ,
         milestone_id: id ,
-        sprintName:data?.Name,
-        sprintDesc:data?.Description,
-        startDate:data?.Startdate,
-        endDate:data?.Enddate,
-        sprintStatus:data?.Status
+        sprintName:val?.Name,
+        sprintDesc:val?.Description,
+        startDate:val?.Startdate,
+        endDate:val?.Enddate,
+        sprintStatus:val?.Status
 
       } 
       dispatch( addSprint(body))
@@ -33,6 +37,16 @@ const Create = ({modal,CloseModal ,id}) => {
     useEffect(() => {
         reset();
     }, [modal])
+    useEffect(() => {
+        if (successHandle?.data?.status == 200) {
+            ToastHandle('success', successHandle?.data?.message);
+            CloseModal('render');
+        } else if (successHandle?.data?.status == 400) {
+            ToastHandle('error', successHandle?.data?.message);
+        } else if (successHandle?.data?.status == 500) {
+            ToastHandle('error', successHandle?.data?.message);
+        }
+    }, [successHandle])
     const handleClose = ()=>{
         CloseModal()
     }
@@ -54,7 +68,8 @@ const Create = ({modal,CloseModal ,id}) => {
                         </Row>
                     </Col>
                 </Row>
-                <Modal.Body className="py-0">
+                {successHandle?.loading ? (<MainLoader/>):(
+                    <Modal.Body className="py-0">
                     <Card className="p-2">
                         <Form onSubmit={handleSubmit(onSubmit)}>
                             <Row>
@@ -123,6 +138,8 @@ const Create = ({modal,CloseModal ,id}) => {
                         </Form>
                     </Card>
                 </Modal.Body>
+                )}
+                
    </Modal>
    </>
   )

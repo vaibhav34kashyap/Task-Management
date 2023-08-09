@@ -28,7 +28,7 @@ const InprogressMilestone = async (req, res) => {
 }
 const getSingleMileston = async (req, res) => {
     try {
-        const milestoneData = await milestoneModel.findById({ _id: req.body._id })
+        const milestoneData = await milestoneModel.findById({ _id: req.params.id })
         if (milestoneData) {
             res.status(200).json({ status: "200", data: milestoneData, message: "Milestone get successfully!" })
         } else {
@@ -77,6 +77,7 @@ const addMilestone = async (req, res) => {
 }
 const updateMilestone = async (req, res) => {
     try {
+        console.log("i am working==")
         const _id = req.body.id
         const existingtitle = await milestoneModel.findOne({ title: req.body.title })
         if (existingtitle) {
@@ -101,9 +102,7 @@ const deleteMilestone = async (req, res) => {
 
     try {
         // const _id = req.body._id
-        console.log(req.params.id,"====")
         let result = await milestoneModel.findByIdAndUpdate({ _id: req.params.id }, { deleteStatus: false });
-        console.log(result,"===working here===")
         if (result) {
             return res.status(200).json({ status: '200', message: 'Milestone Deleted' });
         } else {

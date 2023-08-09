@@ -8,6 +8,7 @@ import Modal from 'react-bootstrap/Modal';
 import moment from 'moment';
 import MainLoader from '../../../constants/Loader/loader';
 import ToastHandle from '../../../constants/toaster/toaster';
+import Update from './Sprint/update';
 const AllSprint = () => {
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
@@ -17,14 +18,28 @@ const AllSprint = () => {
     const getSprintsDetail = store?.getAllSprints;
     const deletehandle =store?.deleteSprint
     const [deletemodal, setDeleteModal] = useState(false);
+    const [editData, setEditData] = useState();
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const handelUpdate = (data) => {
+        setEditData(data);
+        setOpenEditModal(true);
+    };
+    const closeupdatemodal = (val) => {
+        if (val == 'render') {
+            setRender(!render);
+        }
+        setOpenEditModal(false);
+    };
     const handeldelete = (ele) => {
         setdeleteId(ele?._id)
         setDeleteModal(true);
     };
+
     const handeldYes=()=>{      
         dispatch(deleteSprint(deleteId));
         setDeleteModal(false);
     }
+
     useEffect(() => {
         dispatch(getAllSprint());
     }, []);
@@ -110,9 +125,9 @@ const AllSprint = () => {
                                                                 <p className="action-icon m-0 p-0  ">
                                                                     <i
                                                                         className="uil-edit-alt m-0 p-0"
-                                                                        // onClick={() => {
-                                                                        //     handelUpdate(ele);
-                                                                        // }}
+                                                                        onClick={() => {
+                                                                            handelUpdate(ele);
+                                                                        }}
                                                                     ></i>
                                                                 </p>
                                                                 <p className="action-icon m-0 p-0  ">
@@ -167,6 +182,7 @@ const AllSprint = () => {
                     )}
                    
                 </Modal>
+                <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData}/>
             </div>
         </>
     );

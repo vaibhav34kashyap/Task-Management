@@ -2,10 +2,9 @@ const projectModel = require('../models/projects');
 const teamModel = require('../models/team');
 const milestoneModel = require('../models/milestone');
 const getProject = async (req, res) => {
-
     try {
         let data = await projectModel.find({ deleteStatus: true });
-
+        console.log(data,"===get api working====")
         if (data) {
             return res.status(200).json({ status: '200', project: data })
         }
@@ -85,7 +84,6 @@ const updateProject = async (req, res) => {
     try {
         let _id = req.body._id;
         let result = await projectModel.findByIdAndUpdate(_id, req.body);
-
         if (result) {
             return res.status(200).json({ status: '200', project: result, message: 'Project updated Successfully' });
         }

@@ -4,11 +4,13 @@ import { ListGroup, Container, Row, Col, Table, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSprintById } from '../../../../redux/sprint/action';
 import Create from './Task/Create';
+import moment from 'moment';
 const Sprint = () => {
     const { id } = useParams();
     const store = useSelector((state) => state);
     const [openModal, SetOpenModal] = useState(false);
     const dispatch = useDispatch();
+    const getSingleSprintList= store?.getSingleSprint?.data?.data
     const handleCreate=()=>{
       SetOpenModal(true)
     }
@@ -44,7 +46,7 @@ const Sprint = () => {
                                 <div className="ms-2 me-auto">
                                     <div className="">
                                         <b> Sprint Name : </b>
-                                        {/* <i>{data?.title}</i> */}
+                                        <i>{getSingleSprintList?.sprintName}</i>
                                     </div>
                                 </div>
                             </ListGroup.Item>
@@ -52,7 +54,7 @@ const Sprint = () => {
                                 <div className="ms-2 me-auto">
                                     <div className="">
                                         <b>Description : </b>
-                                        {/* <i>{data?.description}</i> */}
+                                        <i>{getSingleSprintList?.sprintDesc}</i>
                                     </div>
                                 </div>
                             </ListGroup.Item>
@@ -60,7 +62,7 @@ const Sprint = () => {
                                 <div className="ms-2 me-auto">
                                     <div className="">
                                         <b>Start Date : </b>
-                                        {/* <i>{moment(data?.startDate).format('L')}</i> */}
+                                        <i>{moment(getSingleSprintList?.startDate).format('L')}</i>
                                     </div>
                                 </div>
                             </ListGroup.Item>
@@ -68,7 +70,7 @@ const Sprint = () => {
                                 <div className="ms-2 me-auto">
                                     <div className="">
                                         <b>End Date : </b>
-                                        {/* <i>{moment(data?.completion_date).format('L')}</i> */}
+                                        <i>{moment(getSingleSprintList?.endDate).format('L')}</i>
                                     </div>
                                 </div>
                             </ListGroup.Item>
