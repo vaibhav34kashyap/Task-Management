@@ -16,6 +16,7 @@ import logoDarkSm from '../assets/images/logo_sm_dark.png';
 import logo from '../assets/images/logo.png';
 import helpBoxImage from '../assets/images/help-icon.svg';
 import profileImg from '../assets/images/users/avatar-1.jpg';
+import logoImg from '../assets/images/logo/rowthtech.jpg';
 
 type SideBarContentProps = {
     hideUserProfile: boolean,
@@ -96,7 +97,7 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                     <>
                         <Link to="/" className="logo text-center logo-light">
                             <span className="logo-lg">
-                                <img src={isLight ? logoDark : logo} alt="logo" height="16" />
+                                <img src={isLight ? logoDark : logoImg} alt="logo" height="25" />
                             </span>
                             <span className="logo-sm">
                                 <img src={isLight ? logoSm : logoDarkSm} alt="logo" height="16" />
@@ -105,7 +106,7 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
 
                         <Link to="/" className="logo text-center logo-dark">
                             <span className="logo-lg">
-                                <img src={isLight ? logoDark : logo} alt="logo" height="16" />
+                                <img src={isLight ? logoDark : logoImg} alt="logo" height="16" />
                             </span>
                             <span className="logo-sm">
                                 <img src={isLight ? logoSm : logoDarkSm} alt="logo" height="16" />
