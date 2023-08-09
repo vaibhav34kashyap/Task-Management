@@ -12,11 +12,11 @@ const AllMillStones = () => {
     const store = useSelector((state) => state);
     const getallmilestones = store?.getAllMileStones?.data?.data;
     const loaderhandle = store?.getAllMileStones;
-    const deletemessagehandle =store?.deleteMileStone?.data
+    const deletemessagehandle = store?.deleteMileStone;
     const [deletemodal, setDeleteModal] = useState(false);
-    const [deleteId,setdeleteId]=useState()
+    const [deleteId, setdeleteId] = useState();
     const handeldelete = (ele) => {
-        setdeleteId(ele?._id)
+        setdeleteId(ele?._id);
         setDeleteModal(true);
     };
     const handeldYes = () => {
@@ -27,15 +27,14 @@ const AllMillStones = () => {
         dispatch(getallMileStones());
     }, []);
     useEffect(() => {
-        if (deletemessagehandle?.status == 200) {
-            ToastHandle('success', deletemessagehandle?.message);
-        } else if (deletemessagehandle?.status == 400) {
-            ToastHandle('error', deletemessagehandle?.message);
-        } else if (deletemessagehandle?.status == 500) {
-            ToastHandle('error', deletemessagehandle?.message);
+        if (deletemessagehandle?.data?.status == 200) {
+            ToastHandle('success', deletemessagehandle?.data?.message);
+        } else if (deletemessagehandle?.data?.status == 400) {
+            ToastHandle('error', deletemessagehandle?.data?.message);
+        } else if (deletemessagehandle?.data?.status == 500) {
+            ToastHandle('error', deletemessagehandle?.data?.message);
         }
-    }, [deletemessagehandle])
-    
+    }, [deletemessagehandle]);
 
     return (
         <>
@@ -46,23 +45,23 @@ const AllMillStones = () => {
                             <h4 className="header-title heading_data"> All MileStones</h4>
                         </Col>
                     </Row>
-                    
-                        {loaderhandle?.loading ? (
-                            <>
-                                <MainLoader />
-                            </>
-                        ) : (
-                            <Table className="mb-0 add_Color_font" striped>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th> Title</th>
-                                <th>Description</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+
+                    {loaderhandle?.loading ? (
+                        <>
+                            <MainLoader />
+                        </>
+                    ) : (
+                        <Table className="mb-0 add_Color_font" striped>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th> Title</th>
+                                    <th>Description</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 {getallmilestones?.map((ele, ind) => {
                                     return (
@@ -87,9 +86,7 @@ const AllMillStones = () => {
                                                 <Row>
                                                     <Col>
                                                         <p className="action-icon m-0 p-0 ">
-                                                            <Link
-                                                            //  to={`/projects/${ele._id}`}
-                                                            >
+                                                            <Link to={`/milestone/${ele._id}`}>
                                                                 <i className="mdi mdi-eye m-0 p-0"></i>
                                                             </Link>
                                                         </p>
@@ -115,37 +112,42 @@ const AllMillStones = () => {
                                     );
                                 })}
                             </tbody>
-                            </Table>
-                        )}
-                    
+                        </Table>
+                    )}
                 </Card.Body>
             </Card>
             {/* delete modal */}
             <Modal show={deletemodal} onHide={() => setDeleteModal(false)}>
-                <Row>
-                    <Col lg={12} className="text-end mt-1 ">
-                        <CloseButton
-                            className="pe-2"
-                            onClick={() => {
-                                setDeleteModal(false);
-                            }}
-                        />
-                    </Col>
-                </Row>
+                {deletemessagehandle?.loading ? (
+                    <MainLoader />
+                ) : (
+                    <>
+                        <Row>
+                            <Col lg={12} className="text-end mt-1 ">
+                                <CloseButton
+                                    className="pe-2"
+                                    onClick={() => {
+                                        setDeleteModal(false);
+                                    }}
+                                />
+                            </Col>
+                        </Row>
 
-                <Modal.Body>Are you sure you want to delete this MileStone</Modal.Body>
-                <Modal.Footer>
-                    <Button className=" web_button " variant="primary" onClick={handeldYes}>
-                        Yes
-                    </Button>
-                    <Button
-                        variant="secondary"
-                        onClick={() => {
-                            setDeleteModal(false);
-                        }}>
-                        No
-                    </Button>
-                </Modal.Footer>
+                        <Modal.Body>Are you sure you want to delete this MileStone</Modal.Body>
+                        <Modal.Footer>
+                            <Button className=" web_button " variant="primary" onClick={handeldYes}>
+                                Yes
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                onClick={() => {
+                                    setDeleteModal(false);
+                                }}>
+                                No
+                            </Button>
+                        </Modal.Footer>
+                    </>
+                )}
             </Modal>
         </>
     );

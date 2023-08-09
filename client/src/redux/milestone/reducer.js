@@ -5,6 +5,11 @@ const GET_ALL_MILESTONE_INTIAL_STATE={
     message: "",
     loading: false
 }
+const GET_MILESTONE_INTIAL_STATE={
+    data: [],
+    message: "",
+    loading: false
+}
 const DELETE_MILESTONE_INTIAL_STATE={
     data: [],
     message: "",
@@ -57,6 +62,31 @@ export const deleteMileStone = (state = DELETE_MILESTONE_INTIAL_STATE, action) =
             return {
                 data: [],
                 status: 403,
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+export const getMileStone = (state = GET_MILESTONE_INTIAL_STATE, action) => {
+    switch (action.type) {
+        case MileStoneType.GET_ALL_MILESTONE_BY_ID_LOADING:
+            return {
+                data: GET_MILESTONE_INTIAL_STATE.data,
+                loading: true,
+            };
+        case MileStoneType.GET_ALL_MILESTONE_BY_ID_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case MileStoneType.GET_ALL_MILESTONE_BY_ID_ERROR:
+            return {
+                data: [],
                 loading: false,
                 message: action?.payload,
             };

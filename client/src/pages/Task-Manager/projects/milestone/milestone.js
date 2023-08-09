@@ -148,10 +148,10 @@ dispatch(getProjectsById(id))
                                             <Table>
                                                 <thead className=" btom_Line_hide">
                                                     <tr>
-                                                        <th>SprintName</th>
-                                                        <th>Sprint Description</th>
-                                                        <th>Sprint Start Date</th>
-                                                        <th>Sprint End Date</th>
+                                                        <th> MileStone Name</th>
+                                                        <th> Description</th>
+                                                        <th> Start Date</th>
+                                                        <th> End Date</th>
                                                     </tr>
                                                 </thead>
                                             </Table>

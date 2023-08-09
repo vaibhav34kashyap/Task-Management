@@ -7,6 +7,9 @@ export function getAllMileStonesApi(data): any {
     return api.get(URL.GetAllMileStones, data.payload)
 }
 export function deleteMileStoneApi(data): any {
-    console.log(data ,"ritika")
     return api.delete(URL.MileStoneDelete + data?.payload)
+}
+export function getMileStoneApi(data): any {
+    console.log(data ,"ritika")
+    return api.get(URL.ParticularMilestoneDetail + data?.payload)
 }

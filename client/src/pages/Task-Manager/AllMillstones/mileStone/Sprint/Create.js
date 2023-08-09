@@ -1,11 +1,14 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
-
-const Create = ({ modal, closeModal }) => {
+import { addSprint } from '../../../../../redux/sprint/action';
+const Create = ({modal,CloseModal ,id}) => {
+    const dispatch = useDispatch();
+    const store = useSelector((state) => state);
     const {
         register,
         handleSubmit,
@@ -16,46 +19,59 @@ const Create = ({ modal, closeModal }) => {
     } = useForm();
 
     const onSubmit = (data) => {
-        console.log(data);
+      let body={
+        milestone_id: id ,
+        sprintName:data?.Name,
+        sprintDesc:data?.Description,
+        startDate:data?.Startdate,
+        endDate:data?.Enddate,
+        sprintStatus:data?.Status
+
+      } 
+      dispatch( addSprint(body))
     };
     useEffect(() => {
         reset();
-    }, [modal]);
-    return (
-        <>
-            <Modal show={modal} onHide={closeModal} size="md">
-                <Row className="m-0 p-0">
+    }, [modal])
+    const handleClose = ()=>{
+        CloseModal()
+    }
+  return (
+    
+   <>
+   <Modal show={modal} onHide={handleClose}>
+   <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
                             <Col lg={7} className="text-end">
                                 <Modal.Title id="" className="mx-auto">
-                                    Add Milestone
+                                    Add Sprint
                                 </Modal.Title>
                             </Col>
                             <Col lg={5} className="text-end pt-2">
-                                <CloseButton onClick={closeModal} />
+                                <CloseButton onClick={handleClose}/>
                             </Col>
                         </Row>
                     </Col>
                 </Row>
                 <Modal.Body className="py-0">
-                    <Card className="p-3">
+                    <Card className="p-2">
                         <Form onSubmit={handleSubmit(onSubmit)}>
                             <Row>
                                 <Col lg={12}>
-                                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                        <Form.Label> Title <span className="text-danger">*</span>:</Form.Label>
-                                        <Form.Control type="text" {...register('Title', { required: true })} />
-                                        {errors.Title?.type === 'required' && (
+                                    <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                        <Form.Label> Name <span className="text-danger">*</span>:</Form.Label>
+                                        <Form.Control type="text" {...register('Name', { required: true })} />
+                                        {errors.Name?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
                                         )}
                                     </Form.Group>
                                 </Col>
                                 <Col lg={12}>
-                                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                    <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                         <Form.Label>Description <span className="text-danger">*</span>:</Form.Label>
                                         <Form.Control
-                                            type="text" aria-label="Default select example"
+                                            type="text"
                                             {...register('Description', { required: true })}
                                         />{' '}
                                         {errors.Description?.type === 'required' && (
@@ -64,22 +80,31 @@ const Create = ({ modal, closeModal }) => {
                                     </Form.Group>
                                 </Col>
                                 <Col lg={12}>
-                                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                    <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                         <Form.Label> Start date <span className="text-danger">*</span>:</Form.Label>
                                         <Form.Control
                                             type="date"
-                                            {...register('Start_date', { required: true })}
+                                            {...register('Startdate', { required: true })}
                                         />{' '}
-                                        {errors.Start_date?.type === 'required' && (
+                                        {errors.Startdate?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
                                         )}
                                     </Form.Group>
                                 </Col>
                                 <Col lg={12}>
-                                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                    <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                         <Form.Label> End date <span className="text-danger">*</span>:</Form.Label>
-                                        <Form.Control type="date" {...register('End_date', { required: true })} />{' '}
-                                        {errors.End_date?.type === 'required' && (
+                                        <Form.Control type="date" {...register('Enddate', { required: true })} />{' '}
+                                        {errors.Enddate?.type === 'required' && (
+                                            <span className="text-danger"> This feild is required *</span>
+                                        )}
+                                    </Form.Group>
+                                </Col>
+                                <Col lg={12}>
+                                    <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                        <Form.Label> Status <span className="text-danger">*</span>:</Form.Label>
+                                        <Form.Control type="text" {...register('Status', { required: true })} />{' '}
+                                        {errors.Status?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>
                                         )}
                                     </Form.Group>
@@ -98,9 +123,9 @@ const Create = ({ modal, closeModal }) => {
                         </Form>
                     </Card>
                 </Modal.Body>
-            </Modal>
-        </>
-    );
-};
+   </Modal>
+   </>
+  )
+}
 
-export default Create;
+export default Create
