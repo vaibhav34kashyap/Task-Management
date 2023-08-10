@@ -1,9 +1,23 @@
-import React from 'react'
+import React from "react";
 
-const Boards = () => {
+import { Row, Col, Card, CardBody } from "reactstrap";
+
+import { generateQuoteMap } from "./mockData";
+
+import Board from "./board/Board";
+
+ function Boards() {
+  const data = {
+    medium: generateQuoteMap(100),
+    large: generateQuoteMap(500)
+  };
+
   return (
-    <div>index</div>
-  )
-}
+    <>
+    
 
+      <Board initial={data.medium} withScrollableColumns />
+    </>
+  );
+}
 export default Boards
