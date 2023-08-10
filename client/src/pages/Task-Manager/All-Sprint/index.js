@@ -24,10 +24,10 @@ const AllSprint = () => {
         setEditData(data);
         setOpenEditModal(true);
     };
-    const closeupdatemodal = (val) => {
-        if (val == 'render') {
-            setRender(!render);
-        }
+    const closeupdatemodal = () => {
+        // if (val == 'render') {
+        //     setRender(!render);
+        // }
         setOpenEditModal(false);
     };
     const handeldelete = (ele) => {
@@ -182,7 +182,7 @@ const AllSprint = () => {
                     )}
                    
                 </Modal>
-                <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData}/>
+                <Update modal={openEditModal} CloseModal={closeupdatemodal} editData={editData}/>
             </div>
         </>
     );

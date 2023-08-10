@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Spinner, Row } from 'react-bootstrap';
-import { Audio } from 'react-loader-spinner';
+import { RotatingLines } from 'react-loader-spinner';
 
 const MainLoader = () => {
     return (
@@ -14,14 +14,14 @@ const MainLoader = () => {
                         </Spinner>
                         <span className="visually-hidden text-center">Loading...</span>
                     </div> */}
-                    <Audio
+                    <RotatingLines
                         height="100"
                         width="100"
-                        color="#313a46"
+                        strokeColor="grey"
                         wrapperStyle={{}}
                         wrapperClass=""
                         visible={true}
-                        ariaLabel="Audio-rotating"
+                        ariaLabel="RotatingLines"
                         outerCircleColor=""
                         innerCircleColor=""
                         middleCircleColor=""
