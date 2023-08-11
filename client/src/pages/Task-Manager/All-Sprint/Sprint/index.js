@@ -81,7 +81,7 @@ const Sprint = () => {
                
               
             </Row>
-            <Create modal={openModal} CloseModal={CloseModal}/>
+            <Create modal={openModal} CloseModal={CloseModal} data={getSingleSprintList}/>
         </>
     );
 };

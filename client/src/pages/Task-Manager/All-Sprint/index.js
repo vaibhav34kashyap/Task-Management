@@ -24,10 +24,10 @@ const AllSprint = () => {
         setEditData(data);
         setOpenEditModal(true);
     };
-    const closeupdatemodal = () => {
-        // if (val == 'render') {
-        //     setRender(!render);
-        // }
+    const closeupdatemodal = (val) => {
+        if (val == 'render') {
+            setRender(!render);
+        }
         setOpenEditModal(false);
     };
     const handeldelete = (ele) => {
@@ -42,7 +42,7 @@ const AllSprint = () => {
 
     useEffect(() => {
         dispatch(getAllSprint());
-    }, []);
+    }, [render]);
     useEffect(() => {
         if (getSprintsDetail?.data?.status == 200) {
             setData(getSprintsDetail?.data?.data);
@@ -51,7 +51,7 @@ const AllSprint = () => {
     useEffect(() => {
         if (deletehandle?.data?.status == 200) {
             ToastHandle('success', deletehandle?.data?.message);
-            // closeModal('render');
+            closeupdatemodal('render');
         } else if (deletehandle?.status == 400) {
             ToastHandle('error', deletehandle?.data?.message);
         } else if (deletehandle?.status == 500) {
