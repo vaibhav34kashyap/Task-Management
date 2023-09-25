@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
-const Create = ({ modal, CloseModal }) => {
+import { createTask } from '../../../../../redux/task/action';
+const Create = ({ modal, CloseModal ,data }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const {
@@ -17,16 +18,22 @@ const Create = ({ modal, CloseModal }) => {
         formState: { errors },
     } = useForm();
 
-    const onSubmit = (data) => {
-        //   let body={
-        //     milestone_id: id ,
-        //     sprintName:data?.Name,
-        //     sprintDesc:data?.Description,
-        //     startDate:data?.Startdate,
-        //     endDate:data?.Enddate,
-        //     sprintStatus:data?.Status
-        //   }
-        //   dispatch( addSprint(body))
+    const onSubmit = (val) => {
+          let body={
+            sprint_id: data?._id ,
+            milestone_id:data?.milestone_id,
+            project_id: data?.project_id ,
+            task_name:val?.Name,
+            task_summery:val?.summary,
+            start_time:val?.Startdate,
+            end_time:val?.Enddate,
+            status:val?.status,
+            module:val?.module,
+            original_estimate:val?.estimatedate,
+            actual_time:val?.actualtime,
+            due_date:val?.dueDate
+          }
+          dispatch( createTask(body))
     };
     const handleClose = () => {
         CloseModal();
@@ -73,12 +80,12 @@ const Create = ({ modal, CloseModal }) => {
                                                     {' '}
                                                     Status<span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                <Form.Select {...register('Name', { required: true })}>
+                                                <Form.Select {...register('status', { required: true })}>
                                                 <option >---Select---</option>
                                                     <option value="1">To Do</option>
                                                     <option value="2">In Progress</option>
                                                     <option value="3">Done</option>
-                                                    {errors.Name?.type === 'required' && (
+                                                    {errors.status?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>
                                                     )}
                                                 </Form.Select>

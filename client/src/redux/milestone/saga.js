@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import MileStoneType from './constant';
-import { deleteMileStoneApi, getAllMileStonesApi, getMileStoneApi } from './api';
+import { UpdateMileStonesApi, deleteMileStoneApi, getAllMileStonesApi, getMileStoneApi } from './api';
     function* getAllMileStonesFunction({ payload }) {
         try {
             yield put({
@@ -103,6 +103,45 @@ import { deleteMileStoneApi, getAllMileStonesApi, getMileStoneApi } from './api'
     
         }
     }
+    function* updateMileStoneFunction({ payload }) {
+        try {
+            yield put({
+                type: MileStoneType.UPDATE_MILESTONE_LOADING,
+                payload: {}
+            })
+            const response = yield call(UpdateMileStonesApi, { payload });
+            if (response.data.status) {
+                yield put({
+                    type: MileStoneType.UPDATE_MILESTONE_SUCCESS,
+                    payload: { ...response.data },
+                });
+                yield put({
+                    type: MileStoneType.UPDATE_MILESTONE_RESET,
+                    payload: {},
+                });
+            }
+            else {
+                yield put({
+                    type: MileStoneType.UPDATE_MILESTONE_ERROR,
+                    payload: { ...response.data }
+                });
+                yield put({
+                    type: MileStoneType.UPDATE_MILESTONE_RESET,
+                    payload: {},
+                });
+            }
+    
+        } catch (error) {
+            yield put({
+                type: MileStoneType.UPDATE_MILESTONE_ERROR,
+                payload: { message: error }
+            });
+            yield put({
+                type: MileStoneType.UPDATE_MILESTONE_RESET,
+                payload: {},
+            });
+        }
+    }
     export function* getAllMileStonesSaga(): any {
         yield takeEvery(MileStoneType.GET_ALL_MILESTONES, getAllMileStonesFunction);
     }
@@ -112,12 +151,16 @@ import { deleteMileStoneApi, getAllMileStonesApi, getMileStoneApi } from './api'
     export function* getMileStoneSaga(): any {
         yield takeEvery(MileStoneType.GET_ALL_MILESTONE_BY_ID, getMileStoneFunction);
     }
+    export function* updateMileStoneSaga(): any {
+        yield takeEvery(MileStoneType.UPDATE_MILESTONE, updateMileStoneFunction);
+    }
     function* AllMileStonesSaga(): any {
         yield all([
  
             fork(getAllMileStonesSaga),
             fork(mileStoneDeleteSaga),
             fork(getMileStoneSaga),
+            fork (updateMileStoneSaga)
    
         ])
     }

@@ -15,3 +15,7 @@ export const deleteMileStone = (data): AuthAction => ({
     type: MileStoneType.DELETE_MILE_STONE,
     payload: data
 })
+export const updateMileStone = (data): AuthAction => ({
+    type: MileStoneType.UPDATE_MILESTONE,
+    payload: data
+})

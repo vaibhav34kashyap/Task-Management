@@ -23,6 +23,9 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             endDate : {
                 type: Date
             },
+            expectedDate : {
+                type: Date
+            },
             complitionDate : {
                 type: Date
             },
