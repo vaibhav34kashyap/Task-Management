@@ -6,7 +6,8 @@ import layoutSaga from './layout/saga';
 import AllProjectSaga from './projects/saga';
 import AllMileStonesSaga from './milestone/saga';
 import AllSprintSaga from './sprint/saga';
-import AllTaskSaga from './task/saga'
+import AllTaskSaga from './task/saga';
+import AllUsersSaga from './user/saga';
 export default function* rootSaga(): any {
-    yield all([authSaga(), layoutSaga() , AllProjectSaga(),AllMileStonesSaga() ,AllSprintSaga(),AllTaskSaga( )]);
+    yield all([authSaga(), layoutSaga() , AllProjectSaga(),AllMileStonesSaga() ,AllSprintSaga(),AllTaskSaga( ),AllUsersSaga()]);
 }
