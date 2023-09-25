@@ -6,6 +6,7 @@ export const DeleteProject ="/project/delete/";
 export const GetProjectById ="/project/getbyprojectid/";
 export const GetAllMileStones="/milestone";
 export const MileStoneDelete ="/milestone/delete/"
+export const MileStoneAdd ="/milestone/add"
 export const ParticularMilestoneDetail ="/milestone/getmilestonebyid/";
 export const AddSprint ="/sprint/add";
 export const GetAllSprints ="/sprint";

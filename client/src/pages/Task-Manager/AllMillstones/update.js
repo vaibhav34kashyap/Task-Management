@@ -38,7 +38,8 @@ const Update = ({modal,closeModal,editData}) => {
             start_date: data?.startDate,
             completion_date: data?.endDate,
         };
-        dispatch(updateMileStone(body));
+        dispatch(updateMileStone(body)); closeModal('render');
+
     };
     const {
         register,

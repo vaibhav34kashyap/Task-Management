@@ -4,8 +4,12 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addAllmilstones } from '../../../../../redux/milestone/action';
 
 const Create = ({ modal, closeModal }) => {
+    const { id } = useParams();
     const {
         register,
         handleSubmit,
@@ -14,9 +18,17 @@ const Create = ({ modal, closeModal }) => {
         reset,
         formState: { errors },
     } = useForm();
-
+    const dispatch=useDispatch()
     const onSubmit = (data) => {
-        console.log(data);
+        const milStones={
+            project_id:id,
+            title :data.Title,
+            description:data.Description,
+            start_date:data.Start_date,
+            completion_date:data.End_date,
+            status:"new"            
+        }
+        dispatch(addAllmilstones(milStones))   
     };
     useEffect(() => {
         reset();
