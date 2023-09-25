@@ -9,7 +9,7 @@ export function getallSprintApi(data): any {
     return api.get(URL.GetAllSprints, data.payload)
 }
 export function deleteSprintApi(data): any {
-    return api.delete(URL.DeleteSprint + data.payload)
+    return api.updatePatch(URL.DeleteSprint + data.payload)
 }
 export function getSingleSprintApi(data): any {
     return api.get(URL.ParticularSprintDetail + data?.payload)

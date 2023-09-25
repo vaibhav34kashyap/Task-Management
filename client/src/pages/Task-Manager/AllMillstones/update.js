@@ -3,12 +3,14 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
-// import ToastHandle from '../../../../constants/toaster/toaster';
+import ToastHandle from '../../../constants/toaster/toaster';
 import { useDispatch, useSelector } from 'react-redux';
+import { updateMileStone } from '../../../redux/milestone/action';
 // import MainLoader from '../../../../constants/Loader/loader';
 const Update = ({modal,closeModal,editData}) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    const sucesshandel =store?.updateMilestone?.data
     useEffect(() => {
         reset({
             title: editData?.title,
@@ -28,19 +30,15 @@ const Update = ({modal,closeModal,editData}) => {
         return formattedDate;
     };
     const onSubmit = (data) => {
-        // let body = {
-        //     _id: editData?._id,
-        //     projectName: data?.projectName,
-        //     projectAccess: data?.access,
-        //     startDate: data?.startDate,
-        //     endDate: data?.endDate,
-        //     CompilationDate: data?.expectedEndDate,
-        //     clientName: data?.clientName,
-        //     projectType: data?.projecttype,
-        //     technology: data?.technology,
-        //     key: data?.key,
-        // };
-        // dispatch(updateProject(body));
+        let body = {
+            _id: editData?._id,
+            title:data?.title,
+            projectName: data?.projectName,
+            description: data?.Description,
+            start_date: data?.startDate,
+            completion_date: data?.endDate,
+        };
+        dispatch(updateMileStone(body));
     };
     const {
         register,
@@ -53,6 +51,17 @@ const Update = ({modal,closeModal,editData}) => {
     const CloseModal =()=>{
         closeModal()
     }
+    useEffect(() => {
+        if (sucesshandel?.data?.status == 200) {
+            // console.log(sucesshandel, sucesshandel?.message);
+            ToastHandle('success',  sucesshandel?.message);
+            closeModal('render');
+        } else if (sucesshandel?.data?.status == 400) {
+            ToastHandle('error', sucesshandel?.message);
+        } else if (sucesshandel?.data?.status == 500) {
+            ToastHandle('error', sucesshandel?.message);
+        }
+    }, [sucesshandel]);
   return (
     <>
       <Modal show={modal} onHide={CloseModal} >

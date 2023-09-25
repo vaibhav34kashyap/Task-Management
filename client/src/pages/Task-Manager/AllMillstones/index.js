@@ -24,6 +24,7 @@ const AllMillStones = () => {
         setDeleteModal(true);
     };
     const handeldYes = () => {
+       
         dispatch(deleteMileStone(deleteId));
         setDeleteModal(false);
     };
@@ -39,10 +40,11 @@ const AllMillStones = () => {
     };
     useEffect(() => {
         dispatch(getallMileStones());
-    }, []);
+    }, [render]);
     useEffect(() => {
         if (deletemessagehandle?.data?.status == 200) {
             ToastHandle('success', deletemessagehandle?.data?.message);
+            closeupdatemodal('render');
         } else if (deletemessagehandle?.data?.status == 400) {
             ToastHandle('error', deletemessagehandle?.data?.message);
         } else if (deletemessagehandle?.data?.status == 500) {

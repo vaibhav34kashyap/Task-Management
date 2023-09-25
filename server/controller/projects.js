@@ -45,16 +45,52 @@ const getProjectMilestone = async (req, res) => {
 
 }
 
+// const addProject = async (req, res) => {
+//     try {
+//         const objData = {
+//             projectName: req.body.projectName,
+//             projectSlug: req.body.projectSlug,
+//             projectLead: req.body.projectLead,
+//             projectIcon: req.body.projectIcon,
+//             projectAccess: req.body.projectAccess,
+//             startDate: req.body.startDate,
+//             endDate: req.body.endDate,
+//             CompilationDate: req.body.CompilationDate,
+//             clientName: req.body.clientName,
+//             technology: req.body.technology,
+//             key: req.body.key,
+//             projectCategory: req.body.projectCategory,
+//             projectType: req.body.projectType,
+//             projectDesc: req.body.projectDesc,
+//             deleteStatus: true
+//         }
+//         let existingProjectName = await projectModel.findOne({ projectName: objData.projectName });
+//         const str = objData.projectType.split(",")
+//         objData.projectType = str
+//         if (existingProjectName) {
+//             return res.status(200).json({ status: '400', message: 'Project Name Already exist' });
+//         }
+//         let result = await projectModel.create(objData)
+//         if (result) {
+//             return res.status(200).json({ status: '200', project: result, message: 'project created successfully!' });
+//         }
+//     } catch (err) {
+//         console.log(err);
+//         return res.status(200).json({ status: '500', message: 'Something went wrong' })
+//     }
+// }
+
 const addProject = async (req, res) => {
     try {
         const objData = {
             projectName: req.body.projectName,
             projectSlug: req.body.projectSlug,
             projectLead: req.body.projectLead,
-            projectIcon: req.body.projectIcon,
+            // projectIcon: req.file.filename,
             projectAccess: req.body.projectAccess,
             startDate: req.body.startDate,
             endDate: req.body.endDate,
+            expectedDate: req.body.expectedDate,
             CompilationDate: req.body.CompilationDate,
             clientName: req.body.clientName,
             technology: req.body.technology,

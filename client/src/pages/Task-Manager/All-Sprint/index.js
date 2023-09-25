@@ -42,7 +42,7 @@ const AllSprint = () => {
 
     useEffect(() => {
         dispatch(getAllSprint());
-    }, []);
+    }, [render]);
     useEffect(() => {
         if (getSprintsDetail?.data?.status == 200) {
             setData(getSprintsDetail?.data?.data);
@@ -51,7 +51,7 @@ const AllSprint = () => {
     useEffect(() => {
         if (deletehandle?.data?.status == 200) {
             ToastHandle('success', deletehandle?.data?.message);
-            // closeModal('render');
+            closeupdatemodal('render');
         } else if (deletehandle?.status == 400) {
             ToastHandle('error', deletehandle?.data?.message);
         } else if (deletehandle?.status == 500) {
@@ -182,7 +182,7 @@ const AllSprint = () => {
                     )}
                    
                 </Modal>
-                <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData}/>
+                <Update modal={openEditModal} CloseModal={closeupdatemodal} editData={editData}/>
             </div>
         </>
     );

@@ -22,18 +22,36 @@ const Update = ({modal,CloseModal,editData}) => {
     const onSubmit=(data)=>{
 
     }
+    useEffect(() => {
+        reset({
+            title: editData?.sprintName            ,
+            Description: editData?.sprintDesc,
+            startDate: handleDate(editData?.startDate),
+            endDate: handleDate( editData?.endDate),
+            
+        });
+    }, [modal]);
+    console.log(editData, 'pppppp');
+    const handleDate = (data) => {
+        let date = new Date(data);
+        let year = date.toLocaleString('default', { year: 'numeric' });
+        let month = date.toLocaleString('default', { month: '2-digit' });
+        let day = date.toLocaleString('default', { day: '2-digit' });
+        let formattedDate = year + '-' + month + '-' + day;
+        return formattedDate;
+    };
   return (
 <>
 <Modal show={modal} onHide={CloseModaal} >
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
-                            <Col lg={9} className="text-end">
+                            <Col lg={8} className="text-end">
                                 <Modal.Title id="" className="mx-auto">
                                     Update Sprint Detail
                                 </Modal.Title>
                             </Col>
-                            <Col lg={3} className="text-end pt-2">
+                            <Col lg={4} className="text-end pt-2">
                                 <CloseButton onClick={CloseModaal} />
                             </Col>
                         </Row>
@@ -51,7 +69,7 @@ const Update = ({modal,CloseModal,editData}) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="text"
-                                                placeholder="Please Enter Project Name"
+                                                placeholder="Please Enter Sprint Name"
                                                 {...register('title', { required: true })}
                                             />
                                             {errors.title?.type === 'required' && (
@@ -66,7 +84,7 @@ const Update = ({modal,CloseModal,editData}) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="text"
-                                                placeholder="Please Enter Client Name"
+                                                placeholder="Please Enter Description Name"
                                                 {...register('Description', { required: true })}
                                             />
                                             {errors.Description?.type === 'required' && (
