@@ -7,6 +7,7 @@ import { addProject, getProject, updateProject, deleteProject, getProjectById } 
 import { getAllMileStones, deleteMileStone, getMileStone ,updateMilestone,addAllmilstones } from './milestone/reducer';
 import { addSprint ,getAllSprints ,deleteSprint,getSingleSprint } from './sprint/reducres';
 import { createTaskReducer } from './task/reducer';
+import { getAllUsers,deleteUser } from './user/reducer';
 export default (combineReducers({
     Auth,
     Layout,
@@ -20,5 +21,5 @@ export default (combineReducers({
     deleteMileStone,
     getMileStone,
     addSprint,
-    getAllSprints,deleteSprint,getSingleSprint,createTaskReducer,updateMilestone
+    getAllSprints,deleteSprint,getSingleSprint,createTaskReducer,updateMilestone,getAllUsers,deleteUser
 }): any);
