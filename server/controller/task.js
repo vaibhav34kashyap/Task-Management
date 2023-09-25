@@ -49,7 +49,7 @@ const createtask = async (req, res) => {
         console.log(error);
         return res.status(200).json({ status: "500", message: 'something went wrong', error });
     }
-    
+
 }
 const taskdetails = async (req, res) => {
     try {
@@ -81,11 +81,9 @@ const getSingleTaskById = async (req, res) => {
     }
 }
 const updatetaskdetails = async (req, res,) => {
-    var _id = req.body._id;
-
     try {
+        var _id = req.body._id;
         let result = await taskModel.findByIdAndUpdate(_id, req.body);
-
         if (result) {
             return res.status(200).json({ status: "200", data: result, message: "task update successfully" });
         }
