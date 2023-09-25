@@ -10,6 +10,6 @@ userRoute.post("/changepassword", users.changePassword);
 // invite team members
 userRoute.post("/inviteMember", users.inviteTeamMember);
 userRoute.post("/getuseronproject", users.getUsersOnProject);
-userRoute.post("/usersDelete", users.deleteUsers);
+userRoute.delete("/usersDelete/:id", users.deleteUsers);
 
 module.exports = userRoute;

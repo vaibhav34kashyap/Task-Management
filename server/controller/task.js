@@ -167,7 +167,6 @@ const taskstatusupdate = async (req, res) => {
         const checkStatus = await taskModel.findOne({ assignee_id: assignee_id });
 
         if (checkStatus.status === 0 && status === 0) {
-            console.log("checkStatus.status == 0");
             return res.status(200).json({ status: '400', message: 'This user already has a pending task' });
         } else {
             const taskdata = await taskModel.findById({ _id: task_Id });
