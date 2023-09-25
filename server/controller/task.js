@@ -191,13 +191,11 @@ const taskstatusupdate = async (req, res) => {
                 let hours = Math.floor(diff / 3600) % 24
                 let minute = Math.floor(diff / 60) % 60
                 let actual_time = days + ":" + hours + ":" + minute
-                console.log(actual_time);
                 let data = await taskModel.findByIdAndUpdate({ _id: task_Id }, { actual_time: actual_time })
                 return res.status(200).json({ status: '200', data: data, message: 'Task time updated Successfully' });
             }
         }
     } catch (err) {
-        console.log(err);
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
     }
 }
@@ -207,7 +205,6 @@ const userPendingTask = async (req, res) => {
         const result = await taskModel.find({ $and: [{ assignee_id: userid }, { status: 0 }] })
         res.status(200).json({ status: "200", data: result, message: "Pending task" })
     } catch (err) {
-        console.log(err);
         res.status(200).json({ status: "500", message: "Something went wrong" })
     }
 }
