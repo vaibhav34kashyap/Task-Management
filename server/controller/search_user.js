@@ -9,8 +9,6 @@ const searchUser = async (req, res) => {
                 { email: { $regex: value, $options: "i" } },
             ],
         })
-       
-
         if (userSearch <= 0) {
             return res.status(200).json({ status: "400", message: 'No record found' });
         } else {

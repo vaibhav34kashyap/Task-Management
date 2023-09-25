@@ -3,13 +3,11 @@ const teamModel = require('../models/team');
 const milestoneModel = require('../models/milestone');
 const getProject = async (req, res) => {
     try {
-        let data = await projectModel.find({ deleteStatus: true });
-        console.log(data,"===get api working====")
-        if (data) {
-            return res.status(200).json({ status: '200', project: data })
+        let project = await projectModel.find({ deleteStatus: true });
+        if (project) {
+            return res.status(200).json({ status: '200', project: project })
         }
     } catch (err) {
-        console.log(err);
         return res.status(200).json({ status: '400', message: 'Something went wrong' })
     }
 
@@ -19,13 +17,12 @@ const getProjectById = async (req, res) => {
 
     try {
         const _id = req.body._id
-        let data = await projectModel.findById({ _id: req.params.id });
+        let project = await projectModel.findById({ _id: req.params.id });
 
-        if (data) {
-            return res.status(200).json({ status: '200', project: data, message: 'Success' })
+        if (project) {
+            return res.status(200).json({ status: '200', project: project, message: 'Success' })
         }
     } catch (err) {
-        console.log(err);
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
     }
 
@@ -34,12 +31,11 @@ const getProjectById = async (req, res) => {
 const getProjectMilestone = async (req, res) => {
     try {
         // const project_id = req.body.project_id
-        let data = await milestoneModel.find({ project_id: req.params.id });
-        if (data) {
-            return res.status(200).json({ status: '200', project: data, message: 'Success' })
+        let milestone = await milestoneModel.find({ project_id: req.params.id });
+        if (milestone) {
+            return res.status(200).json({ status: '200', project: milestone, message: 'Success' })
         }
     } catch (err) {
-        console.log(err);
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
     }
 
@@ -111,7 +107,6 @@ const addProject = async (req, res) => {
             return res.status(200).json({ status: '200', project: result, message: 'project created successfully!' });
         }
     } catch (err) {
-        console.log(err);
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
     }
 }
@@ -124,29 +119,23 @@ const updateProject = async (req, res) => {
             return res.status(200).json({ status: '200', project: result, message: 'Project updated Successfully' });
         }
     } catch (err) {
-        console.log(err);
         return res.status(200).json({ status: '404', message: 'Something went wrong' })
     }
 }
 
 const updateProjectStatus = async (req, res) => {
     try {
-        let _id = req.body._id;
-        const value = req.body.statusvalue;
-        let result = await projectModel.findByIdAndUpdate(_id, { projectStatus: value });
-
+        let result = await projectModel.findByIdAndUpdate({_id:req.body._id}, { projectStatus: req.body.statusvalue });
         if (result) {
             return res.status(200).json({ status: '200', project: result, message: 'Project status updated Successfully' });
         }
     } catch (err) {
-        console.log(err);
         return res.status(200).json({ status: '404', message: 'Something went wrong' })
     }
 }
 
 const deleteProject = async (req, res) => {
     try {
-        // const _id = req.body._id
         let result = await projectModel.findByIdAndUpdate({ _id: req.params.id }, { deleteStatus: false });
         if (result) {
             return res.status(200).json({ status: '200', message: 'Project Deleted Successfully' });
@@ -154,7 +143,6 @@ const deleteProject = async (req, res) => {
             return res.status(200).json({ status: '400', message: 'Not Found' });
         }
     } catch (err) {
-        console.log(err);
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
     }
 }
@@ -176,7 +164,6 @@ const projectAssigned = async (req, res) => {
             res.status(200).json({ status: "400", message: "Already Assigned to this user" });
         }
     } catch (err) {
-        console.log(err);
         res.status(200).json({ status: '500', message: 'Something went wrong' })
     }
 }

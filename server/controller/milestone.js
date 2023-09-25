@@ -125,14 +125,12 @@ const taskmmodel = require('../models/task');
 const showAllMilestone = async (req, res) => {
     try {
         const milestone = await milestoneModel.find({deleteStatus:true});
-        console.log(milestone,"====")
         if (milestone.length > 0) {
             res.status(200).json({ status: "200", data: milestone, message: "milestone" })
         } else {
             res.status(200).json({ status: "404", data: milestone, message: "Not Found" })
         }
     } catch (err) {
-        console.log(err);
         res.status(200).json({ status: "500", message: "something went wrong" })
     }
 }
@@ -145,7 +143,6 @@ const InprogressMilestone = async (req, res) => {
             res.status(200).json({ status: "404", data: milestone, message: "Not Found" })
         }
     } catch (err) {
-        console.log(err);
         res.status(200).json({ status: "500", message: "something went wrong" })
     }
 }
@@ -158,7 +155,6 @@ const getSingleMileston = async (req, res) => {
             res.status(200).json({ status: "404", message: "Not Found" })
         }
     } catch (err) {
-        console.log(err);
         res.status(200).json({ status: "500", message: "something went wrong" })
     }
 }
@@ -171,7 +167,6 @@ const getMilestoneById = async (req, res) => {
             res.status(200).json({ status: "404", message: "Not Found" })
         }
     } catch (err) {
-        console.log(err);
         res.status(200).json({ status: "500", message: "something went wrong" })
     }
 }
@@ -194,13 +189,11 @@ const addMilestone = async (req, res) => {
             res.status(200).json({ status: "200", data: result, message: "milestone added" })
         }
     } catch (err) {
-        console.log(err);
         res.status(200).json({ status: "500", message: "something went wrong" })
     }
 }
 const updateMilestone = async (req, res) => {
     try {
-        const _id = req.body.id
         const existingtitle = await milestoneModel.findOne({ title: req.body.title });
         if (existingtitle) {
             res.status(200).json({ status: "400", message: "Title Already exist" })
@@ -209,7 +202,6 @@ const updateMilestone = async (req, res) => {
             res.status(200).json({ status: "400", data: result, message: "Updated " })
         }
     } catch (err) {
-        console.log(err);
         res.status(200).json({ status: "500", message: "something went wrong" })
     }
 }
@@ -224,14 +216,12 @@ const deleteMilestone = async (req, res) => {
     try {
         // const _id = req.body._id
         let result = await milestoneModel.findByIdAndUpdate({ _id: req.params.id }, { deleteStatus: false });
-        console.log(result,"====resulte====")
         if (result) {
             return res.status(200).json({ status: '200', message: 'Milestone Deleted' });
         } else {
             return res.status(200).json({ status: '400', message: 'Not Found' });
         }
     } catch (err) {
-        console.log(err);
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
     }
 }

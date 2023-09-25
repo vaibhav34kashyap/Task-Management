@@ -6,39 +6,10 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 const bodyParser = require("body-parser");
-const csvwriter = require('csv-writer');
-const userRoutes = require("./routes/authenitcation");
-const profileRoutes = require("./routes/profile");
-const taskRoutes = require("./routes/task");
-const projectRoute = require("./routes/projectRoute");
-const sprintRoute = require("./routes/sprint");
-const subtaskRoute = require("./routes/subtask");
-const labelRoute = require("./routes/label");
-const taskTypeRoute = require("./routes/tasktype");
-const activityRoute = require("./routes/taskActivity");
-const searchroute = require("./routes/searchroute");
-const catRouter = require("./routes/project_category");
-const recentTaskRoute = require("./routes/recenttask");
-const searchUserRoute = require("./routes/search_user");
-const milestoneRoute = require("./routes/milestone");
-const rolesRoute = require("./routes/roles");
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/users", userRoutes);
-app.use("/profile", profileRoutes);
-app.use("/task", taskRoutes);
-app.use("/task/subtask", subtaskRoute);
-app.use("/project", projectRoute);
-app.use("/sprint", sprintRoute);
-app.use("/label", labelRoute);
-app.use("/tasktype", taskTypeRoute);
-app.use("/taskactivity", activityRoute);
-app.use("/projectcategory", catRouter);
-app.use("/search", searchroute);
-app.use("/recenttask", recentTaskRoute);
-app.use("/searchuser", searchUserRoute);
-app.use("/milestone", milestoneRoute);
-app.use("/roles", rolesRoute);
 
+const routes = require('./routes/index');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(routes);
 mongoose.set('strictQuery', false);
 mongoose.connect(
  process.env.MONGO_URI,
