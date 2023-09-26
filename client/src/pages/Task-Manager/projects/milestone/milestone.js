@@ -16,7 +16,7 @@ const Milestone = () => {
     const dispatch = useDispatch();
     const [openModel, setOpenModel] = useState(false);
     const  GetDataById  =store?.getProjectById?.data?.project;
-    const GetAllmilstonesData=store?.getAllMileStones?.data?.data;
+    // const GetAllmilstonesData=store?.getAllMileStones?.data?.data;
 
     // const milstoneData = {
     //     nodes: GetAllmilstonesData?.filter((item) =>
@@ -30,7 +30,7 @@ const Milestone = () => {
     };
     useEffect(() => {
         dispatch(getProjectsById(id))
-        dispatch(getallMileStones())
+        // dispatch(getallMileStones())
     }, [])
     
     return (
@@ -170,7 +170,7 @@ const Milestone = () => {
                                                    
                                                 </thead>
                                                 <tbody>
-                                                {GetAllmilstonesData?.map((item,index)=>
+                                                {/* {GetAllmilstonesData?.map((item,index)=>
                                                         <tr>
                                                         <td>{item.title}</td>
                                                         <td>{item.description}</td>
@@ -178,7 +178,7 @@ const Milestone = () => {
                                                         <td>{item.completion_date}</td>
                                                     </tr>
                                                     
-                                                    )}
+                                                    )} */}
                                                 </tbody>
                                             </Table>
                                         </Accordion.Body>
