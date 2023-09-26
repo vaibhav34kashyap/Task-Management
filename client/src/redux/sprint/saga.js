@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import SprintTypes from './constant';
-import { addSprintApi, deleteSprintApi, getSingleSprintApi, getallSprintApi } from './api';
+import { addSprintApi, deleteSprintApi, getSingleSprintApi, getallSprintApi, updateSprintApi } from './api';
 function* addSprintFunction({ payload }) {
     try {
         yield put({
@@ -139,6 +139,45 @@ function* getSingleSprintFunction({ payload }) {
 
     }
 }
+function* updateSprintFunction({ payload }) {
+    try {
+        yield put({
+            type: SprintTypes.UPDATE_SPRINT_LOADING,
+            payload: {}
+        })
+        const response = yield call(updateSprintApi, { payload });
+        if (response.data.status) {
+            yield put({
+                type: SprintTypes.UPDATE_SPRINT_SUCCESS,
+                payload: { ...response.data },
+            });
+            yield put({
+                type: SprintTypes.UPDATE_SPRINT_RESET,
+                payload: {},
+            });
+        }
+        else {
+            yield put({
+                type: SprintTypes.UPDATE_SPRINT_ERROR,
+                payload: { ...response.data }
+            });
+            yield put({
+                type: SprintTypes.UPDATE_SPRINT_RESET,
+                payload: {},
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: SprintTypes.UPDATE_SPRINT_ERROR,
+            payload: { message: error }
+        });
+        yield put({
+            type: SprintTypes.UPDATE_SPRINT_RESET,
+            payload: {},
+        });
+    }
+}
 export function* addSprintSaga(): any {
     yield takeEvery(SprintTypes.ADD_SPRINT, addSprintFunction);
 }
@@ -152,12 +191,16 @@ export function* deleteSprintSaga(): any {
 export function* getSingleSprintSaga(): any {
     yield takeEvery(SprintTypes.GET_SPRINT_BY_ID, getSingleSprintFunction);
 }
+export function* updateSprintSaga(): any {
+    yield takeEvery(SprintTypes.UPDATE_SPRINT, updateSprintFunction);
+}
 function* AllSprintSaga(): any {
     yield all([
         fork(addSprintSaga),
         fork(getAllSprintSaga),
         fork (deleteSprintSaga),
-       fork (getSingleSprintSaga)
+       fork (getSingleSprintSaga),
+       fork (updateSprintSaga),
     ])
 }
 export default AllSprintSaga;

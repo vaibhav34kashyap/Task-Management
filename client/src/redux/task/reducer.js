@@ -12,14 +12,17 @@ export const createTaskReducer = (state = INITIAL_STATE, action) => {
                 data: INITIAL_STATE.data,
                 loading: true,
             };
-        case TASK_TYPES.INITIAL_STATE:
+        case TASK_TYPES.CREATE_TASK_SUCCESS:
             return {
                 data: action?.payload,
                 loading: false,
             };
-
-
-        case TASK_TYPES.INITIAL_STATE:
+        case TASK_TYPES.CREATE_TASK_RESET:
+            return {
+                data: INITIAL_STATE.data,
+                loading: false,
+            };
+        case TASK_TYPES.CREATE_TASK_ERROR:
             return {
                 data: [],
                 loading: false,
