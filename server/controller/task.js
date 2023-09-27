@@ -215,6 +215,26 @@ const getSprintTasks = async(req,res) => {
     }
 }
 
+const getTasksAccToStatus = async(req,res) => {
+    try {
+        // var resp = null;
+        const todo = await taskModel.find({ status : 0})
+        // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
+
+        const inProgress = await taskModel.find({status : 1});
+        // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
+
+        const review = await taskModel.find({status : 2});
+        // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
+
+        const done = await taskModel.find({status : 3});
+        res.status(200).json({ status : '200', message : "fetched successfully", Response : todo, inProgress, review, done});
+    } catch (error) {
+        console.log(error);
+        res.status(200).json({ status: "500", message: "Something went wrong" })
+    }
+}
+
 module.exports = { createtask, taskdetails, updatetaskdetails, deleteTask, assigntaskuser, taskstatusupdate,
-    userPendingTask, upladFile, deleteImage, getSingleTaskById , getSprintTasks 
+    userPendingTask, upladFile, deleteImage, getSingleTaskById , getSprintTasks, getTasksAccToStatus
 };
