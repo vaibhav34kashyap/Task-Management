@@ -122,6 +122,8 @@
 
 const milestoneModel = require('../models/milestone');
 const taskmmodel = require('../models/task');
+const projectModel = require('../models/projects');
+
 const showAllMilestone = async (req, res) => {
     try {
         const milestone = await milestoneModel.find({deleteStatus:true});
@@ -199,7 +201,7 @@ const updateMilestone = async (req, res) => {
         if (req.body.title) {
             const existingTitle = await milestoneModel.findOne({ title: req.body.title, _id: { $ne: milestoneId } });
             if (existingTitle) {
-                res.status(400).json({ status: "200", message: "Title already exists" });
+                res.status(200).json({ status: "400", message: "Title already exists" });
                 return;
             }
         }
@@ -207,7 +209,7 @@ const updateMilestone = async (req, res) => {
         if (result) {
             res.status(200).json({ status: "200", data: result, message: "Updated" });
         } else {
-            res.status(404).json({ status: "404", message: "Milestone not found" });
+            res.status(200).json({ status: "404", message: "Milestone not found" });
         }
     } catch (err) {
         res.status(500).json({ status: "500", message: "Something went wrong" });
@@ -235,17 +237,18 @@ const deleteMilestone = async (req, res) => {
     }
 }
 
-const getMilestones = async(req,res) => {
+const getAProjectMilestones = async (req, res) => {
     try {
-        console.log('sdagfhgh');
-        const result = await milestoneModel.find();
-        return res.status(200).json({ status : "200", message : "All milestones feteched successfully", Response : result})
+        const result = await milestoneModel.find({ project_id: req.query.id });
+        return res.status(200).json({ status: "200", message: "All milestones fetched successfully", Response: result });
     } catch (error) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong' })
+        console.error(error);
+        return res.status(500).json({ status: '500', message: 'Something went wrong' });
     }
 }
 
+
 module.exports = {
     showAllMilestone, InprogressMilestone, getMilestoneById,
-    addMilestone, updateMilestone, deleteMilestone, getSingleMileston, getMilestones
+    addMilestone, updateMilestone, deleteMilestone, getSingleMileston, getAProjectMilestones
 }

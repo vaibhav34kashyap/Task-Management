@@ -16,7 +16,7 @@ const getProject = async (req, res) => {
 const getProjectById = async (req, res) => {
 
     try {
-        const _id = req.body._id
+        // const _id = req.body._id
         let project = await projectModel.findById({ _id: req.params.id });
 
         if (project) {

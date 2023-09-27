@@ -22,6 +22,6 @@ milestoneRoute.get('/getmilestonebyid/:id', milestone.getSingleMileston);
 milestoneRoute.post('/add', milestone.addMilestone);
 milestoneRoute.put('/update', milestone.updateMilestone);
 milestoneRoute.patch('/delete/:id', milestone.deleteMilestone);
-milestoneRoute.get('/getMilestones', milestone.getMilestones);
+milestoneRoute.get('/getAProjectMilestones', milestone.getAProjectMilestones);
 
 module.exports = milestoneRoute

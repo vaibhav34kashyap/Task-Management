@@ -22,7 +22,7 @@ sprintRoute.post('/singlemilestonesprints',path.sigleMilestoneSprints);
 sprintRoute.post('/add',path.addSprint);
 sprintRoute.put('/update',path.updateSprint);
 sprintRoute.patch('/delete/:id',path.deleteSprint);
-sprintRoute.get('/getAllSprints',path.getAllSprints);
+sprintRoute.get('/getAMilestoneAllSprints',path.getAMilestoneAllSprints);
 
 
 module.exports = sprintRoute;
