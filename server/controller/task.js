@@ -49,7 +49,7 @@ const createtask = async (req, res) => {
         console.log(error);
         return res.status(200).json({ status: "500", message: 'something went wrong', error });
     }
-    
+
 }
 const taskdetails = async (req, res) => {
     try {
@@ -81,11 +81,9 @@ const getSingleTaskById = async (req, res) => {
     }
 }
 const updatetaskdetails = async (req, res,) => {
-    var _id = req.body._id;
-
     try {
+        var _id = req.body._id;
         let result = await taskModel.findByIdAndUpdate(_id, req.body);
-
         if (result) {
             return res.status(200).json({ status: "200", data: result, message: "task update successfully" });
         }
@@ -167,7 +165,6 @@ const taskstatusupdate = async (req, res) => {
         const checkStatus = await taskModel.findOne({ assignee_id: assignee_id });
 
         if (checkStatus.status === 0 && status === 0) {
-            console.log("checkStatus.status == 0");
             return res.status(200).json({ status: '400', message: 'This user already has a pending task' });
         } else {
             const taskdata = await taskModel.findById({ _id: task_Id });
@@ -191,13 +188,11 @@ const taskstatusupdate = async (req, res) => {
                 let hours = Math.floor(diff / 3600) % 24
                 let minute = Math.floor(diff / 60) % 60
                 let actual_time = days + ":" + hours + ":" + minute
-                console.log(actual_time);
                 let data = await taskModel.findByIdAndUpdate({ _id: task_Id }, { actual_time: actual_time })
                 return res.status(200).json({ status: '200', data: data, message: 'Task time updated Successfully' });
             }
         }
     } catch (err) {
-        console.log(err);
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
     }
 }
@@ -207,7 +202,6 @@ const userPendingTask = async (req, res) => {
         const result = await taskModel.find({ $and: [{ assignee_id: userid }, { status: 0 }] })
         res.status(200).json({ status: "200", data: result, message: "Pending task" })
     } catch (err) {
-        console.log(err);
         res.status(200).json({ status: "500", message: "Something went wrong" })
     }
 }

@@ -230,4 +230,13 @@ const deleteSprint = async (req, res) => {
     }
 }
 
-module.exports = { getSprint, getSprintById, addSprint, updateSprint, deleteSprint, sigleMilestoneSprints, getAllTaskBySprint }
+const getAllSprints = async(req,res) => {
+    try {
+        const result = await sprintModel.find();
+        return res.status(200).json({status : '200', message : "ALL sprints fecteched successfully", Response : result})
+    } catch (error) {
+        return res.status(200).json({ status: '500', message: 'Something went wrong' });
+    }
+}
+
+module.exports = { getSprint, getSprintById, addSprint, updateSprint, deleteSprint, sigleMilestoneSprints, getAllTaskBySprint, getAllSprints }
