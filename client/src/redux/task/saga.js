@@ -15,10 +15,10 @@ function* createTaskFunction({ payload }) {
                 type: TASK_TYPES.CREATE_TASK_SUCCESS,
                 payload: { ...response.data },
             });
-            // yield put({
-            //     type: SprintTypes.GET_SPRINT_BY_ID_RESET,
-            //     payload: {},
-            // });
+            yield put({
+                type: TASK_TYPES.CREATE_TASK_RESET,
+                payload: {},
+            });
         }
         else {
             yield put({

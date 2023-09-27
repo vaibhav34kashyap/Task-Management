@@ -14,3 +14,6 @@ export function deleteSprintApi(data): any {
 export function getSingleSprintApi(data): any {
     return api.get(URL.ParticularSprintDetail + data?.payload)
 }
+export function updateSprintApi(data): any {
+    return api.update(URL.UpdateSprint, data.payload)
+}

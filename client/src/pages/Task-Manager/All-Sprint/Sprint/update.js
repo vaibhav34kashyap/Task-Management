@@ -3,11 +3,17 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
-// import ToastHandle from '../../../../constants/toaster/toaster';
+import ToastHandle from '../../../../constants/toaster/toaster';
 import { useDispatch, useSelector } from 'react-redux';
+import { updateSprint } from '../../../../redux/sprint/action';
+import MainLoader from '../../../../constants/Loader/loader';
 // import MainLoader from '../../../../constants/Loader/loader';
 
-const Update = ({modal,CloseModal,editData}) => {
+const Update = ({ modal, CloseModal, editData }) => {
+    const dispatch = useDispatch();
+    const store = useSelector((state) => state);
+    const sucesshandel = store?.updateSprint;
+    const loaderhandel = store?.updateSprint;
     const {
         register,
         handleSubmit,
@@ -16,19 +22,25 @@ const Update = ({modal,CloseModal,editData}) => {
         reset,
         formState: { errors },
     } = useForm();
-    const CloseModaal =()=>{
-        CloseModal()
-    } 
-    const onSubmit=(data)=>{
-
-    }
+    const CloseModaal = () => {
+        CloseModal();
+    };
+    const onSubmit = (data) => {
+        let body = {
+            _id: editData?.id,
+            sprintName: data?.title,
+            sprintDesc: data?.Description,
+            startDate: data?.startDate,
+            endDate: data?.endDate,
+        };
+        dispatch(updateSprint(body));
+    };
     useEffect(() => {
         reset({
-            title: editData?.sprintName            ,
+            title: editData?.sprintName,
             Description: editData?.sprintDesc,
             startDate: handleDate(editData?.startDate),
-            endDate: handleDate( editData?.endDate),
-            
+            endDate: handleDate(editData?.endDate),
         });
     }, [modal]);
     console.log(editData, 'pppppp');
@@ -40,9 +52,19 @@ const Update = ({modal,CloseModal,editData}) => {
         let formattedDate = year + '-' + month + '-' + day;
         return formattedDate;
     };
-  return (
-<>
-<Modal show={modal} onHide={CloseModaal} >
+    useEffect(() => {
+        if (sucesshandel?.data?.status == 200) {
+            ToastHandle('success', 'Updated Successfully');
+            CloseModal('render');
+        } else if (sucesshandel?.data?.status == 400) {
+            ToastHandle('error', sucesshandel?.data?.message);
+        } else if (sucesshandel?.data?.status == 500) {
+            ToastHandle('error', sucesshandel?.data?.message);
+        }
+    }, [sucesshandel]);
+    return (
+        <>
+            <Modal show={modal} onHide={CloseModaal}>
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
@@ -57,7 +79,9 @@ const Update = ({modal,CloseModal,editData}) => {
                         </Row>
                     </Col>
                 </Row>
-               
+                {loaderhandel.loading ? (
+                    <MainLoader />
+                ) : (
                     <Modal.Body className="py-0">
                         <Card className="p-3">
                             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -65,7 +89,7 @@ const Update = ({modal,CloseModal,editData}) => {
                                     <Col lg={12}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
-                                            Sprint Name<span className="text-danger">*</span>:
+                                                Sprint Name<span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Control
                                                 type="text"
@@ -80,7 +104,7 @@ const Update = ({modal,CloseModal,editData}) => {
                                     <Col lg={12}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
                                             <Form.Label>
-                                            Description <span className="text-danger">*</span>:
+                                                Description <span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Control
                                                 type="text"
@@ -92,7 +116,7 @@ const Update = ({modal,CloseModal,editData}) => {
                                             )}
                                         </Form.Group>
                                     </Col>
-                                
+
                                     <Col lg={12}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
                                             <Form.Label>
@@ -123,7 +147,7 @@ const Update = ({modal,CloseModal,editData}) => {
                                             )}
                                         </Form.Group>
                                     </Col>
-                               </Row>
+                                </Row>
                                 <Row>
                                     <Col className="text-start d-flex align-items-center justify-content-center">
                                         <Button
@@ -137,10 +161,10 @@ const Update = ({modal,CloseModal,editData}) => {
                             </Form>
                         </Card>
                     </Modal.Body>
-            
+                )}
             </Modal>
-</>
-  )
-}
+        </>
+    );
+};
 
-export default Update
+export default Update;
