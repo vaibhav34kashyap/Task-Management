@@ -1,4 +1,4 @@
-import React, { useState ,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ListGroup, Container, Row, Col, Table, Button } from 'react-bootstrap';
 import Accordion from 'react-bootstrap/Accordion';
@@ -8,31 +8,37 @@ import moment from 'moment';
 import Create from '../milestone/modal/create';
 import { getProjectsById } from '../../../../redux/projects/action';
 import { getallMileStones } from './../../../../redux/milestone/action';
-import { format } from 'date-fns';
+
+
+// import ToastHandle from '../../../constants/toaster/toaster';
 const Milestone = () => {
     const { id } = useParams();
     const store = useSelector((state) => state);
 
     const dispatch = useDispatch();
     const [openModel, setOpenModel] = useState(false);
-    const  GetDataById  =store?.getProjectById?.data?.project;
-    // const GetAllmilstonesData=store?.getAllMileStones?.data?.data;
+    const GetDataById = store?.getProjectById?.data?.project;
+    const GetAllmilstonesData = store?.getAllMileStones?.data?.data;
+   
+ 
 
-    // const milstoneData = {
-    //     nodes: GetAllmilstonesData?.filter((item) =>
-    //       item.project_id.toLowerCase().includes(id.toLowerCase())
-    //     ),
-    //   };
-    // console.log("GetAllmilstonesData",GetAllmilstonesData.filter(item=> item.includes(id)))
-    
-        const closeModal = () => {
+
+    const milstoneData = {
+        nodes: GetAllmilstonesData?.filter((item) =>
+            item?.project_id?.toLowerCase().includes(id.toLowerCase())
+        ),
+    };
+    // console.log("GetAllmilstonesData", GetAllmilstonesData?.filter(item => item.includes(id)))
+
+    const closeModal = () => {
         setOpenModel(false);
     };
     useEffect(() => {
         dispatch(getProjectsById(id))
-        // dispatch(getallMileStones())
+        dispatch(getallMileStones())
     }, [])
-    
+
+   
     return (
         <>
             {/* <h1>{id}</h1> */}
@@ -62,12 +68,12 @@ const Milestone = () => {
                                 <h4> Project</h4>
                             </Col>
 
-   <ListGroup as="ol" numbered style={{ marginLeft: '20px', position: 'sticky' }}>
+                            <ListGroup as="ol" numbered style={{ marginLeft: '20px', position: 'sticky' }}>
                                 <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
                                     <div className="ms-2 me-auto">
                                         <div className="">
                                             <b>Project Name : </b>
-                                            <i>{ GetDataById ?.projectName}</i>
+                                            <i>{GetDataById?.projectName}</i>
                                         </div>
                                     </div>
                                 </ListGroup.Item>
@@ -75,9 +81,9 @@ const Milestone = () => {
                                     <div className="ms-2 me-auto">
                                         <div className="">
                                             <b>Client Name : </b>
-                                           <i>
-                                            {GetDataById?.clientName}
-                                           </i>
+                                            <i>
+                                                {GetDataById?.clientName}
+                                            </i>
                                         </div>
                                     </div>
                                 </ListGroup.Item>
@@ -85,8 +91,8 @@ const Milestone = () => {
                                     <div className="ms-2 me-auto">
                                         <div className="">
                                             <b>Project Type : </b>
-                                           <i>{GetDataById?.projectType
-}</i>
+                                            <i>{GetDataById?.projectType
+                                            }</i>
                                         </div>
                                     </div>
                                 </ListGroup.Item>
@@ -95,7 +101,7 @@ const Milestone = () => {
                                         <div className="">
                                             <b>Project Start Date : </b>
                                             <i>
-                                            {moment(GetDataById ?.startDate).format('L')}</i>
+                                                {moment(GetDataById?.startDate).format('L')}</i>
                                         </div>
                                     </div>
                                 </ListGroup.Item>
@@ -103,7 +109,7 @@ const Milestone = () => {
                                     <div className="ms-2 me-auto">
                                         <div className="">
                                             <b>Project End Date : </b>
-                                            <i>{moment(GetDataById ?.endDate).format('L')}</i>
+                                            <i>{moment(GetDataById?.endDate).format('L')}</i>
                                         </div>
                                     </div>
                                 </ListGroup.Item>
@@ -111,7 +117,7 @@ const Milestone = () => {
                                     <div className="ms-2 me-auto">
                                         <div className="">
                                             <b>Project Category : </b>
-                                            <i>{ GetDataById ?.projectCategory}</i>
+                                            <i>{GetDataById?.projectCategory}</i>
                                         </div>
                                     </div>
                                 </ListGroup.Item>
@@ -120,7 +126,7 @@ const Milestone = () => {
                                         <div className="">
                                             <b>Project Description : </b>
                                             <i>{GetDataById?.projectDesc
-}</i>
+                                            }</i>
                                         </div>
                                     </div>
                                 </ListGroup.Item>
@@ -133,8 +139,8 @@ const Milestone = () => {
                                     </div>
                                 </ListGroup.Item>
                             </ListGroup>
-    
-                         
+
+
                         </Row>
                     </Col>
 
@@ -158,6 +164,7 @@ const Milestone = () => {
                                             </Table>
                                         </Accordion.Header>
                                         <Accordion.Body>
+                                
                                             <Table>
                                                 <thead className=" btom_Line_hide">
                                                     <tr>
@@ -166,21 +173,23 @@ const Milestone = () => {
                                                         <th> Start Date</th>
                                                         <th> End Date</th>
                                                     </tr>
-                                                   
-                                                   
+
+
                                                 </thead>
                                                 <tbody>
-                                                {/* {GetAllmilstonesData?.map((item,index)=>
+                                                    {/* {GetAllmilstonesData?.map((item, index) =>
                                                         <tr>
-                                                        <td>{item.title}</td>
-                                                        <td>{item.description}</td>
-                                                        <td>{item.start_date}</td>
-                                                        <td>{item.completion_date}</td>
-                                                    </tr>
-                                                    
+                                                            <td>{item?.title}</td>
+                                                            <td>{item?.description}</td>
+                                                          
+                                                            <td>  {moment(item?.startDate).format('L')}</td>
+                                                            <td>{moment(item?.completion_date).format('L')}</td>
+                                                        </tr>
+
                                                     )} */}
                                                 </tbody>
                                             </Table>
+                       
                                         </Accordion.Body>
                                     </Accordion.Item>
                                 </Accordion>
