@@ -12,6 +12,7 @@ export const AddSprint ="/sprint/add";
 export const GetAllSprints ="/sprint";
 export const DeleteSprint ="/sprint/delete/";
 export const ParticularSprintDetail ="/sprint/getsprintbyid/";
+export const getAllSingleSprint="/sprint/getAMilestoneAllSprints?id="
 // create task 
 export const CREATE_TASK = "/task/createtask";
 export const UPDATE_MILESTONE ="/milestone/update";

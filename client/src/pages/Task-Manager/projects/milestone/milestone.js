@@ -19,10 +19,6 @@ const Milestone = () => {
     const [openModel, setOpenModel] = useState(false);
     const GetDataById = store?.getProjectById?.data?.project;
     const GetAllmilstonesData = store?.getAllMileStones?.data?.data;
-   
- 
-
-
     const milstoneData = {
         nodes: GetAllmilstonesData?.filter((item) =>
             item?.project_id?.toLowerCase().includes(id.toLowerCase())
