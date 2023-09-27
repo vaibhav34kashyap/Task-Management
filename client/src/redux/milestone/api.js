@@ -6,6 +6,9 @@ const api = new APICore()
 export function getAllMileStonesApi(data): any {
     return api.get(URL.GetAllMileStones, data.payload)
 }
+export function addAllMilstoneApi(data): any {
+    return api.create(URL.MileStoneAdd, data.payload)
+}
 export function deleteMileStoneApi(data): any {
     return api.updatePatch(URL.MileStoneDelete + data?.payload)
 }

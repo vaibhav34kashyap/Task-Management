@@ -2,6 +2,11 @@ import MileStoneType from "./constant";
 type AuthAction = { type: string, payload: {} | string };
 
 
+export const addAllmilstones=(data):AuthAction => ({
+    type: MileStoneType.ADD_ALL_MILESTONES,
+    payload: data
+})
+
 export const getallMileStones = (data): AuthAction => ({
     type: MileStoneType.GET_ALL_MILESTONES,
     payload: data
@@ -19,3 +24,4 @@ export const updateMileStone = (data): AuthAction => ({
     type: MileStoneType.UPDATE_MILESTONE,
     payload: data
 })
+

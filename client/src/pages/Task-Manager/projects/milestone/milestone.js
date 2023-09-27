@@ -7,17 +7,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import Create from '../milestone/modal/create';
 import { getProjectsById } from '../../../../redux/projects/action';
+import { getallMileStones } from './../../../../redux/milestone/action';
+import { format } from 'date-fns';
 const Milestone = () => {
     const { id } = useParams();
     const store = useSelector((state) => state);
+
     const dispatch = useDispatch();
     const [openModel, setOpenModel] = useState(false);
-    const  GetDataById  =store?.getProjectById?.data?.project
+    const  GetDataById  =store?.getProjectById?.data?.project;
+    const GetAllmilstonesData=store?.getAllMileStones?.data?.data;
+
+    // const milstoneData = {
+    //     nodes: GetAllmilstonesData?.filter((item) =>
+    //       item.project_id.toLowerCase().includes(id.toLowerCase())
+    //     ),
+    //   };
+    // console.log("GetAllmilstonesData",GetAllmilstonesData.filter(item=> item.includes(id)))
+    
         const closeModal = () => {
         setOpenModel(false);
     };
     useEffect(() => {
-dispatch(getProjectsById(id))
+        dispatch(getProjectsById(id))
+        dispatch(getallMileStones())
     }, [])
     
     return (
@@ -153,7 +166,20 @@ dispatch(getProjectsById(id))
                                                         <th> Start Date</th>
                                                         <th> End Date</th>
                                                     </tr>
+                                                   
+                                                   
                                                 </thead>
+                                                <tbody>
+                                                {GetAllmilstonesData?.map((item,index)=>
+                                                        <tr>
+                                                        <td>{item.title}</td>
+                                                        <td>{item.description}</td>
+                                                        <td>{item.start_date}</td>
+                                                        <td>{item.completion_date}</td>
+                                                    </tr>
+                                                    
+                                                    )}
+                                                </tbody>
                                             </Table>
                                         </Accordion.Body>
                                     </Accordion.Item>

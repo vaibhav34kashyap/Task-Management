@@ -1,6 +1,7 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import MileStoneType from './constant';
-import { UpdateMileStonesApi, deleteMileStoneApi, getAllMileStonesApi, getMileStoneApi } from './api';
+import { UpdateMileStonesApi, deleteMileStoneApi, getAllMileStonesApi, getMileStoneApi,addAllMilstoneApi } from './api';
+
     function* getAllMileStonesFunction({ payload }) {
         try {
             yield put({
@@ -8,7 +9,7 @@ import { UpdateMileStonesApi, deleteMileStoneApi, getAllMileStonesApi, getMileSt
                 payload: {}
             })
             const response = yield call(getAllMileStonesApi, { payload });
-            console.log(response,"bbbvvv")
+            console.log("bbbvvv",response)
             if (response.data.status) {
                 yield put({
                     type: MileStoneType.GET_ALL_MILESTONES_SUCCESS,
@@ -30,6 +31,43 @@ import { UpdateMileStonesApi, deleteMileStoneApi, getAllMileStonesApi, getMileSt
             yield put({
                 type: MileStoneType.GET_ALL_MILESTONES_ERROR,
                 payload: { message: error?.message }
+            });
+    
+        }
+    }
+    function* addAllMileStonesFunction({ payload }) {
+        try {
+            yield put({
+                type: MileStoneType.ADD_ALL_MILESTONES_LOADING,
+                payload: {}
+            })
+            const response = yield call(addAllMilstoneApi, { payload });
+            console.log("fsgsgrs")
+            if (response.data.status) {
+                yield put({
+                    type:MileStoneType.ADD_ALL_MILESTONES_SUCCESS,
+                    payload: { ...response.data },
+                });
+                yield put({
+                    type: MileStoneType.ADD_ALL_MILESTONES_RESET,
+                    payload: {},
+                });
+            }
+            else {
+                yield put({
+                    type: MileStoneType.ADD_ALL_MILESTONES_ERROR,
+                    payload: { ...response.data }
+                });
+            }
+    
+        } catch (error) {
+            yield put({
+                type: MileStoneType.ADD_ALL_MILESTONES_ERROR,
+                payload: { message: error?.message }
+            });
+            yield put({
+                type: MileStoneType.ADD_ALL_MILESTONES_RESET,
+                payload: {},
             });
     
         }
@@ -142,6 +180,10 @@ import { UpdateMileStonesApi, deleteMileStoneApi, getAllMileStonesApi, getMileSt
             });
         }
     }
+
+    export function* addAllMileStonesSaga(): any {
+        yield takeEvery(MileStoneType.ADD_ALL_MILESTONES, addAllMileStonesFunction);
+    }
     export function* getAllMileStonesSaga(): any {
         yield takeEvery(MileStoneType.GET_ALL_MILESTONES, getAllMileStonesFunction);
     }
@@ -160,7 +202,8 @@ import { UpdateMileStonesApi, deleteMileStoneApi, getAllMileStonesApi, getMileSt
             fork(getAllMileStonesSaga),
             fork(mileStoneDeleteSaga),
             fork(getMileStoneSaga),
-            fork (updateMileStoneSaga)
+            fork(updateMileStoneSaga),
+            fork(addAllMileStonesSaga)
    
         ])
     }

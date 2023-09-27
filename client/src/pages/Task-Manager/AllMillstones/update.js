@@ -10,7 +10,7 @@ import { updateMileStone } from '../../../redux/milestone/action';
 const Update = ({modal,closeModal,editData}) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    const sucesshandel =store?.updateMilestone?.data
+    const sucesshandel =store?.updateMilestone
     useEffect(() => {
         reset({
             title: editData?.title,
@@ -38,7 +38,8 @@ const Update = ({modal,closeModal,editData}) => {
             start_date: data?.startDate,
             completion_date: data?.endDate,
         };
-        dispatch(updateMileStone(body));
+        dispatch(updateMileStone(body)); closeModal('render');
+
     };
     const {
         register,
@@ -54,12 +55,12 @@ const Update = ({modal,closeModal,editData}) => {
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
             // console.log(sucesshandel, sucesshandel?.message);
-            ToastHandle('success',  sucesshandel?.message);
+            ToastHandle('success', "Updated Successfully");
             closeModal('render');
         } else if (sucesshandel?.data?.status == 400) {
-            ToastHandle('error', sucesshandel?.message);
+            ToastHandle('error', sucesshandel?.data?.message);
         } else if (sucesshandel?.data?.status == 500) {
-            ToastHandle('error', sucesshandel?.message);
+            ToastHandle('error', sucesshandel?.data?.message);
         }
     }, [sucesshandel]);
   return (

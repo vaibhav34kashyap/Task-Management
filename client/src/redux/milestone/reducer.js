@@ -5,6 +5,11 @@ const GET_ALL_MILESTONE_INTIAL_STATE={
     message: "",
     loading: false
 }
+const ADD_ALL_MILESTONE_INTIAL_STATE={
+    data: [],
+    message: "",
+    loading: false
+}
 const GET_MILESTONE_INTIAL_STATE={
     data: [],
     message: "",
@@ -20,6 +25,8 @@ const UPDATE_MILESTONE_INTIAL_STATE={
     message: "",
     loading: false
 }
+
+
 export const getAllMileStones = (state = GET_ALL_MILESTONE_INTIAL_STATE, action) => {
     switch (action.type) {
         case MileStoneType.GET_ALL_MILESTONES_LOADING:
@@ -35,6 +42,35 @@ export const getAllMileStones = (state = GET_ALL_MILESTONE_INTIAL_STATE, action)
 
 
         case MileStoneType.GET_ALL_MILESTONES_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+
+export const addAllmilstones = (state = ADD_ALL_MILESTONE_INTIAL_STATE, action) => {
+    switch (action.type) {
+        case MileStoneType.ADD_ALL_MILESTONES_LOADING:
+            return {
+                data: ADD_ALL_MILESTONE_INTIAL_STATE.data,
+                loading: true,
+            };
+        case MileStoneType.ADD_ALL_MILESTONES_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+        case MileStoneType.ADD_ALL_MILESTONES_RESET:
+            return {
+                data: ADD_ALL_MILESTONE_INTIAL_STATE.data,
+                loading: false,
+            };
+        case MileStoneType.ADD_ALL_MILESTONES_ERROR:
             return {
                 data: [],
                 loading: false,
