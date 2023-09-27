@@ -19,3 +19,6 @@ export function getMileStoneApi(data): any {
 export function UpdateMileStonesApi(data): any {
     return api.update(URL.UPDATE_MILESTONE, data.payload)
 }
+export function getSinleMileStoneApi(data): any {
+    return api.get(URL.SingleMilestone + data?.payload)
+}
