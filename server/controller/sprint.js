@@ -121,7 +121,7 @@ const taskModel = require('../models/task')
 const getSprint = async (req, res) => {
 
     try {
-        const result = await sprintModel.find({deleteStatus:true});
+        const result = await sprintModel.find({ deleteStatus: true });
         if (result) {
             return res.status(200).json({ status: '200', data: result, message: 'Get all sprint' })
         } else {
@@ -136,7 +136,6 @@ const getSprintById = async (req, res) => {
     const id = req.body._id
     try {
         const result = await sprintModel.findById({ _id: req.params.id });
-        console.log(result,"====")
         if (result) {
             return res.status(200).json({ status: '200', data: result, message: 'Success' });
         } else {
@@ -211,9 +210,8 @@ const addSprint = async (req, res) => {
 const updateSprint = async (req, res) => {
     try {
         let _id = req.body._id;
-        const result = await sprintModel.findByIdAndUpdate(_id, req.body)
+        const result = await sprintModel.findByIdAndUpdate(_id, req.body, { new: true });
         return res.status(200).json({ status: '200', result, message: 'Updated sprint' });
-
     } catch (err) {
         console.log(err);
         return res.status(200).json({ status: '404', message: 'Something went wrong' });
@@ -230,10 +228,10 @@ const deleteSprint = async (req, res) => {
     }
 }
 
-const getAllSprints = async(req,res) => {
+const getAllSprints = async (req, res) => {
     try {
         const result = await sprintModel.find();
-        return res.status(200).json({status : '200', message : "ALL sprints fecteched successfully", Response : result})
+        return res.status(200).json({ status: '200', message: "ALL sprints fecteched successfully", Response: result })
     } catch (error) {
         return res.status(200).json({ status: '500', message: 'Something went wrong' });
     }

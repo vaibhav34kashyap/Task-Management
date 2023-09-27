@@ -199,7 +199,7 @@ const updateMilestone = async (req, res) => {
         if (req.body.title) {
             const existingTitle = await milestoneModel.findOne({ title: req.body.title, _id: { $ne: milestoneId } });
             if (existingTitle) {
-                res.status(400).json({ status: "400", message: "Title already exists" });
+                res.status(400).json({ status: "200", message: "Title already exists" });
                 return;
             }
         }
