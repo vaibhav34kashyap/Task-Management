@@ -24,4 +24,7 @@ export const updateMileStone = (data): AuthAction => ({
     type: MileStoneType.UPDATE_MILESTONE,
     payload: data
 })
-
+export const getsingleMileStone = (data): AuthAction => ({
+    type: MileStoneType.GET_SINGLE_MILESTONE,
+    payload: data
+})

@@ -25,6 +25,11 @@ const UPDATE_MILESTONE_INTIAL_STATE={
     message: "",
     loading: false
 }
+const GET_SINGLE_MILESTONE_INTIAL_STATE={
+    data: [],
+    message: "",
+    loading: false
+}
 
 
 export const getAllMileStones = (state = GET_ALL_MILESTONE_INTIAL_STATE, action) => {
@@ -158,6 +163,31 @@ export const updateMilestone = (state = UPDATE_MILESTONE_INTIAL_STATE, action) =
             return {
                 data: [],
                 status: 403,
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+export const getSigleMileStone = (state = GET_SINGLE_MILESTONE_INTIAL_STATE, action) => {
+    switch (action.type) {
+        case MileStoneType.GET_SINGLE_MILESTONE_LOADING:
+            return {
+                data: GET_SINGLE_MILESTONE_INTIAL_STATE.data,
+                loading: true,
+            };
+        case MileStoneType.GET_SINGLE_MILESTONE_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case MileStoneType.GET_SINGLE_MILESTONE_ERROR:
+            return {
+                data: [],
                 loading: false,
                 message: action?.payload,
             };
