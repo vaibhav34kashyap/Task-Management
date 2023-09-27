@@ -206,4 +206,15 @@ const userPendingTask = async (req, res) => {
     }
 }
 
-module.exports = { createtask, taskdetails, updatetaskdetails, deleteTask, assigntaskuser, taskstatusupdate, userPendingTask, upladFile, deleteImage, getSingleTaskById };
+const getSprintTasks = async(req,res) => {
+    try {
+        const result = await taskModel.find({sprint_id : req.query.id});
+        return res.status(200).json({ status: "200", message: "A Sprint All Tasks fetched successfully", Response : result })
+    } catch (error) {
+        res.status(200).json({ status: "500", message: "Something went wrong" })
+    }
+}
+
+module.exports = { createtask, taskdetails, updatetaskdetails, deleteTask, assigntaskuser, taskstatusupdate,
+    userPendingTask, upladFile, deleteImage, getSingleTaskById , getSprintTasks 
+};
