@@ -5,3 +5,6 @@ const api = new APICore()
 export function createTaskApi(data): any {
     return api.create(URL.CREATE_TASK, data.payload)
 }
+export function getSingleSprintTaskApi(data): any {
+    return api.get(URL.SingleSprintTask + data?.payload)
+}
