@@ -192,19 +192,28 @@ const addMilestone = async (req, res) => {
         res.status(200).json({ status: "500", message: "something went wrong" })
     }
 }
+
 const updateMilestone = async (req, res) => {
     try {
-        const existingtitle = await milestoneModel.findOne({ title: req.body.title });
-        if (existingtitle) {
-            res.status(200).json({ status: "400", message: "Title Already exist" })
+        const milestoneId = req.body._id;
+        if (req.body.title) {
+            const existingTitle = await milestoneModel.findOne({ title: req.body.title, _id: { $ne: milestoneId } });
+            if (existingTitle) {
+                res.status(400).json({ status: "400", message: "Title already exists" });
+                return;
+            }
+        }
+        const result = await milestoneModel.findByIdAndUpdate(milestoneId, req.body, { new: true });
+        if (result) {
+            res.status(200).json({ status: "200", data: result, message: "Updated" });
         } else {
-            const result = await milestoneModel.findByIdAndUpdate({ _id: req.body._id }, req.body, { option: true });
-            res.status(200).json({ status: "400", data: result, message: "Updated " })
+            res.status(404).json({ status: "404", message: "Milestone not found" });
         }
     } catch (err) {
-        res.status(200).json({ status: "500", message: "something went wrong" })
+        res.status(500).json({ status: "500", message: "Something went wrong" });
     }
 }
+
 const deleteMilestone = async (req, res) => {
     // try {
     //     const result = await milestoneModel.findByIdAndUpdate({ _id: req.body.id }, { deleteStatus: false });
@@ -226,7 +235,17 @@ const deleteMilestone = async (req, res) => {
     }
 }
 
+const getMilestones = async(req,res) => {
+    try {
+        console.log('sdagfhgh');
+        const result = await milestoneModel.find();
+        return res.status(200).json({ status : "200", message : "All milestones feteched successfully", Response : result})
+    } catch (error) {
+        return res.status(200).json({ status: '500', message: 'Something went wrong' })
+    }
+}
+
 module.exports = {
     showAllMilestone, InprogressMilestone, getMilestoneById,
-    addMilestone, updateMilestone, deleteMilestone, getSingleMileston
+    addMilestone, updateMilestone, deleteMilestone, getSingleMileston, getMilestones
 }
