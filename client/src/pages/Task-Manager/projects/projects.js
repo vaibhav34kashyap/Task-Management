@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Button, Col, Form, Card, Table, CloseButton } from 'react-bootstrap';
+import { Row, Button, Col, Form, Card, Table, CloseButton, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Create from './modal/create';
@@ -128,7 +128,7 @@ const Projects = () => {
                                                     <Row>
                                                         <Col>
                                                             <p className="action-icon m-0 p-0 ">
-                                                                <Link to={`/projects/${ele._id}`}>
+                                                                <Link to={`/projects/${ele?._id}`}>
                                                                     <i className="mdi mdi-eye m-0 p-0"></i>
                                                                 </Link>
                                                             </p>

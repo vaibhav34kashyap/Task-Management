@@ -13,7 +13,7 @@ export function deleteMileStoneApi(data): any {
     return api.updatePatch(URL.MileStoneDelete + data?.payload)
 }
 export function getMileStoneApi(data): any {
-    console.log(data ,"ritika")
+    
     return api.get(URL.ParticularMilestoneDetail + data?.payload)
 }
 export function UpdateMileStonesApi(data): any {

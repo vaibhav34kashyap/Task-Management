@@ -1,6 +1,4 @@
 const MileStoneType = {
-
-
     // add milstones
     ADD_ALL_MILESTONES: "ADD_ALL_MILESTONES",
     ADD_ALL_MILESTONES_LOADING: "ADD_ALL_MILESTONES_LOADING",
