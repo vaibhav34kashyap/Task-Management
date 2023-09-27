@@ -27,7 +27,7 @@ const Update = ({ modal, CloseModal, editData }) => {
     };
     const onSubmit = (data) => {
         let body = {
-            _id: editData?.id,
+            _id : editData?._id ,
             sprintName: data?.title,
             sprintDesc: data?.Description,
             startDate: data?.startDate,
