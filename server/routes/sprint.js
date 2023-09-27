@@ -21,8 +21,8 @@ sprintRoute.get('/getsprintbyid/:id',path.getSprintById);
 sprintRoute.post('/singlemilestonesprints',path.sigleMilestoneSprints);
 sprintRoute.post('/add',path.addSprint);
 sprintRoute.put('/update',path.updateSprint);
-sprintRoute.patch('/delete/:id',path.deleteSprint);
 sprintRoute.get('/getAllSprints',path.getAllSprints);
+sprintRoute.delete('/delete/:id',path.deleteSprint);
 
 
 module.exports = sprintRoute;

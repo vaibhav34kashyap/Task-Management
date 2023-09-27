@@ -30,7 +30,7 @@ const createtask = async (req, res) => {
         start_time: req.body.start_time,
         end_time: req.body.end_time,
         actual_time: req.body.actual_time,
-        due_date: req.body.due_date,
+        due_date:new Date(req.body.due_date),
         assignee_id: req.body.assignee_id,
         labels_id: req.body.labels_id,
         // attachment: imgArray,
@@ -38,7 +38,7 @@ const createtask = async (req, res) => {
     }
     try {
         const data = await taskModel.findOne({ task_name: objData.task_name });
-        if (data <= 0) {
+        if (!data) {
             const result = await taskModel.create(objData);
             return res.status(200).json({ status: "200", user: result, message: "task created successfully" });
         } else {
