@@ -11,8 +11,9 @@ const Container = styled.div`
   ${'' /* background-color: ${colors.B100}; */}
   min-height: 100px;
   /* like display:flex but will allow bleeding over the window width */
-  min-width: 150vw;
+  ${'' /* max-width: 150vw; */}
   display: inline-flex;
+  flex:0 0 33%;
 `;
 
 const Board = ({

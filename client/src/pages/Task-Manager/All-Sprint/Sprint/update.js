@@ -33,6 +33,7 @@ const Update = ({ modal, CloseModal, editData }) => {
             startDate: data?.startDate,
             endDate: data?.endDate,
         };
+        console.log("editsprit",body)
         dispatch(updateSprint(body));
     };
     useEffect(() => {
@@ -87,6 +88,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={12}>
+                                 
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
                                                 Sprint Name<span className="text-danger">*</span>:

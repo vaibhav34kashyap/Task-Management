@@ -12,7 +12,7 @@ import {
     addAllmilstones,
     getSigleMileStone,
 } from './milestone/reducer';
-import { addSprint, getAllSprints, deleteSprint, getSingleSprint, updateSprint } from './sprint/reducres';
+import { addSprint, getAllSprints, deleteSprint, getSingleSprint, updateSprint ,getAllSingleSprints  } from './sprint/reducres';
 import { createTaskReducer, getSigleSprintTask } from './task/reducer';
 import { getAllUsers, deleteUser } from './user/reducer';
 export default (combineReducers({
@@ -37,5 +37,6 @@ export default (combineReducers({
     deleteUser,
     updateSprint,
     getSigleMileStone,
-    getSigleSprintTask
+    getSigleSprintTask,
+    getAllSingleSprints
 }): any);

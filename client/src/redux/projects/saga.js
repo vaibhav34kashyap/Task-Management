@@ -1,6 +1,7 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import ProjectTypes from './constant';
 import { addProjectApi, deleteProjectApi, getProjectApi, getProjectByIdApi, updateProjectApi } from './api';
+
 function* addProjectFunction({ payload }) {
     try {
         yield put({

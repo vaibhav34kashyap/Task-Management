@@ -1,6 +1,8 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import SprintTypes from './constant';
-import { addSprintApi, deleteSprintApi, getSingleSprintApi, getallSprintApi, updateSprintApi } from './api';
+import { addSprintApi, deleteSprintApi, getAllSingleSprintApi, getSingleSprintApi, getallSprintApi, updateSprintApi } from './api';
+
+
 function* addSprintFunction({ payload }) {
     try {
         yield put({
@@ -139,6 +141,40 @@ function* getSingleSprintFunction({ payload }) {
 
     }
 }
+
+function* getAllSingleSprintFunction({ payload }) {
+    try {
+        yield put({
+            type: SprintTypes.GET_ALL_SINGLE_SPRINT_LOADING,
+            payload: {}
+        })
+        const response = yield call(getAllSingleSprintApi, { payload });
+        
+        if (response.data.status) {
+            yield put({
+                type: SprintTypes.GET_ALL_SINGLE_SPRINT_SUCCESS,
+                payload: { ...response.data },
+            });
+            // yield put({
+            //     type: SprintTypes.GET_SPRINT_BY_ID_RESET,
+            //     payload: {},
+            // });
+        }
+        else {
+            yield put({
+                type: SprintTypes.GET_ALL_SINGLE_SPRINT_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: SprintTypes.GET_ALL_SINGLE_SPRINT_ERROR,
+            payload: { message: error?.message }
+        });
+
+    }
+}
 function* updateSprintFunction({ payload }) {
     try {
         yield put({
@@ -185,6 +221,9 @@ export function* getAllSprintSaga(): any {
     yield takeEvery(SprintTypes.GET_ALL_SPRINT, getAllSprintFunction);
 }
 
+export function* getAllSingleSprintSaga(): any {
+    yield takeEvery(SprintTypes.GET_ALL_SINGLE_SPRINT, getAllSingleSprintFunction);
+}
 export function* deleteSprintSaga(): any {
     yield takeEvery(SprintTypes.DELETE_SPRINT, deleteSprintFunction);
 }
@@ -201,6 +240,7 @@ function* AllSprintSaga(): any {
         fork (deleteSprintSaga),
        fork (getSingleSprintSaga),
        fork (updateSprintSaga),
+    fork(getAllSingleSprintSaga)
     ])
 }
 export default AllSprintSaga;
