@@ -7,22 +7,30 @@ import Create from './Sprint/Create';
 import moment from 'moment';
 import "../../projects/milestone/milstone.css"
 import Accordion from 'react-bootstrap/Accordion';
+import { getSingleSprint } from './../../../../redux/sprint/action';
+import MainLoader from '../../../../constants/Loader/loader';
 const MileStone = () => {
     const { id } = useParams();
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [data, setData] = useState();
+    const [render, setRender] = useState(false);
     const [openModal, SetOpenModal] = useState(false);
     const successHandle = store?.getMileStone;
+    const GetAllSingleSprintData = store?.getAllSingleSprints?.data?.Response;
     const handleCreate = () => {
         SetOpenModal(true);
     };
-    const CloseModal = () => {
+    const CloseModal = (val) => {
+        if (val == 'render') {
+            setRender(!render);
+        }
         SetOpenModal(false);
     };
     useEffect(() => {
         dispatch(getMileStoneById(id));
-    }, []);
+        dispatch(getSingleSprint(id));
+    }, [render]);
 
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
@@ -44,6 +52,7 @@ const MileStone = () => {
                     </Button>
                 </Col>
             </Row>
+            {successHandle?.loading ? (<MainLoader/>):(
             <Row>
                 <Col lg={4}>
                     <Row>
@@ -95,7 +104,7 @@ const MileStone = () => {
                                 <h4>Sprints</h4>
                             </Col>
                             <Col className="" lg={12}>
-                                <Accordion defaultActiveKey="0">
+                                {/* <Accordion defaultActiveKey="0">
                                     <Accordion.Item eventKey="1">
                                         <Accordion.Header>
                                             <Table>
@@ -107,7 +116,7 @@ const MileStone = () => {
                                                 </thead>
                                             </Table>
                                         </Accordion.Header>
-                                        <Accordion.Body>
+                                        <Accordion.Body> */}
                                             <Table>
                                                 <thead className=" btom_Line_hide">
                                                     <tr>
@@ -116,16 +125,29 @@ const MileStone = () => {
                                                         <th>Sprint Start Date</th>
                                                         <th>Sprint End Date</th>
                                                     </tr>
+                                                    
+                                                   
+                                                      {GetAllSingleSprintData?.map((item, index) =>
+                                                        <tr>
+                                                            <td>{item?.sprintName}</td>
+                                                            <td>{item?.sprintDesc}</td>
+                                                          
+                                                            <td>  {moment(item?.startDate).format('L')}</td>
+                                                            <td>{moment(item?.endDate).format('L')}</td>
+                                                        </tr>
+
+                                                    )}
                                                 </thead>
                                             </Table>
-                                        </Accordion.Body>
+                                        {/* </Accordion.Body>
                                     </Accordion.Item>
-                                </Accordion>
+                                </Accordion> */}
                             </Col>
                         </Row>
                     </Col>
               
             </Row>
+            )}
             <Create modal={openModal} CloseModal={CloseModal} id={id} data={data}/>
         </>
     );

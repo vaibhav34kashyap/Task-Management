@@ -15,11 +15,13 @@ const DELETE_SPRINT_INITIAL_STATE = {
     message: "",
     loading: false
 }
+//single sprint =--------
 const GET_SINGLE_SPRINT_INITIAL_STATE = {
     data: [],
     message: "",
     loading: false
 }
+// end single sprint ----
 const UPDATE_SPRINT_INITIAL_STATE = {
     data: [],
     message: "",
@@ -53,6 +55,33 @@ export const addSprint = (state = ADD_SPRINT_INITIAL_STATE, action) => {
 
     }
 };
+// get single sprint--------------------------------
+export const getAllSingleSprints = (state = GET_SINGLE_SPRINT_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case SprintTypes.GET_ALL_SINGLE_SPRINT_LOADING:
+            return {
+                data: GET_SINGLE_SPRINT_INITIAL_STATE.data,
+                loading: true,
+            };
+        case SprintTypes.GET_ALL_SINGLE_SPRINT_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case SprintTypes.GET_ALL_SINGLE_SPRINT_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+// end single sprint-------------------------------
 export const getAllSprints = (state = GET_ALL_SPRINT_INITIAL_STATE, action) => {
     switch (action.type) {
         case SprintTypes.GET_ALL_SPRINT_LOADING:

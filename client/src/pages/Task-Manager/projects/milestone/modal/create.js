@@ -5,10 +5,15 @@ import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { addAllmilstones } from '../../../../../redux/milestone/action';
+import ToastHandle from '../../../../../constants/toaster/toaster';
+import MainLoader from './../../../../../constants/Loader/loader';
 
 const Create = ({ modal, closeModal }) => {
+    const store = useSelector((state) => state);
+    const sucesshandel = store?.addAllmilstones;
+    const loaderhandel = store?.addAllmilstones;
     const { id } = useParams();
     const {
         register,
@@ -29,10 +34,24 @@ const Create = ({ modal, closeModal }) => {
             status:"new"            
         }
         dispatch(addAllmilstones(milStones))   
+        closeModal()
     };
     useEffect(() => {
         reset();
     }, [modal]);
+
+    useEffect(() => {
+        if (sucesshandel?.data?.status == 200) {
+            console.log(sucesshandel, '//////////////////////////////////////////////////');
+            ToastHandle('success', 'Successfully Added');
+            closeModal('render');
+        } else if (sucesshandel?.data?.status == 400) {
+            ToastHandle('error', sucesshandel?.data?.message);
+        } else if (sucesshandel?.data?.status == 500) {
+            ToastHandle('error', sucesshandel?.data?.message);
+        }
+    }, [sucesshandel]);
+   
     return (
         <>
             <Modal show={modal} onHide={closeModal} size="md">
@@ -51,6 +70,11 @@ const Create = ({ modal, closeModal }) => {
                     </Col>
                 </Row>
                 <Modal.Body className="py-0">
+                {loaderhandel?.loading ? (
+                        <>
+                            <MainLoader />
+                        </>
+                    ) : (
                     <Card className="p-3">
                         <Form onSubmit={handleSubmit(onSubmit)}>
                             <Row>
@@ -109,6 +133,7 @@ const Create = ({ modal, closeModal }) => {
                             </Row>
                         </Form>
                     </Card>
+                    )}
                 </Modal.Body>
             </Modal>
         </>
