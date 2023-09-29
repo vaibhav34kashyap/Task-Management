@@ -225,7 +225,7 @@ const getSprintTasks = async (req, res) => {
             .skip((parseInt(req.query.skip) - 1) * pageSize);
         const totalPages = Math.ceil(totalCount / pageSize);
 
-        return res.status(200).json({ status: "200", message: "Sprint tasks fetched successfully", Response: result, totalCount, totalPages });
+        return res.status(200).json({ status: "200", message: "Sprint tasks fetched successfully", response: result, totalCount, totalPages });
     } catch (error) {
         console.error(error); // Log the error for debugging
         res.status(500).json({ status: "500", message: "Something went wrong" });
