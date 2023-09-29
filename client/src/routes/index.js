@@ -38,7 +38,7 @@ const ProjectDashboard = React.lazy(() => import('../pages/dashboard/Project'));
 const EWalletDashboard = React.lazy(() => import('../pages/dashboard/E-Wallet'));
 
 // Boards
-const Boards = React.lazy(() => import('../pages/Task-Manager/Boards'));
+const Boards = React.lazy(() => import('../pages/Task-Manager/board/board'));
 
 // AllMillStone
 const AllMillStone = React.lazy(() => import('../pages/Task-Manager/AllMillstones'));
