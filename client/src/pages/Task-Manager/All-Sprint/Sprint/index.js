@@ -7,8 +7,11 @@ import Create from './Task/Create';
 import moment from 'moment';
 import { getsingleSprintTask } from '../../../../redux/task/action';
 import MainLoader from '../../../../constants/Loader/loader';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 const Sprint = () => {
     const { id } = useParams();
+    const [skip, setSkip] = useState(1);
     const store = useSelector((state) => state);
     const [openModal, SetOpenModal] = useState(false);
     const dispatch = useDispatch();
@@ -19,6 +22,10 @@ const Sprint = () => {
     const handleCreate=()=>{
       SetOpenModal(true)
     }
+    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setSkip(value);
+        dispatch(getsingleSprintTask({id: id, skip: value }));
+    };
     const CloseModal = (val) => {
       
       if (val == 'render') {
@@ -28,7 +35,7 @@ const Sprint = () => {
   };
     useEffect(() => {
         dispatch(getSprintById(id));
-        dispatch(getsingleSprintTask(id))
+        dispatch(getsingleSprintTask({id: id, skip: 1 }))
     }, [render]);
 
     return (
@@ -44,7 +51,8 @@ const Sprint = () => {
                     </Button>
                 </Col>
             </Row>
-            {loaderhandel.loading ?(<MainLoader/>): <Row>
+            {loaderhandel.loading ?(<MainLoader/>): 
+            <Row>
                 <Col lg={4}>
                     <Row>
                         <Col className="text-center" lg={12}>
@@ -87,6 +95,7 @@ const Sprint = () => {
      
                         </ListGroup>
                     </Row>
+
                 </Col>
                 <Col className="mx-auto" lg={7}>
                             <Row>
@@ -124,7 +133,23 @@ const Sprint = () => {
                                  
                                 </Col>
                             </Row>
+                            <Row>
+                            <Col lg={12} className="d-flex justify-content-end mt-3">
+                                {store?.getSigleSprintTask?.data?.totalPages > 0 && (
+                                    <Stack spacing={2}>
+                                        <Pagination
+                                            defaultPage={skip}
+                                            count={store?.getSigleSprintTask?.data?.totalPages}
+                                            color="primary"
+                                            variant="outlined"
+                                            onChange={handlePaginationChange}
+                                        />
+                                    </Stack>
+                                )}
+                            </Col>
+                        </Row>
                         </Col>
+
             </Row>}
             
             <Create modal={openModal} CloseModal={CloseModal} data={getSingleSprintList}/>

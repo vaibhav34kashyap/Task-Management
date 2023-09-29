@@ -38,6 +38,9 @@ const Title = styled.span`
 `;
 
 
+
+
+
 const Boards = () => {
     const dispatch = useDispatch();
     const store = useSelector(state=>state)
@@ -110,18 +113,18 @@ const Boards = () => {
     <DragDropContext
       onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
     >
-      <Container>
-        <TaskColumnStyles>
+      <Container >
+        <TaskColumnStyles class="one">
           {Object.entries(columns).map(([columnId, column], index) => {
             console.log(columnId,column,"######################")
             return (
-              <Droppable key={columnId} droppableId={columnId}>
+              <Droppable class="two" key={columnId} droppableId={columnId}>
                 {(provided, snapshot) => (
-                  <TaskList
+                  <TaskList class="three"
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                   >
-                    <Title>{column.title}</Title>
+                    <Title class="">{column.title}</Title>
                     {column.items.map((item, index) => (
                       <TaskCard key={item} item={item} index={index} />
                     ))}
