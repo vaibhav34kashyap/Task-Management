@@ -4,6 +4,8 @@ const multer = require("multer");
 const path = require('path');
 const fs = require('fs');
 const upladFile = multer({ storage: multer.diskStorage({}) })
+
+// Create or add tasks
 const createtask = async (req, res) => {
     const files = req.files;
     const imgArray = [];
@@ -49,8 +51,8 @@ const createtask = async (req, res) => {
         console.log(error);
         return res.status(200).json({ status: "500", message: 'something went wrong', error });
     }
-
 }
+
 const taskdetails = async (req, res) => {
     try {
         const pageSize = 5;
@@ -234,13 +236,13 @@ const getSprintTasks = async (req, res) => {
 const getTasksAccToStatus = async (req, res) => {
     try {
         // var resp = null;
-        const todo = await taskModel.find({ status: 0 })
+        const todo = await taskModel.find({ status: 1 })
         // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
 
-        const inProgress = await taskModel.find({ status: 1 });
+        const inProgress = await taskModel.find({ status: 2 });
         // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
 
-        const review = await taskModel.find({ status: 2 });
+        const review = await taskModel.find({ status: 4 });
         // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
 
         const done = await taskModel.find({ status: 3 });
