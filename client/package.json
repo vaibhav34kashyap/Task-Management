@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@atlaskit/theme": "10.0.5",
+    "@emotion/styled": "^11.11.0",
     "@fullcalendar/bootstrap": "^5.10.1",
     "@fullcalendar/core": "^5.10.1",
     "@fullcalendar/daygrid": "^5.10.1",

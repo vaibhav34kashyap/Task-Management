@@ -10,3 +10,7 @@ export const getsingleSprintTask = (data): AuthAction => ({
     type: TASK_TYPES.GET_SINGLE_SPRINT_TASK,
     payload: data
 })
+export const getAllTask= (data): AuthAction => ({
+    type: TASK_TYPES.GET_ALL_TASK,
+    payload: data
+})

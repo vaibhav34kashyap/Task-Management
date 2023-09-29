@@ -8,3 +8,6 @@ export function createTaskApi(data): any {
 export function getSingleSprintTaskApi(data): any {
     return api.get(URL.SingleSprintTask + data?.payload)
 }
+export function getAllTaskApi(data): any {
+    return api.get(URL.GetAllTask, data.payload)
+}
