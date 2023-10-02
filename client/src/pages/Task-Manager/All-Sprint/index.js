@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { ListGroup, Container, Row, Col, Table, Button, Card ,CloseButton} from 'react-bootstrap';
 import { deleteSprint, getAllSprint } from '../../../redux/sprint/action';
 import { Link } from 'react-router-dom';
