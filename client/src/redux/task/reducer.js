@@ -94,3 +94,28 @@ export const getAllTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) =>
 
     }
 };
+export const UpdateTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case TASK_TYPES.UPDATE_TASK_LOADING:
+            return {
+                data: GET_All_TASK_INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.UPDATE_TASK_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case TASK_TYPES.UPDATE_TASK_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};

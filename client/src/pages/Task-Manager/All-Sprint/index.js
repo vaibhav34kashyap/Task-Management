@@ -75,10 +75,11 @@ const AllSprint = () => {
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>Milestone Name</th>
                                         <th> Sprint Name</th>
                                         <th>Description</th>
-                                        <th> Sprint Start Date</th>
-                                        <th> Sprint End Date</th>
+                                        <th>  Start Date</th>
+                                        <th>  End Date</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -89,7 +90,9 @@ const AllSprint = () => {
                                         {data?.map((ele, ind) => {
                                             return (
                                                 <tr className="align-middle">
+
                                                     <th scope="row">{ind + 1}</th>
+                                                    <td></td>
                                                     <td className="cp">
                                                         <span className="namelink"> {ele?.sprintName} </span>
                                                     </td>

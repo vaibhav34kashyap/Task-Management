@@ -11,7 +11,7 @@ const InviteUser = () => {
         reset,
         formState: { errors },
     } = useForm();
-    const onSubmit=()=>{
+    const onSubmit=(data)=>{
 
     }
     return (
@@ -67,7 +67,7 @@ const InviteUser = () => {
                 </Col>
             </Row>
             <Row>
-                <Col> <Button>Invite</Button></Col>
+                <Col> <Button type="submit">Invite</Button></Col>
                
             </Row>
             </Form>

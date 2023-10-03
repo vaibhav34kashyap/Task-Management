@@ -4,8 +4,9 @@ import styled from '@emotion/styled';
 import { columnsFromBackend } from './data';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
-import { getAllTask } from '../../../redux/actions';
+import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
+import MainLoader from '../../../constants/Loader/loader';
 
 const Container = styled.div`
   display: flex;
@@ -44,7 +45,7 @@ const Boards = () => {
     const successHandle = store?.getAllTaskReducer
     
     const [columns, setColumns] = useState(columnsFromBackend);
-    console.log(columns,"VISHALLLLLLLLLLLLLLL")
+    console.log(columns,"Ritika")
 
   const onDragEnd = (result, columns, setColumns) => {
     console.log(result,columns,setColumns)
@@ -105,17 +106,25 @@ const Boards = () => {
     })
    }
    }, [successHandle])
-   
+   const handelupdatetask=(ele)=>{
+    let body={
+_id:ele?.id,
+status:ele?.status
+    }
+dispatch(updateTask(body))
+   }
   return (
+    
     <DragDropContext
-      onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+      onDragEnd={(result) => onDragEnd(result, columns, setColumns) }
+     
     >
-      <Container>
+      {successHandle.loading ? (<MainLoader/>): <Container>
         <TaskColumnStyles>
           {Object.entries(columns).map(([columnId, column], index) => {
-            console.log(columnId,column,"######################")
+            console.log(column,"######################")
             return (
-              <Droppable key={columnId} droppableId={columnId}>
+              <Droppable key={columnId} droppableId={columnId} onClick={(column)=>{handelupdatetask(column)}}>
                 {(provided, snapshot) => (
                   <TaskList
                     ref={provided.innerRef}
@@ -132,7 +141,8 @@ const Boards = () => {
             );
           })}
         </TaskColumnStyles>
-      </Container>
+      </Container>}
+     
     </DragDropContext>
   );
 };
