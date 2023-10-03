@@ -16,15 +16,14 @@ const mongoose = require("mongoose"),
         type: String,
         required: true,
       },
-      role: [
-        {
+      role: {
           type : String
         }
-      ]
+      
     },
     {
       timestamps: true,
     }
   );
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("user", userSchema);

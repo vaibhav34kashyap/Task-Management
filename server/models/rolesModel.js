@@ -12,4 +12,4 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
         }
     )
 
-module.exports = mongoose.model("Roles", rolesSchema);
+module.exports = mongoose.model("roles", rolesSchema);
