@@ -123,16 +123,18 @@
 const milestoneModel = require('../models/milestone');
 const taskmmodel = require('../models/task');
 const projectModel = require('../models/projects');
+const { login } = require('./users');
 
 const showAllMilestone = async (req, res) => {
     try {
-        const milestone = await milestoneModel.find({deleteStatus:true});
+        const milestone = await milestoneModel.find({deleteStatus:true}).populate('project_id','projectName');
         if (milestone.length > 0) {
             res.status(200).json({ status: "200", data: milestone, message: "milestone" })
         } else {
             res.status(200).json({ status: "404", data: milestone, message: "Not Found" })
         }
     } catch (err) {
+        console.log(err);
         res.status(200).json({ status: "500", message: "something went wrong" })
     }
 }

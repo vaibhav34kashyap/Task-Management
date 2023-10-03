@@ -121,7 +121,7 @@ const taskModel = require('../models/task')
 const getSprint = async (req, res) => {
 
     try {
-        const result = await sprintModel.find({ deleteStatus: true });
+        const result = await sprintModel.find({ deleteStatus: true }).populate('milestone_id','title');
         if (result) {
             return res.status(200).json({ status: '200', data: result, message: 'Get all sprint' })
         } else {
