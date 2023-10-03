@@ -19,7 +19,7 @@ const getUsers = async (req, res) => {
   }
 }
 const register = async (req, res) => {
-  var { username, email, password, role } = req.body;
+  var { username, email, password } = req.body;
   try {
     const existingUser = await userModel.findOne({
       email: email
@@ -32,17 +32,17 @@ const register = async (req, res) => {
       userName: username,
       email: email,
       password: hashedPassword,
-      role: role
+      role: "User"
     });
-    const token = jwt.sign({
-      username: result.userName,
-      email: result.email,
-      password: result.password,
-      role: role
-    },
-      SECRET_KEY
-    );
-    res.status(200).json({ status: "200", user: result, token: token, message: 'User created successfully' });
+    // const token = jwt.sign({
+    //   username: result.userName,
+    //   email: result.email,
+    //   password: result.password,
+    //   role: "User"
+    // },
+    //   SECRET_KEY
+    // );
+    res.status(200).json({ status: "200", user: result, message: 'User created successfully' });
   } catch (error) {
     console.log(error);
     res.status(200).json({ status: "500", message: "Something went wrong" });
@@ -55,8 +55,8 @@ const login = async (req, res) => {
   } = req.body;
   try {
     const existingUser = await userModel.findOne({ email: email });
-    const role = existingUser.role;
-    const permission = await rolesModel.findOne({ role: role })
+    // const role = existingUser.role;
+    // const permission = await rolesModel.findOne({ role: role })
     // console.log(role)
     // console.log(permission)
     if (!existingUser) {
@@ -84,8 +84,7 @@ const login = async (req, res) => {
         status: "200",
         message: "user Details",
         user: existingUser,
-        permission: permission,
-        token: token,
+        token: token
       });
   } catch (error) {
     res.status(200).json({
