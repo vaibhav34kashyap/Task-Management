@@ -5,56 +5,30 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
                 type: String,
                 required: [true, 'Project Name is required'],
             },
-            projectSlug: {
-                type: String,
-                required: false
-            },
-            projectLead: {
-                type: Number,
-                required: false
-            },
-            projectIcon: {
-                type: String,
-                required: false
-            },
-            startDate : {
-                type: Date
-            },
-            endDate : {
-                type: Date
-            },
-            expectedDate : {
-                type: Date
-            },
-            complitionDate : {
-                type: Date
+            projectType: {
+                type: mongoose.Types.ObjectId,
             },
             clientName : {
                 type : String
             },
             technology: {
-                type: String,
-                required: false  
+                type: String, 
             },
-            projectAccess: {
-                type: Number,
-                required: true
-            },
-            key: {
+            projectLead: {
                 type: String,
                 required: false
             },
-            projectCategory: {
+            projectIcon: {
                 type: String,
-                required: false
             },
-            projectType: {
-                type: Array,
-                required: false
+            startDate : {
+                type: Date
+            },
+            endDate : {
+                type : Date
             },
             projectDesc: {
                 type: String,
-                required: false
             },
             status: {
                 type: Boolean,
