@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import DeactivatedSprintTable from './deactivatedSprint/DeactivatedMilstoneTable'
-import ActiveSprintTable from './activeSprint/ActiveMilstoneTable'
+import DeactivatedSprintTable from './deactivated/DeactivatedMilstoneTable'
+import ActiveSprintTable from './activeMilstone/ActiveMilstoneTable'
 const ActiveDeactiveSprintIndex = () => {
     const [connectActive, setConnectActive] = useState(false)
     const connectMilstone = () => {

@@ -1,16 +1,15 @@
 const projectModel = require('../models/projects');
 const teamModel = require('../models/team');
 const milestoneModel = require('../models/milestone');
-const getProject = async (req, res) => {
+
+// Get all Projects WRT status
+const getProjects = async (req, res) => {
     try {
-        let project = await projectModel.find({ deleteStatus: true });
-        if (project) {
-            return res.status(200).json({ status: '200', project: project })
-        }
+        const project = await projectModel.find({ status: req.query.status });
+        return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: project })
     } catch (err) {
         return res.status(200).json({ status: '400', message: 'Something went wrong' })
     }
-
 }
 
 const getProjectById = async (req, res) => {
@@ -40,41 +39,6 @@ const getProjectMilestone = async (req, res) => {
     }
 
 }
-
-// const addProject = async (req, res) => {
-//     try {
-//         const objData = {
-//             projectName: req.body.projectName,
-//             projectSlug: req.body.projectSlug,
-//             projectLead: req.body.projectLead,
-//             projectIcon: req.body.projectIcon,
-//             projectAccess: req.body.projectAccess,
-//             startDate: req.body.startDate,
-//             endDate: req.body.endDate,
-//             CompilationDate: req.body.CompilationDate,
-//             clientName: req.body.clientName,
-//             technology: req.body.technology,
-//             key: req.body.key,
-//             projectCategory: req.body.projectCategory,
-//             projectType: req.body.projectType,
-//             projectDesc: req.body.projectDesc,
-//             deleteStatus: true
-//         }
-//         let existingProjectName = await projectModel.findOne({ projectName: objData.projectName });
-//         const str = objData.projectType.split(",")
-//         objData.projectType = str
-//         if (existingProjectName) {
-//             return res.status(200).json({ status: '400', message: 'Project Name Already exist' });
-//         }
-//         let result = await projectModel.create(objData)
-//         if (result) {
-//             return res.status(200).json({ status: '200', project: result, message: 'project created successfully!' });
-//         }
-//     } catch (err) {
-//         console.log(err);
-//         return res.status(200).json({ status: '500', message: 'Something went wrong' })
-//     }
-// }
 
 const addProject = async (req, res) => {
     try {
@@ -125,7 +89,7 @@ const updateProject = async (req, res) => {
 
 const updateProjectStatus = async (req, res) => {
     try {
-        let result = await projectModel.findByIdAndUpdate({_id:req.body._id}, { projectStatus: req.body.statusvalue });
+        let result = await projectModel.findByIdAndUpdate({ _id: req.body._id }, { projectStatus: req.body.statusvalue });
         if (result) {
             return res.status(200).json({ status: '200', project: result, message: 'Project status updated Successfully' });
         }
@@ -134,14 +98,11 @@ const updateProjectStatus = async (req, res) => {
     }
 }
 
-const deleteProject = async (req, res) => {
+// Deactivate project status
+const deactivateProject = async (req, res) => {
     try {
-        let result = await projectModel.findByIdAndUpdate({ _id: req.params.id }, { deleteStatus: false });
-        if (result) {
-            return res.status(200).json({ status: '200', message: 'Project Deleted Successfully' });
-        } else {
-            return res.status(200).json({ status: '400', message: 'Not Found' });
-        }
+        await projectModel.findByIdAndUpdate({ _id: req.params.id }, { status: false });
+        return res.status(200).json({ status: '200', message: 'Project Deactivated Successfully' });
     } catch (err) {
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
     }
@@ -168,4 +129,4 @@ const projectAssigned = async (req, res) => {
     }
 }
 
-module.exports = { getProject, addProject, updateProject, getProjectMilestone, deleteProject, getProjectById, projectAssigned, updateProjectStatus };
+module.exports = { getProjects, addProject, updateProject, getProjectMilestone, deactivateProject, getProjectById, projectAssigned, updateProjectStatus };

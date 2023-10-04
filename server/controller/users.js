@@ -48,29 +48,18 @@ const register = async (req, res) => {
     res.status(200).json({ status: "500", message: "Something went wrong" });
   }
 }
+
+// Log in api
 const login = async (req, res) => {
-  var {
-    email,
-    password
-  } = req.body;
+  var { email, password } = req.body;
   try {
     const existingUser = await userModel.findOne({ email: email });
-    // const role = existingUser.role;
-    // const permission = await rolesModel.findOne({ role: role })
-    // console.log(role)
-    // console.log(permission)
     if (!existingUser) {
-      res.status(200).json({
-        status: "404",
-        message: "No user Found"
-      });
+      res.status(200).json({ status: "404", message: "No user Found" });
     }
     const matchPassword = await bcrypt.compare(password, existingUser.password);
     if (!matchPassword) {
-      return res.status(200).json({
-        status: "400",
-        message: "Invalid Credentials"
-      });
+      return res.status(200).json({ status: "400", message: "Invalid Credentials" });
     }
     const token = jwt.sign({
       email: existingUser.email,
@@ -78,21 +67,13 @@ const login = async (req, res) => {
     },
       SECRET_KEY
     );
-    res
-      .status(200)
-      .json({
-        status: "200",
-        message: "user Details",
-        user: existingUser,
-        token: token
-      });
+    res.status(200).json({ status: "200", message: "user Details", user: existingUser, token: token });
   } catch (error) {
-    res.status(200).json({
-      status: "500",
-      message: "Something went wrong" + error
-    });
+    res.status(200).json({ status: "500", message: "Something went wrong" + error });
   }
 }
+
+// Forgotten password with email notification 
 const forgotPassword = async (req, res) => {
 
   var {

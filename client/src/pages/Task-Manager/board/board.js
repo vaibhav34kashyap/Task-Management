@@ -125,6 +125,7 @@ const Boards = () => {
       {successHandle.loading ? (<MainLoader />) : <Container>
         <TaskColumnStyles>
           {Object.entries(columns).map(([columnId, column], index) => {
+            console.log(column, "######################")
             return (
               <Droppable key={columnId} droppableId={columnId} onClick={(column) => { handelupdatetask(column) }}>
                 {(provided, snapshot) => (

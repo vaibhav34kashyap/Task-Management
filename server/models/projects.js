@@ -17,24 +17,24 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
                 type: String,
                 required: false
             },
-            startDate : {
+            startDate: {
                 type: Date
             },
-            endDate : {
+            endDate: {
                 type: Date
             },
-            expectedDate : {
+            expectedDate: {
                 type: Date
             },
-            complitionDate : {
+            complitionDate: {
                 type: Date
             },
-            clientName : {
-                type : String
+            clientName: {
+                type: String
             },
             technology: {
                 type: String,
-                required: false  
+                required: false
             },
             projectAccess: {
                 type: Number,
@@ -56,13 +56,14 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
                 type: String,
                 required: false
             },
-            projectStatus:{
-                type: String,
-                required: false
-            },
-            deleteStatus: {
+            status: {
                 type: Boolean,
+                default: true
             },
+            projectStatus: {
+                type: Number,
+                default: 1 // status : 1- live, 2 : hold, 3 : completed 
+            }
         },
         {
             timestamps: true,

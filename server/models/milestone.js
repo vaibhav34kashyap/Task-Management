@@ -20,19 +20,16 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
         project_id: {
             type: mongoose.Types.ObjectId,
             required: true,
-            ref:'projects',
+            ref: 'projects',
         },
         status: {
-            type: String,
-            required : true
+            type: Boolean,
+            default: true
         },
-        deleteStatus: {
-            type: Boolean
-        }
     },
         {
             timestamps: true
         }
     )
 
-module.exports = mongoose.model('milestone',milestoneModel)
+module.exports = mongoose.model('milestone', milestoneModel)
