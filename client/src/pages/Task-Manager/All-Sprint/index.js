@@ -92,7 +92,7 @@ const AllSprint = () => {
                                                 <tr className="align-middle">
 
                                                     <th scope="row">{ind + 1}</th>
-                                                    <td></td>
+                                                    <td><span className='namelink'>{ele?.milestone_id?.title}</span></td>
                                                     <td className="cp">
                                                         <span className="namelink"> {ele?.sprintName} </span>
                                                     </td>
