@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { ListGroup, Container, Row, Col, Table, Button, Card ,CloseButton} from 'react-bootstrap';
 import { deleteSprint, getAllSprint } from '../../../redux/sprint/action';
 import { Link } from 'react-router-dom';
@@ -76,10 +75,11 @@ const AllSprint = () => {
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>Milestone Name</th>
                                         <th> Sprint Name</th>
                                         <th>Description</th>
-                                        <th> Sprint Start Date</th>
-                                        <th> Sprint End Date</th>
+                                        <th>  Start Date</th>
+                                        <th>  End Date</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -90,7 +90,9 @@ const AllSprint = () => {
                                         {data?.map((ele, ind) => {
                                             return (
                                                 <tr className="align-middle">
+
                                                     <th scope="row">{ind + 1}</th>
+                                                    <td><span className='namelink'>{ele?.milestone_id?.title}</span></td>
                                                     <td className="cp">
                                                         <span className="namelink"> {ele?.sprintName} </span>
                                                     </td>

@@ -101,7 +101,7 @@ const Sprint = () => {
                             <Row>
                                 <Col className="text-center" lg={12}>
                                     {' '}
-                                    <h4>Milestones</h4>
+                                    <h4>Tasks</h4>
                                 </Col>
                                 <Col className="" lg={12}>
                                     
@@ -110,7 +110,7 @@ const Sprint = () => {
                                         <thead className=" btom_Line_hide">
                                             <tr>
                                                 <th>#</th>
-                                                <th>  Name</th>
+                                                <th> Task Name</th>
                                                 <th> Description</th>
                                                 <th> Start Date</th>
                                                 <th> End Date</th>

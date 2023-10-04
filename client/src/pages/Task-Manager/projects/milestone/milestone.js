@@ -121,7 +121,7 @@ const Milestone = () => {
                                             </div>
                                         </div>
                                     </ListGroup.Item>
-                                    <ListGroup.Item
+                                    {/* <ListGroup.Item
                                         as="li"
                                         className="d-flex justify-content-between align-items-start">
                                         <div className="ms-2 me-auto">
@@ -130,8 +130,8 @@ const Milestone = () => {
                                                 <i>{GetDataById?.projectCategory}</i>
                                             </div>
                                         </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
+                                    </ListGroup.Item> */}
+                                    {/* <ListGroup.Item
                                         as="li"
                                         className="d-flex justify-content-between align-items-start">
                                         <div className="ms-2 me-auto">
@@ -140,8 +140,8 @@ const Milestone = () => {
                                                 <i>{GetDataById?.projectDesc}</i>
                                             </div>
                                         </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
+                                    </ListGroup.Item> */}
+                                    {/* <ListGroup.Item
                                         as="li"
                                         className="d-flex justify-content-between align-items-start">
                                         <div className="ms-2 me-auto">
@@ -150,7 +150,7 @@ const Milestone = () => {
                                                 <i>{GetDataById?.projectSlug}</i>
                                             </div>
                                         </div>
-                                    </ListGroup.Item>
+                                    </ListGroup.Item> */}
                                 </ListGroup>
                             </Row>
                         </Col>
