@@ -15,13 +15,13 @@
 const express = require('express');
 const sprintRoute = express.Router();
 const path = require('../controller/sprint');
-sprintRoute.get('/',path.getSprint);
+sprintRoute.get('/',path.getSprints);
 sprintRoute.post('/getalltask',path.getAllTaskBySprint);
 sprintRoute.get('/getsprintbyid/:id',path.getSprintById);
 sprintRoute.post('/singlemilestonesprints',path.sigleMilestoneSprints);
 sprintRoute.post('/add',path.addSprint);
 sprintRoute.put('/update',path.updateSprint);
-sprintRoute.patch('/delete/:id',path.deleteSprint);
+sprintRoute.put('/deactivateSprint/:id',path.deactivateSprint);
 sprintRoute.get('/getAMilestoneAllSprints',path.getAMilestoneAllSprints);
 
 
