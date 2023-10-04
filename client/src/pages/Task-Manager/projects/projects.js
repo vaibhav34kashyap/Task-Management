@@ -20,7 +20,10 @@ const Projects = () => {
     const [editData, setEditData] = useState();
     const getProjectList = store?.getProject;
     const deletehandle =store?.deleteProject?.data
-
+    const [status, setStatus] = useState(1);
+    const [checkedData, setCheckedData] = useState();
+    const [checkedStatus, setCheckedStatus] = useState();
+    const [statusModal, setStatusModal] = useState(false);
     const handeldelete = (ele) => {
         setdeleteId(ele?._id)
         setDeleteModal(true);
@@ -44,12 +47,44 @@ const Projects = () => {
         }
         setOpenEditModal(false);
     };
-    const handeldYes=()=>{      
-        dispatch(deleteProject(deleteId));
-        setDeleteModal(false);
-    }
+    const handleYes = () => {
+        if (checkedStatus) {
+            dispatch(deleteProject(checkedData._id));
+        } else {
+            dispatch(deleteProject(checkedData._id));
+        }
+        setStatusModal(false);
+    };
+console.log(checkedData,"oooooooooooooooooooooooooooo")
+    const handleStatusChange = (e, data) => {
+        if (e.target.checked) {
+            setCheckedStatus(true);
+        } else {
+            setCheckedStatus(false);
+        }
+        setCheckedData(data);
+        setStatusModal(true);
+    };
+    const handleActive = (val) => {
+        if (val) {
+            setStatus(1);
+            let data = {
+                status: 1,
+            };
+            dispatch(getAllProjects(data));
+        } else {
+            setStatus(0);
+            let data = {
+                status: 0,
+            };
+            dispatch(getAllProjects(data));
+        }
+    };
     useEffect(() => {
-        dispatch(getAllProjects());
+        let body ={
+            status: status,
+        }
+        dispatch(getAllProjects(body));
     }, [render]);
     useEffect(() => {
         if (deletehandle?.status == 200) {
@@ -67,11 +102,27 @@ const Projects = () => {
             <div>
                 <Card>
                     <Card.Body>
-                        <div className="row mx-auto">
-                            <div className="col-6 d-flex align-items-end justify-content-end">
-                                <h4 className="header-title heading_data"> Projects</h4>
-                            </div>
-                            <div className="col-6 d-flex align-items-center justify-content-end pe-0">
+                            <div className="row mx-auto mt-2">
+                                <div className="d-flex col-4">
+                                    <div className="row d-flex align-items-center">
+                                        <div
+                                            className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
+                                            <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
+                                                Actived
+                                            </p>
+                                        </div>
+                                        <div
+                                            className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
+                                            <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
+                                                Deactived
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-4 d-flex align-items-center justify-content-center">
+                                    <h4 className="header-title heading_data"> Projects</h4>
+                                </div>
+                                <div className="col-4 d-flex align-items-center justify-content-end pe-0">
                                 <Button
                                     className="web_button"
                                     variant="info"
@@ -79,9 +130,10 @@ const Projects = () => {
                                         handelCreate();
                                     }}>
                                     Add Projects
-                                </Button>
+                                </Button>  
+                                </div>
                             </div>
-                        </div>
+                        
                         {getProjectList?.loading ? (
                             <>
                                 <MainLoader />
@@ -96,11 +148,12 @@ const Projects = () => {
                                         <th>Project Type</th>
                                         <th>Project Start Date</th>
                                         <th>Project End Date</th>
+                                        <th>Active/InActive</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {store?.getProject?.data?.project?.map((ele, ind) => {
+                                    {store?.getProject?.data?.response?.map((ele, ind) => {
                                         return (
                                             <tr className="align-middle">
                                                 <th scope="row">{ind + 1}</th>
@@ -123,6 +176,13 @@ const Projects = () => {
                                                         {' '}
                                                         {moment(ele?.endDate).format('L')}
                                                     </span>
+                                                </td>
+                                                <td>
+                                                <Form.Check
+                                                    type="switch"
+                                                    checked={ele?.status}
+                                                    onChange={(e) => handleStatusChange(e, ele)}
+                                                />
                                                 </td>
                                                 <td>
                                                     <Row>
@@ -159,32 +219,23 @@ const Projects = () => {
                 <Create modal={openModal} closeModal={closeModal} />
                 <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
                 {/* delete modal */}
-                <Modal show={deletemodal} onHide={() => setDeleteModal(false)}>
-                    <Row>
-                        <Col lg={12} className="text-end mt-1 ">
-                            <CloseButton
-                                className="pe-2"
-                                onClick={() => {
-                                    setDeleteModal(false);
-                                }}
-                            />
-                        </Col>
-                    </Row>
-
-                    <Modal.Body>Are you sure you want to delete this project</Modal.Body>
-                    <Modal.Footer>
-                        <Button  className=" web_button " variant="primary" onClick={handeldYes}>
-                            Yes
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            onClick={() => {
-                                setDeleteModal(false);
-                            }}>
-                            No
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+                <Modal show={statusModal} onHide={() => setStatusModal(false)}>
+                <Modal.Body>
+                    Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this Modal ?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            setStatusModal(false);
+                        }}>
+                        No
+                    </Button>
+                    <Button className=" web_button " variant="primary" onClick={() => handleYes()}>
+                        Yes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             </div>
         </>
     );
