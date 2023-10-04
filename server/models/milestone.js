@@ -23,12 +23,9 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             ref:'projects',
         },
         status: {
-            type: String,
-            required : true
+            type: Boolean,
+            default : true
         },
-        deleteStatus: {
-            type: Boolean
-        }
     },
         {
             timestamps: true

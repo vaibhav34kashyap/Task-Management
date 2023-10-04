@@ -56,12 +56,9 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
                 type: String,
                 required: false
             },
-            projectStatus:{
-                type: String,
-                required: false
-            },
-            deleteStatus: {
+            status: {
                 type: Boolean,
+                default : true
             },
         },
         {
