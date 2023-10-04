@@ -4,6 +4,8 @@ const multer = require("multer");
 const path = require('path');
 const fs = require('fs');
 const upladFile = multer({ storage: multer.diskStorage({}) })
+
+// Create or add tasks
 const createtask = async (req, res) => {
     const files = req.files;
     const imgArray = [];
@@ -30,7 +32,7 @@ const createtask = async (req, res) => {
         start_time: req.body.start_time,
         end_time: req.body.end_time,
         actual_time: req.body.actual_time,
-        due_date:new Date(req.body.due_date),
+        due_date: new Date(req.body.due_date),
         assignee_id: req.body.assignee_id,
         labels_id: req.body.labels_id,
         // attachment: imgArray,
@@ -49,16 +51,23 @@ const createtask = async (req, res) => {
         console.log(error);
         return res.status(200).json({ status: "500", message: 'something went wrong', error });
     }
-
 }
+
 const taskdetails = async (req, res) => {
     try {
-        const existingtask = await taskModel.find({ deleteStatus: true });
+        const pageSize = 5;
+        const totalCount = await taskModel.countDocuments({ deleteStatus: true });
+        const existingtask = await taskModel.find({ deleteStatus: true })
+            .sort({ createdAt: -1 })
+            .limit(pageSize)
+            .skip((parseInt(req.query.skip) - 1) * pageSize);
+        const totalPages = Math.ceil(totalCount / pageSize);
+
         if (!existingtask) {
             return res.status(200).json({ status: "400", message: "task not found" });
         }
         else {
-            return res.status(200).json({ status: "200", data: existingtask, });
+            return res.status(200).json({ status: "200", data: existingtask, totalCount, totalPages });
         }
     } catch (error) {
         console.log(error);
@@ -206,35 +215,45 @@ const userPendingTask = async (req, res) => {
     }
 }
 
-const getSprintTasks = async(req,res) => {
+const getSprintTasks = async (req, res) => {
     try {
-        const result = await taskModel.find({sprint_id : req.query.id});
-        return res.status(200).json({ status: "200", message: "A Sprint All Tasks fetched successfully", Response : result })
+        const pageSize = 5;
+        const totalCount = await taskModel.countDocuments({ sprint_id: req.query.id });
+        const result = await taskModel.find({ sprint_id: req.query.id })
+            .sort({ createdAt: -1 })
+            .limit(pageSize)
+            .skip((parseInt(req.query.skip) - 1) * pageSize);
+        const totalPages = Math.ceil(totalCount / pageSize);
+
+        return res.status(200).json({ status: "200", message: "Sprint tasks fetched successfully", response: result, totalCount, totalPages });
     } catch (error) {
-        res.status(200).json({ status: "500", message: "Something went wrong" })
+        console.error(error); // Log the error for debugging
+        res.status(500).json({ status: "500", message: "Something went wrong" });
     }
 }
 
-const getTasksAccToStatus = async(req,res) => {
+
+const getTasksAccToStatus = async (req, res) => {
     try {
         // var resp = null;
-        const todo = await taskModel.find({ status : 0})
+        const todo = await taskModel.find({ status: 1 })
         // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
 
-        const inProgress = await taskModel.find({status : 1});
+        const inProgress = await taskModel.find({ status: 2 });
         // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
 
-        const review = await taskModel.find({status : 2});
+        const review = await taskModel.find({ status: 4 });
         // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
 
-        const done = await taskModel.find({status : 3});
-        res.status(200).json({ status : '200', message : "fetched successfully", Response : todo, inProgress, review, done});
+        const done = await taskModel.find({ status: 3 });
+        res.status(200).json({ status: '200', message: "fetched successfully", Response: todo, inProgress, review, done });
     } catch (error) {
         console.log(error);
         res.status(200).json({ status: "500", message: "Something went wrong" })
     }
 }
 
-module.exports = { createtask, taskdetails, updatetaskdetails, deleteTask, assigntaskuser, taskstatusupdate,
-    userPendingTask, upladFile, deleteImage, getSingleTaskById , getSprintTasks, getTasksAccToStatus
+module.exports = {
+    createtask, taskdetails, updatetaskdetails, deleteTask, assigntaskuser, taskstatusupdate,
+    userPendingTask, upladFile, deleteImage, getSingleTaskById, getSprintTasks, getTasksAccToStatus
 };

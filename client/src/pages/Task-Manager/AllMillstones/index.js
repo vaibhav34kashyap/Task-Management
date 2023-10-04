@@ -8,6 +8,7 @@ import { deleteMileStone, getallMileStones } from '../../../redux/milestone/acti
 import MainLoader from '../../../constants/Loader/loader';
 import ToastHandle from '../../../constants/toaster/toaster';
 import Update from './update';
+import ActiveDeactiveIndex from './activeDeactive/ActiveDeactiveIndex';
 const AllMillStones = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -24,7 +25,7 @@ const AllMillStones = () => {
         setDeleteModal(true);
     };
     const handeldYes = () => {
-       
+
         dispatch(deleteMileStone(deleteId));
         setDeleteModal(false);
     };
@@ -54,6 +55,9 @@ const AllMillStones = () => {
 
     return (
         <>
+            <div>
+                <ActiveDeactiveIndex />
+            </div>
             <Card>
                 <Card.Body>
                     <Row>
@@ -84,7 +88,8 @@ const AllMillStones = () => {
                                     return (
                                         <tr className="align-middle">
                                             <th scope="row">{ind + 1}</th>
-                                            <td></td>
+                                            <td>
+                                                <span className="namelink">{ele?.project_id?.projectName}</span></td>
                                             <td className="cp">
                                                 <span className="namelink">{ele?.title}</span>
                                             </td>
@@ -167,7 +172,7 @@ const AllMillStones = () => {
                     </>
                 )}
             </Modal>
-            <Update modal ={openEditModal} closeModal={closeupdatemodal}  editData={editData} />
+            <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
         </>
     );
 };

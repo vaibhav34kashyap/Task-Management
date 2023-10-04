@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ListGroup, Container, Row, Col, Table, Button, Card ,CloseButton} from 'react-bootstrap';
+import { ListGroup, Container, Row, Col, Table, Button, Card, CloseButton } from 'react-bootstrap';
 import { deleteSprint, getAllSprint } from '../../../redux/sprint/action';
 import { Link } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
@@ -8,14 +8,15 @@ import moment from 'moment';
 import MainLoader from '../../../constants/Loader/loader';
 import ToastHandle from '../../../constants/toaster/toaster';
 import Update from './Sprint/update';
+import ActiveDeactiveSprintIndex from './Sprint/activeDeactive/ActiveDeactiveSprintIndex';
 const AllSprint = () => {
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
-    const [deleteId,setdeleteId]=useState()
+    const [deleteId, setdeleteId] = useState()
     const [render, setRender] = useState(false);
     const getSprintsDetail = store?.getAllSprints;
-    const deletehandle =store?.deleteSprint
+    const deletehandle = store?.deleteSprint
     const [deletemodal, setDeleteModal] = useState(false);
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
@@ -34,7 +35,7 @@ const AllSprint = () => {
         setDeleteModal(true);
     };
 
-    const handeldYes=()=>{      
+    const handeldYes = () => {
         dispatch(deleteSprint(deleteId));
         setDeleteModal(false);
     }
@@ -61,6 +62,9 @@ const AllSprint = () => {
     return (
         <>
             <div>
+                <div>
+                    <ActiveDeactiveSprintIndex />
+                </div>
                 <Card>
                     <Card.Body>
                         <div className="row mx-auto">
@@ -92,7 +96,7 @@ const AllSprint = () => {
                                                 <tr className="align-middle">
 
                                                     <th scope="row">{ind + 1}</th>
-                                                    <td></td>
+                                                    <td><span className='namelink'>{ele?.milestone_id?.title}</span></td>
                                                     <td className="cp">
                                                         <span className="namelink"> {ele?.sprintName} </span>
                                                     </td>
@@ -119,7 +123,7 @@ const AllSprint = () => {
                                                             <Col>
                                                                 <p className="action-icon m-0 p-0 ">
                                                                     <Link
-                                                                    to={`/sprint/${ele._id}`}
+                                                                        to={`/sprint/${ele._id}`}
                                                                     >
                                                                         <i className="mdi mdi-eye m-0 p-0"></i>
                                                                     </Link>
@@ -154,37 +158,37 @@ const AllSprint = () => {
                 </Card>
                 {/* delete modal */}
                 <Modal show={deletemodal} onHide={() => setDeleteModal(false)}>
-                    {deletehandle?.loading ?(<MainLoader/>):(
-                         <>
-                         <Row>
-                             <Col lg={12} className="text-end mt-1 ">
-                                 <CloseButton
-                                     className="pe-2"
-                                     onClick={() => {
-                                         setDeleteModal(false);
-                                     }}
-                                 />
-                             </Col>
-                         </Row>
-     
-                         <Modal.Body>Are you sure you want to delete this Sprint</Modal.Body>
-                         <Modal.Footer>
-                             <Button className=" web_button " variant="primary" onClick={handeldYes}>
-                                 Yes
-                             </Button>
-                             <Button
-                                 variant="secondary"
-                                 onClick={() => {
-                                     setDeleteModal(false);
-                                 }}>
-                                 No
-                             </Button>
-                         </Modal.Footer>
-                         </>
+                    {deletehandle?.loading ? (<MainLoader />) : (
+                        <>
+                            <Row>
+                                <Col lg={12} className="text-end mt-1 ">
+                                    <CloseButton
+                                        className="pe-2"
+                                        onClick={() => {
+                                            setDeleteModal(false);
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
+
+                            <Modal.Body>Are you sure you want to delete this Sprint</Modal.Body>
+                            <Modal.Footer>
+                                <Button className=" web_button " variant="primary" onClick={handeldYes}>
+                                    Yes
+                                </Button>
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => {
+                                        setDeleteModal(false);
+                                    }}>
+                                    No
+                                </Button>
+                            </Modal.Footer>
+                        </>
                     )}
-                   
+
                 </Modal>
-                <Update modal={openEditModal} CloseModal={closeupdatemodal} editData={editData}/>
+                <Update modal={openEditModal} CloseModal={closeupdatemodal} editData={editData} />
             </div>
         </>
     );

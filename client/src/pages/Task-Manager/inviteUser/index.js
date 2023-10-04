@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
+import {inviteUser} from "../../../redux/user/action"
+import ToastHandle from '../../../constants/toaster/toaster';
 const InviteUser = () => {
+    const dispatch = useDispatch();
+  
+    const store = useSelector((state) => state);
+    const successHandle = store?.createUser?.data
     const {
         register,
         handleSubmit,
@@ -12,8 +19,24 @@ const InviteUser = () => {
         formState: { errors },
     } = useForm();
     const onSubmit=(data)=>{
-
+let body={
+    username:data?.title,
+    password:data?.password,
+    email:data?.email
     }
+    dispatch(inviteUser(body))
+}
+useEffect(() => {
+    if (successHandle?.status == 200) {
+        ToastHandle('success', "User created successfully");
+        reset()
+    } else if (successHandle?.status == 400) {
+        ToastHandle('error', successHandle?.data?.message);
+    } else if (successHandle?.status == 500) {
+        ToastHandle('error', successHandle?.data?.message);
+    }
+}, [successHandle])
+
     return (
         <>
          <Form onSubmit={handleSubmit(onSubmit)}>
