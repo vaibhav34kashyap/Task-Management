@@ -6,9 +6,11 @@ import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
 import { createTask } from '../../../../../redux/task/action';
+import ToastHandle from '../../../../../constants/toaster/toaster';
 const Create = ({ modal, CloseModal ,data }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    const errorhandel = store?.createTaskReducer;
     const {
         register,
         handleSubmit,
@@ -36,8 +38,20 @@ const Create = ({ modal, CloseModal ,data }) => {
           dispatch( createTask(body))
     };
     const handleClose = () => {
+        reset()
         CloseModal();
     };
+    useEffect(() => {
+        if (errorhandel?.data?.status == 200) {
+            ToastHandle('success', 'Successfully added');
+            CloseModal('render');
+            reset();
+        } else if (errorhandel?.data?.status == 400) {
+            ToastHandle('error', errorhandel?.data?.message);
+        } else if (errorhandel?.data?.status == 500) {
+            ToastHandle('error', errorhandel?.data?.message);
+        }
+    }, [errorhandel]);
 
     return (
         <>
@@ -181,7 +195,7 @@ const Create = ({ modal, CloseModal ,data }) => {
                                                     Due Date<span className="text-danger">*</span>:
                                                 </Form.Label>
                                                 <Form.Control
-                                                    type="time"
+                                                    type="date"
                                                     {...register('dueDate', { required: true })}
                                                 />{' '}
                                                 {errors.dueDate?.type === 'required' && (

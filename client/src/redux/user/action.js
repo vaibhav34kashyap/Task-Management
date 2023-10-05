@@ -9,3 +9,7 @@ export const deleteUser= (data): AuthAction => ({
     type: ALL_USERS.DELETE_USER,
     payload: data
 })
+export const inviteUser= (data): AuthAction => ({
+    type: ALL_USERS.CREATE_USER,
+    payload: data
+})

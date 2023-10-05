@@ -31,7 +31,7 @@ const Create = ({ modal, closeModal }) => {
             CompilationDate: data?.expectedEndDate,
             projectType: data?.projecttype,
             technology: data?.technology,
-            expectedDate:data?.expectedEndDate
+            expectedDate: data?.expectedEndDate
             // projectIcon: data?.uploadicons[0],
         };
         console.log(data, 'bbb');
@@ -259,3 +259,4 @@ const Create = ({ modal, closeModal }) => {
 };
 
 export default Create;
+

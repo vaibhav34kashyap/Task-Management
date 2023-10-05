@@ -5,64 +5,39 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
                 type: String,
                 required: [true, 'Project Name is required'],
             },
-            projectSlug: {
+            projectType: {
+                type: mongoose.Types.ObjectId,
+            },
+            clientName: {
+                type: String
+            },
+            technology: {
                 type: String,
-                required: false
             },
             projectLead: {
-                type: Number,
+                type: String,
                 required: false
             },
             projectIcon: {
                 type: String,
-                required: false
             },
-            startDate : {
+            startDate: {
                 type: Date
             },
-            endDate : {
+            endDate: {
                 type: Date
-            },
-            expectedDate : {
-                type: Date
-            },
-            complitionDate : {
-                type: Date
-            },
-            clientName : {
-                type : String
-            },
-            technology: {
-                type: String,
-                required: false  
-            },
-            projectAccess: {
-                type: Number,
-                required: true
-            },
-            key: {
-                type: String,
-                required: false
-            },
-            projectCategory: {
-                type: String,
-                required: false
-            },
-            projectType: {
-                type: Array,
-                required: false
             },
             projectDesc: {
                 type: String,
-                required: false
             },
-            projectStatus:{
-                type: String,
-                required: false
-            },
-            deleteStatus: {
+            status: {
                 type: Boolean,
+                default: true
             },
+            projectStatus: {
+                type: Number,
+                default: 1 // status : 1- live, 2 : hold, 3 : completed 
+            }
         },
         {
             timestamps: true,

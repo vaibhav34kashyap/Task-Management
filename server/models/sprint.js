@@ -19,18 +19,16 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
         },
         milestone_id: {
             type: mongoose.Types.ObjectId,
-            required: true
+            required: true,
+            ref: 'milestone'
         },
         project_id: {
             type: mongoose.Types.ObjectId,
             required: true
         },
-        sprintStatus: {
-            type: Number,
-            required: true
-        },
-        deleteStatus: {
+        status: {
             type: Boolean,
+            default: true
         },
     },
         {

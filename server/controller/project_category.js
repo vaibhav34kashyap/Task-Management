@@ -34,7 +34,7 @@ const UpdateCategory = async (req, res) => {
     try {
         const existingname = await projectCategorySchema.findOne({ name: req.body.name });
         if (!existingname) {
-            const result = await projectCategorySchema.findByIdAndUpdate({ _id:  req.body._id }, req.body);
+            const result = await projectCategorySchema.findByIdAndUpdate({ _id: req.body._id }, req.body);
             return res.status(200).json({ status: '200', data: result, message: 'Project category updated Successfully' })
         } else {
             return res.status(200).json({ status: '400', message: 'Category name already exist' })
@@ -46,8 +46,8 @@ const UpdateCategory = async (req, res) => {
 const deleteCategory = async (req, res) => {
     try {
         const result = await projectCategorySchema.findByIdAndUpdate({ _id: req.body.id }, { deleteStatus: false });
-        if(result){
-        return res.status(200).json({ status: '200', message: 'Deleted success' })
+        if (result) {
+            return res.status(200).json({ status: '200', message: 'Deleted success' })
         }
     } catch (err) {
         return res.status(200).json({ status: '500', message: 'Something went wrong' })

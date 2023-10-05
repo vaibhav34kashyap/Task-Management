@@ -9,6 +9,8 @@ taskRouter.delete("/deletetask",tasks.deleteTask);
 taskRouter.delete("/deleteimage",tasks.deleteImage);
 taskRouter.put("/assigntask",tasks.assigntaskuser);
 taskRouter.post("/statusupdate",tasks.taskstatusupdate);
-taskRouter.post("/pendingtask",tasks.userPendingTask)
+taskRouter.post("/pendingtask",tasks.userPendingTask);
+taskRouter.get("/getSprintTasks",tasks.getSprintTasks);
+taskRouter.get("/getTasksAccToStatus",tasks.getTasksAccToStatus);
 // taskRouter.get("/downloadTimeSheet", downloadTimeSheetfun);
 module.exports = taskRouter;

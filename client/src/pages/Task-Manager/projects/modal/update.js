@@ -41,7 +41,8 @@ const Update = ({ modal, closeModal, editData }) => {
             expectedEndDate: handleDate(editData?.CompilationDate),
             projecttype: editData?.projectType,
             technology: editData?.technology,
-            expectedEndDate:  handleDate(editData?.expectedDate)
+            projectStatus: editData?.projectstatus,
+            expectedEndDate: handleDate(editData?.expectedDate)
         });
     }, [modal]);
 
@@ -50,14 +51,12 @@ const Update = ({ modal, closeModal, editData }) => {
         let body = {
             _id: editData?._id,
             projectName: data?.projectName,
-            projectAccess: data?.access,
             startDate: data?.startDate,
             endDate: data?.endDate,
-            expectedDate: data?.expectedEndDate,
             clientName: data?.clientName,
             projectType: data?.projecttype,
             technology: data?.technology,
-            key: data?.key,
+            projectStatus: data?.projectstatus,
         };
         dispatch(updateProject(body));
     };
@@ -132,40 +131,6 @@ const Update = ({ modal, closeModal, editData }) => {
                                         </Form.Group>
                                     </Col>
                                 </Row>
-
-                                <Row>
-                                    <Col lg={6}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                Access <span className="text-danger">*</span>:
-                                            </Form.Label>
-                                            <Form.Select {...register('access', { required: true })}>
-                                                <option>Choose an access level </option>
-                                                <option value="0">Private</option>
-                                                <option value="1">Limited</option>
-                                                <option value="2"> Open</option>
-                                            </Form.Select>
-                                            {errors.access?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
-                                    <Col lg={6}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label>
-                                                Key<span className="text-danger">*</span>:
-                                            </Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                {...register('key', { required: true })}
-                                                placeholder="Please Enter key"
-                                            />
-                                            {errors.key?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
-                                </Row>
                                 <Row>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
@@ -199,21 +164,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col lg={6}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label>
-                                                Expected End Date<span className="text-danger">*</span>:
-                                            </Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                {...register('expectedEndDate', { required: true })}
-                                                placeholder="Please Expected End Date "
-                                            />
-                                            {errors.expectedEndDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
+
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
@@ -222,16 +173,15 @@ const Update = ({ modal, closeModal, editData }) => {
                                             <Form.Select {...register('projecttype', { required: true })}>
                                                 <option>Choose an Project Type </option>
                                                 <option value="T&M">T&M</option>
-                                                <option value="Fixed">Fixed</option>
+                                                <option value="Fixed Cost">Fixed Cost</option>
+                                                <option value=" Hourly">Hourly</option>
+                                                <option value="Dedicated team">Dedicated team</option>
                                             </Form.Select>
                                             {errors.projecttype?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
-                                </Row>
-
-                                <Row>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
@@ -247,21 +197,27 @@ const Update = ({ modal, closeModal, editData }) => {
                                             )}
                                         </Form.Group>
                                     </Col>
+                                </Row>
+                                <Row>
                                     <Col lg={6}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
                                             <Form.Label>
-                                                Upload Icons <span className="text-danger">*</span>:
+                                                Status<span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control
-                                                type="file"
-                                                {...register('uploadicons', { required: false })}
-                                            />
-                                            {errors.uploadicons?.type === 'required' && (
+                                            <Form.Select {...register('projectstatus', { required: true })}>
+                                                <option>Choose an Project Status</option>
+                                                <option value="Live">Live</option>
+                                                <option value="Completed">Completed</option>
+                                                <option value=" Hold">Hold</option>
+
+                                            </Form.Select>
+                                            {errors.projectstatus?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
                                 </Row>
+
 
                                 <Row>
                                     <Col className="text-start d-flex align-items-center justify-content-center">
