@@ -92,11 +92,11 @@ const updateMilestone = async (req, res) => {
     }
 }
 
-// Deactivate Milestone status
-const deactivateMilestone = async (req, res) => {
+// update Milestone status
+const updateStatus = async (req, res) => {
     try {
-        await milestoneModel.findByIdAndUpdate({ _id: req.params.id }, { status: false });
-        return res.status(200).json({ status: '200', message: 'Milestone Deactivated Successfully' });
+        await milestoneModel.findByIdAndUpdate({ _id: req.params.id }, { status: req.body.status });
+        return res.status(200).json({ status: '200', message: 'Milestone status updated Successfully' });
     } catch (err) {
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
     }
@@ -115,5 +115,5 @@ const getAProjectMilestones = async (req, res) => {
 
 module.exports = {
     getMilestones, InprogressMilestone, getMilestoneById,
-    addMilestone, updateMilestone, deactivateMilestone, getSingleMileston, getAProjectMilestones
+    addMilestone, updateMilestone, updateStatus, getSingleMileston, getAProjectMilestones
 }

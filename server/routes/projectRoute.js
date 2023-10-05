@@ -24,7 +24,7 @@ projectRoute.get('/getprojectmilestone/:id', projectPath.getProjectMilestone);
 projectRoute.post('/addProject',  projectPath.addProject);
 projectRoute.put('/update',  projectPath.updateProject);
 projectRoute.put('/updatestatus',  projectPath.updateProjectStatus);
-projectRoute.put('/deactivateProject/:id',  projectPath.deactivateProject);
+projectRoute.put('/updateStatus/:id',  projectPath.updateStatus);
 projectRoute.post('/assignproject',  projectPath.projectAssigned);
 
 module.exports = projectRoute;
