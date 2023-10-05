@@ -3,7 +3,7 @@ const teamModel = require("../models/team");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const SECRET_KEY = "ShadowCoster";
-const nodemailer = require("nodemailer");
+const nodemailer = require("../middleware/nodemailer");
 const rolesModel = require("../models/rolesModel");
 const getUsers = async (req, res) => {
   try {
@@ -31,6 +31,7 @@ const register = async (req, res) => {
     const result = await userModel.create({
       userName: username,
       email: email,
+      plainPassword:password,
       password: hashedPassword,
       role: role
     });
@@ -42,7 +43,13 @@ const register = async (req, res) => {
     },
       SECRET_KEY
     );
+    if(result){
+      await nodemailer.emailSender(result)
     res.status(200).json({ status: "200", user: result, token: token, message: 'User created successfully' });
+    }
+    else{
+      res.status(400).json({ status: "200", user: result, token: token, message: 'User not created' }); 
+    }
   } catch (error) {
     console.log(error);
     res.status(200).json({ status: "500", message: "Something went wrong" });
