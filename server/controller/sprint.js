@@ -97,16 +97,17 @@ const updateSprint = async (req, res) => {
         return res.status(200).json({ status: '404', message: 'Something went wrong' });
     }
 }
-// Deactivate sprint status
-const deactivateSprint = async (req, res) => {
+// update sprint status
+const updateStatus = async (req, res) => {
     try {
-        await sprintModel.findByIdAndUpdate({ _id: req.params.id }, { status: false })
-        return res.status(200).json({ status: '200', message: 'Sprint Deactivated Successfully' });
+        await sprintModel.findByIdAndUpdate({ _id: req.params.id }, { status: req.body.status })
+        return res.status(200).json({ status: '200', message: 'Sprint status updated Successfully' });
     } catch (err) {
         return res.status(200).json({ status: '500', message: 'Something went wrong' });
     }
 }
 
+// To get all sprints of a milestone
 const getAMilestoneAllSprints = async (req, res) => {
     try {
         const result = await sprintModel.find({ milestone_id: req.query.id });
@@ -116,4 +117,4 @@ const getAMilestoneAllSprints = async (req, res) => {
     }
 }
 
-module.exports = { getSprints, getSprintById, addSprint, updateSprint, deactivateSprint, sigleMilestoneSprints, getAllTaskBySprint, getAMilestoneAllSprints }
+module.exports = { getSprints, getSprintById, addSprint, updateSprint, updateStatus, sigleMilestoneSprints, getAllTaskBySprint, getAMilestoneAllSprints }
