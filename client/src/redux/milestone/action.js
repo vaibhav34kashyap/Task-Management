@@ -2,7 +2,7 @@ import MileStoneType from "./constant";
 type AuthAction = { type: string, payload: {} | string };
 
 
-export const addAllmilstones=(data):AuthAction => ({
+export const addAllmilstones = (data): AuthAction => ({
     type: MileStoneType.ADD_ALL_MILESTONES,
     payload: data
 })

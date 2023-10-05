@@ -1,27 +1,28 @@
 import React, { useState } from 'react'
 import DeactivatedMilstoneTable from './deactivated/DeactivatedMilstoneTable'
 import ActiveMilstoneTable from './activeMilstone/ActiveMilstoneTable'
-const ActiveDeactiveIndex = () => {
+const ActiveDeactiveIndex = ({ milstonesPrnt }) => {
     const [connectActive, setConnectActive] = useState(false)
-    const connectMilstone = () => {
+    const connectMilstone = (id) => {
         setConnectActive(!connectActive)
+        milstonesPrnt(id)
     }
 
     return (
         <div>
-            <div className='d-flex mt-2'>
-                <div><button className={!connectActive ? 'btn btn-primary active' : "btn"} onClick={() => { connectMilstone() }}>
+            <div className='d-flex my-2'>
+                <div><button className={!connectActive ? 'btn btn-primary active' : "btn"} onClick={() => { connectMilstone(1) }}>
                     Active
                 </button></div>
-                <div className='ms-2 '><button className={!connectActive ? 'btn' : "btn btn-primary active"} onClick={() => { connectMilstone() }}>
+                <div className='ms-2 '><button className={!connectActive ? 'btn' : "btn btn-primary active"} onClick={() => { connectMilstone(0) }}>
                     Deactive
                 </button></div>
             </div>
-            {connectActive ? <div>
+            {/* {connectActive ? <div>
                 <DeactivatedMilstoneTable />
             </div> : <div>
                 <ActiveMilstoneTable />
-            </div>}
+            </div>} */}
 
 
         </div>

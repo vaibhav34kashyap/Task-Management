@@ -5,17 +5,21 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
                 type: String,
                 required: [true, 'Project Name is required'],
             },
-            projectSlug: {
+            projectType: {
+                type: mongoose.Types.ObjectId,
+            },
+            clientName: {
+                type: String
+            },
+            technology: {
                 type: String,
-                required: false
             },
             projectLead: {
-                type: Number,
+                type: String,
                 required: false
             },
             projectIcon: {
                 type: String,
-                required: false
             },
             startDate: {
                 type: Date
@@ -23,38 +27,8 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             endDate: {
                 type: Date
             },
-            expectedDate: {
-                type: Date
-            },
-            complitionDate: {
-                type: Date
-            },
-            clientName: {
-                type: String
-            },
-            technology: {
-                type: String,
-                required: false
-            },
-            projectAccess: {
-                type: Number,
-                required: true
-            },
-            key: {
-                type: String,
-                required: false
-            },
-            projectCategory: {
-                type: String,
-                required: false
-            },
-            projectType: {
-                type: Array,
-                required: false
-            },
             projectDesc: {
                 type: String,
-                required: false
             },
             status: {
                 type: Boolean,
