@@ -3,7 +3,7 @@ const teamModel = require("../models/team");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const SECRET_KEY = "ShadowCoster";
-const nodemailer = require("nodemailer");
+const nodemailer = require("../middleware/nodemailer");
 const rolesModel = require("../models/rolesModel");
 const getUsers = async (req, res) => {
   try {
@@ -19,7 +19,7 @@ const getUsers = async (req, res) => {
   }
 }
 const register = async (req, res) => {
-  var { username, email, password } = req.body;
+  var { username, email, password, role } = req.body;
   try {
     const existingUser = await userModel.findOne({
       email: email
@@ -31,35 +31,53 @@ const register = async (req, res) => {
     const result = await userModel.create({
       userName: username,
       email: email,
+      plainPassword:password,
       password: hashedPassword,
-      role: "User"
+      role: role
     });
-    // const token = jwt.sign({
-    //   username: result.userName,
-    //   email: result.email,
-    //   password: result.password,
-    //   role: "User"
-    // },
-    //   SECRET_KEY
-    // );
-    res.status(200).json({ status: "200", user: result, message: 'User created successfully' });
+    const token = jwt.sign({
+      username: result.userName,
+      email: result.email,
+      password: result.password,
+      role: role
+    },
+      SECRET_KEY
+    );
+    if(result){
+      await nodemailer.emailSender(result)
+    res.status(200).json({ status: "200", user: result, token: token, message: 'User created successfully' });
+    }
+    else{
+      res.status(400).json({ status: "200", user: result, token: token, message: 'User not created' }); 
+    }
   } catch (error) {
     console.log(error);
     res.status(200).json({ status: "500", message: "Something went wrong" });
   }
 }
-
-// Log in api
 const login = async (req, res) => {
-  var { email, password } = req.body;
+  var {
+    email,
+    password
+  } = req.body;
   try {
     const existingUser = await userModel.findOne({ email: email });
+    const role = existingUser.role;
+    const permission = await rolesModel.findOne({ role: role })
+    // console.log(role)
+    // console.log(permission)
     if (!existingUser) {
-      res.status(200).json({ status: "404", message: "No user Found" });
+      res.status(200).json({
+        status: "404",
+        message: "No user Found"
+      });
     }
     const matchPassword = await bcrypt.compare(password, existingUser.password);
     if (!matchPassword) {
-      return res.status(200).json({ status: "400", message: "Invalid Credentials" });
+      return res.status(200).json({
+        status: "400",
+        message: "Invalid Credentials"
+      });
     }
     const token = jwt.sign({
       email: existingUser.email,
@@ -67,13 +85,22 @@ const login = async (req, res) => {
     },
       SECRET_KEY
     );
-    res.status(200).json({ status: "200", message: "user Details", user: existingUser, token: token });
+    res
+      .status(200)
+      .json({
+        status: "200",
+        message: "user Details",
+        user: existingUser,
+        permission: permission,
+        token: token,
+      });
   } catch (error) {
-    res.status(200).json({ status: "500", message: "Something went wrong" + error });
+    res.status(200).json({
+      status: "500",
+      message: "Something went wrong" + error
+    });
   }
 }
-
-// Forgotten password with email notification 
 const forgotPassword = async (req, res) => {
 
   var {

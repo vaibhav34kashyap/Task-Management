@@ -16,10 +16,15 @@ const mongoose = require("mongoose"),
         type: String,
         required: true,
       },
-      role: {
-        type: String
-      }
-
+      plainPassword:{
+        type: String,
+        required: true
+      },
+      role: [
+        {
+          type : String
+        }
+      ]
     },
     {
       timestamps: true,
