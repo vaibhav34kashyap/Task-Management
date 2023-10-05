@@ -126,8 +126,9 @@ const MileStone = () => {
                                                         <th>Sprint End Date</th>
                                                     </tr>
                                                     
-                                                   
-                                                      {GetAllSingleSprintData?.map((item, index) =>
+                                                    </thead>
+                                                    <tbody>
+                                                    {GetAllSingleSprintData?.map((item, index) =>
                                                         <tr>
                                                             <td>{item?.sprintName}</td>
                                                             <td>{item?.sprintDesc}</td>
@@ -137,7 +138,9 @@ const MileStone = () => {
                                                         </tr>
 
                                                     )}
-                                                </thead>
+                                                    </tbody>
+                                                   
+                                              
                                             </Table>
                                         {/* </Accordion.Body>
                                     </Accordion.Item>

@@ -12,3 +12,6 @@ export function getSingleSprintTaskApi(data): any {
 export function getAllTaskApi(data): any {
     return api.get(URL.GetAllTask, data.payload)
 }
+export function UpdateTaskApi(data): any {
+    return api.update(URL.UpdateTask, data.payload)
+}

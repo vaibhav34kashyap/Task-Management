@@ -45,6 +45,7 @@ const AllMillStone = React.lazy(() => import('../pages/Task-Manager/AllMillstone
 const MileStone = React.lazy(() => import('../pages/Task-Manager/projects/milestone/milestone'));
 const SingleMilestoneDetail = React.lazy(() => import('../pages/Task-Manager/AllMillstones/mileStone'));
 const SingleSprintDetail = React.lazy(() => import('../pages/Task-Manager/All-Sprint/Sprint'));
+const Sprint = React.lazy(() => import('../pages/Task-Manager/projects/milestone/sprint/sprint'));
 // AllSprint
 const AllSprint = React.lazy(() => import('../pages/Task-Manager/All-Sprint'));
 
@@ -311,6 +312,10 @@ const AllRoutes = () => {
                 {
                     path: 'inviteuser',
                     element: <LoadComponent component={InviteUsers} />,
+                },
+                {
+                    path:"singleMilestonesprint/:id",
+                    element:<LoadComponent component={Sprint}/>
                 },
                 {
                     path: 'apps',

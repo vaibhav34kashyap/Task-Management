@@ -71,7 +71,8 @@ const AllMillStones = () => {
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th> Title</th>
+                                    <th>Project Name</th>
+                                    <th> Milestone Name</th>
                                     <th>Description</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
@@ -83,6 +84,8 @@ const AllMillStones = () => {
                                     return (
                                         <tr className="align-middle">
                                             <th scope="row">{ind + 1}</th>
+                                            <td>
+                                            <span className="namelink">{ele?.project_id?.projectName}</span></td>
                                             <td className="cp">
                                                 <span className="namelink">{ele?.title}</span>
                                             </td>

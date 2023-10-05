@@ -1,8 +1,8 @@
 // end points
 export const AddProject = "/project/add";
-export const GetAllProject = "/project";
+export const GetAllProject = "/project/getProjects?status=";
 export const UpdateProjectDetails="/project/update";
-export const DeleteProject ="/project/delete/";
+export const DeleteProject ="/project/deactivateProject/";
 export const GetProjectById ="/project/getbyprojectid/";
 export const GetAllMileStones="/milestone";
 export const MileStoneDelete ="/milestone/delete/"
@@ -22,3 +22,5 @@ export const UpdateSprint ="/sprint/update";
 export const SingleMilestone ="/milestone/getAProjectMilestones?id="
 export const SingleSprintTask ="/task/getSprintTasks?id="
 export const GetAllTask ="/task/getTasksAccToStatus"
+export const UpdateTask ="/task/updatetaskdetails"
+export const InviteUser ="/users/register"
