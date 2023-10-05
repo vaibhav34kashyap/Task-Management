@@ -8,10 +8,11 @@ import { deleteMileStone, getallMileStones } from '../../../redux/milestone/acti
 import MainLoader from '../../../constants/Loader/loader';
 import ToastHandle from '../../../constants/toaster/toaster';
 import Update from './update';
+import ActiveDeactiveIndex from './activeDeactive/ActiveDeactiveIndex';
 const AllMillStones = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    const getallmilestones = store?.getAllMileStones?.data?.data;
+    const getallmilestones = store?.getAllMileStones?.data?.response;
     const loaderhandle = store?.getAllMileStones;
     const deletemessagehandle = store?.deleteMileStone;
     const [deletemodal, setDeleteModal] = useState(false);
@@ -24,7 +25,7 @@ const AllMillStones = () => {
         setDeleteModal(true);
     };
     const handeldYes = () => {
-       
+
         dispatch(deleteMileStone(deleteId));
         setDeleteModal(false);
     };
@@ -38,9 +39,16 @@ const AllMillStones = () => {
         }
         setOpenEditModal(false);
     };
+    const [statusMilstone, setStatusMilstone] = useState(1)
+    const milstonesPrnt = (id) => {
+        setStatusMilstone(id)
+
+    }
     useEffect(() => {
-        dispatch(getallMileStones());
-    }, [render]);
+        dispatch(getallMileStones({
+            status: statusMilstone
+        }));
+    }, [render, statusMilstone]);
     useEffect(() => {
         if (deletemessagehandle?.data?.status == 200) {
             ToastHandle('success', deletemessagehandle?.data?.message);
@@ -54,6 +62,9 @@ const AllMillStones = () => {
 
     return (
         <>
+            <div>
+                <ActiveDeactiveIndex milstonesPrnt={milstonesPrnt} />
+            </div>
             <Card>
                 <Card.Body>
                     <Row>
@@ -76,16 +87,20 @@ const AllMillStones = () => {
                                     <th>Description</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
+                                    <th>Status</th>
+                                    {/* <th>Status</th> */}
+
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {getallmilestones?.map((ele, ind) => {
+                                    console.log(ele?.status, 'apidata')
                                     return (
                                         <tr className="align-middle">
                                             <th scope="row">{ind + 1}</th>
                                             <td>
-                                            <span className="namelink">{ele?.project_id?.projectName}</span></td>
+                                                <span className="namelink">{ele?.project_id?.projectName}</span></td>
                                             <td className="cp">
                                                 <span className="namelink">{ele?.title}</span>
                                             </td>
@@ -100,6 +115,19 @@ const AllMillStones = () => {
                                                     {moment(ele?.completion_date).format('L')}
                                                 </span>
                                             </td>
+                                            <td>
+                                                {ele?.status ?
+
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" checked={ele?.status ? true : false} onClick={() => { handeldelete(ele) }} role="switch" id="flexSwitchCheckChecked" />
+                                                        <label class="form-check-label text-success" for="flexSwitchCheckChecked">Active</label>
+                                                    </div> :
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" checked={ele?.status ? true : false} onClick={() => { handeldelete(ele) }} role="switch" id="flexSwitchCheckChecked" />
+                                                        <label class="form-check-label text-danger" for="flexSwitchCheckChecked">Deactive</label>
+                                                    </div>
+                                                }
+                                            </td>
 
                                             <td>
                                                 <Row>
@@ -109,7 +137,7 @@ const AllMillStones = () => {
                                                                 <i className="mdi mdi-eye m-0 p-0"></i>
                                                             </Link>
                                                         </p>
-                                                        <p className="action-icon m-0 p-0  ">
+                                                        <p className="action-icon m-0 p-0 ms-2 ">
                                                             <i
                                                                 className="uil-edit-alt m-0 p-0"
                                                                 onClick={() => {
@@ -117,13 +145,13 @@ const AllMillStones = () => {
                                                                 }}
                                                             ></i>
                                                         </p>
-                                                        <p className="action-icon m-0 p-0  ">
+                                                        {/* <p className="action-icon m-0 p-0  ">
                                                             <i
                                                                 className="mdi mdi-delete m-0 p-0"
                                                                 onClick={() => {
                                                                     handeldelete(ele);
                                                                 }}></i>
-                                                        </p>
+                                                        </p> */}
                                                     </Col>
                                                 </Row>
                                             </td>
@@ -168,7 +196,7 @@ const AllMillStones = () => {
                     </>
                 )}
             </Modal>
-            <Update modal ={openEditModal} closeModal={closeupdatemodal}  editData={editData} />
+            <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
         </>
     );
 };

@@ -17,9 +17,9 @@ const mongoose = require("mongoose"),
         required: true,
       },
       role: {
-          type : String
-        }
-      
+        type: String
+      }
+
     },
     {
       timestamps: true,

@@ -20,7 +20,7 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
         milestone_id: {
             type: mongoose.Types.ObjectId,
             required: true,
-            ref:'milestone'
+            ref: 'milestone'
         },
         project_id: {
             type: mongoose.Types.ObjectId,
@@ -28,7 +28,7 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
         },
         status: {
             type: Boolean,
-            default : true
+            default: true
         },
     },
         {

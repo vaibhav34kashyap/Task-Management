@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addAllmilstones } from '../../../../../redux/milestone/action';
 import ToastHandle from '../../../../../constants/toaster/toaster';
 import MainLoader from './../../../../../constants/Loader/loader';
@@ -23,17 +23,17 @@ const Create = ({ modal, closeModal }) => {
         reset,
         formState: { errors },
     } = useForm();
-    const dispatch=useDispatch()
+    const dispatch = useDispatch()
     const onSubmit = (data) => {
-        const milStones={
-            project_id:id,
-            title :data.Title,
-            description:data.Description,
-            start_date:data.Start_date,
-            completion_date:data.End_date,
-            status:"new"            
+        const milStones = {
+            project_id: id,
+            title: data.Title,
+            description: data.Description,
+            start_date: data.Start_date,
+            completion_date: data.End_date,
+            status: "new"
         }
-        dispatch(addAllmilstones(milStones))   
+        dispatch(addAllmilstones(milStones))
         closeModal()
     };
     useEffect(() => {
@@ -51,7 +51,7 @@ const Create = ({ modal, closeModal }) => {
             ToastHandle('error', sucesshandel?.data?.message);
         }
     }, [sucesshandel]);
-   
+
     return (
         <>
             <Modal show={modal} onHide={closeModal} size="md">
@@ -70,69 +70,69 @@ const Create = ({ modal, closeModal }) => {
                     </Col>
                 </Row>
                 <Modal.Body className="py-0">
-                {loaderhandel?.loading ? (
+                    {loaderhandel?.loading ? (
                         <>
                             <MainLoader />
                         </>
                     ) : (
-                    <Card className="p-3">
-                        <Form onSubmit={handleSubmit(onSubmit)}>
-                            <Row>
-                                <Col lg={12}>
-                                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                        <Form.Label> Milestone<span className="text-danger">*</span>:</Form.Label>
-                                        <Form.Control type="text" {...register('Title', { required: true })} />
-                                        {errors.Title?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
-                                    </Form.Group>
-                                </Col>
-                                <Col lg={12}>
-                                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                        <Form.Label>Description <span className="text-danger">*</span>:</Form.Label>
-                                        <Form.Control
-                                            type="text" aria-label="Default select example"
-                                            {...register('Description', { required: true })}
-                                        />{' '}
-                                        {errors.Description?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
-                                    </Form.Group>
-                                </Col>
-                                <Col lg={12}>
-                                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                        <Form.Label> Start date <span className="text-danger">*</span>:</Form.Label>
-                                        <Form.Control
-                                            type="date"
-                                            {...register('Start_date', { required: true })}
-                                        />{' '}
-                                        {errors.Start_date?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
-                                    </Form.Group>
-                                </Col>
-                                <Col lg={12}>
-                                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                        <Form.Label> End date <span className="text-danger">*</span>:</Form.Label>
-                                        <Form.Control type="date" {...register('End_date', { required: true })} />{' '}
-                                        {errors.End_date?.type === 'required' && (
-                                            <span className="text-danger"> This feild is required *</span>
-                                        )}
-                                    </Form.Group>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col className="text-start d-flex align-items-center justify-content-center">
-                                    <Button
-                                        variant="info"
-                                        type="submit"
-                                        className="btn btn-sm  text-white pt-1 pb-1 mt-3 web_button ">
-                                        Add
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </Form>
-                    </Card>
+                        <Card className="p-3">
+                            <Form onSubmit={handleSubmit(onSubmit)}>
+                                <Row>
+                                    <Col lg={12}>
+                                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                            <Form.Label> Milestone<span className="text-danger">*</span>:</Form.Label>
+                                            <Form.Control type="text" {...register('Title', { required: true })} />
+                                            {errors.Title?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
+                                        </Form.Group>
+                                    </Col>
+                                    <Col lg={12}>
+                                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                            <Form.Label>Description <span className="text-danger">*</span>:</Form.Label>
+                                            <Form.Control
+                                                type="text" aria-label="Default select example"
+                                                {...register('Description', { required: true })}
+                                            />{' '}
+                                            {errors.Description?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
+                                        </Form.Group>
+                                    </Col>
+                                    <Col lg={12}>
+                                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                            <Form.Label> Start date <span className="text-danger">*</span>:</Form.Label>
+                                            <Form.Control
+                                                type="date"
+                                                {...register('Start_date', { required: true })}
+                                            />{' '}
+                                            {errors.Start_date?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
+                                        </Form.Group>
+                                    </Col>
+                                    <Col lg={12}>
+                                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                            <Form.Label> End date <span className="text-danger">*</span>:</Form.Label>
+                                            <Form.Control type="date" {...register('End_date', { required: true })} />{' '}
+                                            {errors.End_date?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col className="text-start d-flex align-items-center justify-content-center">
+                                        <Button
+                                            variant="info"
+                                            type="submit"
+                                            className="btn btn-sm  text-white pt-1 pb-1 mt-3 web_button ">
+                                            Add
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </Form>
+                        </Card>
                     )}
                 </Modal.Body>
             </Modal>
