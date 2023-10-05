@@ -19,6 +19,7 @@ const Milestone = () => {
     const dispatch = useDispatch();
     const [openModel, setOpenModel] = useState(false);
     const [render, setRender] = useState(false);
+    const [status, setStatus] = useState(1);
     const GetDataById = store?.getProjectById?.data?.project;
     const GetSinglemilstonesData = store?.getSigleMileStone?.data?.Response;
     const loaderhandel = store?.getSigleMileStone;
@@ -28,9 +29,26 @@ const Milestone = () => {
         }
         setOpenModel(false);
     };
+    const handleActive = (val) => {
+        if (val) {
+            setStatus(1);
+            let data = {
+                id:id ,
+                status: 1,
+            };
+            dispatch(getsingleMileStone(data));
+        } else {
+            setStatus(0);
+            let data = {
+                id:id,
+                status: 0,
+            };
+            dispatch(getsingleMileStone(data));
+        }
+    };
     useEffect(() => {
         dispatch(getProjectsById(id));
-        dispatch(getsingleMileStone(id));
+        dispatch(getsingleMileStone({id:id ,status:1}));
     }, [render]);
 
     return (
@@ -91,10 +109,25 @@ const Milestone = () => {
                             <Card.Body>
                                 <Col className="mx-auto" lg={12}>
                                     <Row>
-                                        <Col className="text-center" lg={12}>
-                                            {' '}
-                                            <h4>Milestones</h4>
-                                        </Col>
+                                        <div className="row mx-auto mt-2">
+                                            <div className="d-flex col-4">
+                                                <div className="row d-flex align-items-center">
+                                                    <div
+                                                        className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
+                                                        <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
+                                                            Active
+                                                        </p>
+                                                    </div>
+                                                    <div
+                                                        className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
+                                                        <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
+                                                            Deactive
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          
+                                        </div>
                                         <Col className="" lg={12}>
 
                                             <Table striped>
@@ -123,14 +156,11 @@ const Milestone = () => {
                                                                         <Link to={`/singleMilestonesprint/${item?._id}`}>
                                                                             <i className="mdi mdi-eye m-0 p-0"></i>
                                                                         </Link>
-                                                                        {/* <Link to={`/projects/${ele?._id}`}>
-                                                                    <i className="mdi mdi-eye m-0 p-0"></i>
-                                                                </Link> */}
                                                                     </p>
                                                                     <p className="action-icon m-0 p-0  ">
                                                                         <i
                                                                             className="uil-edit-alt m-0 p-0"
-                                                                         ></i>
+                                                                        ></i>
                                                                     </p>
 
                                                                 </Col>
@@ -145,7 +175,7 @@ const Milestone = () => {
                                 </Col>
                             </Card.Body>
                         </Card>
-                        </>
+                    </>
 
                 )}
 

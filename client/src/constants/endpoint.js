@@ -2,7 +2,7 @@
 export const AddProject = "/project/add";
 export const GetAllProject = "/project/getProjects?status=";
 export const UpdateProjectDetails = "/project/update";
-export const DeleteProject = "/project/deactivateProject/";
+export const DeleteProject = "/project/updateStatus";
 export const GetProjectById = "/project/getbyprojectid/";
 export const GetAllMileStones = "/milestone?";
 export const MileStoneDelete = "/milestone/delete/"

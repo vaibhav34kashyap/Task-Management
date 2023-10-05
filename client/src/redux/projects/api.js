@@ -13,7 +13,8 @@ export function updateProjectApi(data): any {
 }
 export function deleteProjectApi(data): any {
     console.log(data, "nnnn")
-    return api.update(`${URL.DeleteProject}${data?.payload}`)
+    return api.update(URL.DeleteProject, data.payload)
+    // return api.update(`${URL.DeleteProject}${data?.payload?.id}`)
 }
 export function getProjectByIdApi(data): any {
     console.log(data, "bbbbbbbbb")

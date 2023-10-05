@@ -49,9 +49,17 @@ const Projects = () => {
     };
     const handleYes = () => {
         if (checkedStatus) {
-            dispatch(deleteProject(checkedData._id));
+            let body ={
+                id : checkedData._id ,
+                status:true
+            }
+            dispatch(deleteProject(body));
         } else {
-            dispatch(deleteProject(checkedData._id));
+            let body ={
+                id : checkedData._id ,
+                status:false
+            }
+            dispatch(deleteProject(body));
         }
         setStatusModal(false);
     };
@@ -108,13 +116,13 @@ const Projects = () => {
                                     <div
                                         className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
                                         <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
-                                            Actived
+                                            Active
                                         </p>
                                     </div>
                                     <div
                                         className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
                                         <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
-                                            Deactived
+                                            Deactive
                                         </p>
                                     </div>
                                 </div>
@@ -148,7 +156,7 @@ const Projects = () => {
                                         <th>Project Type</th>
                                         <th>Project Start Date</th>
                                         <th>Project End Date</th>
-                                        <th>Active/InActive</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
