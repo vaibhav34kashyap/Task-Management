@@ -4,10 +4,21 @@ import { APICore } from './apiCore';
 const api = new APICore();
 
 // account
+// function login(params: any): any {
+//     const baseUrl = '/login/';
+//     return api.create(`${baseUrl}`, params);
+// }
+
 function login(params: any): any {
-    const baseUrl = '/login/';
-    return api.create(`${baseUrl}`, params);
+    let { username, password } = params
+    let loginType = {
+        email: username,
+        password: password
+    }
+    const baseUrl = '/users/login';
+    return api.create(`${baseUrl}`, loginType);
 }
+
 
 function logout(): any {
     const baseUrl = '/logout/';

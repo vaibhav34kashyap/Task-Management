@@ -65,8 +65,8 @@ class APICore {
         if (params) {
             var queryString = params
                 ? Object.keys(params)
-                      .map((key) => key + '=' + params[key])
-                      .join('&')
+                    .map((key) => key + '=' + params[key])
+                    .join('&')
                 : '';
             response = axios.get(`${url}?${queryString}`, params);
         } else {
@@ -80,8 +80,8 @@ class APICore {
         if (params) {
             var queryString = params
                 ? Object.keys(params)
-                      .map((key) => key + '=' + params[key])
-                      .join('&')
+                    .map((key) => key + '=' + params[key])
+                    .join('&')
                 : '';
             response = axios.get(`${url}?${queryString}`, { responseType: 'blob' });
         } else {
@@ -96,8 +96,8 @@ class APICore {
         if (params) {
             queryString = params
                 ? Object.keys(params)
-                      .map((key) => key + '=' + params[key])
-                      .join('&')
+                    .map((key) => key + '=' + params[key])
+                    .join('&')
                 : '';
         }
 
@@ -176,14 +176,22 @@ class APICore {
         if (!user || (user && !user.token)) {
             return false;
         }
-        const decoded = jwtDecode(user.token);
-        const currentTime = Date.now() / 1000;
-        if (decoded.exp < currentTime) {
-            console.warn('access token expired');
-            return false;
-        } else {
-            return true;
+        if (!user.token) {
+            return false
         }
+        return true
+        // const user = this.getLoggedInUser();
+        // if (!user || (user && !user.token)) {
+        //     return false;
+        // }
+        // const decoded = jwtDecode(user.token);
+        // const currentTime = Date.now() / 1000;
+        // if (decoded.exp < currentTime) {
+        //     console.warn('access token expired');
+        //     return false;
+        // } else {
+        //     return true;
+        // }
     };
 
     setLoggedInUser = (session) => {
@@ -220,4 +228,4 @@ if (user) {
     }
 }
 
-export { APICore, setAuthorization };
+export { APICore, setAuthorization, getUserFromSession };
