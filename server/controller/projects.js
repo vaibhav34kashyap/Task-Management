@@ -39,7 +39,7 @@ const getProjectMilestone = async (req, res) => {
     }
 
 }
- 
+
 // Add a new Project
 const addProject = async (req, res) => {
     try {
@@ -59,10 +59,10 @@ const addProject = async (req, res) => {
             projectType: req.body.projectType,
             projectDesc: req.body.projectDesc,
         }
-            let result = await projectModel.create(objData)
-            if (result) {
-                return res.status(200).json({ status: '200', message: 'project created successfully!', response : result });
-            }    
+        let result = await projectModel.create(objData)
+        if (result) {
+            return res.status(200).json({ status: '200', message: 'project created successfully!', response: result });
+        }
     } catch (err) {
         console.log(err);
         return res.status(200).json({ status: '500', message: 'Something went wrong' })

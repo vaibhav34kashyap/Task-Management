@@ -20,11 +20,11 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
         project_id: {
             type: mongoose.Types.ObjectId,
             required: true,
-            ref:'projects',
+            ref: 'projects',
         },
         status: {
             type: Boolean,
-            default : true
+            default: true
         },
     },
         {
@@ -32,4 +32,4 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
         }
     )
 
-module.exports = mongoose.model('milestone',milestoneModel)
+module.exports = mongoose.model('milestone', milestoneModel)

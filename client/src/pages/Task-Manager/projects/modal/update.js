@@ -42,7 +42,7 @@ const Update = ({ modal, closeModal, editData }) => {
             projecttype: editData?.projectType,
             technology: editData?.technology,
             projectStatus: editData?.projectstatus,
-            expectedEndDate:  handleDate(editData?.expectedDate)
+            expectedEndDate: handleDate(editData?.expectedDate)
         });
     }, [modal]);
 
@@ -164,7 +164,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                     </Col>
                                 </Row>
                                 <Row>
-                                   
+
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
@@ -209,7 +209,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 <option value="Live">Live</option>
                                                 <option value="Completed">Completed</option>
                                                 <option value=" Hold">Hold</option>
-                                             
+
                                             </Form.Select>
                                             {errors.projectstatus?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
@@ -217,7 +217,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                         </Form.Group>
                                     </Col>
                                 </Row>
-                              
+
 
                                 <Row>
                                     <Col className="text-start d-flex align-items-center justify-content-center">

@@ -52,52 +52,52 @@ const MileStone = () => {
                     </Button>
                 </Col>
             </Row>
-            {successHandle?.loading ? (<MainLoader/>):(
-            <Row>
-                <Col lg={4}>
-                    <Row>
-                        <Col className="text-center" lg={12}>
-                            <h4> MileStone</h4>
-                        </Col>
+            {successHandle?.loading ? (<MainLoader />) : (
+                <Row>
+                    <Col lg={4}>
+                        <Row>
+                            <Col className="text-center" lg={12}>
+                                <h4> MileStone</h4>
+                            </Col>
 
-                        <ListGroup as="ol" numbered style={{ marginLeft: '20px', position: 'sticky' }}>
-                            <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
-                                <div className="ms-2 me-auto">
-                                    <div className="">
-                                        <b> MileStone Title : </b>
-                                        <i>{data?.title}</i>
+                            <ListGroup as="ol" numbered style={{ marginLeft: '20px', position: 'sticky' }}>
+                                <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
+                                    <div className="ms-2 me-auto">
+                                        <div className="">
+                                            <b> MileStone Title : </b>
+                                            <i>{data?.title}</i>
+                                        </div>
                                     </div>
-                                </div>
-                            </ListGroup.Item>
-                            <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
-                                <div className="ms-2 me-auto">
-                                    <div className="">
-                                        <b>Description : </b>
-                                        <i>{data?.description}</i>
+                                </ListGroup.Item>
+                                <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
+                                    <div className="ms-2 me-auto">
+                                        <div className="">
+                                            <b>Description : </b>
+                                            <i>{data?.description}</i>
+                                        </div>
                                     </div>
-                                </div>
-                            </ListGroup.Item>
-                            <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
-                                <div className="ms-2 me-auto">
-                                    <div className="">
-                                        <b>Start Date : </b>
-                                        <i>{moment(data?.startDate).format('L')}</i>
+                                </ListGroup.Item>
+                                <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
+                                    <div className="ms-2 me-auto">
+                                        <div className="">
+                                            <b>Start Date : </b>
+                                            <i>{moment(data?.startDate).format('L')}</i>
+                                        </div>
                                     </div>
-                                </div>
-                            </ListGroup.Item>
-                            <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
-                                <div className="ms-2 me-auto">
-                                    <div className="">
-                                        <b>End Date : </b>
-                                        <i>{moment(data?.completion_date).format('L')}</i>
+                                </ListGroup.Item>
+                                <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
+                                    <div className="ms-2 me-auto">
+                                        <div className="">
+                                            <b>End Date : </b>
+                                            <i>{moment(data?.completion_date).format('L')}</i>
+                                        </div>
                                     </div>
-                                </div>
-                            </ListGroup.Item>
-     
-                        </ListGroup>
-                    </Row>
-                </Col>
-                <Col className="mx-auto" lg={7}>
+                                </ListGroup.Item>
+
+                            </ListGroup>
+                        </Row>
+                    </Col>
+                    <Col className="mx-auto" lg={7}>
                         <Row>
                             <Col className="text-center" lg={12}>
                                 {' '}
@@ -117,41 +117,38 @@ const MileStone = () => {
                                             </Table>
                                         </Accordion.Header>
                                         <Accordion.Body> */}
-                                            <Table>
-                                                <thead className=" btom_Line_hide">
-                                                    <tr>
-                                                        <th>SprintName</th>
-                                                        <th>Sprint Description</th>
-                                                        <th>Sprint Start Date</th>
-                                                        <th>Sprint End Date</th>
-                                                    </tr>
-                                                    
-                                                    </thead>
-                                                    <tbody>
-                                                    {GetAllSingleSprintData?.map((item, index) =>
-                                                        <tr>
-                                                            <td>{item?.sprintName}</td>
-                                                            <td>{item?.sprintDesc}</td>
-                                                          
-                                                            <td>  {moment(item?.startDate).format('L')}</td>
-                                                            <td>{moment(item?.endDate).format('L')}</td>
-                                                        </tr>
+                                <Table>
+                                    <thead className=" btom_Line_hide">
+                                        <tr>
+                                            <th>SprintName</th>
+                                            <th>Sprint Description</th>
+                                            <th>Sprint Start Date</th>
+                                            <th>Sprint End Date</th>
+                                        </tr>
 
-                                                    )}
-                                                    </tbody>
-                                                   
-                                              
-                                            </Table>
-                                        {/* </Accordion.Body>
+
+                                        {GetAllSingleSprintData?.map((item, index) =>
+                                            <tr>
+                                                <td>{item?.sprintName}</td>
+                                                <td>{item?.sprintDesc}</td>
+
+                                                <td>  {moment(item?.startDate).format('L')}</td>
+                                                <td>{moment(item?.endDate).format('L')}</td>
+                                            </tr>
+
+                                        )}
+                                    </thead>
+                                </Table>
+                                {/* </Accordion.Body>
                                     </Accordion.Item>
                                 </Accordion> */}
                             </Col>
                         </Row>
                     </Col>
-              
-            </Row>
+
+                </Row>
             )}
-            <Create modal={openModal} CloseModal={CloseModal} id={id} data={data}/>
+            <Create modal={openModal} CloseModal={CloseModal} id={id} data={data} />
         </>
     );
 };

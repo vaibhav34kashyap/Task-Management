@@ -314,8 +314,8 @@ const AllRoutes = () => {
                     element: <LoadComponent component={InviteUsers} />,
                 },
                 {
-                    path:"singleMilestonesprint/:id",
-                    element:<LoadComponent component={Sprint}/>
+                    path: "singleMilestonesprint/:id",
+                    element: <LoadComponent component={Sprint} />
                 },
                 {
                     path: 'apps',

@@ -43,15 +43,15 @@ const Title = styled.span`
 
 
 const Boards = () => {
-    const dispatch = useDispatch();
-    const store = useSelector(state=>state)
-    const successHandle = store?.getAllTaskReducer
-    
-    const [columns, setColumns] = useState(columnsFromBackend);
-    console.log(columns,"Ritika")
+  const dispatch = useDispatch();
+  const store = useSelector(state => state)
+  const successHandle = store?.getAllTaskReducer
+
+  const [columns, setColumns] = useState(columnsFromBackend);
+  console.log(columns, "Ritika")
 
   const onDragEnd = (result, columns, setColumns) => {
-    console.log(result,columns,setColumns)
+    console.log(result, columns, setColumns)
     if (!result.destination) return;
     const { source, destination } = result;
     if (source.droppableId !== destination.droppableId) {
@@ -86,48 +86,48 @@ const Boards = () => {
       });
     }
   };
-  
+
   useEffect(() => {
     dispatch(getAllTask())
-   }, [])
-   useEffect(() => {
-     
-   if(successHandle?.data?.status==200){
-    setColumns({
-      [uuidv4()]: {
-        title: 'To-do',
-        items: successHandle?.data?.Response?.map((ele)=>{return {...ele,id:ele._id}}),
-      },
-      [uuidv4()]: {
-        title: 'In Progress',
-        items: successHandle?.data?.inProgress?.map((ele)=>{return {...ele,id:ele._id}}),
-      },
-      [uuidv4()]: {
-        title: 'Done',
-        items: successHandle?.data?.done?.map((ele)=>{return {...ele,id:ele._id}}),
-      },
-    })
-   }
-   }, [successHandle])
-   const handelupdatetask=(ele)=>{
-    let body={
-_id:ele?.id,
-status:ele?.status
+  }, [])
+  useEffect(() => {
+
+    if (successHandle?.data?.status == 200) {
+      setColumns({
+        [uuidv4()]: {
+          title: 'To-do',
+          items: successHandle?.data?.Response?.map((ele) => { return { ...ele, id: ele._id } }),
+        },
+        [uuidv4()]: {
+          title: 'In Progress',
+          items: successHandle?.data?.inProgress?.map((ele) => { return { ...ele, id: ele._id } }),
+        },
+        [uuidv4()]: {
+          title: 'Done',
+          items: successHandle?.data?.done?.map((ele) => { return { ...ele, id: ele._id } }),
+        },
+      })
     }
-dispatch(updateTask(body))
-   }
+  }, [successHandle])
+  const handelupdatetask = (ele) => {
+    let body = {
+      _id: ele?.id,
+      status: ele?.status
+    }
+    dispatch(updateTask(body))
+  }
   return (
-    
+
     <DragDropContext
-      onDragEnd={(result) => onDragEnd(result, columns, setColumns) }
-     
+      onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+
     >
-      {successHandle.loading ? (<MainLoader/>): <Container>
+      {successHandle.loading ? (<MainLoader />) : <Container>
         <TaskColumnStyles>
           {Object.entries(columns).map(([columnId, column], index) => {
-            console.log(column,"######################")
+            console.log(column, "######################")
             return (
-              <Droppable key={columnId} droppableId={columnId} onClick={(column)=>{handelupdatetask(column)}}>
+              <Droppable key={columnId} droppableId={columnId} onClick={(column) => { handelupdatetask(column) }}>
                 {(provided, snapshot) => (
                   <TaskList class="three"
                     ref={provided.innerRef}
@@ -145,7 +145,7 @@ dispatch(updateTask(body))
           })}
         </TaskColumnStyles>
       </Container>}
-     
+
     </DragDropContext>
   );
 };

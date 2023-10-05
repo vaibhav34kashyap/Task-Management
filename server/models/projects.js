@@ -8,11 +8,11 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             projectType: {
                 type: mongoose.Types.ObjectId,
             },
-            clientName : {
-                type : String
+            clientName: {
+                type: String
             },
             technology: {
-                type: String, 
+                type: String,
             },
             projectLead: {
                 type: String,
@@ -21,22 +21,22 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             projectIcon: {
                 type: String,
             },
-            startDate : {
+            startDate: {
                 type: Date
             },
-            endDate : {
-                type : Date
+            endDate: {
+                type: Date
             },
             projectDesc: {
                 type: String,
             },
             status: {
                 type: Boolean,
-                default : true
+                default: true
             },
-            projectStatus : {
-                type : Number,
-                default : 1 // status : 1- live, 2 : hold, 3 : completed 
+            projectStatus: {
+                type: Number,
+                default: 1 // status : 1- live, 2 : hold, 3 : completed 
             }
         },
         {
