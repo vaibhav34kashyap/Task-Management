@@ -50,7 +50,7 @@ function* login({ payload: { username, password } }) {
                 password: 'test',
                 firstName: 'Test',
                 lastName: 'User',
-                role: role,
+                role: role?.[0],
                 token: token,
                 userData: user
             };

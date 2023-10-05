@@ -49,15 +49,15 @@ const Projects = () => {
     };
     const handleYes = () => {
         if (checkedStatus) {
-            let body ={
-                id : checkedData._id ,
-                status:true
+            let body = {
+                id: checkedData._id,
+                status: true
             }
             dispatch(deleteProject(body));
         } else {
-            let body ={
-                id : checkedData._id ,
-                status:false
+            let body = {
+                id: checkedData._id,
+                status: false
             }
             dispatch(deleteProject(body));
         }
@@ -196,7 +196,7 @@ const Projects = () => {
                                                     <Row>
                                                         <Col>
                                                             <p className="action-icon m-0 p-0 ">
-                                                                <Link to={`/projects/${ele?._id}`}>
+                                                                <Link to={`/user/dashboard/projects/${ele?._id}`}>
                                                                     <i className="mdi mdi-eye m-0 p-0"></i>
                                                                 </Link>
                                                             </p>
