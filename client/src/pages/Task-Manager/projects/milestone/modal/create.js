@@ -80,7 +80,7 @@ const Create = ({ modal, closeModal }) => {
                             <Row>
                                 <Col lg={12}>
                                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                        <Form.Label> Title <span className="text-danger">*</span>:</Form.Label>
+                                        <Form.Label> Milestone<span className="text-danger">*</span>:</Form.Label>
                                         <Form.Control type="text" {...register('Title', { required: true })} />
                                         {errors.Title?.type === 'required' && (
                                             <span className="text-danger"> This feild is required *</span>

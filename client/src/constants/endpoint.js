@@ -1,6 +1,6 @@
 // end points
 export const AddProject = "/project/add";
-export const GetAllProject = "/project?status=";
+export const GetAllProject = "/project/getProjects?status=";
 export const UpdateProjectDetails="/project/update";
 export const DeleteProject ="/project/deactivateProject/";
 export const GetProjectById ="/project/getbyprojectid/";

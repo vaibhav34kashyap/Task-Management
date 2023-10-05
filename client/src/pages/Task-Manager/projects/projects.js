@@ -14,12 +14,12 @@ const Projects = () => {
     const store = useSelector((state) => state);
     const [openModal, setOpenModal] = useState(false);
     const [render, setRender] = useState(false);
-    const [deleteId,setdeleteId]=useState()
+    const [deleteId, setdeleteId] = useState()
     const [openEditModal, setOpenEditModal] = useState(false);
     const [deletemodal, setDeleteModal] = useState(false);
     const [editData, setEditData] = useState();
     const getProjectList = store?.getProject;
-    const deletehandle =store?.deleteProject?.data
+    const deletehandle = store?.deleteProject?.data
     const [status, setStatus] = useState(1);
     const [checkedData, setCheckedData] = useState();
     const [checkedStatus, setCheckedStatus] = useState();
@@ -55,7 +55,7 @@ const Projects = () => {
         }
         setStatusModal(false);
     };
-console.log(checkedData,"oooooooooooooooooooooooooooo")
+    console.log(checkedData, "oooooooooooooooooooooooooooo")
     const handleStatusChange = (e, data) => {
         if (e.target.checked) {
             setCheckedStatus(true);
@@ -81,7 +81,7 @@ console.log(checkedData,"oooooooooooooooooooooooooooo")
         }
     };
     useEffect(() => {
-        let body ={
+        let body = {
             status: status,
         }
         dispatch(getAllProjects(body));
@@ -96,33 +96,33 @@ console.log(checkedData,"oooooooooooooooooooooooooooo")
             ToastHandle('error', deletehandle?.message);
         }
     }, [deletehandle])
-    
+
     return (
         <>
             <div>
                 <Card>
                     <Card.Body>
-                            <div className="row mx-auto mt-2">
-                                <div className="d-flex col-4">
-                                    <div className="row d-flex align-items-center">
-                                        <div
-                                            className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
-                                            <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
-                                                Actived
-                                            </p>
-                                        </div>
-                                        <div
-                                            className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
-                                            <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
-                                                Deactived
-                                            </p>
-                                        </div>
+                        <div className="row mx-auto mt-2">
+                            <div className="d-flex col-4">
+                                <div className="row d-flex align-items-center">
+                                    <div
+                                        className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
+                                        <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
+                                            Actived
+                                        </p>
+                                    </div>
+                                    <div
+                                        className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
+                                        <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
+                                            Deactived
+                                        </p>
                                     </div>
                                 </div>
-                                <div className="col-4 d-flex align-items-center justify-content-center">
-                                    <h4 className="header-title heading_data"> Projects</h4>
-                                </div>
-                                <div className="col-4 d-flex align-items-center justify-content-end pe-0">
+                            </div>
+                            <div className="col-4 d-flex align-items-center justify-content-center">
+                                <h4 className="header-title heading_data"> Projects</h4>
+                            </div>
+                            {status == 1 ? <div className="col-4 d-flex align-items-center justify-content-end pe-0">
                                 <Button
                                     className="web_button"
                                     variant="info"
@@ -130,10 +130,10 @@ console.log(checkedData,"oooooooooooooooooooooooooooo")
                                         handelCreate();
                                     }}>
                                     Add Projects
-                                </Button>  
-                                </div>
-                            </div>
-                        
+                                </Button>
+                            </div> : ""}
+                        </div>
+
                         {getProjectList?.loading ? (
                             <>
                                 <MainLoader />
@@ -178,11 +178,11 @@ console.log(checkedData,"oooooooooooooooooooooooooooo")
                                                     </span>
                                                 </td>
                                                 <td>
-                                                <Form.Check
-                                                    type="switch"
-                                                    checked={ele?.status}
-                                                    onChange={(e) => handleStatusChange(e, ele)}
-                                                />
+                                                    <Form.Check
+                                                        type="switch"
+                                                        checked={ele?.status}
+                                                        onChange={(e) => handleStatusChange(e, ele)}
+                                                    />
                                                 </td>
                                                 <td>
                                                     <Row>
@@ -199,11 +199,7 @@ console.log(checkedData,"oooooooooooooooooooooooooooo")
                                                                         handelUpdate(ele);
                                                                     }}></i>
                                                             </p>
-                                                            <p className="action-icon m-0 p-0  ">
-                                                                <i
-                                                                    className="mdi mdi-delete m-0 p-0"
-                                                                    onClick={()=>{handeldelete(ele)}}></i>
-                                                            </p>
+
                                                         </Col>
                                                     </Row>
                                                 </td>
@@ -220,22 +216,22 @@ console.log(checkedData,"oooooooooooooooooooooooooooo")
                 <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
                 {/* delete modal */}
                 <Modal show={statusModal} onHide={() => setStatusModal(false)}>
-                <Modal.Body>
-                    Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this Modal ?
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="secondary"
-                        onClick={() => {
-                            setStatusModal(false);
-                        }}>
-                        No
-                    </Button>
-                    <Button className=" web_button " variant="primary" onClick={() => handleYes()}>
-                        Yes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+                    <Modal.Body>
+                        Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this Project ?
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                setStatusModal(false);
+                            }}>
+                            No
+                        </Button>
+                        <Button className=" web_button " variant="primary" onClick={() => handleYes()}>
+                            Yes
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         </>
     );

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { ListGroup, Container, Row, Col, Table, Button } from 'react-bootstrap';
+import { ListGroup, Container, Row, Col, Card, Table, Button } from 'react-bootstrap';
 import Accordion from 'react-bootstrap/Accordion';
 import './milstone.css';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import Create from '../milestone/modal/create';
@@ -21,13 +22,6 @@ const Milestone = () => {
     const GetDataById = store?.getProjectById?.data?.project;
     const GetSinglemilstonesData = store?.getSigleMileStone?.data?.Response;
     const loaderhandel = store?.getSigleMileStone;
-    // const milstoneData = {
-    //     nodes: GetAllmilstonesData?.filter((item) =>
-    //         item?.project_id?.toLowerCase().includes(id.toLowerCase())
-    //     ),
-    // };
-    // console.log("GetAllmilstonesData", GetAllmilstonesData?.filter(item => item.includes(id)))
-
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -56,157 +50,103 @@ const Milestone = () => {
                             variant="info"
                             type="submit"
                             className="btn fs-5  text-white p-1   web_button">
-                            Add
+                            Add Milestone
                         </Button>
                     </Col>
                 </Row>
                 {loaderhandel.loading ? (
                     <MainLoader />
                 ) : (
-                    <Row>
-                        <Col lg={4}>
-                            <Row>
-                                <Col className="text-center" lg={12}>
-                                    <h4> Project</h4>
-                                </Col>
+                    <>
+                        <Row>
+                            <Col lg={12}>
+                                <Row>
+                                    <Col className="text-center" lg={12}>
+                                        <h4> Project</h4>
+                                    </Col>
+                                    <Row>
+                                        <Col lg={12} className='d-flex justify-content-between'>
+                                            <div className='d-flex'><h5 className='p-0 m-0'>Project Name :</h5>
+                                                <p className='p-0 m-0'>{GetDataById?.projectName}</p></div>
+                                            <div className='d-flex '><h5 className='p-0 m-0'>Client Name :</h5>
+                                                <p className='p-0 m-0'>{GetDataById?.clientName}</p></div>
+                                            <div className='d-flex '><h5 className='p-0 m-0'>Project Type :</h5>
+                                                <p className='p-0 m-0'>{GetDataById?.projectType}</p></div>
+                                            <div className='d-flex '><h5 className='p-0 m-0'>Project Start Date :</h5>
+                                                <p className='p-0 m-0'> {moment(GetDataById?.startDate).format('L')}</p></div>
+                                            <div className='d-flex '><h5 className='p-0 m-0'>Project End Date :</h5>
+                                                <p className='p-0 m-0'> {moment(GetDataById?.endDate).format('L')}</p></div>
+                                        </Col>
+                                    </Row>
 
-                                <ListGroup as="ol" numbered style={{ marginLeft: '20px', position: 'sticky' }}>
-                                    <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start">
-                                        <div className="ms-2 me-auto">
-                                            <div className="">
-                                                <b>Project Name : </b>
-                                                <i>{GetDataById?.projectName}</i>
-                                            </div>
-                                        </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start">
-                                        <div className="ms-2 me-auto">
-                                            <div className="">
-                                                <b>Client Name : </b>
-                                                <i>{GetDataById?.clientName}</i>
-                                            </div>
-                                        </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start">
-                                        <div className="ms-2 me-auto">
-                                            <div className="">
-                                                <b>Project Type : </b>
-                                                <i>{GetDataById?.projectType}</i>
-                                            </div>
-                                        </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start">
-                                        <div className="ms-2 me-auto">
-                                            <div className="">
-                                                <b>Project Start Date : </b>
-                                                <i>{moment(GetDataById?.startDate).format('L')}</i>
-                                            </div>
-                                        </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start">
-                                        <div className="ms-2 me-auto">
-                                            <div className="">
-                                                <b>Project End Date : </b>
-                                                <i>{moment(GetDataById?.endDate).format('L')}</i>
-                                            </div>
-                                        </div>
-                                    </ListGroup.Item>
-                                    {/* <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start">
-                                        <div className="ms-2 me-auto">
-                                            <div className="">
-                                                <b>Project Category : </b>
-                                                <i>{GetDataById?.projectCategory}</i>
-                                            </div>
-                                        </div>
-                                    </ListGroup.Item> */}
-                                    {/* <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start">
-                                        <div className="ms-2 me-auto">
-                                            <div className="">
-                                                <b>Project Description : </b>
-                                                <i>{GetDataById?.projectDesc}</i>
-                                            </div>
-                                        </div>
-                                    </ListGroup.Item> */}
-                                    {/* <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start">
-                                        <div className="ms-2 me-auto">
-                                            <div className="">
-                                                <b>Project Slug : </b>
-                                                <i>{GetDataById?.projectSlug}</i>
-                                            </div>
-                                        </div>
-                                    </ListGroup.Item> */}
-                                </ListGroup>
-                            </Row>
-                        </Col>
 
-                        <Col className="mx-auto" lg={7}>
-                            <Row>
-                                <Col className="text-center" lg={12}>
-                                    {' '}
-                                    <h4>Milestones</h4>
-                                </Col>
-                                <Col className="" lg={12}>
-                                    {/* <Accordion defaultActiveKey="0">
-                                    <Accordion.Item eventKey="1">
-                                        <Accordion.Header>
-                                            <Table>
-                                                <thead className="text-center btom_Line_hide">
+
+
+                                </Row>
+                            </Col>
+
+
+                        </Row>
+                        <Card className='mt-3'>
+                            <Card.Body>
+                                <Col className="mx-auto" lg={12}>
+                                    <Row>
+                                        <Col className="text-center" lg={12}>
+                                            {' '}
+                                            <h4>Milestones</h4>
+                                        </Col>
+                                        <Col className="" lg={12}>
+
+                                            <Table striped>
+                                                <thead >
                                                     <tr>
-                                                        <th>Start Date</th>
-                                                        <th>End Date</th>
+                                                        <th>#</th>
+                                                        <th> MileStone Name</th>
+                                                        <th> Description</th>
+                                                        <th> Start Date</th>
+                                                        <th> End Date</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
+                                                <tbody>
+                                                    {GetSinglemilstonesData?.map((item, index) => (
+                                                        <tr>
+                                                            <td>{index + 1}</td>
+                                                            <td>{item?.title}</td>
+                                                            <td>{item?.description}</td>
+
+                                                            <td> {moment(item?.startDate).format('L')}</td>
+                                                            <td>{moment(item?.completion_date).format('L')}</td>
+                                                            <td> <Row>
+                                                                <Col>
+                                                                    <p className="action-icon m-0 p-0 ">
+                                                                        <Link to={`/singleMilestonesprint/${item?._id}`}>
+                                                                            <i className="mdi mdi-eye m-0 p-0"></i>
+                                                                        </Link>
+                                                                        {/* <Link to={`/projects/${ele?._id}`}>
+                                                                    <i className="mdi mdi-eye m-0 p-0"></i>
+                                                                </Link> */}
+                                                                    </p>
+                                                                    <p className="action-icon m-0 p-0  ">
+                                                                        <i
+                                                                            className="uil-edit-alt m-0 p-0"
+                                                                         ></i>
+                                                                    </p>
+
+                                                                </Col>
+                                                            </Row></td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
                                             </Table>
-                                        </Accordion.Header>
-                                        <Accordion.Body> */}
 
-                                    <Table>
-                                        <thead className=" btom_Line_hide">
-                                            <tr>
-                                                <th>#</th>
-                                                <th> MileStone Name</th>
-                                                <th> Description</th>
-                                                <th> Start Date</th>
-                                                <th> End Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {GetSinglemilstonesData?.map((item, index) => (
-                                                <tr>
-                                                    <td>{index + 1}</td>
-                                                    <td>{item?.title}</td>
-                                                    <td>{item?.description}</td>
-
-                                                    <td> {moment(item?.startDate).format('L')}</td>
-                                                    <td>{moment(item?.completion_date).format('L')}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </Table>
-
-                                    {/* </Accordion.Body>
-                                    </Accordion.Item>
-                                </Accordion> */}
+                                        </Col>
+                                    </Row>
                                 </Col>
-                            </Row>
-                        </Col>
-                    </Row>
+                            </Card.Body>
+                        </Card>
+                        </>
+
                 )}
 
                 <Create modal={openModel} closeModal={closeModal} />
