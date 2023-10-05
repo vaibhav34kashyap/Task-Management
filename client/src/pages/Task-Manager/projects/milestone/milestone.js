@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { ListGroup, Container, Row, Col, Card, Table, Button } from 'react-bootstrap';
+import { ListGroup, Container, Row, Col, Card, Table,Form, Button } from 'react-bootstrap';
 import Accordion from 'react-bootstrap/Accordion';
 import './milstone.css';
 import { Link } from 'react-router-dom';
@@ -8,9 +8,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import Create from '../milestone/modal/create';
 import { getProjectsById } from '../../../../redux/projects/action';
-import { getallMileStones, getsingleMileStone } from './../../../../redux/milestone/action';
+import { deleteMileStone, getallMileStones, getsingleMileStone } from './../../../../redux/milestone/action';
 import MainLoader from '../../../../constants/Loader/loader';
-
+import Modal from 'react-bootstrap/Modal';
+import ToastHandle from '../../../../constants/toaster/toaster';
+import Update from './modal/update';
 // import ToastHandle from '../../../constants/toaster/toaster';
 const Milestone = () => {
     const { id } = useParams();
@@ -23,6 +25,12 @@ const Milestone = () => {
     const GetDataById = store?.getProjectById?.data?.project;
     const GetSinglemilstonesData = store?.getSigleMileStone?.data?.Response;
     const loaderhandel = store?.getSigleMileStone;
+    const [checkedStatus, setCheckedStatus] = useState();
+    const [statusModal, setStatusModal] = useState(false);
+    const [checkedData, setCheckedData] = useState();
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [editData, setEditData] = useState();
+    const deletehandle = store?.deleteMileStone?.data
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -46,10 +54,56 @@ const Milestone = () => {
             dispatch(getsingleMileStone(data));
         }
     };
+    const handleStatusChange = (e, data) => {
+        if (e.target.checked) {
+            setCheckedStatus(true);
+        } else {
+            setCheckedStatus(false);
+        }
+        setCheckedData(data);
+        setStatusModal(true);
+    };
+    const handleYes = () => {
+        if (checkedStatus) {
+            let body ={
+                id : checkedData._id ,
+                status:true
+            }
+            dispatch(deleteMileStone(body));
+        } else {
+            let body ={
+                id : checkedData._id ,
+                status:false
+            }
+            dispatch(deleteMileStone(body));
+        }
+        setStatusModal(false);
+    };
+    const handelUpdate = (data) => {
+        setEditData(data);
+        setOpenEditModal(true);
+    };
+    const closeupdatemodal = (val) => {
+        if (val == 'render') {
+            setRender(!render);
+        }
+        setOpenEditModal(false);
+    };
+    useEffect(() => {
+        if (deletehandle?.status == 200) {
+            ToastHandle('success', deletehandle?.message);
+            closeModal('render');
+        } else if (deletehandle?.status == 400) {
+            ToastHandle('error', deletehandle?.message);
+        } else if (deletehandle?.status == 500) {
+            ToastHandle('error', deletehandle?.message);
+        }
+    }, [deletehandle])
     useEffect(() => {
         dispatch(getProjectsById(id));
         dispatch(getsingleMileStone({id:id ,status:1}));
     }, [render]);
+    
 
     return (
         <>
@@ -126,7 +180,9 @@ const Milestone = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                          
+                                            <div className="col-4 d-flex align-items-center justify-content-center">
+                                <h4 className="header-title heading_data"> Milestones</h4>
+                            </div>
                                         </div>
                                         <Col className="" lg={12}>
 
@@ -138,6 +194,7 @@ const Milestone = () => {
                                                         <th> Description</th>
                                                         <th> Start Date</th>
                                                         <th> End Date</th>
+                                                        <th>Status</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -150,6 +207,11 @@ const Milestone = () => {
 
                                                             <td> {moment(item?.startDate).format('L')}</td>
                                                             <td>{moment(item?.completion_date).format('L')}</td>
+                                                            <td> <Form.Check
+                                                        type="switch"
+                                                        checked={item?.status}
+                                                        onChange={(e) => handleStatusChange(e, item)}
+                                                    /></td>
                                                             <td> <Row>
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0 ">
@@ -159,6 +221,9 @@ const Milestone = () => {
                                                                     </p>
                                                                     <p className="action-icon m-0 p-0  ">
                                                                         <i
+                                                                          onClick={() => {
+                                                                            handelUpdate(item);
+                                                                        }}
                                                                             className="uil-edit-alt m-0 p-0"
                                                                         ></i>
                                                                     </p>
@@ -180,6 +245,25 @@ const Milestone = () => {
                 )}
 
                 <Create modal={openModel} closeModal={closeModal} />
+                <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
+                  {/* delete modal */}
+                  <Modal show={statusModal} onHide={() => setStatusModal(false)}>
+                    <Modal.Body>
+                        Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this MileStone?
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                setStatusModal(false);
+                            }}>
+                            No
+                        </Button>
+                        <Button className=" web_button " variant="primary" onClick={() => handleYes()}>
+                            Yes
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </Container>
         </>
     );
