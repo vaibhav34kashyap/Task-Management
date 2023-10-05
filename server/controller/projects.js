@@ -81,23 +81,14 @@ const updateProject = async (req, res) => {
     }
 }
 
-const updateProjectStatus = async (req, res) => {
-    try {
-        let result = await projectModel.findByIdAndUpdate({ _id: req.body._id }, { projectStatus: req.body.statusvalue });
-        if (result) {
-            return res.status(200).json({ status: '200', project: result, message: 'Project status updated Successfully' });
-        }
-    } catch (err) {
-        return res.status(200).json({ status: '404', message: 'Something went wrong' })
-    }
-}
-
 // update project status
 const updateStatus = async (req, res) => {
     try {
-        await projectModel.findByIdAndUpdate({ _id: req.params.id }, { status: req.body.status });
+        console.log('dfgfnhgh');
+        await projectModel.findByIdAndUpdate({ _id: req.body.id }, { status: req.body.status });
         return res.status(200).json({ status: '200', message: 'Project status updated Successfully' });
     } catch (err) {
+        console.log(err);
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
     }
 }
@@ -123,4 +114,4 @@ const projectAssigned = async (req, res) => {
     }
 }
 
-module.exports = { getProjects, addProject, updateProject, getProjectMilestone, updateStatus, getProjectById, projectAssigned, updateProjectStatus };
+module.exports = { getProjects, addProject, updateProject, getProjectMilestone, updateStatus, getProjectById, projectAssigned, };
