@@ -92,11 +92,11 @@ const updateProjectStatus = async (req, res) => {
     }
 }
 
-// Deactivate project status
-const deactivateProject = async (req, res) => {
+// update project status
+const updateStatus = async (req, res) => {
     try {
-        await projectModel.findByIdAndUpdate({ _id: req.params.id }, { status: false });
-        return res.status(200).json({ status: '200', message: 'Project Deactivated Successfully' });
+        await projectModel.findByIdAndUpdate({ _id: req.params.id }, { status: req.body.status });
+        return res.status(200).json({ status: '200', message: 'Project status updated Successfully' });
     } catch (err) {
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
     }
@@ -123,4 +123,4 @@ const projectAssigned = async (req, res) => {
     }
 }
 
-module.exports = { getProjects, addProject, updateProject, getProjectMilestone, deactivateProject, getProjectById, projectAssigned, updateProjectStatus };
+module.exports = { getProjects, addProject, updateProject, getProjectMilestone, updateStatus, getProjectById, projectAssigned, updateProjectStatus };

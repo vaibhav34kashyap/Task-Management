@@ -21,7 +21,7 @@ sprintRoute.get('/getsprintbyid/:id', path.getSprintById);
 sprintRoute.post('/singlemilestonesprints', path.sigleMilestoneSprints);
 sprintRoute.post('/add', path.addSprint);
 sprintRoute.put('/update', path.updateSprint);
-sprintRoute.put('/deactivateSprint/:id', path.deactivateSprint);
+sprintRoute.put('/updateStatus/:id', path.updateStatus);
 sprintRoute.get('/getAMilestoneAllSprints', path.getAMilestoneAllSprints);
 
 
