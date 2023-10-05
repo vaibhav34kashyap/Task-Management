@@ -2,14 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListGroup, Container, Row, Col, Card, Table, Button } from 'react-bootstrap';
-import { getSingleSprint } from '../../../../../redux/actions';
 import moment from 'moment';
+import Create from './modal/create';
+import { getSingleSprint } from '../../../../../redux/sprint/action';
 const Sprint = () => {
     const { id } = useParams();
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
+    const [data, setData] = useState();
+    const [openModal, SetOpenModal] = useState(false);
     const GetAllSingleSprintData = store?.getAllSingleSprints?.data?.Response;
+    const CloseModal = (val) => {
+        if (val == 'render') {
+            setRender(!render);
+        }
+        SetOpenModal(false);
+    };
+    const handleCreate = () => {
+        SetOpenModal(true);
+    };
     useEffect(() => {
         dispatch(getSingleSprint(id));
     }, [render]);
@@ -21,7 +33,8 @@ const Sprint = () => {
                         <Col lg={12} className='text-end'>
                             <Button
                                 variant="info"
-                                type="submit"
+                                
+                                onClick={handleCreate}
                                 className="btn fs-5  text-white p-1   web_button">
                                 Add Sprint
                             </Button>
@@ -71,6 +84,7 @@ const Sprint = () => {
                     </Col>
                 </Card.Body>
             </Card>
+            <Create modal={openModal} CloseModal={CloseModal} id={id} data={data} />
         </>
     )
 }
