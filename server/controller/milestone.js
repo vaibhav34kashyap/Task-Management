@@ -102,9 +102,10 @@ const updateStatus = async (req, res) => {
     }
 }
 
+// Get all milestones of a project
 const getAProjectMilestones = async (req, res) => {
     try {
-        const result = await milestoneModel.find({ project_id: req.query.id });
+        const result = await milestoneModel.find({ $and: [{ project_id: req.query.id }, { status: req.query.status }] });
         return res.status(200).json({ status: "200", message: "All milestones fetched successfully", Response: result });
     } catch (error) {
         console.error(error);
