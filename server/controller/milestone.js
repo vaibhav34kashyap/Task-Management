@@ -95,7 +95,7 @@ const updateMilestone = async (req, res) => {
 // update Milestone status
 const updateStatus = async (req, res) => {
     try {
-        await milestoneModel.findByIdAndUpdate({ _id: req.params.id }, { status: req.body.status });
+        await milestoneModel.findByIdAndUpdate({ _id: req.body.id }, { status: req.body.status });
         return res.status(200).json({ status: '200', message: 'Milestone status updated Successfully' });
     } catch (err) {
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
