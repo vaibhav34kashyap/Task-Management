@@ -1,11 +1,11 @@
 // end points
 export const AddProject = "/project/add";
-export const GetAllProject = "/project";
+export const GetAllProject = "/project/getProjects?status=";
 export const UpdateProjectDetails = "/project/update";
-export const DeleteProject = "/project/delete/";
+export const DeleteProject = "/project/deactivateProject/";
 export const GetProjectById = "/project/getbyprojectid/";
 export const GetAllMileStones = "/milestone?";
-export const MileStoneDelete = "/milestone/deactivateMilestone/"
+export const MileStoneDelete = "/milestone/delete/"
 export const MileStoneAdd = "/milestone/add"
 export const ParticularMilestoneDetail = "/milestone/getmilestonebyid/";
 export const AddSprint = "/sprint/add";
