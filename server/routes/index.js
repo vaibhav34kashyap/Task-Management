@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const userRoutes = require("./authenitcation");
+const userRoutes = require("./users.route");
 const profileRoutes = require("./profile");
 const taskRoutes = require("./task");
 const projectRoute = require("./projectRoute");
@@ -15,7 +15,7 @@ const catRouter = require("./project_type");
 const recentTaskRoute = require("./recenttask");
 const searchUserRoute = require("./search_user");
 const milestoneRoute = require("./milestone");
-const rolesRoute = require("./roles");
+const rolesRoute = require("./roles.route");
 const technologyRoute = require("./technology.route");
 
 

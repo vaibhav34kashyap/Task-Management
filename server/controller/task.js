@@ -1,5 +1,5 @@
 const taskModel = require('../models/task');
-const userModel = require("../models/login_register");
+const userModel = require("../models/users.model");
 const multer = require("multer");
 const path = require('path');
 const fs = require('fs');
