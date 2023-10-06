@@ -16,6 +16,7 @@ const recentTaskRoute = require("./recenttask");
 const searchUserRoute = require("./search_user");
 const milestoneRoute = require("./milestone");
 const rolesRoute = require("./roles");
+const technologyRoute = require("./technology.route");
 
 
 router.use("/users", userRoutes);
@@ -33,5 +34,6 @@ router.use("/recenttask", recentTaskRoute);
 router.use("/searchuser", searchUserRoute);
 router.use("/milestone", milestoneRoute);
 router.use("/roles", rolesRoute);
+router.use("/technology", technologyRoute);
 
 module.exports = router;
