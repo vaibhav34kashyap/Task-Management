@@ -19,18 +19,58 @@ const api = new APICore();
  * Login the user
  * @param {*} payload - username and password
  */
+// function* login({ payload: { username, password } }) {
+//     try {
+//         const response = yield call(loginApi, { username, password });
+//         const user = response.data;
+//         // NOTE - You can change this according to response format from your api
+//         api.setLoggedInUser(user);
+//         setAuthorization(user['token']);
+//         yield put(authApiResponseSuccess(AuthActionTypes.LOGIN_USER, user));
+//     } catch (error) {
+//         yield put(authApiResponseError(AuthActionTypes.LOGIN_USER, error));
+//         api.setLoggedInUser(null);
+//         setAuthorization(null);
+//     }
+// }
+
 function* login({ payload: { username, password } }) {
     try {
+
         const response = yield call(loginApi, { username, password });
-        const user = response.data;
-        // NOTE - You can change this according to response format from your api
-        api.setLoggedInUser(user);
-        setAuthorization(user['token']);
-        yield put(authApiResponseSuccess(AuthActionTypes.LOGIN_USER, user));
+        console.log(response?.data?.status, 'aoiresponse error')
+
+        if (response?.data?.status === '200') {
+            const { token, user } = response.data;
+
+            let { role } = user
+            const users = {
+                id: 1,
+                username: 'test',
+                password: 'test',
+                firstName: 'Test',
+                lastName: 'User',
+                role: role?.[0],
+                token: token,
+                userData: user
+            };
+            // NOTE - You can change this according to response format from your api
+            api.setLoggedInUser(users);
+            setAuthorization(users['token']);
+            yield put(authApiResponseSuccess(AuthActionTypes.LOGIN_USER, users));
+
+        } else if (response?.data?.status === "400") {
+            let error = response?.data?.message
+            yield put(authApiResponseError(AuthActionTypes.LOGIN_USER, error));
+            api.setLoggedInUser(null);
+            setAuthorization(null);
+        }
+
     } catch (error) {
-        yield put(authApiResponseError(AuthActionTypes.LOGIN_USER, error));
-        api.setLoggedInUser(null);
-        setAuthorization(null);
+        console.log(error, 'aoi error')
+        // yield put(authApiResponseError(AuthActionTypes.LOGIN_USER, error));
+        // api.setLoggedInUser(null);
+        // setAuthorization(null);
     }
 }
 
