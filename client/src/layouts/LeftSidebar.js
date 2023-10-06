@@ -36,7 +36,7 @@ const SideBarContent = ({ hideUserProfile }: SideBarContentProps) => {
             )}
             <AppMenu menuItems={getMenuItems()} />
 
-            <div
+            {/* <div
                 className={classNames('help-box', 'text-center', {
                     'text-white': hideUserProfile,
                 })}>
@@ -55,7 +55,7 @@ const SideBarContent = ({ hideUserProfile }: SideBarContentProps) => {
                     )}>
                     Upgrade
                 </button>
-            </div>
+            </div> */}
             <div className="clearfix" />
         </>
     );
@@ -118,7 +118,7 @@ const LeftSidebar = ({ isCondensed, isLight, hideLogo, hideUserProfile }: LeftSi
                 {!isCondensed && (
                     <SimpleBar style={{ maxHeight: '100%' }} timeout={500} scrollbarMaxSize={320}>
                         <SideBarContent
-                            menuClickHandler={() => {}}
+                            menuClickHandler={() => { }}
                             isLight={isLight}
                             hideUserProfile={hideUserProfile}
                         />

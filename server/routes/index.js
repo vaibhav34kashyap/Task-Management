@@ -15,7 +15,8 @@ const catRouter = require("./project_type");
 const recentTaskRoute = require("./recenttask");
 const searchUserRoute = require("./search_user");
 const milestoneRoute = require("./milestone");
-const rolesRoute = require("./roles.route");
+
+const rolesRoute = require("./roles");
 const technologyRoute = require("./technology.route");
 
 

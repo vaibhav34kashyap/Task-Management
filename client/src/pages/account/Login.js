@@ -89,7 +89,8 @@ const Login = (): React$Element<any> => {
                 <VerticalForm
                     onSubmit={onSubmit}
                     resolver={schemaResolver}
-                    defaultValues={{ username: 'test', password: 'test' }}>
+                // defaultValues={{ username: 'test', password: 'test' }}
+                >
                     <FormInput
                         label={t('Username')}
                         type="text"
