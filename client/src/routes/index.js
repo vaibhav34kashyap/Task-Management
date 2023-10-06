@@ -312,7 +312,7 @@ const AllRoutes = () => {
                             element: <LoadComponent component={InviteUsers} />,
                         },
                         {
-                            path: "singleMilestonesprint/:id",
+                            path: "singleMilestonesprint/projectId=/:projectId&milestoneId=/:milestoneId" ,
                             element: <LoadComponent component={Sprint} />
                         },
                     ],

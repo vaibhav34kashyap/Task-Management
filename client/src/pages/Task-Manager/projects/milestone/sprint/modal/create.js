@@ -8,7 +8,7 @@ import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
 import { addSprint } from '../../../../../../redux/sprint/action';
 import ToastHandle from '../../../../../../constants/toaster/toaster';
 import MainLoader from '../../../../../../constants/Loader/loader';
-const Create = ({modal,CloseModal ,id,data}) => {
+const Create = ({modal,CloseModal ,projectId,milestoneId}) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle= store?.addSprint
@@ -23,8 +23,8 @@ const Create = ({modal,CloseModal ,id,data}) => {
 
     const onSubmit = (val) => {
       let body={
-        project_id: data?.project_id ,
-        milestone_id: id ,
+        project_id: projectId ,
+        milestone_id: milestoneId ,
         sprintName:val?.Name,
         sprintDesc:val?.Description,
         startDate:val?.Startdate,

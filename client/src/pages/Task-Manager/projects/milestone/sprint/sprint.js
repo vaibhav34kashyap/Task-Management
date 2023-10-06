@@ -6,7 +6,7 @@ import moment from 'moment';
 import Create from './modal/create';
 import { getSingleSprint } from '../../../../../redux/sprint/action';
 const Sprint = () => {
-    const { id } = useParams();
+    const {projectId,milestoneId} = useParams()
     const store = useSelector((state) => state);
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
@@ -23,7 +23,7 @@ const Sprint = () => {
         SetOpenModal(true);
     };
     useEffect(() => {
-        dispatch(getSingleSprint(id));
+        dispatch(getSingleSprint(milestoneId));
     }, [render]);
     return (
         <>
@@ -84,7 +84,7 @@ const Sprint = () => {
                     </Col>
                 </Card.Body>
             </Card>
-            <Create modal={openModal} CloseModal={CloseModal} id={id} data={data} />
+            <Create modal={openModal} CloseModal={CloseModal} projectId={projectId} milestoneId={milestoneId}/>
         </>
     )
 }

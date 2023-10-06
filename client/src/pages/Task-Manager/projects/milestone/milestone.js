@@ -101,7 +101,7 @@ const Milestone = () => {
     }, [deletehandle])
     useEffect(() => {
         dispatch(getProjectsById(id));
-        dispatch(getsingleMileStone({ id: id, status: 1 }));
+        dispatch(getsingleMileStone({id:id ,status:status}));
     }, [render]);
 
 
@@ -215,7 +215,7 @@ const Milestone = () => {
                                                             <td> <Row>
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0 ">
-                                                                        <Link to={`/user/dashboard/singleMilestonesprint/${item?._id}`}>
+                                                                        <Link to={`/user/dashboard/singleMilestonesprint/projectId=/${item?.project_id}&milestoneId=/${item?._id}`}>
                                                                             <i className="mdi mdi-eye m-0 p-0"></i>
                                                                         </Link>
                                                                     </p>
