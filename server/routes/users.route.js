@@ -1,9 +1,11 @@
 const express = require("express");
-const users = require("../controller/users");
+const users = require("../controller/users.controller");
 const userRoute = express.Router();
+
+
+userRoute.post("/register", users.registerUser);
+userRoute.post("/login", users.logInUser);
 userRoute.get("", users.getUsers);
-userRoute.post("/register", users.register);
-userRoute.post("/login", users.login);
 userRoute.post("/forgotpasswordlink", users.forgotPassword);
 userRoute.post("/forgotpasswordupdate", users.forgotPasswordupdate);
 userRoute.post("/changepassword", users.changePassword);
