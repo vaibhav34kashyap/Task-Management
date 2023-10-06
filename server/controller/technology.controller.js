@@ -5,7 +5,6 @@ const technologyModel = require('../models/technology.model');
 // Add  a Technology category
 const addTechCategory = async (req, res) => {
     try {
-        console.log('3oienjgbfwe');
         const result = await techCategoryModel.create({
             name: req.body.name
         });

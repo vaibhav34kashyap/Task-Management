@@ -1,106 +1,74 @@
-const userModel = require("../models/login_register");
+const userModel = require("../models/users.model");
 const teamModel = require("../models/team");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const SECRET_KEY = "ShadowCoster";
 const nodemailer = require("../middleware/nodemailer");
-const rolesModel = require("../models/rolesModel");
-const getUsers = async (req, res) => {
+const bcrypt = require("bcrypt");
+const { accessToken } = require("../middleware/jwt.auth");
+
+// Register a user
+const registerUser = async (req, res) => {
   try {
-    const userSearch = await userModel.find().limit(10)
-    if (userSearch <= 0) {
-      return res.status(200).json({ status: "400", message: 'No record found' });
-    } else {
-      return res.status(200).json({ status: "200", data: userSearch, message: 'Record found' });
+    const existingUser = await userModel.findOne({ email: req.body.email });
+    if (existingUser) {
+      return res.status(200).json({ status: "400", message: "Email already exists" });
     }
-  } catch (err) {
-    console.log(err);
-    return res.status(200).json({ status: "500", message: 'Something went wrong' });
+    const hashedPassword = await bcrypt.hash(req.body.password, 9);
+    const result = await userModel.create({
+      userName: req.body.userName,
+      email: req.body.email,
+      password: hashedPassword,
+      plainPassword: req.body.password,
+      roleId: req.body.roleId,
+      role:2
+    });
+    if (result) {
+      await nodemailer.emailSender(result);
+      return res.status(200).json({ status: "200", message: "User created Successfully", response: result });
+    } else {
+      return res.status(400).json({ status: "400", message: 'User not created' });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: "500", message: "Something went wrong" });
   }
 }
-const register = async (req, res) => {
-  var { username, email, password, role } = req.body;
+
+// LognIn of A User
+const logInUser = async (req, res) => {
   try {
-    const existingUser = await userModel.findOne({
-      email: email
-    });
+    let existingUser;
+    if (req.body.email) {
+      existingUser = await userModel.findOne({ email: req.body.email, role: 1 }).populate('roleId')
+    }
+    if (!existingUser && req.body.email) {
+      existingUser = await userModel.findOne({ email: req.body.email, role: 2 }).populate('roleId')
+    }
     if (existingUser) {
-      return res.status(200).json({ status: "400", message: "Email already exist" });
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const result = await userModel.create({
-      userName: username,
-      email: email,
-      plainPassword:password,
-      password: hashedPassword,
-      role: role
-    });
-    const token = jwt.sign({
-      username: result.userName,
-      email: result.email,
-      password: result.password,
-      role: role
-    },
-      SECRET_KEY
-    );
-    if(result){
-      await nodemailer.emailSender(result)
-    res.status(200).json({ status: "200", user: result, token: token, message: 'User created successfully' });
-    }
-    else{
-      res.status(400).json({ status: "200", user: result, token: token, message: 'User not created' }); 
+      const isPasswordValid = await bcrypt.compare(req.body.password, existingUser.password);
+      if (isPasswordValid) {
+        const token = await accessToken(existingUser);
+        return res.status(200).json({ status: "200", message: "User logged in successfully", response: existingUser, token });
+      } else {
+        return res.status(200).json({ status: "400", message: "Incorrect password" });
+      }
+    } else {
+      return res.status(200).json({ status: "400", message: "User not found" });
     }
   } catch (error) {
     console.log(error);
-    res.status(200).json({ status: "500", message: "Something went wrong" });
+    return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
   }
-}
-const login = async (req, res) => {
-  var {
-    email,
-    password
-  } = req.body;
+};
+
+// Get All Users
+const getUsers = async (req, res) => {
   try {
-    const existingUser = await userModel.findOne({ email: email });
-    const role = existingUser.role;
-    const permission = await rolesModel.findOne({ role: role })
-    // console.log(role)
-    // console.log(permission)
-    if (!existingUser) {
-      res.status(200).json({
-        status: "404",
-        message: "No user Found"
-      });
-    }
-    const matchPassword = await bcrypt.compare(password, existingUser.password);
-    if (!matchPassword) {
-      return res.status(200).json({
-        status: "400",
-        message: "Invalid Credentials"
-      });
-    }
-    const token = jwt.sign({
-      email: existingUser.email,
-      result: existingUser._id,
-    },
-      SECRET_KEY
-    );
-    res
-      .status(200)
-      .json({
-        status: "200",
-        message: "user Details",
-        user: existingUser,
-        permission: permission,
-        token: token,
-      });
+    const result = await userModel.find()
+    return res.status(200).json({ status: "200", message: 'User data fetched successfully', response : result });
   } catch (error) {
-    res.status(200).json({
-      status: "500",
-      message: "Something went wrong" + error
-    });
+    return res.status(200).json({ status: "500", message: 'Something went wrong' });
   }
 }
+
 const forgotPassword = async (req, res) => {
 
   var {
@@ -333,6 +301,6 @@ const deleteUsers = async (req, res) => {
 }
 
 module.exports = {
-  getUsers, register, login, forgotPassword, forgotPasswordupdate, changePassword,
+  getUsers, registerUser, logInUser, forgotPassword, forgotPasswordupdate, changePassword,
   inviteTeamMember, getUsersOnProject, deleteUsers
 };
