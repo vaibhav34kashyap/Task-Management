@@ -253,8 +253,8 @@ const AllRoutes = () => {
         },
         {
             // auth protected routes
-            path: '/',
-            element: <PrivateRoute roles={'Admin'} component={Layout} />,
+            path: 'user',
+            element: <PrivateRoute roles={'User'} component={Layout} />,
             children: [
                 {
                     path: 'dashboard',
@@ -275,48 +275,145 @@ const AllRoutes = () => {
                             path: 'e-wallet',
                             element: <LoadComponent component={EWalletDashboard} />,
                         },
+                        {
+                            path: 'projects',
+                            element: <LoadComponent component={Projects} />,
+                        },
+                        {
+                            path: 'projects/:id',
+                            element: <LoadComponent component={MileStone} />,
+                        },
+                        {
+                            path: 'milestone/:id',
+                            element: <LoadComponent component={SingleMilestoneDetail} />,
+                        },
+                        {
+                            path: 'sprint/:id',
+                            element: <LoadComponent component={SingleSprintDetail} />,
+                        },
+                        {
+                            path: 'boards',
+                            element: <LoadComponent component={Boards} />,
+                        },
+                        {
+                            path: 'allmillstones',
+                            element: <LoadComponent component={AllMillStone} />,
+                        },
+                        {
+                            path: 'allsprint',
+                            element: <LoadComponent component={AllSprint} />,
+                        },
+                        {
+                            path: 'alluser',
+                            element: <LoadComponent component={AllUsers} />,
+                        },
+                        {
+                            path: 'inviteuser',
+                            element: <LoadComponent component={InviteUsers} />,
+                        },
+                        {
+                            path: "singleMilestonesprint/:id",
+                            element: <LoadComponent component={Sprint} />
+                        },
                     ],
                 },
-                {
-                    path: 'projects',
-                    element: <LoadComponent component={Projects} />,
-                },
-                {
-                    path: 'projects/:id',
-                    element: <LoadComponent component={MileStone} />,
-                },
-                {
-                    path: 'milestone/:id',
-                    element: <LoadComponent component={SingleMilestoneDetail} />,
-                },
-                {
-                    path: 'sprint/:id',
-                    element: <LoadComponent component={SingleSprintDetail} />,
-                },
-                {
-                    path: 'boards',
-                    element: <LoadComponent component={Boards} />,
-                },
-                {
-                    path: 'allmillstones',
-                    element: <LoadComponent component={AllMillStone} />,
-                },
-                {
-                    path: 'allsprint',
-                    element: <LoadComponent component={AllSprint} />,
-                },
-                {
-                    path: 'alluser',
-                    element: <LoadComponent component={AllUsers} />,
-                },
-                {
-                    path: 'inviteuser',
-                    element: <LoadComponent component={InviteUsers} />,
-                },
-                {
-                    path: "singleMilestonesprint/:id",
-                    element: <LoadComponent component={Sprint} />
-                },
+
+                //new code add routing
+                // {
+                //     path: 'user',
+                //     element: <PrivateRoute roles={'User'} component={Layout} />,
+                //     children: [
+                //         {
+                //             path: 'dashboard',
+                //             children: [
+                //                 {
+                //                     path: 'projects',
+                //                     element: <LoadComponent component={Projects} />,
+                //                 },
+                //                 {
+                //                     path: 'projects/:id',
+                //                     element: <LoadComponent component={MileStone} />,
+                //                 },
+                //                 {
+                //                     path: 'milestone/:id',
+                //                     element: <LoadComponent component={SingleMilestoneDetail} />,
+                //                 },
+                //                 {
+                //                     path: 'sprint/:id',
+                //                     element: <LoadComponent component={SingleSprintDetail} />,
+                //                 },
+                //                 {
+                //                     path: 'boards',
+                //                     element: <LoadComponent component={Boards} />,
+                //                 },
+                //                 {
+                //                     path: 'allmillstones',
+                //                     element: <LoadComponent component={AllMillStone} />,
+                //                 },
+                //                 {
+                //                     path: 'allsprint',
+                //                     element: <LoadComponent component={AllSprint} />,
+                //                 },
+                //                 {
+                //                     path: 'alluser',
+                //                     element: <LoadComponent component={AllUsers} />,
+                //                 },
+                //                 {
+                //                     path: 'inviteuser',
+                //                     element: <LoadComponent component={InviteUsers} />,
+                //                 },
+                //                 {
+                //                     path: "singleMilestonesprint/:id",
+                //                     element: <LoadComponent component={Sprint} />
+                //                 },
+                //                 // icon routing
+                //             ],
+                //         },
+                //     ],
+                // },
+                //new code add routing
+
+
+                // {
+                //     path: 'projects',
+                //     element: <LoadComponent component={Projects} />,
+                // },
+                // {
+                //     path: 'projects/:id',
+                //     element: <LoadComponent component={MileStone} />,
+                // },
+                // {
+                //     path: 'milestone/:id',
+                //     element: <LoadComponent component={SingleMilestoneDetail} />,
+                // },
+                // {
+                //     path: 'sprint/:id',
+                //     element: <LoadComponent component={SingleSprintDetail} />,
+                // },
+                // {
+                //     path: 'boards',
+                //     element: <LoadComponent component={Boards} />,
+                // },
+                // {
+                //     path: 'allmillstones',
+                //     element: <LoadComponent component={AllMillStone} />,
+                // },
+                // {
+                //     path: 'allsprint',
+                //     element: <LoadComponent component={AllSprint} />,
+                // },
+                // {
+                //     path: 'alluser',
+                //     element: <LoadComponent component={AllUsers} />,
+                // },
+                // {
+                //     path: 'inviteuser',
+                //     element: <LoadComponent component={InviteUsers} />,
+                // },
+                // {
+                //     path: "singleMilestonesprint/:id",
+                //     element: <LoadComponent component={Sprint} />
+                // },
                 {
                     path: 'apps',
                     children: [
