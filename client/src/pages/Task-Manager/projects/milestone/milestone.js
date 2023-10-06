@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { ListGroup, Container, Row, Col, Card, Table,Form, Button } from 'react-bootstrap';
+import { ListGroup, Container, Row, Col, Card, Table, Form, Button } from 'react-bootstrap';
 import Accordion from 'react-bootstrap/Accordion';
 import './milstone.css';
 import { Link } from 'react-router-dom';
@@ -41,14 +41,14 @@ const Milestone = () => {
         if (val) {
             setStatus(1);
             let data = {
-                id:id ,
+                id: id,
                 status: 1,
             };
             dispatch(getsingleMileStone(data));
         } else {
             setStatus(0);
             let data = {
-                id:id,
+                id: id,
                 status: 0,
             };
             dispatch(getsingleMileStone(data));
@@ -65,15 +65,15 @@ const Milestone = () => {
     };
     const handleYes = () => {
         if (checkedStatus) {
-            let body ={
-                id : checkedData._id ,
-                status:true
+            let body = {
+                id: checkedData._id,
+                status: true
             }
             dispatch(deleteMileStone(body));
         } else {
-            let body ={
-                id : checkedData._id ,
-                status:false
+            let body = {
+                id: checkedData._id,
+                status: false
             }
             dispatch(deleteMileStone(body));
         }
@@ -103,7 +103,7 @@ const Milestone = () => {
         dispatch(getProjectsById(id));
         dispatch(getsingleMileStone({id:id ,status:status}));
     }, [render]);
-    
+
 
     return (
         <>
@@ -181,8 +181,8 @@ const Milestone = () => {
                                                 </div>
                                             </div>
                                             <div className="col-4 d-flex align-items-center justify-content-center">
-                                <h4 className="header-title heading_data"> Milestones</h4>
-                            </div>
+                                                <h4 className="header-title heading_data"> Milestones</h4>
+                                            </div>
                                         </div>
                                         <Col className="" lg={12}>
 
@@ -208,22 +208,22 @@ const Milestone = () => {
                                                             <td> {moment(item?.startDate).format('L')}</td>
                                                             <td>{moment(item?.completion_date).format('L')}</td>
                                                             <td> <Form.Check
-                                                        type="switch"
-                                                        checked={item?.status}
-                                                        onChange={(e) => handleStatusChange(e, item)}
-                                                    /></td>
+                                                                type="switch"
+                                                                checked={item?.status}
+                                                                onChange={(e) => handleStatusChange(e, item)}
+                                                            /></td>
                                                             <td> <Row>
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0 ">
-                                                                        <Link to={`/singleMilestonesprint/projectId=/${item?.project_id}&milestoneId=/${item?._id}`}>
+                                                                        <Link to={`/user/dashboard/singleMilestonesprint/projectId=/${item?.project_id}&milestoneId=/${item?._id}`}>
                                                                             <i className="mdi mdi-eye m-0 p-0"></i>
                                                                         </Link>
                                                                     </p>
                                                                     <p className="action-icon m-0 p-0  ">
                                                                         <i
-                                                                          onClick={() => {
-                                                                            handelUpdate(item);
-                                                                        }}
+                                                                            onClick={() => {
+                                                                                handelUpdate(item);
+                                                                            }}
                                                                             className="uil-edit-alt m-0 p-0"
                                                                         ></i>
                                                                     </p>
@@ -246,8 +246,8 @@ const Milestone = () => {
 
                 <Create modal={openModel} closeModal={closeModal} />
                 <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
-                  {/* delete modal */}
-                  <Modal show={statusModal} onHide={() => setStatusModal(false)}>
+                {/* delete modal */}
+                <Modal show={statusModal} onHide={() => setStatusModal(false)}>
                     <Modal.Body>
                         Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this MileStone?
                     </Modal.Body>
