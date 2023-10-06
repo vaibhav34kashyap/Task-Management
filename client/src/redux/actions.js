@@ -5,3 +5,4 @@ export * from './milestone/action';
 export * from './sprint/action';
 export * from './task/action';
 export * from './user/action';
+export * from './technology/action'

@@ -12,9 +12,10 @@ import {
     addAllmilstones,
     getSigleMileStone,
 } from './milestone/reducer';
-import { addSprint, getAllSprints, deleteSprint, getSingleSprintReducer, updateSprint ,getAllSingleSprints  } from './sprint/reducres';
-import { createTaskReducer, getSigleSprintTask,getAllTaskReducer,UpdateTaskReducer} from './task/reducer';
-import { getAllUsers, deleteUser ,createUser} from './user/reducer';
+import { addSprint, getAllSprints, deleteSprint, getSingleSprintReducer, updateSprint, getAllSingleSprints } from './sprint/reducres';
+import { createTaskReducer, getSigleSprintTask, getAllTaskReducer, UpdateTaskReducer } from './task/reducer';
+import { getAllUsers, deleteUser, createUser } from './user/reducer';
+import {createTechnologyReducer,getAllTechnologyReducer,UpdateTechnologyReducer} from './technology/reducer'
 export default (combineReducers({
     Auth,
     Layout,
@@ -38,5 +39,6 @@ export default (combineReducers({
     updateSprint,
     getSigleMileStone,
     getSigleSprintTask,
-    getAllSingleSprints,getAllTaskReducer,UpdateTaskReducer,createUser
+    getAllSingleSprints, getAllTaskReducer, UpdateTaskReducer, createUser,
+    createTechnologyReducer,getAllTechnologyReducer,UpdateTechnologyReducer
 }): any);

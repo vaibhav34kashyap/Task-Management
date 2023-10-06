@@ -71,6 +71,12 @@ const MENU_ITEMS = [
         url: 'dashboard/inviteUser',
         icon: 'uil-user-plus',
     },
+    {
+        key: 'technology',
+        label: 'Technology',
+        url: 'dashboard/technology',
+        icon: 'uil-technology',
+    },
     // { key: 'apps', label: 'Apps', isTitle: true },
     // {
     //     key: 'apps-calendar',
