@@ -7,13 +7,13 @@ import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import MainLoader from '../../../../constants/Loader/loader';
 import { MultiSelect } from 'react-multi-select-component';
-import { createTechnology, getAllTechnologyCategory } from '../../../../redux/technology/action';
-const Create = ({ modal, closeModal }) => {
+import { createTechnology, createTechnologyCategory } from '../../../../redux/technology/action';
+const CreateCategory = ({ modal, closeModal }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [selected, setSelected] = useState([]);
-    const errorhandel = store?.createTechnologyReducer;
-    const loaderhandel = store?.createTechnologyReducer;
+    const errorhandel = store?.createTechnologyCategoryReducer;
+    const loaderhandel = store?.createTechnologyCategoryReducer;
     const {
         register,
         handleSubmit,
@@ -24,10 +24,9 @@ const Create = ({ modal, closeModal }) => {
     } = useForm();
     const onSubmit = (data) => {
         let body = {
-            techCategory_id:data?.category,
-            techName: data?.technologyName,
+            name: data?.category,
         };
-        dispatch(createTechnology(body));
+        dispatch(createTechnologyCategory(body));
     };
     useEffect(() => {
         if (errorhandel?.data?.status == 200) {
@@ -42,13 +41,7 @@ const Create = ({ modal, closeModal }) => {
     useEffect(() => {
         reset();
     }, [modal]);
-    useEffect(() => {
-        let body = {
-            status: true,
-        };
-        dispatch(getAllTechnologyCategory(body));
-    }, [])
-    
+
     return (
         <>
             <Modal show={modal} onHide={closeModal}>
@@ -57,7 +50,7 @@ const Create = ({ modal, closeModal }) => {
                         <Row>
                             <Col lg={7} className="text-end">
                                 <Modal.Title id="" className="mx-auto">
-                                    Create Technology
+                                    Create Category
                                 </Modal.Title>
                             </Col>
                             <Col lg={5} className="text-end pt-2">
@@ -72,48 +65,22 @@ const Create = ({ modal, closeModal }) => {
                     <Modal.Body className="py-0">
                         <Card className="p-2">
                             <Form onSubmit={handleSubmit(onSubmit)}>
-                            <Row>
-                                    <Col lg={12}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-                                            <Row>
-                                                <Col lg={4}>
-                                                    <Form.Label>
-                                                        Category <span className="text-danger">*</span>:
-                                                    </Form.Label>
-                                                </Col>
-                                                <Col lg={8}>
-                                                    <Form.Select
-                                                        {...register('category', { required: true })}
-                                                    >
-                                                      <option value={''}>--Select--</option>
-                                                {store?.getAllTechnologyCategoryReducer?.data?.response?.map((ele, ind) => (
-                                                    <option value={ele?._id}> {ele?.name} </option>
-                                                ))}
-                                                </Form.Select>
-                                                    {errors.category?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
-                                                    )}
-                                                </Col>
-                                            </Row>
-                                        </Form.Group>
-                                    </Col>
-                                </Row>
                                 <Row>
                                     <Col lg={12}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Row>
                                                 <Col lg={4}>
                                                     <Form.Label>
-                                                        Technology Name <span className="text-danger">*</span>:
+                                                    Category Name <span className="text-danger">*</span>:
                                                     </Form.Label>
                                                 </Col>
                                                 <Col lg={8}>
                                                     <Form.Control
                                                         type="text"
-                                                        placeholder="Please Enter Technology Name"
-                                                        {...register('technologyName', { required: true })}
+                                                        placeholder="Please Enter Category Name"
+                                                        {...register('category', { required: true })}
                                                     />
-                                                    {errors.technologyName?.type === 'required' && (
+                                                    {errors.category?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>
                                                     )}
                                                 </Col>
@@ -128,7 +95,7 @@ const Create = ({ modal, closeModal }) => {
                                             variant="info"
                                             type="submit"
                                             className="btn btn-sm  text-white pt-1 pb-1  web_button ">
-                                            Add
+                                            Add 
                                         </Button>
                                     </Col>
                                 </Row>
@@ -141,4 +108,4 @@ const Create = ({ modal, closeModal }) => {
     );
 };
 
-export default Create;
+export default CreateCategory;

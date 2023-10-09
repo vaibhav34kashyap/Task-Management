@@ -77,6 +77,12 @@ const MENU_ITEMS = [
         url: 'dashboard/technology',
         icon: 'uil-technology',
     },
+    {
+        key: 'TechnologyCategory',
+        label: 'TechnologyCategory',
+        url: 'dashboard/technologyCategory',
+        icon: 'uil-technology',
+    },
     // { key: 'apps', label: 'Apps', isTitle: true },
     // {
     //     key: 'apps-calendar',

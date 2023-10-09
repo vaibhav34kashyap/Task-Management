@@ -38,25 +38,25 @@ function* login({ payload: { username, password } }) {
     try {
 
         const response = yield call(loginApi, { username, password });
-        console.log(response?.data?.status, 'aoiresponse error')
+        console.log(response, 'aoiresponse error')
 
         if (response?.data?.status === '200') {
-            const { token, user } = response.data;
+            // const { token, user } = response.data;
 
-            let { role } = user
+            // let { role } = user
             const users = {
                 id: 1,
                 username: 'test',
                 password: 'test',
                 firstName: 'Test',
                 lastName: 'User',
-                role: role?.[0],
-                token: token,
-                userData: user
+                role: "User",
+                token: response?.data?.token,
+                userData: response?.data?.response
             };
             // NOTE - You can change this according to response format from your api
             api.setLoggedInUser(users);
-            setAuthorization(users['token']);
+            setAuthorization(response?.data?.token);
             yield put(authApiResponseSuccess(AuthActionTypes.LOGIN_USER, users));
 
         } else if (response?.data?.status === "400") {
