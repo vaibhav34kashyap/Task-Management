@@ -62,7 +62,7 @@ const addTechnology = async (req, res) => {
 // Get all Technologies
 const getTechnology = async (req, res) => {
     try {
-        const result = await technologyModel.find({ status: req.query.status });
+        const result = await technologyModel.find({ status: req.query.status }).populate('techCategory_id');
         return res.status(200).json({ status: '200', message: 'Technology data feteched Successfully', response: result })
     } catch (err) {
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
