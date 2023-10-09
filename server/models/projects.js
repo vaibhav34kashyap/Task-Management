@@ -12,7 +12,8 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
                 type: String
             },
             technology: {
-                type: String,
+                type: [mongoose.Types.ObjectId],
+                ref : 'Technology'
             },
             projectLead: {
                 type: String,
