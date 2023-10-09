@@ -7,7 +7,8 @@ import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 import { addProject } from '../../../../redux/projects/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import MainLoader from '../../../../constants/Loader/loader';
-import { MultiSelect } from "react-multi-select-component";
+import Multiselect from 'multiselect-react-dropdown'
+import { getAllTechnology } from '../../../../redux/technology/action';
 const Create = ({ modal, closeModal }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -20,6 +21,7 @@ const Create = ({ modal, closeModal }) => {
     const [selected, setSelected] = useState([]);
     const errorhandel = store?.addProject;
     const loaderhandel = store?.addProject;
+    const getTechnology = store?.getAllTechnologyReducer?.data?.response
     const {
         register,
         handleSubmit,
@@ -55,6 +57,16 @@ const Create = ({ modal, closeModal }) => {
     useEffect(() => {
         reset();
     }, [modal]);
+    useEffect(() => {
+        const getTechnologyname=[];
+    dispatch(getAllTechnology({status:true}))
+    for(let i=0; i<getTechnology?.length; i++)
+    {
+        getTechnologyname.push(getTechnology[i]?.techName);
+    }
+    setSelected(getTechnologyname);
+    }, [modal])
+    
 
     return (
         <>
@@ -113,57 +125,10 @@ const Create = ({ modal, closeModal }) => {
                                         </Form.Group>
                                     </Col>
                                 </Row>
-                                {/* 
-                                <Row>
-                                    <Col lg={6}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                Access <span className="text-danger">*</span>:
-                                            </Form.Label>
-                                            <Form.Select {...register('access', { required: true })}>
-                                                <option>Choose an access level </option>
-                                                <option value="0">Private</option>
-                                                <option value="1">Limited</option>
-                                                <option value="2">Open</option>
-                                            </Form.Select>
-                                            {errors.access?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
-                                    <Col lg={6}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label>
-                                                Key<span className="text-danger">*</span>:
-                                            </Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                {...register('key', { required: true })}
-                                                placeholder="Please Enter key"
-                                            />
-                                            {errors.key?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
-                                </Row> */}
+                
 
                                 <Row>
-                                    {/* <Col lg={6}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
-                                            <Form.Label>
-                                                Expected End Date<span className="text-danger">*</span>:
-                                            </Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                {...register('expectedEndDate', { required: true })}
-                                                placeholder="Please Expected End Date "
-                                            />
-                                            {errors.expectedEndDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
-                                    </Col> */}
+                                 
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
@@ -186,11 +151,16 @@ const Create = ({ modal, closeModal }) => {
                                             <Form.Label>
                                                 Select Your Technology <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <MultiSelect
-                                                options={options}
-                                                value={selected}
-                                                onChange={setSelected}
-                                                labelledBy="Select"
+                                            <Multiselect
+                                                // options={options}
+                                                // value={selected}
+                                                // onChange={setSelected}
+                                                // labelledBy="Select"
+                                                onRemove={(event)=>{console.log(event)}}
+                                                onSelect={(event)=>{console.log(event)}}
+                                                isObject={false}
+                                                options ={selected}
+                                                showCheckbox
                                             />
 
                                         </Form.Group>

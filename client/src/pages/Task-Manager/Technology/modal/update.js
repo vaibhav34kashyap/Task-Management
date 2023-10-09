@@ -7,7 +7,7 @@ import { updateProject } from '../../../../redux/projects/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import { useDispatch, useSelector } from 'react-redux';
 import MainLoader from '../../../../constants/Loader/loader';
-import { updateTechnology } from '../../../../redux/technology/action';
+import { getAllTechnologyCategory, updateTechnology } from '../../../../redux/technology/action';
 
 const Update = ({ modal, closeModal, editData }) => {
     const dispatch = useDispatch();
@@ -25,18 +25,26 @@ const Update = ({ modal, closeModal, editData }) => {
 
     useEffect(() => {
         reset({
-            TechnologyName:editData?.name,    
+            category:editData?.techCategory_id?._id,
+            TechnologyName: editData?.techName,
         });
     }, [modal]);
 
     console.log(editData, 'pppppp');
     const onSubmit = (data) => {
-        let body={
-            id:editData?._id,
-            name:data?.TechnologyName,
-        }
+        let body = {
+            id: editData?._id,
+            techCategory_id: data?.category ,
+            name: data?.TechnologyName,
+        };
         dispatch(updateTechnology(body));
     };
+    useEffect(() => {
+        let body = {
+            status: true,
+        };
+        dispatch(getAllTechnologyCategory(body));
+    }, [])
 
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
@@ -65,47 +73,76 @@ const Update = ({ modal, closeModal, editData }) => {
                         </Row>
                     </Col>
                 </Row>
-                {loaderhandle?.loading ? (<MainLoader />) : <Modal.Body className="py-0">
-                    <Card className="p-2">
-                        <Form onSubmit={handleSubmit(onSubmit)}>
-                            <Row>
-                                <Col lg={12}>
-                                    <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-                                        <Row>
-                                            <Col lg={4}>
-                                                <Form.Label>
-                                                    Technology Name <span className="text-danger">*</span>:
-                                                </Form.Label>
-                                            </Col>
-                                            <Col lg={8}>
-                                                <Form.Control
-                                                    type="text"
-                                                    placeholder="Please Enter Technology Name"
-                                                    {...register('TechnologyName', { required: true })}
-                                                />
-                                                {errors.TechnologyName?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
-                                                )}
-                                            </Col>
-                                        </Row>
-                                    </Form.Group>
-                                </Col>
-                            </Row>
+                {loaderhandle?.loading ? (
+                    <MainLoader />
+                ) : (
+                    <Modal.Body className="py-0">
+                        <Card className="p-2">
+                            <Form onSubmit={handleSubmit(onSubmit)}>
+                                <Row>
+                                    <Col lg={12}>
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
+                                            <Row>
+                                                <Col lg={4}>
+                                                    <Form.Label>
+                                                        Category <span className="text-danger">*</span>:
+                                                    </Form.Label>
+                                                </Col>
+                                                <Col lg={8}>
+                                                    <Form.Select {...register('category', { required: true })}>
+                                                        {/* <option value={''}>--Select--</option> */}
+                                                        {store?.getAllTechnologyCategoryReducer?.data?.response?.map(
+                                                            (ele, ind) => (
+                                                                <option value={ele?._id}> {ele?.name} </option>
+                                                            )
+                                                        )}
+                                                    </Form.Select>
+                                                    {errors.category?.type === 'required' && (
+                                                        <span className="text-danger"> This feild is required *</span>
+                                                    )}
+                                                </Col>
+                                            </Row>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col lg={12}>
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
+                                            <Row>
+                                                <Col lg={4}>
+                                                    <Form.Label>
+                                                        Technology Name <span className="text-danger">*</span>:
+                                                    </Form.Label>
+                                                </Col>
+                                                <Col lg={8}>
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="Please Enter Technology Name"
+                                                        {...register('TechnologyName', { required: true })}
+                                                    />
+                                                    {errors.TechnologyName?.type === 'required' && (
+                                                        <span className="text-danger"> This feild is required *</span>
+                                                    )}
+                                                </Col>
+                                            </Row>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
 
-                            <Row>
-                                <Col className="text-start d-flex align-items-center justify-content-center">
-                                    <Button
-                                        variant="info"
-                                        type="submit"
-                                        className="btn btn-sm  text-white pt-1 pb-1  web_button ">
-                                        Update
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </Form>
-                    </Card>
-                </Modal.Body> }
-               
+                                <Row>
+                                    <Col className="text-start d-flex align-items-center justify-content-center">
+                                        <Button
+                                            variant="info"
+                                            type="submit"
+                                            className="btn btn-sm  text-white pt-1 pb-1  web_button ">
+                                            Update
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </Form>
+                        </Card>
+                    </Modal.Body>
+                )}
             </Modal>
         </>
     );
