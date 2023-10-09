@@ -5,7 +5,7 @@ const milestoneModel = require('../models/milestone');
 // Get all Projects WRT status
 const getProjects = async (req, res) => {
     try {
-        const project = await projectModel.find({ status: req.query.status });
+        const project = await projectModel.find({ status: req.query.status }).populate('technology','techName');
         return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: project })
     } catch (err) {
         return res.status(200).json({ status: '400', message: 'Something went wrong' })
@@ -63,9 +63,9 @@ const addProject = async (req, res) => {
         if (result) {
             return res.status(200).json({ status: '200', message: 'project created successfully!', response: result });
         }
-    } catch (err) {
-        console.log(err);
-        return res.status(200).json({ status: '500', message: 'Something went wrong' })
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
     }
 }
 
