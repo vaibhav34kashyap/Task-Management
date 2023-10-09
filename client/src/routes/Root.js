@@ -16,7 +16,10 @@ const RootFind = () => {
     //  else if (user?.role === 'user') {
     //     return 'user/dashboard/itdashboard';
     // }
+    else{
     return 'account/login'
+
+    }
 
 
 };

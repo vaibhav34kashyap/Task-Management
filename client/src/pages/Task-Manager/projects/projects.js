@@ -9,23 +9,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import MainLoader from '../../../constants/Loader/loader';
 import ToastHandle from '../../../constants/toaster/toaster';
 import moment from 'moment';
+
 const Projects = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [openModal, setOpenModal] = useState(false);
     const [render, setRender] = useState(false);
-    const [deleteId, setdeleteId] = useState()
+    const [deleteId, setdeleteId] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const [deletemodal, setDeleteModal] = useState(false);
     const [editData, setEditData] = useState();
     const getProjectList = store?.getProject;
-    const deletehandle = store?.deleteProject?.data
+    const deletehandle = store?.deleteProject?.data;
     const [status, setStatus] = useState(1);
     const [checkedData, setCheckedData] = useState();
     const [checkedStatus, setCheckedStatus] = useState();
     const [statusModal, setStatusModal] = useState(false);
     const handeldelete = (ele) => {
-        setdeleteId(ele?._id)
+        setdeleteId(ele?._id);
         setDeleteModal(true);
     };
     const handelCreate = () => {
@@ -51,19 +52,19 @@ const Projects = () => {
         if (checkedStatus) {
             let body = {
                 id: checkedData._id,
-                status: true
-            }
+                status: true,
+            };
             dispatch(deleteProject(body));
         } else {
             let body = {
                 id: checkedData._id,
-                status: false
-            }
+                status: false,
+            };
             dispatch(deleteProject(body));
         }
         setStatusModal(false);
     };
-    console.log(checkedData, "oooooooooooooooooooooooooooo")
+    console.log(checkedData, 'oooooooooooooooooooooooooooo');
     const handleStatusChange = (e, data) => {
         if (e.target.checked) {
             setCheckedStatus(true);
@@ -91,7 +92,7 @@ const Projects = () => {
     useEffect(() => {
         let body = {
             status: status,
-        }
+        };
         dispatch(getAllProjects(body));
     }, [render]);
     useEffect(() => {
@@ -103,7 +104,7 @@ const Projects = () => {
         } else if (deletehandle?.status == 500) {
             ToastHandle('error', deletehandle?.message);
         }
-    }, [deletehandle])
+    }, [deletehandle]);
 
     return (
         <>
@@ -113,14 +114,12 @@ const Projects = () => {
                         <div className="row mx-auto mt-2">
                             <div className="d-flex col-4">
                                 <div className="row d-flex align-items-center">
-                                    <div
-                                        className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
+                                    <div className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
                                         <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
                                             Active
                                         </p>
                                     </div>
-                                    <div
-                                        className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
+                                    <div className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
                                         <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
                                             Deactive
                                         </p>
@@ -130,16 +129,20 @@ const Projects = () => {
                             <div className="col-4 d-flex align-items-center justify-content-center">
                                 <h4 className="header-title heading_data"> Projects</h4>
                             </div>
-                            {status == 1 ? <div className="col-4 d-flex align-items-center justify-content-end pe-0">
-                                <Button
-                                    className="web_button"
-                                    variant="info"
-                                    onClick={() => {
-                                        handelCreate();
-                                    }}>
-                                    Add Projects
-                                </Button>
-                            </div> : ""}
+                            {status == 1 ? (
+                                <div className="col-4 d-flex align-items-center justify-content-end pe-0">
+                                    <Button
+                                        className="web_button"
+                                        variant="info"
+                                        onClick={() => {
+                                            handelCreate();
+                                        }}>
+                                        Add Projects
+                                    </Button>
+                                </div>
+                            ) : (
+                                ''
+                            )}
                         </div>
 
                         {getProjectList?.loading ? (
@@ -207,7 +210,6 @@ const Projects = () => {
                                                                         handelUpdate(ele);
                                                                     }}></i>
                                                             </p>
-
                                                         </Col>
                                                     </Row>
                                                 </td>

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Button, Col, Form, Card, Table, CloseButton, Alert } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import Create from './modal/create';
-import { deleteTechnology, getAllTechnology } from '../../../redux/technology/action';
-import Update from './modal/update';
+import CreateCategory from './modal/create';
+import { deleteTechnologyCategory, getAllTechnologyCategory } from '../../../redux/technology/action';
+import CategoryUpdate from './modal/update';
 import { Modal } from 'react-bootstrap';
 import ToastHandle from '../../../constants/toaster/toaster';
-const Technology = () => {
+const Category = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [status, setStatus] = useState(true);
@@ -17,7 +17,7 @@ const Technology = () => {
     const [checkedData, setCheckedData] = useState();
     const [checkedStatus, setCheckedStatus] = useState();
     const [statusModal, setStatusModal] = useState(false);
-    const deletehandle = store?.deleteTechnology?.data;
+    const deletehandle = store?.deleteTechnologyCategory?.data;
     const handelCreate = () => {
         setOpenModal(true);
     };
@@ -43,13 +43,13 @@ const Technology = () => {
             let body = {
                 status: true,
             };
-            dispatch(getAllTechnology(body));
+            dispatch(getAllTechnologyCategory(body));
         } else {
             setStatus(false);
             let body = {
                 status: false,
             };
-            dispatch(getAllTechnology(body));
+            dispatch(getAllTechnologyCategory(body));
         }
     };
     const handleStatusChange = (e, data) => {
@@ -67,13 +67,13 @@ const Technology = () => {
                 id: checkedData._id,
                 status: true,
             };
-            dispatch(deleteTechnology(body));
+            dispatch(deleteTechnologyCategory(body));
         } else {
             let body = {
                 id: checkedData._id,
                 status: false,
             };
-            dispatch(deleteTechnology(body));
+            dispatch(deleteTechnologyCategory(body));
         }
         setStatusModal(false);
     };
@@ -81,7 +81,7 @@ const Technology = () => {
         let body = {
             status: status,
         };
-        dispatch(getAllTechnology(body));
+        dispatch(getAllTechnologyCategory(body));
     }, [render]);
     useEffect(() => {
         if (deletehandle?.status == 200) {
@@ -121,7 +121,7 @@ const Technology = () => {
                                     </div>
                                 </div>
                                 <div className="col-4 d-flex align-items-center justify-content-center">
-                                    <h4 className="header-title heading_data"> Technology</h4>
+                                    <h4 className="header-title heading_data"> Category</h4>
                                 </div>
                                 {status == 1 ? (
                                     <div className="col-4 d-flex align-items-center justify-content-end pe-0">
@@ -131,7 +131,7 @@ const Technology = () => {
                                             onClick={() => {
                                                 handelCreate();
                                             }}>
-                                            Add Technology
+                                            Add Category
                                         </Button>
                                     </div>
                                 ) : (
@@ -143,18 +143,18 @@ const Technology = () => {
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th> Technology Name</th>
+                                        <th> Category Name</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {store?.getAllTechnologyReducer?.data?.response?.map((ele, ind) => {
+                                    {store?.getAllTechnologyCategoryReducer?.data?.response?.map((ele, ind) => {
                                         return (
                                             <tr className="align-middle">
                                                 <th scope="row">{ind + 1}</th>
                                                 <td className="cp">
-                                                    <span className="namelink"> {ele?.techName} </span>
+                                                    <span className="namelink"> {ele?.name} </span>
                                                 </td>
 
                                                 <td>
@@ -187,12 +187,12 @@ const Technology = () => {
                     </Card>
                 </Col>
             </Row>
-            <Create modal={openModal} closeModal={closeModal} />
-            <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
+            <CreateCategory modal={openModal} closeModal={closeModal} />
+            <CategoryUpdate modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
                  {/* delete modal */}
                  <Modal show={statusModal} onHide={() => setStatusModal(false)}>
                     <Modal.Body>
-                        Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this Technology ?
+                        Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this Category ?
                     </Modal.Body>
                     <Modal.Footer>
                         <Button
@@ -211,4 +211,4 @@ const Technology = () => {
     );
 };
 
-export default Technology;
+export default Category;

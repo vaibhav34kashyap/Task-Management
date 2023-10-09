@@ -7,13 +7,13 @@ import { updateProject } from '../../../../redux/projects/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import { useDispatch, useSelector } from 'react-redux';
 import MainLoader from '../../../../constants/Loader/loader';
-import { updateTechnology } from '../../../../redux/technology/action';
+import { updateTechnologyCategory } from '../../../../redux/technology/action';
 
-const Update = ({ modal, closeModal, editData }) => {
+const CategoryUpdate = ({ modal, closeModal, editData }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    const sucesshandel = store?.UpdateTechnologyReducer;
-    const loaderhandle = store?.UpdateTechnologyReducer;
+    const sucessCatogeryhandel = store?.UpdateTechnologyCategoryReducer;
+    const loaderhandle = store?.UpdateTechnologyCategoryReducer;
     const {
         register,
         handleSubmit,
@@ -25,7 +25,7 @@ const Update = ({ modal, closeModal, editData }) => {
 
     useEffect(() => {
         reset({
-            TechnologyName:editData?.name,    
+            Category:editData?.name,    
         });
     }, [modal]);
 
@@ -33,21 +33,21 @@ const Update = ({ modal, closeModal, editData }) => {
     const onSubmit = (data) => {
         let body={
             id:editData?._id,
-            name:data?.TechnologyName,
+            name:data?.Category,
         }
-        dispatch(updateTechnology(body));
+        dispatch(updateTechnologyCategory(body));
     };
 
     useEffect(() => {
-        if (sucesshandel?.data?.status == 200) {
-            ToastHandle('success', sucesshandel?.data?.message);
+        if (sucessCatogeryhandel?.data?.status == 200) {
+            ToastHandle('success', sucessCatogeryhandel?.data?.message);
             closeModal('render');
-        } else if (sucesshandel?.data?.status == 400) {
-            ToastHandle('error', sucesshandel?.data?.message);
-        } else if (sucesshandel?.data?.status == 500) {
-            ToastHandle('error', sucesshandel?.data?.message);
+        } else if (sucessCatogeryhandel?.data?.status == 400) {
+            ToastHandle('error', sucessCatogeryhandel?.data?.message);
+        } else if (sucessCatogeryhandel?.data?.status == 500) {
+            ToastHandle('error', sucessCatogeryhandel?.data?.message);
         }
-    }, [sucesshandel]);
+    }, [sucessCatogeryhandel]);
     return (
         <>
             <Modal show={modal} onHide={closeModal}>
@@ -56,7 +56,7 @@ const Update = ({ modal, closeModal, editData }) => {
                         <Row>
                             <Col lg={7} className="text-end">
                                 <Modal.Title id="" className="mx-auto">
-                                    Update Technology
+                                    Update Category
                                 </Modal.Title>
                             </Col>
                             <Col lg={5} className="text-end pt-2">
@@ -74,16 +74,16 @@ const Update = ({ modal, closeModal, editData }) => {
                                         <Row>
                                             <Col lg={4}>
                                                 <Form.Label>
-                                                    Technology Name <span className="text-danger">*</span>:
+                                                    Category Name <span className="text-danger">*</span>:
                                                 </Form.Label>
                                             </Col>
                                             <Col lg={8}>
                                                 <Form.Control
                                                     type="text"
-                                                    placeholder="Please Enter Technology Name"
-                                                    {...register('TechnologyName', { required: true })}
+                                                    placeholder="Please Enter Category Name"
+                                                    {...register('Category', { required: true })}
                                                 />
-                                                {errors.TechnologyName?.type === 'required' && (
+                                                {errors.Category?.type === 'required' && (
                                                     <span className="text-danger"> This feild is required *</span>
                                                 )}
                                             </Col>
@@ -111,4 +111,4 @@ const Update = ({ modal, closeModal, editData }) => {
     );
 };
 
-export default Update;
+export default CategoryUpdate;
