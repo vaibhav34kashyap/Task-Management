@@ -58,6 +58,7 @@ const addProject = async (req, res) => {
             technology: req.body.technology,
             projectType: req.body.projectType,
             projectDesc: req.body.projectDesc,
+            project_type: req.body.project_type
         }
         let result = await projectModel.create(objData)
         if (result) {
