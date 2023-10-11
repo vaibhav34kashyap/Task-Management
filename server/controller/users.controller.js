@@ -245,7 +245,7 @@ const inviteTeamMember = async (req, res) => {
     if (!existingUser) {
       const hashedPassword = await bcrypt.hash(objData.password, 10);
       objData.password = hashedPassword
-      const newuser = await userModel.create(objData);
+      await userModel.create(objData);
       const existingUser = await userModel.findOne({ email: objData.email });
       const userId = existingUser._id
       const result = await teamModel.create({
@@ -257,7 +257,7 @@ const inviteTeamMember = async (req, res) => {
       return res.status(200).json({ status: '200', result: result, message: 'user invitation success' });
     } else {
       const userId = existingUser._id
-      const result = await teamModel.create({
+     await teamModel.create({
         userName: req.body.userName,
         userId: userId,
         projectId: objData.projectid,
