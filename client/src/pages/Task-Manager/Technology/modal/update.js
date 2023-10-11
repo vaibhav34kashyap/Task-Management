@@ -35,7 +35,7 @@ const Update = ({ modal, closeModal, editData }) => {
         let body = {
             id: editData?._id,
             techCategory_id: data?.category ,
-            name: data?.TechnologyName,
+            techName: data?.TechnologyName,
         };
         dispatch(updateTechnology(body));
     };

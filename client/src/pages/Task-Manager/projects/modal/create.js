@@ -7,21 +7,23 @@ import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 import { addProject } from '../../../../redux/projects/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import MainLoader from '../../../../constants/Loader/loader';
-import Multiselect from 'multiselect-react-dropdown'
+import Multiselect from 'multiselect-react-dropdown';
 import { getAllTechnology } from '../../../../redux/technology/action';
 const Create = ({ modal, closeModal }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const options = [
-        { label: "React ", value: "React" },
-        { label: "Node", value: "Node" },
-        { label: "Angular", value: "Angular" },
-        { label: "Flutter", value: "Flutter" },
+        { label: 'React ', value: 'React' },
+        { label: 'Node', value: 'Node' },
+        { label: 'Angular', value: 'Angular' },
+        { label: 'Flutter', value: 'Flutter' },
     ];
     const [selected, setSelected] = useState([]);
     const errorhandel = store?.addProject;
     const loaderhandel = store?.addProject;
-    const getTechnology = store?.getAllTechnologyReducer?.data?.response
+    const [removeValue, setRemoveValue] = useState([]);
+    const [addValue, setAddValue] = useState([]);
+    const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     const {
         register,
         handleSubmit,
@@ -36,10 +38,9 @@ const Create = ({ modal, closeModal }) => {
             clientName: data?.clientName,
             startDate: data?.startDate,
             endDate: data?.endDate,
-            projectType: selected,
+            projectType: addValue,
             technology: data?.technology,
-            projectStatus: "Live"
-
+            projectStatus: 'Live',
         };
         console.log(data, 'bbb');
         dispatch(addProject(body));
@@ -57,16 +58,26 @@ const Create = ({ modal, closeModal }) => {
     useEffect(() => {
         reset();
     }, [modal]);
+    const removehandle = () => {
+        const remove = getTechnology.map((ele, ind) => ele?._id);
+        console.log(remove, 'ritu');
+        setRemoveValue(remove);
+    };
+    const addhandle = (name) => {
+        const add = getTechnology.filter((ele, ind) => {
+            return ele?.techName == name;
+        });
+        console.log(add, 'ritika');
+        setAddValue(add);
+    };
     useEffect(() => {
-        const getTechnologyname=[];
-    dispatch(getAllTechnology({status:true}))
-    for(let i=0; i<getTechnology?.length; i++)
-    {
-        getTechnologyname.push(getTechnology[i]?.techName);
-    }
-    setSelected(getTechnologyname);
-    }, [modal])
-    
+        const getTechnologyname = [];
+        dispatch(getAllTechnology({ status: true }));
+        for (let i = 0; i < getTechnology?.length; i++) {
+            getTechnologyname.push(getTechnology[i]?.techName);
+        }
+        setSelected(getTechnologyname);
+    }, [modal]);
 
     return (
         <>
@@ -125,10 +136,8 @@ const Create = ({ modal, closeModal }) => {
                                         </Form.Group>
                                     </Col>
                                 </Row>
-                
 
                                 <Row>
-                                 
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
@@ -151,18 +160,18 @@ const Create = ({ modal, closeModal }) => {
                                             <Form.Label>
                                                 Select Your Technology <span className="text-danger">*</span>:
                                             </Form.Label>
+
                                             <Multiselect
                                                 // options={options}
                                                 // value={selected}
                                                 // onChange={setSelected}
                                                 // labelledBy="Select"
-                                                onRemove={(event)=>{console.log(event)}}
-                                                onSelect={(event)=>{console.log(event)}}
+                                                onRemove={removehandle}
+                                                onSelect={addhandle}
                                                 isObject={false}
-                                                options ={selected}
+                                                options={selected}
                                                 showCheckbox
                                             />
-
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -216,7 +225,6 @@ const Create = ({ modal, closeModal }) => {
                                             )}
                                         </Form.Group>
                                     </Col>
-
                                 </Row>
                                 <Row>
                                     <Col className="text-start d-flex align-items-center justify-content-center">
