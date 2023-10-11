@@ -4,7 +4,7 @@ const nodemailer = require("../middleware/nodemailer");
 const bcrypt = require("bcrypt");
 const { accessToken } = require("../middleware/jwt.auth");
 
-// Register a user
+// Register a user or invite a user 
 const registerUser = async (req, res) => {
   try {
     const existingUser = await userModel.findOne({ email: req.body.email });
@@ -62,7 +62,7 @@ const logInUser = async (req, res) => {
 // Get All Users
 const getUsers = async (req, res) => {
   try {
-    const result = await userModel.find()
+    const result = await userModel.find({role : 2})
     return res.status(200).json({ status: "200", message: 'User data fetched successfully', response : result });
   } catch (error) {
     return res.status(200).json({ status: "500", message: 'Something went wrong' });
