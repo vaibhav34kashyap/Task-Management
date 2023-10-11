@@ -44,16 +44,22 @@ function* login({ payload: { username, password } }) {
             // const { token, user } = response.data;
 
             // let { role } = user
+            const data = response?.data?.response
+            const tokenData = response?.data
             const users = {
-                id: 1,
+                id: data?.roleId?._id,
                 username: 'test',
                 password: 'test',
                 firstName: 'Test',
                 lastName: 'User',
-                role: "User",
-                token: response?.data?.token,
-                userData: response?.data?.response
+                role: data?.role,
+                token:tokenData?.token,
+                // userData: response?.data?.response
+                
             };
+            sessionStorage.setItem("role", data?.role);
+         
+        
             // NOTE - You can change this according to response format from your api
             api.setLoggedInUser(users);
             setAuthorization(response?.data?.token);

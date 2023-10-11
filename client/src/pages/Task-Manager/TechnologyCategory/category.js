@@ -6,6 +6,7 @@ import { deleteTechnologyCategory, getAllTechnologyCategory } from '../../../red
 import CategoryUpdate from './modal/update';
 import { Modal } from 'react-bootstrap';
 import ToastHandle from '../../../constants/toaster/toaster';
+import MainLoader from '../../../constants/Loader/loader';
 const Category = () => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -18,6 +19,7 @@ const Category = () => {
     const [checkedStatus, setCheckedStatus] = useState();
     const [statusModal, setStatusModal] = useState(false);
     const deletehandle = store?.deleteTechnologyCategory?.data;
+    const loader = store?.getAllTechnologyCategoryReducer;
     const handelCreate = () => {
         setOpenModal(true);
     };
@@ -138,75 +140,77 @@ const Category = () => {
                                     ''
                                 )}
                             </div>
+                            {loader?.loading ? (
+                                <MainLoader />
+                            ) : (
+                                <Table className="mb-0 add_Color_font" striped>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th> Category Name</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {store?.getAllTechnologyCategoryReducer?.data?.response?.map((ele, ind) => {
+                                            return (
+                                                <tr className="align-middle">
+                                                    <th scope="row">{ind + 1}</th>
+                                                    <td className="cp">
+                                                        <span className="namelink"> {ele?.name} </span>
+                                                    </td>
 
-                            <Table className="mb-0 add_Color_font" striped>
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th> Category Name</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {store?.getAllTechnologyCategoryReducer?.data?.response?.map((ele, ind) => {
-                                        return (
-                                            <tr className="align-middle">
-                                                <th scope="row">{ind + 1}</th>
-                                                <td className="cp">
-                                                    <span className="namelink"> {ele?.name} </span>
-                                                </td>
-
-                                                <td>
-                                                    <Form.Check
-                                                        type="switch"
-                                                        checked={ele?.status}
-                                                        onChange={(e) => handleStatusChange(e, ele)}
-                                                    />
-                                                </td>
-                                                <td>
-                                                    <Row>
-                                                        <Col>
-                                                            <p className="action-icon m-0 p-0  ">
-                                                                <i
-                                                                    className="uil-edit-alt m-0 p-0"
-                                                                    onClick={() => {
-                                                                        handelUpdate(ele);
-                                                                    }}
-                                                                ></i>
-                                                            </p>
-                                                        </Col>
-                                                    </Row>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </Table>
+                                                    <td>
+                                                        <Form.Check
+                                                            type="switch"
+                                                            checked={ele?.status}
+                                                            onChange={(e) => handleStatusChange(e, ele)}
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <Row>
+                                                            <Col>
+                                                                <p className="action-icon m-0 p-0  ">
+                                                                    <i
+                                                                        className="uil-edit-alt m-0 p-0"
+                                                                        onClick={() => {
+                                                                            handelUpdate(ele);
+                                                                        }}></i>
+                                                                </p>
+                                                            </Col>
+                                                        </Row>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </Table>
+                            )}
                         </Card.Body>
                     </Card>
                 </Col>
             </Row>
             <CreateCategory modal={openModal} closeModal={closeModal} />
             <CategoryUpdate modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
-                 {/* delete modal */}
-                 <Modal show={statusModal} onHide={() => setStatusModal(false)}>
-                    <Modal.Body>
-                        Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this Category ?
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button
-                            variant="secondary"
-                            onClick={() => {
-                                setStatusModal(false);
-                            }}>
-                            No
-                        </Button>
-                        <Button className=" web_button " variant="primary" onClick={() => handleYes()}>
-                            Yes
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+            {/* delete modal */}
+            <Modal show={statusModal} onHide={() => setStatusModal(false)}>
+                <Modal.Body>
+                    Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this Category ?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            setStatusModal(false);
+                        }}>
+                        No
+                    </Button>
+                    <Button className=" web_button " variant="primary" onClick={() => handleYes()}>
+                        Yes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 };

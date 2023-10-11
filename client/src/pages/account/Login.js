@@ -34,6 +34,7 @@ const BottomLink = () => {
 };
 
 const Login = (): React$Element<any> => {
+    const store = useSelector((state) => state);
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
@@ -66,6 +67,9 @@ const Login = (): React$Element<any> => {
     */
     const onSubmit = (formData) => {
         dispatch(loginUser(formData['username'], formData['password']));
+        const roleId = store?.Auth?.user
+        localStorage.setItem("roleId",roleId);
+        console.log(roleId,"priya")
     };
 
     return (

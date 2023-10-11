@@ -1,8 +1,23 @@
-import MENU_ITEMS from '../constants/menu';
+import MENU_ITEMS, {
+    SUPER_ADMIN_MENU_ITEMS,
+    COMPANY_MENU_ITEMS,
+    ADMIN_MENU_ITEMS,
+    EMPLOYEE_MENU_ITEMS,
+    HR_MENU_ITEMS,
+    MANAGER_MENU_ITEMS
+} from '../constants/menu';
 
 const getMenuItems = () => {
     // NOTE - You can fetch from server and return here as well
-    return MENU_ITEMS;
+    const role = sessionStorage.getItem("role");
+    if (role == 1) {
+        return ADMIN_MENU_ITEMS;
+    } else if (role == 2) {
+        return EMPLOYEE_MENU_ITEMS;
+    } 
+    else {
+        return MENU_ITEMS
+    }
 };
 
 const findAllParent = (menuItems, menuItem) => {
