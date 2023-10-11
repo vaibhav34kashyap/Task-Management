@@ -199,7 +199,7 @@ const Projects = () => {
                                                     <Row>
                                                         <Col>
                                                             <p className="action-icon m-0 p-0 ">
-                                                                <Link to={`/user/dashboard/projects/${ele?._id}`}>
+                                                                <Link to={`/dashboard/projects/${ele?._id}`}>
                                                                     <i className="mdi mdi-eye m-0 p-0"></i>
                                                                 </Link>
                                                             </p>

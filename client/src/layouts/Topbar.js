@@ -124,7 +124,7 @@ type TopbarProps = {
 
 const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: TopbarProps): React$Element<any> => {
     const dispatch = useDispatch();
-
+    const store = useSelector((state) => state);
     const [isopen, setIsopen] = useState(false);
 
     const navbarCssClasses = navCssClasses || '';
@@ -139,6 +139,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
      * Toggle the leftmenu when having mobile screen
      */
     const handleLeftMenuCallBack = () => {
+
         setIsopen((prevState) => !prevState);
         if (openLeftMenuCallBack) openLeftMenuCallBack();
 
@@ -209,8 +210,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             <ProfileDropdown
                                 profilePic={profilePic}
                                 menuItems={ProfileMenus}
-                                username={'Dominic Keller'}
-                                userTitle={'Founder'}
+                                username= {store?.Auth?.user?.username }
+                                userTitle={store?.Auth?.user?.firstName }
                             />
                         </li>
                     </ul>
