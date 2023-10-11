@@ -17,7 +17,7 @@ const Sprint = () => {
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
     const getSingleSprintList= store?.getSingleSprint?.data?.data
-    const getSingleSprintTask =store?.getSigleSprintTask?.data?.Response
+    const getSingleSprintTask =store?.getSigleSprintTask?.data?.response
     const loaderhandel = store?.getSigleSprintTask
     const handleCreate=()=>{
       SetOpenModal(true)

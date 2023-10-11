@@ -20,5 +20,5 @@ export const ALL_USERS ="/users";
 export const deleteUsers = "/users/usersDelete/";
 export const UpdateSprint ="/sprint/update";
 export const SingleMilestone ="/milestone/getAProjectMilestones?id="
-export const SingleSprintTask ="/task/getSprintTasks?id="
+export const SingleSprintTask ="/task/getSprintTasks"
 export const GetAllTask ="/task/getTasksAccToStatus"
