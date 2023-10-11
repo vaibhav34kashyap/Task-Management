@@ -1,6 +1,5 @@
 const milestoneModel = require('../models/milestone');
-const taskmmodel = require('../models/task');
-const projectModel = require('../models/projects');
+const taskmmodel = require('../models/task.model');
 
 // Get all Milestones WRT status
 const getMilestones = async (req, res) => {

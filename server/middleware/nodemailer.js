@@ -11,7 +11,7 @@ async function emailSender(user) {
 
     const details = {
         from: 'support@rowthtech.com',
-        to: 'support@rowthtech.com',
+        to: user.email,
         subject: 'Testing mail',
         text: 'This mail is here to certify that our code is working',
         html:`Dear ${user.userName}

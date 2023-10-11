@@ -1,4 +1,4 @@
-const taskmmodel = require('../models/task');
+const taskmmodel = require('../models/task.model');
 const projectModel = require('../models/projects');
 const subtaskmodel = require('../models/sub_task')
 const getSearchData = async (req, res) => {
