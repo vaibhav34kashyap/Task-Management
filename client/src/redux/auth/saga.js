@@ -48,9 +48,9 @@ function* login({ payload: { username, password } }) {
             const tokenData = response?.data
             const users = {
                 id: data?.roleId?._id,
-                username: 'test',
+                username: data?.roleId?.role,
                 password: 'test',
-                firstName: 'Test',
+                firstName:data?.userName ,
                 lastName: 'User',
                 role: data?.role,
                 token:tokenData?.token,

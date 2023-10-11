@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 // images
-import Logo from '../../assets/images/logo.png';
+import Logo from '../../assets/images/logo/rowthtech.jpg';
 
 type AccountLayoutProps = {
     bottomLinks?: React$Element<any>,
@@ -34,7 +34,7 @@ const AccountLayout = ({ bottomLinks, children }: AccountLayoutProps): React$Ele
                                 <Card.Header className="pt-4 pb-4 text-center bg-primary">
                                     <Link to="/">
                                         <span>
-                                            <img src={Logo} alt="" height="18" />
+                                            <img src={Logo} alt="" height="26" />
                                         </span>
                                     </Link>
                                 </Card.Header>
