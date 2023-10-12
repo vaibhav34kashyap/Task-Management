@@ -48,7 +48,7 @@ const Update = ({ modal, closeModal, editData }) => {
             startDate: handleDate(editData?.startDate),
             endDate: handleDate(editData?.endDate),
             expectedEndDate: handleDate(editData?.CompilationDate),
-            projecttype: editData?.projectType,
+            project_type: editData?.project_type,
             technology: editData?.technology,
             projectStatus: editData?.projectstatus,
             expectedEndDate: handleDate(editData?.expectedDate)
@@ -92,7 +92,7 @@ const Update = ({ modal, closeModal, editData }) => {
             startDate: data?.startDate,
             endDate: data?.endDate,
             clientName: data?.clientName,
-            projectType: data?.projecttype,
+            project_type: data?.project_type,
             technology: addValue,
             projectStatus: data?.projectstatus,
         };
@@ -221,14 +221,14 @@ const Update = ({ modal, closeModal, editData }) => {
                                             <Form.Label>
                                                 Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Select {...register('projecttype', { required: true })}>
+                                            <Form.Select {...register('project_type', { required: true })}>
                                                 <option>Choose an Project Type </option>
                                                 <option value="T&M">T&M</option>
                                                 <option value="Fixed Cost">Fixed Cost</option>
                                                 <option value=" Hourly">Hourly</option>
                                                 <option value="Dedicated team">Dedicated team</option>
                                             </Form.Select>
-                                            {errors.projecttype?.type === 'required' && (
+                                            {errors.project_type?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>

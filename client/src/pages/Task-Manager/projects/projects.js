@@ -175,7 +175,7 @@ const Projects = () => {
                                                     <span className="namelink"> {ele?.clientName}</span>
                                                 </td>
                                                 <td>
-                                                    <span className="namelink"> {ele?.projectType}</span>
+                                                    <span className="namelink"> {ele?.project_type}</span>
                                                 </td>
                                                 <td>
                                                     <span className="namelink">
