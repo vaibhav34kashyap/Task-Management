@@ -1,4 +1,4 @@
-const userModel = require('../models/login_register');
+const userModel = require('../models/users.model');
 
 const searchUser = async (req, res) => {
     try {

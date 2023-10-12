@@ -8,3 +8,6 @@ export function getallUsersApi(data): any {
 export function deleteUserApi(data): any {
     return api.delete(URL.deleteUsers + data.payload)
 }
+export function InviteUserApi(data): any {
+    return api.create(URL.InviteUser , data.payload)
+}

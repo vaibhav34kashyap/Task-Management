@@ -14,3 +14,7 @@ export const getAllTask= (data): AuthAction => ({
     type: TASK_TYPES.GET_ALL_TASK,
     payload: data
 })
+export const updateTask= (data): AuthAction => ({
+    type: TASK_TYPES.UPDATE_TASK,
+    payload: data
+})

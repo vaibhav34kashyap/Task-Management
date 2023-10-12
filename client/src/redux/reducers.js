@@ -12,9 +12,26 @@ import {
     addAllmilstones,
     getSigleMileStone,
 } from './milestone/reducer';
-import { addSprint, getAllSprints, deleteSprint, getSingleSprint, updateSprint ,getAllSingleSprints  } from './sprint/reducres';
-import { createTaskReducer, getSigleSprintTask,getAllTaskReducer } from './task/reducer';
-import { getAllUsers, deleteUser } from './user/reducer';
+import {
+    addSprint,
+    getAllSprints,
+    deleteSprint,
+    getSingleSprintReducer,
+    updateSprint,
+    getAllSingleSprints,
+} from './sprint/reducres';
+import { createTaskReducer, getSigleSprintTask, getAllTaskReducer, UpdateTaskReducer } from './task/reducer';
+import { getAllUsers, deleteUser, createUser } from './user/reducer';
+import {
+    createTechnologyReducer,
+    getAllTechnologyReducer,
+    UpdateTechnologyReducer,
+    deleteTechnology,
+    createTechnologyCategoryReducer,
+    getAllTechnologyCategoryReducer,
+    UpdateTechnologyCategoryReducer,
+    deleteTechnologyCategory,
+} from './technology/reducer';
 export default (combineReducers({
     Auth,
     Layout,
@@ -30,7 +47,7 @@ export default (combineReducers({
     addSprint,
     getAllSprints,
     deleteSprint,
-    getSingleSprint,
+    getSingleSprintReducer,
     createTaskReducer,
     updateMilestone,
     getAllUsers,
@@ -38,5 +55,16 @@ export default (combineReducers({
     updateSprint,
     getSigleMileStone,
     getSigleSprintTask,
-    getAllSingleSprints,getAllTaskReducer
+    getAllSingleSprints,
+    getAllTaskReducer,
+    UpdateTaskReducer,
+    createUser,
+    createTechnologyReducer,
+    getAllTechnologyReducer,
+    UpdateTechnologyReducer,
+    deleteTechnology,
+    createTechnologyCategoryReducer,
+    getAllTechnologyCategoryReducer,
+    UpdateTechnologyCategoryReducer,
+    deleteTechnologyCategory,
 }): any);

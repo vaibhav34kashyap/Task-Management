@@ -7,11 +7,25 @@ import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 import { addProject } from '../../../../redux/projects/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import MainLoader from '../../../../constants/Loader/loader';
+//import Multiselect from 'multiselect-react-dropdown';
+import { getAllTechnology } from '../../../../redux/technology/action';
+import Multiselect from 'multiselect-react-dropdown';
+import { Select } from 'react-select';
 const Create = ({ modal, closeModal }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    const options = [
+        { label: 'React ', value: 'React' },
+        { label: 'Node', value: 'Node' },
+        { label: 'Angular', value: 'Angular' },
+        { label: 'Flutter', value: 'Flutter' },
+    ];
+    const [selected, setSelected] = useState([]);
     const errorhandel = store?.addProject;
     const loaderhandel = store?.addProject;
+    //const [removeValue, setRemoveValue] = useState([]);
+    const [addValue, setAddValue] = useState([]);
+    const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     const {
         register,
         handleSubmit,
@@ -20,21 +34,20 @@ const Create = ({ modal, closeModal }) => {
         reset,
         formState: { errors },
     } = useForm();
+    console.log(addValue,"select")
     const onSubmit = (data) => {
         let body = {
             projectName: data?.projectName,
             clientName: data?.clientName,
-            projectAccess: data?.access,
-            key: data?.key,
             startDate: data?.startDate,
             endDate: data?.endDate,
-            CompilationDate: data?.expectedEndDate,
-            projectType: data?.projecttype,
-            technology: data?.technology,
-            expectedDate:data?.expectedEndDate
-            // projectIcon: data?.uploadicons[0],
+            projectType: addValue,
+            technology:addValue,
+            projectStatus: 'Live',
+
+             //iska koi parameter hoga usme 
         };
-        console.log(data, 'bbb');
+        console.log(body, 'dhdfhfdhfghgf');
         dispatch(addProject(body));
     };
     useEffect(() => {
@@ -49,6 +62,42 @@ const Create = ({ modal, closeModal }) => {
     }, [errorhandel]);
     useEffect(() => {
         reset();
+    }, [modal]);
+    const removehandle = (selectedList, removedItem) => {
+        const remove = getTechnology.filter((ele, ind) => {
+            return ele?.techName == removedItem;
+        }); 
+        // make a separate copy of the array
+        var index = addValue.indexOf(remove[0]._id)
+        if (index !== -1) {
+            addValue.splice(index, 1);
+            setAddValue(addValue)
+            console.log("remove",addValue)
+        }
+        else{
+            setAddValue(null)
+        }     
+       
+        
+    };
+  
+
+    const addhandle=(selectedList,selectItem)=> {
+             const add = getTechnology.filter((ele, ind) => {
+            return ele?.techName == selectItem;
+        }); 
+        setAddValue([...addValue, add[0]._id])
+        console.log(addValue,"addvalue info")
+        
+      
+    }
+    useEffect(() => {
+        const getTechnologyname = [];
+        dispatch(getAllTechnology({ status: true }));
+        for (let i = 0; i < getTechnology?.length; i++) {
+            getTechnologyname.push(getTechnology[i]?.techName);
+        }
+        setSelected(getTechnologyname);
     }, [modal]);
 
     return (
@@ -113,35 +162,43 @@ const Create = ({ modal, closeModal }) => {
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
-                                                Access <span className="text-danger">*</span>:
+                                                Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Select {...register('access', { required: true })}>
-                                                <option>Choose an access level </option>
-                                                <option value="0">Private</option>
-                                                <option value="1">Limited</option>
-                                                <option value="2">Open</option>
+                                            <Form.Select {...register('projecttype', { required: true })}>
+                                                <option>Choose an Project Type </option>
+                                                <option value="T&M">T&M</option>
+                                                <option value="Fixed Cost">Fixed Cost</option>
+                                                <option value=" Hourly">Hourly</option>
+                                                <option value="Dedicated team">Dedicated team</option>
                                             </Form.Select>
-                                            {errors.access?.type === 'required' && (
+                                            {errors.projecttype?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
                                     <Col lg={6}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
-                                                Key<span className="text-danger">*</span>:
+                                                Select Your Technology <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                {...register('key', { required: true })}
-                                                placeholder="Please Enter key"
+
+                                            <Multiselect
+                                                // options={options}
+                                                // value={selected}
+                                                // onChange={setSelected}
+                                                // labelledBy="Select"
+                                                onRemove={removehandle}
+                                                onSelect={addhandle}
+                                                isObject={false}
+                                                options={selected}
+                                                showCheckbox
                                             />
-                                            {errors.key?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
+                                            
+
                                         </Form.Group>
                                     </Col>
                                 </Row>
+
                                 <Row>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
@@ -174,71 +231,24 @@ const Create = ({ modal, closeModal }) => {
                                         </Form.Group>
                                     </Col>
                                 </Row>
+
                                 <Row>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
                                             <Form.Label>
-                                                Expected End Date<span className="text-danger">*</span>:
+                                                Status<span className="text-danger">*</span>:
                                             </Form.Label>
                                             <Form.Control
-                                                type="date"
-                                                {...register('expectedEndDate', { required: true })}
-                                                placeholder="Please Expected End Date "
+                                                type="text"
+                                                {...register('status', { required: true, disabled: true })}
+                                                placeholder="Live"
                                             />
-                                            {errors.expectedEndDate?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
-                                    <Col lg={6}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                Type Of Project <span className="text-danger">*</span>:
-                                            </Form.Label>
-                                            <Form.Select {...register('projecttype', { required: true })}>
-                                                <option>Choose an Project Type </option>
-                                                <option value="T&M">T&M</option>
-                                                <option value="Fixed">Fixed</option>
-                                            </Form.Select>
-                                            {errors.projecttype?.type === 'required' && (
+                                            {errors.status?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
                                 </Row>
-
-                                <Row>
-                                    <Col lg={6}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                Select Your Technology <span className="text-danger">*</span>:
-                                            </Form.Label>
-                                            <Form.Select {...register('technology', { required: true })}>
-                                                <option>Choose Technology</option>
-                                                <option value="Web">Web</option>
-                                                <option value="Mobile">Mobile</option>
-                                            </Form.Select>
-                                            {errors.technology?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
-                                    <Col lg={6}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                Upload Icons <span className="text-danger">*</span>:
-                                            </Form.Label>
-                                            <Form.Control
-                                                type="file"
-                                                {...register('uploadicons', { required: false })}
-                                            />
-                                            {errors.uploadicons?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
-                                </Row>
-
                                 <Row>
                                     <Col className="text-start d-flex align-items-center justify-content-center">
                                         <Button

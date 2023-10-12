@@ -8,7 +8,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateSprint } from '../../../../redux/sprint/action';
 import MainLoader from '../../../../constants/Loader/loader';
 // import MainLoader from '../../../../constants/Loader/loader';
+import { EditorState } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
 
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 const Update = ({ modal, CloseModal, editData }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -27,15 +30,22 @@ const Update = ({ modal, CloseModal, editData }) => {
     };
     const onSubmit = (data) => {
         let body = {
-            _id : editData?._id ,
+            _id: editData?._id,
             sprintName: data?.title,
             sprintDesc: data?.Description,
             startDate: data?.startDate,
             endDate: data?.endDate,
         };
-        console.log("editsprit",body)
+        console.log("editsprit", body)
         dispatch(updateSprint(body));
     };
+    //editor state
+    const [editorState, setEditorState] = useState(
+        () => EditorState.createEmpty(),
+    );
+    const textEditorOnchange = (e) => {
+        console.log(e, 'edi')
+    }
     useEffect(() => {
         reset({
             title: editData?.sprintName,
@@ -88,7 +98,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={12}>
-                                 
+
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
                                                 Sprint Name<span className="text-danger">*</span>:
@@ -104,18 +114,28 @@ const Update = ({ modal, CloseModal, editData }) => {
                                         </Form.Group>
                                     </Col>
                                     <Col lg={12}>
-                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                        <Form.Group className="mb-2 border" controlId="exampleForm.ControlTextarea1">
                                             <Form.Label>
                                                 Description <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control
+                                            <dvi className=""
+                                            >
+                                                <Editor
+                                                    // {...register('Description', { required: true })}
+                                                    editorState={editorState}
+                                                    onEditorStateChange={setEditorState}
+                                                    onChange={(e) => { textEditorOnchange(e) }}
+
+                                                />
+                                            </dvi>
+                                            {/* <Form.Control
                                                 type="text"
                                                 placeholder="Please Enter Description Name"
                                                 {...register('Description', { required: true })}
                                             />
                                             {errors.Description?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
-                                            )}
+                                            )} */}
                                         </Form.Group>
                                     </Col>
 

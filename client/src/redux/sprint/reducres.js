@@ -137,7 +137,7 @@ export const deleteSprint = (state = DELETE_SPRINT_INITIAL_STATE, action) => {
 
     }
 };
-export const getSingleSprint = (state = GET_SINGLE_SPRINT_INITIAL_STATE, action) => {
+export const getSingleSprintReducer = (state = GET_SINGLE_SPRINT_INITIAL_STATE, action) => {
     switch (action.type) {
         case SprintTypes.GET_SPRINT_BY_ID_LOADING:
             return {

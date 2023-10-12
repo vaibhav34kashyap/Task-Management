@@ -16,26 +16,26 @@ const Sprint = () => {
     const [openModal, SetOpenModal] = useState(false);
     const dispatch = useDispatch();
     const [render, setRender] = useState(false);
-    const getSingleSprintList= store?.getSingleSprint?.data?.data
-    const getSingleSprintTask =store?.getSigleSprintTask?.data?.response
+    const getSingleSprintList = store?.getSingleSprint?.data?.data
+    const getSingleSprintTask = store?.getSigleSprintTask?.data?.Response
     const loaderhandel = store?.getSigleSprintTask
-    const handleCreate=()=>{
-      SetOpenModal(true)
+    const handleCreate = () => {
+        SetOpenModal(true)
     }
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getsingleSprintTask({id: id, skip: value }));
+        dispatch(getsingleSprintTask({ id: id, skip: value }));
     };
     const CloseModal = (val) => {
-      
-      if (val == 'render') {
-        setRender(!render);
-    }
-    SetOpenModal(false);
-  };
+
+        if (val == 'render') {
+            setRender(!render);
+        }
+        SetOpenModal(false);
+    };
     useEffect(() => {
         dispatch(getSprintById(id));
-        dispatch(getsingleSprintTask({id: id, skip: 1 }))
+        dispatch(getsingleSprintTask({ id: id, skip: 1 }))
     }, [render]);
 
     return (
@@ -51,89 +51,89 @@ const Sprint = () => {
                     </Button>
                 </Col>
             </Row>
-            {loaderhandel.loading ?(<MainLoader/>): 
-            <Row>
-                <Col lg={4}>
-                    <Row>
-                        <Col className="text-center" lg={12}>
-                            <h4> Sprint</h4>
-                        </Col>
+            {loaderhandel.loading ? (<MainLoader />) :
+                <Row>
+                    <Col lg={4}>
+                        <Row>
+                            <Col className="text-center" lg={12}>
+                                <h4> Sprint</h4>
+                            </Col>
 
-                        <ListGroup as="ol" numbered style={{ marginLeft: '20px', position: 'sticky' }}>
-                            <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
-                                <div className="ms-2 me-auto">
-                                    <div className="">
-                                        <b> Sprint Name : </b>
-                                        <i>{getSingleSprintList?.sprintName}</i>
+                            <ListGroup as="ol" numbered style={{ marginLeft: '20px', position: 'sticky' }}>
+                                <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
+                                    <div className="ms-2 me-auto">
+                                        <div className="">
+                                            <b> Sprint Name : </b>
+                                            <i>{getSingleSprintList?.sprintName}</i>
+                                        </div>
                                     </div>
-                                </div>
-                            </ListGroup.Item>
-                            <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
-                                <div className="ms-2 me-auto">
-                                    <div className="">
-                                        <b>Description : </b>
-                                        <i>{getSingleSprintList?.sprintDesc}</i>
+                                </ListGroup.Item>
+                                <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
+                                    <div className="ms-2 me-auto">
+                                        <div className="">
+                                            <b>Description : </b>
+                                            <i>{getSingleSprintList?.sprintDesc}</i>
+                                        </div>
                                     </div>
-                                </div>
-                            </ListGroup.Item>
-                            <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
-                                <div className="ms-2 me-auto">
-                                    <div className="">
-                                        <b>Start Date : </b>
-                                        <i>{moment(getSingleSprintList?.startDate).format('L')}</i>
+                                </ListGroup.Item>
+                                <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
+                                    <div className="ms-2 me-auto">
+                                        <div className="">
+                                            <b>Start Date : </b>
+                                            <i>{moment(getSingleSprintList?.startDate).format('L')}</i>
+                                        </div>
                                     </div>
-                                </div>
-                            </ListGroup.Item>
-                            <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
-                                <div className="ms-2 me-auto">
-                                    <div className="">
-                                        <b>End Date : </b>
-                                        <i>{moment(getSingleSprintList?.endDate).format('L')}</i>
+                                </ListGroup.Item>
+                                <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
+                                    <div className="ms-2 me-auto">
+                                        <div className="">
+                                            <b>End Date : </b>
+                                            <i>{moment(getSingleSprintList?.endDate).format('L')}</i>
+                                        </div>
                                     </div>
-                                </div>
-                            </ListGroup.Item>
-     
-                        </ListGroup>
-                    </Row>
+                                </ListGroup.Item>
 
-                </Col>
-                <Col className="mx-auto" lg={7}>
-                            <Row>
-                                <Col className="text-center" lg={12}>
-                                    {' '}
-                                    <h4>Milestones</h4>
-                                </Col>
-                                <Col className="" lg={12}>
-                                    
+                            </ListGroup>
+                        </Row>
 
-                                    <Table>
-                                        <thead className=" btom_Line_hide">
+                    </Col>
+                    <Col className="mx-auto" lg={7}>
+                        <Row>
+                            <Col className="text-center" lg={12}>
+                                {' '}
+                                <h4>Tasks</h4>
+                            </Col>
+                            <Col className="" lg={12}>
+
+
+                                <Table>
+                                    <thead className=" btom_Line_hide">
+                                        <tr>
+                                            <th>#</th>
+                                            <th> Task Name</th>
+                                            <th> Description</th>
+                                            <th> Start Date</th>
+                                            <th> End Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {getSingleSprintTask?.map((item, index) => (
                                             <tr>
-                                                <th>#</th>
-                                                <th>  Name</th>
-                                                <th> Description</th>
-                                                <th> Start Date</th>
-                                                <th> End Date</th>
+                                                <td>{index + 1}</td>
+                                                <td>{item?.task_name}</td>
+                                                <td>{item?.task_summery}</td>
+
+                                                <td> {moment(item?.createdAt).format('L')}</td>
+                                                <td>{moment(item?.due_date).format('L')}</td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            {getSingleSprintTask?.map((item, index) => (
-                                                <tr>
-                                                    <td>{index + 1}</td>
-                                                    <td>{item?.task_name}</td>
-                                                    <td>{item?.task_summery}</td>
+                                        ))}
+                                    </tbody>
+                                </Table>
 
-                                                    <td> {moment(item?.createdAt).format('L')}</td>
-                                                    <td>{moment(item?.due_date).format('L')}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </Table>
 
-                                 
-                                </Col>
-                            </Row>
-                            <Row>
+                            </Col>
+                        </Row>
+                        <Row>
                             <Col lg={12} className="d-flex justify-content-end mt-3">
                                 {store?.getSigleSprintTask?.data?.totalPages > 0 && (
                                     <Stack spacing={2}>
@@ -148,11 +148,11 @@ const Sprint = () => {
                                 )}
                             </Col>
                         </Row>
-                        </Col>
+                    </Col>
 
-            </Row>}
-            
-            <Create modal={openModal} CloseModal={CloseModal} data={getSingleSprintList}/>
+                </Row>}
+
+            <Create modal={openModal} CloseModal={CloseModal} data={getSingleSprintList} />
         </>
     );
 };

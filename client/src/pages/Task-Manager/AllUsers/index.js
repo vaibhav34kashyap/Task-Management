@@ -45,7 +45,8 @@ const AllUsers = () => {
     }, [render]);
     useEffect(() => {
         if (getUsers?.data?.status == 200) {
-            setData(getUsers?.data?.data);
+            setData(getUsers?.data?.response
+                );
         }
     }, [getUsers]);
     useEffect(() => {

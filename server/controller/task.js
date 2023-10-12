@@ -1,5 +1,5 @@
 const taskModel = require('../models/task');
-const userModel = require("../models/login_register");
+const userModel = require("../models/users.model");
 const multer = require("multer");
 const path = require('path');
 const fs = require('fs');
@@ -215,6 +215,7 @@ const userPendingTask = async (req, res) => {
     }
 }
 
+// Get all tasks of a sprint
 const getSprintTasks = async (req, res) => {
     try {
         const pageSize = 5;
@@ -232,7 +233,7 @@ const getSprintTasks = async (req, res) => {
     }
 }
 
-
+// Get tasks according to status
 const getTasksAccToStatus = async (req, res) => {
     try {
         // var resp = null;

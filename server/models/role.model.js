@@ -4,12 +4,12 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             role: {
                 type: String
             },
-            permission: [
-                {
-                    type: String
-                }
-            ]
+            // permission: [
+            //     {
+            //         type: String
+            //     }
+            // ]
         }
     )
 
-module.exports = mongoose.model("Roles", rolesSchema);
+module.exports = mongoose.model("roles", rolesSchema);
