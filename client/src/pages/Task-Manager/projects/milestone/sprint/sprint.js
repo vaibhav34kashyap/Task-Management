@@ -8,6 +8,7 @@ import Create from './modal/create';
 import { getSingleSprint,deleteSprint } from '../../../../../redux/sprint/action';
 import ToastHandle from '../../../../../constants/toaster/toaster';
 import Update from './modal/update';
+import { Link } from 'react-router-dom';
 import MainLoader from '../../../../../constants/Loader/loader';
 const Sprint = () => {
     const { projectId, milestoneId } = useParams()
@@ -173,9 +174,9 @@ const Sprint = () => {
                                                             <td> <Row>
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0 ">
-                                                                        {/* <Link to={`/user/dashboard/singleMilestonesprint/projectId=/${item?.project_id}&milestoneId=/${item?._id}`}> */}
+                                                                        <Link to={`/dashboard/singleSprintTask/projectId=/${item?.project_id}&milestoneId=/${item?.milestone_id}&spriteId=/${item?._id}`}>
                                                                             <i className="mdi mdi-eye m-0 p-0"></i>
-                                                                        {/* </Link> */}
+                                                                        </Link>
                                                                     </p>
                                                                     <p className="action-icon m-0 p-0  ">
                                                                         <i
