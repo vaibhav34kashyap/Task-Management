@@ -5,9 +5,6 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
                 type: String,
                 required: [true, 'Project Name is required'],
             },
-            projectType: {
-                type: mongoose.Types.ObjectId,
-            },
             clientName: {
                 type: String
             },
@@ -15,13 +12,13 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
                 type: [mongoose.Types.ObjectId],
                 ref : 'Technology'
             },
-            projectLead: {
-                type: String,
-                required: false
-            },
-            projectIcon: {
-                type: String,
-            },
+            // projectLead: {
+            //     type: String,
+            //     required: false
+            // },
+            // projectIcon: {
+            //     type: String,
+            // },
             startDate: {
                 type: Date
             },

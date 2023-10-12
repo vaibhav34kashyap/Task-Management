@@ -20,7 +20,8 @@ const addRole = async (req, res) => {
 // Get roles 
 const getRoles = async (req, res) => {
     try {
-        const result = await rolesModel.find();
+        const currentUserRole = req.user.roleId.role;
+        const result = await rolesModel.find({ role: { $ne: currentUserRole } });
         return res.status(200).json({ status: "200", message: "Roles get successfully", response: result })
     } catch (error) {
         return res.status(500).json({ status: "500", message: "something went wrong", error: error.message })
