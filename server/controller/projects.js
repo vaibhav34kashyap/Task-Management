@@ -50,13 +50,10 @@ const addProject = async (req, res) => {
 
         const objData = {
             projectName: req.body.projectName,
-            projectLead: req.body.projectLead,
-            // projectIcon: req.file.filename,
-            startDate: req.body.startDate,
-            endDate: req.body.endDate,
             clientName: req.body.clientName,
             technology: req.body.technology,
-            projectType: req.body.projectType,
+            startDate: req.body.startDate,
+            endDate: req.body.endDate,
             projectDesc: req.body.projectDesc,
             project_type: req.body.project_type
         }
@@ -70,15 +67,13 @@ const addProject = async (req, res) => {
     }
 }
 
+// Update a project
 const updateProject = async (req, res) => {
     try {
-        let _id = req.body._id;
-        let result = await projectModel.findByIdAndUpdate(_id, req.body);
-        if (result) {
-            return res.status(200).json({ status: '200', project: result, message: 'Project updated Successfully' });
-        }
+        await projectModel.findByIdAndUpdate({_id : req.body.projectId }, req.body, {new : true });
+        return res.status(200).json({status : "200", message : "Project updated successfully"})
     } catch (err) {
-        return res.status(200).json({ status: '404', message: 'Something went wrong' })
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
     }
 }
 

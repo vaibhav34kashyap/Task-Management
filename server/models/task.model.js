@@ -38,7 +38,12 @@ const tasks = mongoose.model(
             type: Date
         },
         status: {
-            type : Number // 1=,todo, 2=inProgress, 3=done, 4=review, 
+            type: Number,
+            default: 1 // 1=,todo, 2=inProgress, 3=done, 4=review, 
+        },
+        activeStatus: {
+            type: Boolean,
+            default: true
         }
     },
         {
