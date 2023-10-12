@@ -140,7 +140,7 @@ const AllUsers = () => {
                      </Col>
                  </Row>
 
-                 <Modal.Body>Are you sure you want to delete this Sprint</Modal.Body>
+                 <Modal.Body>Are you sure you want to delete this User</Modal.Body>
                  <Modal.Footer>
                      <Button className=" web_button " variant="primary" onClick={handeldYes}>
                          Yes

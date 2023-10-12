@@ -39,7 +39,7 @@ const Login = (): React$Element<any> => {
     const dispatch = useDispatch();
 
     const location = useLocation();
-    const redirectUrl = location.state && location.state.from ? location.state.from.pathname : '/';
+    const redirectUrl =  '/';
 
     useEffect(() => {
         dispatch(resetAuth());

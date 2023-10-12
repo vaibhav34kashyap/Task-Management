@@ -9,7 +9,8 @@ const InviteUser = () => {
     const dispatch = useDispatch();
 
     const store = useSelector((state) => state);
-    const successHandle = store?.createUser?.data
+    const successHandle = store?.createUser?.data;
+   const  roleid = store?.Auth?.user?.id
     const {
         register,
         handleSubmit,
@@ -20,9 +21,10 @@ const InviteUser = () => {
     } = useForm();
     const onSubmit = (data) => {
         let body = {
-            username: data?.title,
+            userName: data?.title,
             password: data?.password,
-            email: data?.email
+            email: data?.email,
+            roleId: roleid
         }
         dispatch(inviteUser(body))
     }

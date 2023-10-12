@@ -51,8 +51,8 @@ const TaskCard = ({ item, index }) => {
           {...provided.dragHandleProps}
         >
           <TaskInformation>
-            <p>{item.task_name}</p>
-            <p>{item.task_summery}</p>
+            <p>{item.summary}</p>
+            <p>{item.description}</p>
             <div className="secondary-details">
               <p>
                 <span>
