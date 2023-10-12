@@ -7,8 +7,10 @@ import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
 import { addProject } from '../../../../redux/projects/action';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import MainLoader from '../../../../constants/Loader/loader';
-import Multiselect from 'multiselect-react-dropdown';
+//import Multiselect from 'multiselect-react-dropdown';
 import { getAllTechnology } from '../../../../redux/technology/action';
+import Multiselect from 'multiselect-react-dropdown';
+import { Select } from 'react-select';
 const Create = ({ modal, closeModal }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -21,7 +23,7 @@ const Create = ({ modal, closeModal }) => {
     const [selected, setSelected] = useState([]);
     const errorhandel = store?.addProject;
     const loaderhandel = store?.addProject;
-    const [removeValue, setRemoveValue] = useState([]);
+    //const [removeValue, setRemoveValue] = useState([]);
     const [addValue, setAddValue] = useState([]);
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     const {
@@ -32,6 +34,7 @@ const Create = ({ modal, closeModal }) => {
         reset,
         formState: { errors },
     } = useForm();
+    console.log(addValue,"select")
     const onSubmit = (data) => {
         let body = {
             projectName: data?.projectName,
@@ -39,10 +42,12 @@ const Create = ({ modal, closeModal }) => {
             startDate: data?.startDate,
             endDate: data?.endDate,
             projectType: addValue,
-            technology: data?.technology,
+            technology:addValue,
             projectStatus: 'Live',
+
+             //iska koi parameter hoga usme 
         };
-        console.log(data, 'bbb');
+        console.log(body, 'dhdfhfdhfghgf');
         dispatch(addProject(body));
     };
     useEffect(() => {
@@ -58,18 +63,34 @@ const Create = ({ modal, closeModal }) => {
     useEffect(() => {
         reset();
     }, [modal]);
-    const removehandle = () => {
-        const remove = getTechnology.map((ele, ind) => ele?._id);
-        console.log(remove, 'ritu');
-        setRemoveValue(remove);
+    const removehandle = (selectedList, removedItem) => {
+        const remove = getTechnology.filter((ele, ind) => {
+            return ele?.techName == removedItem;
+        }); 
+        // make a separate copy of the array
+        var index = addValue.indexOf(remove[0]._id)
+        if (index !== -1) {
+            addValue.splice(index, 1);
+            setAddValue(addValue)
+            console.log("remove",addValue)
+        }
+        else{
+            setAddValue(null)
+        }     
+       
+        
     };
-    const addhandle = (name) => {
-        const add = getTechnology.filter((ele, ind) => {
-            return ele?.techName == name;
-        });
-        console.log(add, 'ritika');
-        setAddValue(add);
-    };
+  
+
+    const addhandle=(selectedList,selectItem)=> {
+             const add = getTechnology.filter((ele, ind) => {
+            return ele?.techName == selectItem;
+        }); 
+        setAddValue([...addValue, add[0]._id])
+        console.log(addValue,"addvalue info")
+        
+      
+    }
     useEffect(() => {
         const getTechnologyname = [];
         dispatch(getAllTechnology({ status: true }));
@@ -172,6 +193,8 @@ const Create = ({ modal, closeModal }) => {
                                                 options={selected}
                                                 showCheckbox
                                             />
+                                            
+
                                         </Form.Group>
                                     </Col>
                                 </Row>
