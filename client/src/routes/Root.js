@@ -3,51 +3,26 @@ import { Navigate } from 'react-router-dom';
 import { getUserFromSession } from '../helpers/api/apiCore';
 import { getMenuByRole } from '../constants/menu';
 
-const RootFind = () => {
-    const user = getUserFromSession();
-    // const forcePasswordCheck = user?.data?.data?.user?.forcePassword;
-
-    if (user?.role === 'User') {
-        return 'user/dashboard/boards';
-    }
-    //  else if (user?.role === 'site-admin') {
-    //     return 'siteadmin/dashboard/itdashboard';
-    // }
-    //  else if (user?.role === 'user') {
-    //     return 'user/dashboard/itdashboard';
-    // }
-    else{
-    return 'account/login'
-
-    }
-
-
-};
 
 const Root = () => {
-    const getRootUrl = () => {
-        let url = RootFind();
-        return url;
-    };
+    const role = sessionStorage.getItem("role");
+    console.log(role,"bbbb")
+    if (role == "1") {
+        return <Navigate to={'/dashboard/projects'} />
+    } else if (role == "2") {
+        return <Navigate to={'/dashboard/boards'} />
+    } else {
+        return <Navigate to={'/pageNotFound'} />
+    }
 
-    const url = getRootUrl();
+    // const getRootUrl = () => {
+    //     let url = 'dashboard/admin';
+    //     return url;
+    // };
 
-    return <Navigate to={`/${url}`} />;
+    // const url = getRootUrl();
+
+    // return <Navigate to={`/${url}`} />;
 };
 
 export default Root;
-
-// import { Navigate } from 'react-router-dom';
-
-// const Root = () => {
-//     const getRootUrl = () => {
-//         let url = 'user/dashboard/boards';
-//         return url;
-//     };
-
-//     const url = getRootUrl();
-
-//     return <Navigate to={`/${url}`} />;
-// };
-
-// export default Root;

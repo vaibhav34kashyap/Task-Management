@@ -3,7 +3,7 @@ const router = express.Router();
 
 const userRoutes = require("./users.route");
 const profileRoutes = require("./profile");
-const taskRoutes = require("./task");
+const taskRoutes = require("./task.route");
 const projectRoute = require("./projectRoute");
 const sprintRoute = require("./sprint");
 const subtaskRoute = require("./subtask");

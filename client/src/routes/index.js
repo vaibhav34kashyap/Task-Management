@@ -29,7 +29,7 @@ const Register2 = React.lazy(() => import('../pages/account2/Register2'));
 const Confirm2 = React.lazy(() => import('../pages/account2/Confirm2'));
 const ForgetPassword2 = React.lazy(() => import('../pages/account2/ForgetPassword2'));
 const LockScreen2 = React.lazy(() => import('../pages/account2/LockScreen2'));
-
+const UserNotFound = React.lazy(() => import("../components/UserNotFound"))
 // dashboard
 const Projects = React.lazy(() => import('../pages/Task-Manager/projects/projects'));
 const AnalyticsDashboard = React.lazy(() => import('../pages/dashboard/Analytics'));
@@ -256,8 +256,8 @@ const AllRoutes = () => {
         },
         {
             // auth protected routes
-            path: 'user',
-            element: <PrivateRoute roles={'User'} component={Layout} />,
+            path: '/',
+            element: <PrivateRoute component={Layout} />,
             children: [
                 {
                     path: 'dashboard',
@@ -326,6 +326,15 @@ const AllRoutes = () => {
                             path: 'technologyCategory',
                             element: <LoadComponent component={TechnologyCategory} />,
                         },
+                    ],
+                },
+                {
+                    path: '/',
+                    children: [
+                        {
+                            path: 'pageNotFound',
+                            element: <LoadComponent component={UserNotFound} />,
+                        }
                     ],
                 },
 

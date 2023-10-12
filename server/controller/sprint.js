@@ -1,5 +1,5 @@
 const sprintModel = require('../models/sprint');
-const taskModel = require('../models/task')
+const taskModel = require('../models/task.model')
 
 // Get all sprints WRT status
 const getSprints = async (req, res) => {
@@ -49,7 +49,7 @@ const getAllTaskBySprint = async (req, res) => {
     try {
         const result = await taskModel.find({
             $and: [
-                { sprint_id: sprint_id }, { deleteStatus: true },
+                { sprint_id: sprint_id },
             ]
         });
         if (result) {
