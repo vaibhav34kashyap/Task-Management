@@ -9,22 +9,22 @@ const createtask = async (req, res) => {
         if (existingtask) {
             return res.status(200).json({ status: "400", message: "Task already exists" });
         }
-        else{
-        const task = await taskModel.create({
-            projectId: projectId,
-            milestoneId: milestoneId,
-            sprintId: sprintId,
-            summary: summary,
-            description: description,
-            assigneeId: assigneeId, // One who is doing work
-            reporterId: reporterId, // one who will assignee report after work done
-            priority: priority,
-            startDate: startDate,
-            dueDate: dueDate,
-            status: status
-        })
-        return res.status(200).json({ status: "200", message: "Task created successfully", response: task });
-    }
+        else {
+            const task = await taskModel.create({
+                projectId: projectId,
+                milestoneId: milestoneId,
+                sprintId: sprintId,
+                summary: summary,
+                description: description,
+                assigneeId: assigneeId, // One who is doing work
+                reporterId: reporterId, // one who will assignee report after work done
+                priority: priority,
+                startDate: startDate,
+                dueDate: dueDate,
+                status: status
+            })
+            return res.status(200).json({ status: "200", message: "Task created successfully", response: task });
+        }
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
@@ -34,9 +34,9 @@ const createtask = async (req, res) => {
 const getTasks = async (req, res) => {
     try {
         const pageSize = 5;
-        const totalCount = await taskModel.countDocuments();
+        const totalCount = await taskModel.countDocuments({activeStatus : req.query.activeStatus});
 
-        const tasks = await taskModel.find().populate([
+        const tasks = await taskModel.find({activeStatus : req.query.activeStatus}).populate([
             { path: 'projectId', select: 'projectName' },
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
@@ -105,6 +105,17 @@ const updateTaskStatus = async (req, res,) => {
     }
 }
 
+// update Active inactive Status of a task
+const updateTaskActiveStatus = async (req, res,) => {
+    try {
+        await taskModel.findByIdAndUpdate({ _id: req.body.taskId }, { activeStatus: req.body.activeStatus }, { new: true });
+        return res.status(200).json({ status: "200", message: "Task Active Inactive Status updated successfully" });
+    }
+    catch (error) {
+        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+    }
+}
+
 // Get all tasks of a sprint
 const getSprintTasks = async (req, res) => {
     try {
@@ -132,10 +143,10 @@ const getTasksAccToStatus = async (req, res) => {
         const inProgress = await taskModel.find({ status: 2 });
         // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
 
-        const review = await taskModel.find({ status: 4 });
+        const done = await taskModel.find({ status: 3 });
         // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
 
-        const done = await taskModel.find({ status: 3 });
+        const review = await taskModel.find({ status: 4 });
         res.status(200).json({ status: '200', message: "fetched successfully", Response: todo, inProgress, review, done });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -143,5 +154,5 @@ const getTasksAccToStatus = async (req, res) => {
 }
 
 module.exports = {
-    createtask, getTasks, getATask, updateTask, deleteTask, updateTaskStatus, getSprintTasks, getTasksAccToStatus
+    createtask, getTasks, getATask, updateTask, deleteTask, updateTaskStatus, updateTaskActiveStatus, getSprintTasks, getTasksAccToStatus
 };
