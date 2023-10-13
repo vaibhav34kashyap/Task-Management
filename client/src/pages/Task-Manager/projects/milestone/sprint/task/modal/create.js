@@ -7,11 +7,14 @@ import { useForm } from 'react-hook-form';
 import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
 import { createTask } from '../../../../../../../redux/task/action';
 import ToastHandle from '../../../../../../../constants/toaster/toaster';
-const Create = ({ modal, CloseModal ,data }) => {
+import { getAllProjects } from '../../../../../../../redux/projects/action';
+import { getallMileStones, getsingleMileStone } from '../../../../../../../redux/milestone/action';
+import { getAllSprint, getSingleSprint } from '../../../../../../../redux/sprint/action';
+const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const errorhandel = store?.createTaskReducer;
-    console.log(data,"newwwwwww")
+    console.log(projectid, 'newwwwwww');
     const {
         register,
         handleSubmit,
@@ -22,26 +25,31 @@ const Create = ({ modal, CloseModal ,data }) => {
     } = useForm();
 
     const onSubmit = (val) => {
-          let body={
-            sprint_id: data?._id ,
-            milestone_id:data?.milestone_id,
-            project_id: data?.project_id ,
-            task_name:val?.Name,
-            task_summery:val?.summary,
-            start_time:val?.Startdate,
-            end_time:val?.Enddate,
-            status:val?.status,
-            module:val?.module,
-            original_estimate:val?.estimatedate,
-            actual_time:val?.actualtime,
-            due_date:val?.dueDate
-          }
-          dispatch( createTask(body))
+        let body = {
+            sprint_id: val?.Sprint,
+            milestone_id: val?.Milestone,
+            project_id: val?.projectname,
+            description: val?.Description,
+            summary: val?.summary,
+            startDate: val?.Startdate,
+            dueDate: val?.dueDate,
+            assigneeId: val?.Assignee,
+            reporterId: 'Admin',
+            priority: val?.Prioiity,
+        };
+        dispatch(createTask(body));
     };
     const handleClose = () => {
-        reset()
+        reset();
         CloseModal();
     };
+    useEffect(() => {
+        reset({
+            projectname: projectid,
+            Milestone: milestoneid,
+        });
+    }, [modal]);
+
     useEffect(() => {
         if (errorhandel?.data?.status == 200) {
             ToastHandle('success', 'Successfully added');
@@ -83,8 +91,14 @@ const Create = ({ modal, CloseModal ,data }) => {
                                                     {' '}
                                                     Project<span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                <Form.Control type="text" {...register('ProjectName', { required: true })} />
-                                                {errors.ProjectName?.type === 'required' && (
+
+                                                <Form.Select {...register('projectname', { required: true })}>
+                                                    {/* <option value={''}>--Select--</option> */}
+                                                    {store?.getProject?.data?.response?.map((ele, ind) => (
+                                                        <option value={ele?._id}> {ele?.projectName} </option>
+                                                    ))}
+                                                </Form.Select>
+                                                {errors.projectname?.type === 'required' && (
                                                     <span className="text-danger"> This feild is required *</span>
                                                 )}
                                             </Form.Group>
@@ -95,7 +109,13 @@ const Create = ({ modal, CloseModal ,data }) => {
                                                     {' '}
                                                     Milestone<span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                <Form.Control type="text" {...register('Milestone', { required: true })} />
+
+                                                <Form.Select {...register('Milestone', { required: true })}>
+                                                    {/* <option value={''}>--Select--</option> */}
+                                                    {store?.getAllMileStones?.data?.response?.map((ele, ind) => (
+                                                        <option value={ele?._id}> {ele?.title} </option>
+                                                    ))}
+                                                </Form.Select>
                                                 {errors.Milestone?.type === 'required' && (
                                                     <span className="text-danger"> This feild is required *</span>
                                                 )}
@@ -108,12 +128,18 @@ const Create = ({ modal, CloseModal ,data }) => {
                                         <Col lg={6}>
                                             <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                 <Form.Label>
-                                                Sprint <span className="text-danger">*</span>:
+                                                    Sprint <span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    {...register('Sprint', { required: true })}
-                                                />{' '}
+                                                {/* <Form.Control type="text" {...register('Sprint', { required: true })} />{' '}
+                                                {errors.Sprint?.type === 'required' && (
+                                                    <span className="text-danger"> This feild is required *</span>
+                                                )} */}
+                                                <Form.Select {...register('Sprint', { required: true })}>
+                                                    {/* <option value={''}>--Select--</option> */}
+                                                    {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
+                                                        <option value={ele?._id}> {ele?.sprintName} </option>
+                                                    ))}
+                                                </Form.Select>
                                                 {errors.Sprint?.type === 'required' && (
                                                     <span className="text-danger"> This feild is required *</span>
                                                 )}
@@ -127,6 +153,7 @@ const Create = ({ modal, CloseModal ,data }) => {
                                                 </Form.Label>
                                                 <Form.Control
                                                     type="text"
+                                                    placeholder=" Enter Task Summary"
                                                     {...register('summary', { required: true })}
                                                 />{' '}
                                                 {errors.summary?.type === 'required' && (
@@ -144,7 +171,11 @@ const Create = ({ modal, CloseModal ,data }) => {
                                                     {' '}
                                                     Description<span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                <Form.Control type="text" {...register('Description', { required: true })} />{' '}
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder=" Enter Task Description"
+                                                    {...register('Description', { required: true })}
+                                                />{' '}
                                                 {errors.Description?.type === 'required' && (
                                                     <span className="text-danger"> This feild is required *</span>
                                                 )}
@@ -156,10 +187,21 @@ const Create = ({ modal, CloseModal ,data }) => {
                                                     {' '}
                                                     Assignee <span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                <Form.Control
+                                                {/* <Form.Control
                                                     type="text"
+                                                    placeholder = ' Enter Task Assignee'
                                                     {...register('Assignee', { required: true })}
                                                 />{' '}
+                                                {errors.Assignee?.type === 'required' && (
+                                                    <span className="text-danger"> This feild is required *</span>
+                                                )} */}
+
+                                                <Form.Select {...register('Assignee', { required: true })}>
+                                                    <option value={''}>--Select--</option>
+                                                    {store?.getAllUsers?.data?.response?.map((ele, ind) => (
+                                                        <option value={ele?._id}> {ele?.userName} </option>
+                                                    ))}
+                                                </Form.Select>
                                                 {errors.Assignee?.type === 'required' && (
                                                     <span className="text-danger"> This feild is required *</span>
                                                 )}
@@ -175,7 +217,11 @@ const Create = ({ modal, CloseModal ,data }) => {
                                                     {' '}
                                                     Reporter<span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                <Form.Control type="text" {...register('Reporter', { required: true })} />{' '}
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder=" Admin"
+                                                    {...register('Reporter', { required: true, disabled: true })}
+                                                />{' '}
                                                 {errors.Reporter?.type === 'required' && (
                                                     <span className="text-danger"> This feild is required *</span>
                                                 )}
@@ -185,13 +231,15 @@ const Create = ({ modal, CloseModal ,data }) => {
                                             <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                 <Form.Label>
                                                     {' '}
-                                                    Prioiity  <span className="text-danger">*</span>:
+                                                    Prioiity <span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    {...register('Prioiity ', { required: true })}
-                                                />{' '}
-                                                {errors.Prioiity ?.type === 'required' && (
+                                                <Form.Select {...register('Prioiity', { required: true })}>
+                                                    <option>-------select----</option>
+                                                    <option value="1">High</option>
+                                                    <option value="2">Medium</option>
+                                                    <option value="3">Low</option>
+                                                </Form.Select>
+                                                {errors.Prioiity?.type === 'required' && (
                                                     <span className="text-danger"> This feild is required *</span>
                                                 )}
                                             </Form.Group>
@@ -200,7 +248,7 @@ const Create = ({ modal, CloseModal ,data }) => {
                                 </Col>
                                 <Col lg={12}>
                                     <Row>
-                                    <Col lg={6}>
+                                        <Col lg={6}>
                                             <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                 <Form.Label>
                                                     {' '}

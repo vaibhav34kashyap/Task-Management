@@ -9,7 +9,7 @@ export const MileStoneDelete = "/milestone/updateStatus"
 export const MileStoneAdd = "/milestone/add"
 export const ParticularMilestoneDetail = "/milestone/getmilestonebyid/";
 export const AddSprint = "/sprint/add";
-export const GetAllSprints = "/sprint";
+export const GetAllSprints = "/sprint?";
 export const DeleteSprint = "/sprint/updateStatus";
 export const ParticularSprintDetail = "/sprint/getsprintbyid/";
 export const getAllSingleSprint = "/sprint/getAMilestoneAllSprints?id="

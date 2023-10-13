@@ -6,7 +6,8 @@ export function addSprintApi(data): any {
     return api.create(URL.AddSprint, data.payload)
 }
 export function getallSprintApi(data): any {
-    return api.get(URL.GetAllSprints, data.payload)
+    // return api.get(URL.GetAllSprints, data.payload)
+    return api.get(`${URL.GetAllSprints}status=${data?.payload}`)
 }
 export function deleteSprintApi(data): any {
     return api.update(URL.DeleteSprint , data.payload)
