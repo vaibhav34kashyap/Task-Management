@@ -120,8 +120,8 @@ const deleteTask = async (req, res) => {
 const getSprintTasks = async (req, res) => {
     try {
         const pageSize = 5;
-        const totalCount = await taskModel.countDocuments({ sprintId: req.query.sprintId });
-        const result = await taskModel.find({ sprintId: req.query.sprintId })
+        const totalCount = await taskModel.countDocuments({ sprintId: req.query.sprintId, activeStatus: req.query.activeStatus } );
+        const result = await taskModel.find({ sprintId: req.query.sprintId , activeStatus: req.query.activeStatus })
             .sort({ createdAt: -1 })
             .limit(pageSize)
             .skip((parseInt(req.query.skip) - 1) * pageSize);
