@@ -20,8 +20,8 @@ import {
     updateSprint,
     getAllSingleSprints,
 } from './sprint/reducres';
-import { createTaskReducer, getSigleSprintTask, getAllTaskReducer, UpdateTaskReducer } from './task/reducer';
-import { getAllUsers, deleteUser, createUser } from './user/reducer';
+import { createTaskReducer, getSigleSprintTask, getAllTaskReducer, UpdateTaskReducer,deleteTask } from './task/reducer';
+import { getAllUsers, deleteUser, createUser ,getAllRoles} from './user/reducer';
 import {
     createTechnologyReducer,
     getAllTechnologyReducer,
@@ -67,4 +67,6 @@ export default (combineReducers({
     getAllTechnologyCategoryReducer,
     UpdateTechnologyCategoryReducer,
     deleteTechnologyCategory,
+    getAllRoles,
+    deleteTask
 }): any);

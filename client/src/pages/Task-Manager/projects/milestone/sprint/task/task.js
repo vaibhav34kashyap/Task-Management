@@ -4,15 +4,16 @@ import { ListGroup, Container, Row, Col, Link, Table, Button, Form, Card } from 
 import { useDispatch, useSelector } from 'react-redux';
 import Create from './modal/create';
 import moment from 'moment';
-import { getsingleSprintTask } from '../../../../../../redux/task/action';
+import { deleteTask, getsingleSprintTask } from '../../../../../../redux/task/action';
 import MainLoader from '../../../../../../constants/Loader/loader';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Update from './modal/update';
 import { getAllProjects } from '../../../../../../redux/projects/action';
-import { getallMileStones, getsingleMileStone } from '../../../../../../redux/milestone/action';
-import { getAllSprint, getSingleSprint, getSprintById } from '../../../../../../redux/sprint/action';
-import { getAllUsers } from '../../../../../../redux/actions';
+import {  getsingleMileStone } from '../../../../../../redux/milestone/action';
+import { getSingleSprint, getSprintById } from '../../../../../../redux/sprint/action';
+import { getAllRoles, getAllUsers } from '../../../../../../redux/actions';
+import { Modal } from 'react-bootstrap';
 const Task = () => {
     const { projectId, milestoneId, spriteId } = useParams();
     const [skip, setSkip] = useState(1);
@@ -21,8 +22,12 @@ const Task = () => {
     const [editopenModal, SetEditOpenModal] = useState(false);
     const dispatch = useDispatch();
     const [status, setStatus] = useState(1);
+    const [checkedData, setCheckedData] = useState();
+    const [checkedStatus, setCheckedStatus] = useState();
     const [editData, setEditData] = useState();
     const [render, setRender] = useState(false);
+    const [statusModal, setStatusModal] = useState(false);
+    const [activeStatus, setactiveStatus] = useState(true);
     const getSingleSprintTask = store?.getSigleSprintTask?.data?.response;
 
     const loaderhandel = store?.getSigleSprintTask;
@@ -44,19 +49,47 @@ const Task = () => {
             setStatus(1);
             let data = {
                 id: spriteId,
+                activeStatus:true,
                 skip: skip,
+                
             };
             dispatch(getsingleSprintTask(data));
         } else {
             setStatus(0);
             let data = {
                 id: spriteId,
+                activeStatus:false,
                 skip: skip,
+                
             };
             dispatch(getsingleSprintTask(data));
         }
     };
-
+    const handleStatusChange = (e, data) => {
+        if (e.target.checked) {
+            setCheckedStatus(true);
+        } else {
+            setCheckedStatus(false);
+        }
+        setCheckedData(data);
+        setStatusModal(true);
+    };
+    const handleYes = () => {
+        if (checkedStatus) {
+            let body = {
+                taskId: checkedData._id,
+                activeStatus: 1,
+            };
+            dispatch(deleteTask(body));
+        } else {
+            let body = {
+                taskId: checkedData._id,
+                activeStatus: 0,
+            };
+            dispatch(deleteTask(body));
+        }
+        setStatusModal(false);
+    };
     const handelUpdate = (data) => {
         setEditData(data);
         SetEditOpenModal(true);
@@ -65,25 +98,23 @@ const Task = () => {
         SetEditOpenModal(false);
     };
     useEffect(() => {
-        dispatch(getsingleSprintTask({ id: spriteId, skip: 1 }));
+        dispatch(getsingleSprintTask({ id: spriteId ,activeStatus:true , skip: 1 }));
     }, [render]);
     useEffect(() => {
         let body = {
             status: 1,
         };
         dispatch(getAllProjects(body));
-    //    dispatch(getallMileStones({status:1}))
-    // dispatch(getAllSprint({status:1}))
-    dispatch(getsingleMileStone({id:projectId , status:1}))
-    dispatch(getSprintById({status:1,id:milestoneId}))
-        dispatch(getSingleSprint({status:1 ,id:milestoneId}));
+        dispatch(getsingleMileStone({ id: projectId, status: 1 }));
+        dispatch(getSprintById({ status: 1, id: milestoneId }));
+        dispatch(getSingleSprint({ status: 1, id: milestoneId }));
+        dispatch(getAllRoles());
         dispatch(getAllUsers());
-    }, [render ])
+    }, [render]);
     return (
         <>
             <Card>
                 <Card.Body>
-                  
                     <div className="row mx-auto mt-2">
                         <div className="d-flex col-4">
                             <div className="row d-flex align-items-center">
@@ -145,7 +176,7 @@ const Task = () => {
                                                             <Form.Check
                                                                 type="switch"
                                                                 checked={item?.status}
-                                                                // onChange={(e) => handleStatusChange(e, ele)}
+                                                                onChange={(e) => handleStatusChange(e, item)}
                                                             />
                                                         </td>
                                                         <td>
@@ -196,6 +227,24 @@ const Task = () => {
                 sprintid={spriteId}
             />
             <Update modal={editopenModal} CloseModal={CloseUpdateModal} editData={editData} />
+            {/* delete modal */}
+            <Modal show={statusModal} onHide={() => setStatusModal(false)}>
+                <Modal.Body>
+                    Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this Task ?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            setStatusModal(false);
+                        }}>
+                        No
+                    </Button>
+                    <Button className=" web_button " variant="primary" onClick={() => handleYes()}>
+                        Yes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 };

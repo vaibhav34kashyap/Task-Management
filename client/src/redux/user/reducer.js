@@ -17,6 +17,12 @@ const CREATE_USER_INITIAL_STATE = {
     message: "",
     loading: false
 }
+
+const GET_ALL_ROLES_INITIAL_STATE = {
+    data: [],
+    message: "",
+    loading: false
+}
 export const getAllUsers = (state = GET_ALL_USER_INITIAL_STATE, action) => {
     switch (action.type) {
         case USERS_TYPES.GET_ALL_USERS_LOADING:
@@ -94,6 +100,31 @@ export const createUser = (state = CREATE_USER_INITIAL_STATE, action) => {
             return {
                 data: [],
                 status: 403,
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+export const getAllRoles = (state = GET_ALL_ROLES_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case USERS_TYPES.GET_ALL_ROLES_LOADING:
+            return {
+                data: GET_ALL_ROLES_INITIAL_STATE.data,
+                loading: true,
+            };
+        case USERS_TYPES.GET_ALL_ROLES_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case USERS_TYPES.GET_ALL_ROLES_ERROR:
+            return {
+                data: [],
                 loading: false,
                 message: action?.payload,
             };

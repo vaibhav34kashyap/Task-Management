@@ -13,3 +13,7 @@ export const inviteUser= (data): AuthAction => ({
     type: ALL_USERS.CREATE_USER,
     payload: data
 })
+export const getAllRoles = (data): AuthAction => ({
+    type: ALL_USERS.GET_ALL_ROLES,
+    payload: data
+})
