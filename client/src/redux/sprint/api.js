@@ -13,7 +13,7 @@ export function deleteSprintApi(data): any {
     return api.update(URL.DeleteSprint , data.payload)
 }
 export function getSingleSprintApi(data): any {
-    return api.get(URL.ParticularSprintDetail + data?.payload)
+    return api.get( `${URL.ParticularSprintDetail}${data?.payload?.id}&status=${data.payload.status}`)
 }
 export function getAllSingleSprintApi(data): any {
     // return api.get(URL.getAllSingleSprint + data?.payload)
