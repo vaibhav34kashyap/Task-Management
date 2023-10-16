@@ -105,16 +105,16 @@ const deleteTask = async (req, res) => {
 //     }
 // }
 
-// // update Active inactive Status of a task
-// const updateTaskActiveStatus = async (req, res,) => {
-//     try {
-//         await taskModel.findByIdAndUpdate({ _id: req.body.taskId }, { activeStatus: req.body.activeStatus }, { new: true });
-//         return res.status(200).json({ status: "200", message: "Task Active Inactive Status updated successfully" });
-//     }
-//     catch (error) {
-//         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
-//     }
-// }
+// update Active inactive Status of a task
+const updateTaskActiveStatus = async (req, res,) => {
+    try {
+        await taskModel.findByIdAndUpdate({ _id: req.body.taskId }, { activeStatus: req.body.activeStatus }, { new: true });
+        return res.status(200).json({ status: "200", message: "Task Active Inactive Status updated successfully" });
+    }
+    catch (error) {
+        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+    }
+}
 
 // Get all tasks of a sprint
 const getSprintTasks = async (req, res) => {
@@ -154,5 +154,5 @@ const getTasksAccToStatus = async (req, res) => {
 }
 
 module.exports = {
-    createtask, getTasks, getATask, updateTask, deleteTask,/* updateTaskStatus, updateTaskActiveStatus,*/ getSprintTasks, getTasksAccToStatus
+    createtask, getTasks, getATask, updateTask, deleteTask,/* updateTaskStatus,*/ updateTaskActiveStatus, getSprintTasks, getTasksAccToStatus
 };
