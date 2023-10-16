@@ -13,6 +13,7 @@ import { Editor } from 'react-draft-wysiwyg';
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 const Update = ({ modal, CloseModal, editData }) => {
+    console.log(editData,"update")
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const sucesshandel = store?.updateSprint;
@@ -30,27 +31,37 @@ const Update = ({ modal, CloseModal, editData }) => {
     };
     const onSubmit = (data) => {
         let body = {
-            _id: editData?._id,
-            sprintName: data?.title,
-            sprintDesc: data?.Description,
-            startDate: data?.startDate,
-            endDate: data?.endDate,
+            taskId : editData?._id,
+            projectId : data?.projectname,
+            milestoneId : data?.Milestone,
+            sprintId : data?.Sprint,
+            summary :data?.summary,
+            description: data?.Description,
+            assigneeId : data?.Assignee,
+            reporterId : data?.Reporter,
+            priority : data?.priority ,
+            startDate : data?.startDate,
+            dueDate : data?.dueDate,
+
         };
         console.log('editsprit', body);
         dispatch(updateSprint(body));
     };
-    //editor state
-    const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
-    const textEditorOnchange = (e) => {
-        console.log(e, 'edi');
-    };
+  
     useEffect(() => {
         reset({
             Milestone: editData?.milestoneId,
             projectname: editData?.projectId,
             Sprint: editData?.sprintId,
-            startDate: handleDate(editData?.startDate),
+            startDate: handleDate(editData?.createdAt),
             dueDate: handleDate(editData?.dueDate),
+            summary:editData?.summary,
+            Description:editData?.description,
+            Assignee:editData?.assigneeId,
+            Reporter:editData?.reporterId,
+            priority:editData?.priority,
+
+
         });
     }, [modal]);
     console.log(editData, 'pppppp');
@@ -126,9 +137,9 @@ const Update = ({ modal, CloseModal, editData }) => {
 
                                                     <Form.Select {...register('Milestone', { required: true })}>
                                                         {/* <option value={''}>--Select--</option> */}
-                                                        {store?.getAllMileStones?.data?.response?.map((ele, ind) => (
-                                                            <option value={ele?._id}> {ele?.title} </option>
-                                                        ))}
+                                                        {store?.getSigleMileStone?.data?.Response?.map((ele, ind) => (
+                                                        <option value={ele?._id}> {ele?.title} </option>
+                                                    ))}
                                                     </Form.Select>
                                                     {errors.Milestone?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>
@@ -144,15 +155,12 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                     <Form.Label>
                                                         Sprint <span className="text-danger">*</span>:
                                                     </Form.Label>
-                                                    {/* <Form.Control type="text" {...register('Sprint', { required: true })} />{' '}
-                                                {errors.Sprint?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
-                                                )} */}
+                                                 
                                                     <Form.Select {...register('Sprint', { required: true })}>
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
-                                                            <option value={ele?._id}> {ele?.sprintName} </option>
-                                                        ))}
+                                                        <option value={ele?._id}> {ele?.sprintName} </option>
+                                                    ))}
                                                     </Form.Select>
                                                     {errors.Sprint?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>
@@ -201,14 +209,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         {' '}
                                                         Assignee <span className="text-danger">*</span>:
                                                     </Form.Label>
-                                                    {/* <Form.Control
-                                                    type="text"
-                                                    placeholder = ' Enter Task Assignee'
-                                                    {...register('Assignee', { required: true })}
-                                                />{' '}
-                                                {errors.Assignee?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
-                                                )} */}
+
 
                                                     <Form.Select {...register('Assignee', { required: true })}>
                                                         <option value={''}>--Select--</option>
@@ -231,11 +232,12 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         {' '}
                                                         Reporter<span className="text-danger">*</span>:
                                                     </Form.Label>
-                                                    <Form.Control
-                                                        type="text"
-                                                        placeholder=" Admin"
-                                                        {...register('Reporter', { required: true, disabled: true })}
-                                                    />{' '}
+                                                    <Form.Select {...register('Reporter', { required: true })}>
+                                                    <option value={''}>--Select--</option>
+                                                    {store?.getAllRoles?.data?.response?.map((ele, ind) => (
+                                                        <option value={ele?._id}> {ele?.role} </option>
+                                                    ))}
+                                                </Form.Select>
                                                     {errors.Reporter?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>
                                                     )}
@@ -245,15 +247,15 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                 <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                     <Form.Label>
                                                         {' '}
-                                                        Prioiity <span className="text-danger">*</span>:
+                                                        Priority <span className="text-danger">*</span>:
                                                     </Form.Label>
-                                                    <Form.Select {...register('Prioiity', { required: true })}>
+                                                    <Form.Select {...register('priority', { required: true })}>
                                                         <option>-------select----</option>
                                                         <option value="1">High</option>
                                                         <option value="2">Medium</option>
                                                         <option value="3">Low</option>
                                                     </Form.Select>
-                                                    {errors.Prioiity?.type === 'required' && (
+                                                    {errors.priority?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>
                                                     )}
                                                 </Form.Group>
@@ -270,9 +272,9 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                     </Form.Label>
                                                     <Form.Control
                                                         type="date"
-                                                        {...register('startdate', { required: true })}
+                                                        {...register('startDate', { required: true })}
                                                     />{' '}
-                                                    {errors.estimatedate?.type === 'required' && (
+                                                    {errors.startDate?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>
                                                     )}
                                                 </Form.Group>

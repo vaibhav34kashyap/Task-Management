@@ -26,16 +26,16 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
 
     const onSubmit = (val) => {
         let body = {
-            sprint_id: val?.Sprint,
-            milestone_id: val?.Milestone,
-            project_id: val?.projectname,
+            sprintId: val?.Sprint,
+            milestoneId: val?.Milestone,
+            projectId: val?.projectname,
             description: val?.Description,
             summary: val?.summary,
             startDate: val?.Startdate,
             dueDate: val?.dueDate,
             assigneeId: val?.Assignee,
-            reporterId: 'Admin',
-            priority: val?.Prioiity,
+            reporterId: val?.Reporter,
+            priority: val?.Priority,
         };
         dispatch(createTask(body));
     };
@@ -218,11 +218,12 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     {' '}
                                                     Reporter<span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    placeholder=" Admin"
-                                                    {...register('Reporter', { required: true, disabled: true })}
-                                                />{' '}
+                                                <Form.Select {...register('Reporter', { required: true })}>
+                                                    <option value={''}>--Select--</option>
+                                                    {store?.getAllRoles?.data?.response?.map((ele, ind) => (
+                                                        <option value={ele?._id}> {ele?.role} </option>
+                                                    ))}
+                                                </Form.Select>
                                                 {errors.Reporter?.type === 'required' && (
                                                     <span className="text-danger"> This feild is required *</span>
                                                 )}
@@ -232,15 +233,15 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                             <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
                                                 <Form.Label>
                                                     {' '}
-                                                    Prioiity <span className="text-danger">*</span>:
+                                                    Priority <span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                <Form.Select {...register('Prioiity', { required: true })}>
+                                                <Form.Select {...register('Priority', { required: true })}>
                                                     <option>-------select----</option>
                                                     <option value="1">High</option>
                                                     <option value="2">Medium</option>
                                                     <option value="3">Low</option>
                                                 </Form.Select>
-                                                {errors.Prioiity?.type === 'required' && (
+                                                {errors.Priority?.type === 'required' && (
                                                     <span className="text-danger"> This feild is required *</span>
                                                 )}
                                             </Form.Group>

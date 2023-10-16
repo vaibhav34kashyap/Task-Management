@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import TASK_TYPES from './constant';
-import { UpdateTaskApi, createTaskApi, getAllTaskApi, getSingleSprintTaskApi } from './api';
+import { UpdateTaskApi, createTaskApi, deleteTaskApi, getAllTaskApi, getSingleSprintTaskApi } from './api';
 
 function* createTaskFunction({ payload }) {
     try {
@@ -134,6 +134,43 @@ function* updateTaskFunction({ payload }) {
 
     }
 }
+
+function* deleteTaskFunction({ payload }) {
+    try {
+        yield put({
+            type: TASK_TYPES.DELETE_TASK_LOADING,
+            payload: {}
+        })
+        const response = yield call(deleteTaskApi, { payload });
+        if (response.data.status) {
+            yield put({
+                type: TASK_TYPES.DELETE_TASK_SUCCESS,
+                payload: { ...response.data },
+            });
+            yield put({
+                type: TASK_TYPES.DELETE_TASK_RESET,
+                payload: {},
+            });
+        }
+        else {
+            yield put({
+                type: TASK_TYPES.DELETE_TASK_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: TASK_TYPES.DELETE_TASK_ERROR,
+            payload: { message: error?.message }
+        });
+        yield put({
+            type: TASK_TYPES.DELETE_TASK_RESET,
+            payload: {},
+        });
+
+    }
+}
 export function* createTaskSaga(): any {
     yield takeEvery(TASK_TYPES.CREATE_TASK, createTaskFunction);
 }
@@ -146,12 +183,16 @@ export function* getAllTask(): any {
 export function* updateTask(): any {
     yield takeEvery(TASK_TYPES.UPDATE_TASK, updateTaskFunction);
 }
+export function* deleteTask(): any {
+    yield takeEvery(TASK_TYPES.DELETE_TASK, deleteTaskFunction);
+}
 function* AllTaskSaga(): any {
     yield all([
         fork(createTaskSaga),
         fork(getSingleSprintTaskSaga),
         fork(getAllTask),
-        fork(updateTask)
+        fork(updateTask),
+        fork(deleteTask)
     ])
 }
 export default AllTaskSaga;

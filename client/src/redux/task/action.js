@@ -18,3 +18,7 @@ export const updateTask= (data): AuthAction => ({
     type: TASK_TYPES.UPDATE_TASK,
     payload: data
 })
+export const deleteTask = (data): AuthAction => ({
+    type: TASK_TYPES.DELETE_TASK,
+    payload: data
+})
