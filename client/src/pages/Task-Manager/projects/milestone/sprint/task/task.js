@@ -11,7 +11,7 @@ import Stack from '@mui/material/Stack';
 import Update from './modal/update';
 import { getAllProjects } from '../../../../../../redux/projects/action';
 import { getallMileStones, getsingleMileStone } from '../../../../../../redux/milestone/action';
-import { getAllSprint, getSingleSprint } from '../../../../../../redux/sprint/action';
+import { getAllSprint, getSingleSprint, getSprintById } from '../../../../../../redux/sprint/action';
 import { getAllUsers } from '../../../../../../redux/actions';
 const Task = () => {
     const { projectId, milestoneId, spriteId } = useParams();
@@ -72,8 +72,10 @@ const Task = () => {
             status: 1,
         };
         dispatch(getAllProjects(body));
-       dispatch(getallMileStones({status:1}))
-    dispatch(getAllSprint({status:1}))
+    //    dispatch(getallMileStones({status:1}))
+    // dispatch(getAllSprint({status:1}))
+    dispatch(getsingleMileStone({id:projectId , status:1}))
+    dispatch(getSprintById({status:1,id:milestoneId}))
         dispatch(getSingleSprint({status:1 ,id:milestoneId}));
         dispatch(getAllUsers());
     }, [render ])

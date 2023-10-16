@@ -47,6 +47,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
         reset({
             projectname: projectid,
             Milestone: milestoneid,
+            Sprint: sprintid,
         });
     }, [modal]);
 
@@ -110,9 +111,9 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     Milestone<span className="text-danger">*</span>:
                                                 </Form.Label>
 
-                                                <Form.Select {...register('Milestone', { required: true })}>
+                                                <Form.Select {...register('Milestone', { required: true })} >
                                                     {/* <option value={''}>--Select--</option> */}
-                                                    {store?.getAllMileStones?.data?.response?.map((ele, ind) => (
+                                                    {store?.getSigleMileStone?.data?.Response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.title} </option>
                                                     ))}
                                                 </Form.Select>
