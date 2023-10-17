@@ -14,6 +14,7 @@ import {  getsingleMileStone } from '../../../../../../redux/milestone/action';
 import { getSingleSprint, getSprintById } from '../../../../../../redux/sprint/action';
 import { getAllRoles, getAllUsers } from '../../../../../../redux/actions';
 import { Modal } from 'react-bootstrap';
+import ToastHandle from '../../../../../../constants/toaster/toaster';
 const Task = () => {
     const { projectId, milestoneId, spriteId } = useParams();
     const [skip, setSkip] = useState(1);
@@ -27,9 +28,9 @@ const Task = () => {
     const [editData, setEditData] = useState();
     const [render, setRender] = useState(false);
     const [statusModal, setStatusModal] = useState(false);
-    const [activeStatus, setactiveStatus] = useState(true);
-    const getSingleSprintTask = store?.getSigleSprintTask?.data?.response;
 
+    const getSingleSprintTask = store?.getSigleSprintTask?.data?.response;
+    const deletehandle = store?.deleteTask?.data;
     const loaderhandel = store?.getSigleSprintTask;
     const handleCreate = () => {
         SetOpenModal(true);
@@ -78,13 +79,13 @@ const Task = () => {
         if (checkedStatus) {
             let body = {
                 taskId: checkedData._id,
-                activeStatus: 1,
+                activeStatus: true,
             };
             dispatch(deleteTask(body));
         } else {
             let body = {
                 taskId: checkedData._id,
-                activeStatus: 0,
+                activeStatus: false,
             };
             dispatch(deleteTask(body));
         }
@@ -111,6 +112,16 @@ const Task = () => {
         dispatch(getAllRoles());
         dispatch(getAllUsers());
     }, [render]);
+    useEffect(() => {
+        if (deletehandle?.status == 200) {
+            ToastHandle('success', deletehandle?.message);
+            CloseModal('render');
+        } else if (deletehandle?.status == 400) {
+            ToastHandle('error', deletehandle?.message);
+        } else if (deletehandle?.status == 500) {
+            ToastHandle('error', deletehandle?.message);
+        }
+    }, [deletehandle]);
     return (
         <>
             <Card>
@@ -175,7 +186,8 @@ const Task = () => {
                                                         <td>
                                                             <Form.Check
                                                                 type="switch"
-                                                                checked={item?.status}
+                                                                checked={item?.activeStatus}
+                                                            
                                                                 onChange={(e) => handleStatusChange(e, item)}
                                                             />
                                                         </td>
