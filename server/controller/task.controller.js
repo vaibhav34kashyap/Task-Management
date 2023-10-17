@@ -137,16 +137,40 @@ const getSprintTasks = async (req, res) => {
 const getTasksAccToStatus = async (req, res) => {
     try {
         // var resp = null;
-        const todo = await taskModel.find({ status: 1 })
+        const todo = await taskModel.find({ status: 1 }).populate([
+            { path: 'projectId', select: 'projectName' },
+            { path: 'milestoneId', select: 'title' },
+            { path: 'sprintId', select: 'sprintName' },
+            { path: 'assigneeId', select: 'userName' },
+            { path: 'reporterId', select: 'userName' }
+        ])
         // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
 
-        const inProgress = await taskModel.find({ status: 2 });
+        const inProgress = await taskModel.find({ status: 2 }).populate([
+            { path: 'projectId', select: 'projectName' },
+            { path: 'milestoneId', select: 'title' },
+            { path: 'sprintId', select: 'sprintName' },
+            { path: 'assigneeId', select: 'userName' },
+            { path: 'reporterId', select: 'userName' }
+        ])
         // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
 
-        const done = await taskModel.find({ status: 3 });
+        const done = await taskModel.find({ status: 3 }).populate([
+            { path: 'projectId', select: 'projectName' },
+            { path: 'milestoneId', select: 'title' },
+            { path: 'sprintId', select: 'sprintName' },
+            { path: 'assigneeId', select: 'userName' },
+            { path: 'reporterId', select: 'userName' }
+        ])
         // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
 
-        const review = await taskModel.find({ status: 4 });
+        const review = await taskModel.find({ status: 4 }).populate([
+            { path: 'projectId', select: 'projectName' },
+            { path: 'milestoneId', select: 'title' },
+            { path: 'sprintId', select: 'sprintName' },
+            { path: 'assigneeId', select: 'userName' },
+            { path: 'reporterId', select: 'userName' }
+        ])
         res.status(200).json({ status: '200', message: "fetched successfully", Response: todo, inProgress, review, done });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
