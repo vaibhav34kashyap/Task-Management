@@ -109,7 +109,11 @@ export const UpdateTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) =>
                 data: action?.payload,
                 loading: false,
             };
-
+            case TASK_TYPES.UPDATE_TASK_RESET:
+                return {
+                    data: GET_All_TASK_INITIAL_STATE.data,
+                    loading: false
+                }
 
         case TASK_TYPES.UPDATE_TASK_ERROR:
             return {

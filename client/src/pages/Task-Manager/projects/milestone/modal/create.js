@@ -9,9 +9,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addAllmilstones } from '../../../../../redux/milestone/action';
 import ToastHandle from '../../../../../constants/toaster/toaster';
 import MainLoader from './../../../../../constants/Loader/loader';
-
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const Create = ({ modal, closeModal }) => {
     const store = useSelector((state) => state);
+    const [description, setDescription] = useState('');
     const sucesshandel = store?.addAllmilstones;
     const loaderhandel = store?.addAllmilstones;
     const { id } = useParams();
@@ -23,18 +25,18 @@ const Create = ({ modal, closeModal }) => {
         reset,
         formState: { errors },
     } = useForm();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const onSubmit = (data) => {
         const milStones = {
             project_id: id,
             title: data.Title,
-            description: data.Description,
+            description: description,
             start_date: data.Start_date,
             completion_date: data.End_date,
-            status: "new"
-        }
-        dispatch(addAllmilstones(milStones))
-        closeModal()
+            status: 'new',
+        };
+        dispatch(addAllmilstones(milStones));
+        closeModal();
     };
     useEffect(() => {
         reset();
@@ -80,7 +82,10 @@ const Create = ({ modal, closeModal }) => {
                                 <Row>
                                     <Col lg={12}>
                                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                            <Form.Label> Milestone Name<span className="text-danger">*</span>:</Form.Label>
+                                            <Form.Label>
+                                                {' '}
+                                                Milestone Name<span className="text-danger">*</span>:
+                                            </Form.Label>
                                             <Form.Control type="text" {...register('Title', { required: true })} />
                                             {errors.Title?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
@@ -89,23 +94,32 @@ const Create = ({ modal, closeModal }) => {
                                     </Col>
                                     <Col lg={12}>
                                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>Description <span className="text-danger">*</span>:</Form.Label>
-                                            <Form.Control
-                                                type="text" aria-label="Default select example"
-                                                {...register('Description', { required: true })}
-                                            />{' '}
-                                            {errors.Description?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
+                                            <Form.Label>
+                                                Description <span className="text-danger">*</span>:
+                                            </Form.Label>
+                                            <CKEditor
+                                                editor={ClassicEditor}
+                                                config={{
+                                                    ckfinder: {
+                                                        uploadUrl:
+                                                            'https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
+                                                    },
+                                                }}
+                                                data=""
+                                                onChange={(event, editor) => {
+                                                    const data = editor.getData();
+                                                    setDescription(data);
+                                                }}
+                                            />
                                         </Form.Group>
                                     </Col>
                                     <Col lg={12}>
                                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                            <Form.Label> Start date <span className="text-danger">*</span>:</Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                {...register('Start_date', { required: true })}
-                                            />{' '}
+                                            <Form.Label>
+                                                {' '}
+                                                Start date <span className="text-danger">*</span>:
+                                            </Form.Label>
+                                            <Form.Control type="date" {...register('Start_date', { required: true })} />{' '}
                                             {errors.Start_date?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
@@ -113,7 +127,10 @@ const Create = ({ modal, closeModal }) => {
                                     </Col>
                                     <Col lg={12}>
                                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                            <Form.Label> End date <span className="text-danger">*</span>:</Form.Label>
+                                            <Form.Label>
+                                                {' '}
+                                                End date <span className="text-danger">*</span>:
+                                            </Form.Label>
                                             <Form.Control type="date" {...register('End_date', { required: true })} />{' '}
                                             {errors.End_date?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
