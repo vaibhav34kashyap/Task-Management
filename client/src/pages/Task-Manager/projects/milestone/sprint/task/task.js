@@ -179,7 +179,11 @@ const Task = () => {
                                                     <tr>
                                                         <td>{index + 1}</td>
                                                         <td>{item?.summary}</td>
-                                                        <td>{item?.description}</td>
+                                                        <td>  <div
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: item?.description,
+                                                    }}
+                                                /></td>
 
                                                         <td> {moment(item?.startDate).format('L')}</td>
                                                         <td>{moment(item?.dueDate).format('L')}</td>
