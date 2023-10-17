@@ -22,7 +22,7 @@ export const UpdateSprint = "/sprint/update";
 export const SingleMilestone = "/milestone/getAProjectMilestones?id="
 export const SingleSprintTask = "/task/getSprintTasks?sprintId="
 export const GetAllTask = "/task/getTasksAccToStatus"
-export const UpdateTask = "/task/updatetaskdetails"
+export const UpdateTask = "/task/updateTask"
 export const DeleteTask = "/task/updateTaskActiveStatus"
 export const InviteUser = "/users/register"
 export const AddTechnology ="/technology/addTechnology"

@@ -251,7 +251,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 <option Value="Mobile">Mobile</option>
                                             </Form.Select> */}
                                             <Multiselect
-                                            {...register('technology', { required: true })}
+                                            {...register('technology', { required: false })}
                                                 onRemove={removehandle}
                                                 onSelect={addhandle}
                                                 isObject={false}
