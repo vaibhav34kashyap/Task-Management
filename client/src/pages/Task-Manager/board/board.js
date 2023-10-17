@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
 
+
 const Container = styled.div`
   display: flex;
 `;
@@ -47,7 +48,7 @@ const Boards = (props) => {
   const successHandle = store?.getAllTaskReducer
   const [showModal, setShowModal] = useState(false);
   const [columns, setColumns] = useState(columnsFromBackend);
-  console.log(columns, "Ritika")
+ 
 
   const onDragEnd = (result, columns, setColumns) => {
     console.log(result, columns, setColumns)
@@ -88,6 +89,7 @@ const Boards = (props) => {
 
   useEffect(() => {
     dispatch(getAllTask())
+  
   }, [])
   useEffect(() => {
 

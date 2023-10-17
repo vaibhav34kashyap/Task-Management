@@ -20,3 +20,4 @@ export function getProjectByIdApi(data): any {
     console.log(data, "bbbbbbbbb")
     return api.get(URL.GetProjectById + data?.payload)
 }
+

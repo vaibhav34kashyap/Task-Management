@@ -1,12 +1,14 @@
 // @flow
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 
 // actions
 import { showRightSidebar, changeSidebarType } from '../redux/actions';
-
+import {getAllProjects} from '../../src/redux/projects/action'
+import { getallMileStones,getMileStoneById } from '../redux/actions';
+import { getAllSprint } from '../redux/actions';
 // components
 import LanguageDropdown from '../components/LanguageDropdown';
 import NotificationDropdown from '../components/NotificationDropdown';
@@ -26,6 +28,9 @@ import logo from '../assets/images/logo-light.png';
 //constants
 import * as layoutConstants from '../constants/layout';
 import TimeLine from './../pages/profile2/TimeLine';
+import MileStone from './../pages/Task-Manager/AllMillstones/mileStone/index';
+
+
 
 // get the notifications
 const Notifications = [
@@ -127,7 +132,13 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [isopen, setIsopen] = useState(false);
+    const allProjects = store?.getProject?.data?.response;
+    const getAllMilestoneData = store?.getAllMileStones?.data?.response;
+    const getAllSprintData = store?.getAllSprints?.data?.response;
+    const [projectId ,setProjectId] = useState('');
 
+    console.log("store datarererherhherher",store)
+    
     const navbarCssClasses = navCssClasses || '';
     const containerCssClasses = !hideLogo ? 'container-fluid' : '';
 
@@ -135,6 +146,29 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         layoutType: state.Layout.layoutType,
         leftSideBarType: state.Layout.leftSideBarType,
     }));
+
+    useEffect(()=>{
+        let data = {
+            status: 1,
+        };
+        dispatch(getAllProjects(data))
+        dispatch(getallMileStones({status:1}))
+        dispatch(getAllSprint());        
+    },[])
+
+    const onChangeProject =(e)=>{   
+        setProjectId(e.target.value) 
+       
+        getAllMilestoneData?.filter((item)=>{
+            return item.project_id === e.target.value;
+        })
+        
+    }
+    const onChangeMilestone =(e)=>{
+       
+     
+        console.log("sprint fata",store?.getAllSprints?.data?.response?.filter((item)=>item.project_id===projectId))
+    }
 
     /**
      * Toggle the leftmenu when having mobile screen
@@ -170,6 +204,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
      */
     const handleRightSideBar = () => {
         dispatch(showRightSidebar());
+        
     };
 
     return (
@@ -198,11 +233,33 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                     <div class="menuinfo">
                     <ul>
                         
-                   <li><Link to=''>Apps</Link></li>
-                            <li><Link to=''>Projects</Link></li>
+                            <li><Link to=''>Apps</Link></li>
                             <li><Link to=''>Filters</Link></li>
                             <li><Link to=''>Dashboard</Link></li>
                             <li><Link to=''>Teams</Link></li>
+                            <li>
+                            <div class="project_names">
+                            {/* <label class="form-label" for="exampleForm.ControlInput1"> Projects <span class="text-danger">*</span>:</label> */}
+                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeProject}>
+                                <option>--Select Project--</option>
+                                {allProjects?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.projectName}</option>
+                                )}
+                            </select>
+                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeMilestone}>
+                                <option>--Select MileStone--</option>
+                                {getAllMilestoneData?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.title}</option>
+                                )}
+                            </select>
+                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1">
+                                <option>--Select Sprint--</option>
+                                {getAllSprintData?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.sprintName}</option>
+                                )}
+                            </select>
+                            </div>
+                            </li>
                     </ul>
                    </div>
                          </div> 

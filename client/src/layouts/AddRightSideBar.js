@@ -141,15 +141,22 @@ export default function RightBar(props) {
               </div>
               <div class="row">
               
-                <div class="col-lg-12">
+                <div class="col-lg-6">
                  
-                    <div class="mb-1"><label class="form-label" for="exampleForm.ControlInput1"> Priority <span class="text-danger">*</span>:</label><select name="Priority" class="form-select" id="exampleForm.ControlInput1"><option>-------select----</option><option value="1">High</option><option value="2">Medium</option><option value="3">Low</option></select></div>
+                    <div class="mb-1"><label class="form-label" for="exampleForm.ControlInput1"> Priority <span class="text-danger">*</span>:</label>
+                    <select name="Priority" class="form-select" id="exampleForm.ControlInput1"><option>-----select----</option><option value="1">High</option>
+                    <option value="2">Medium</option><option value="3">Low</option></select>
+                    </div>
 
                   </div>
+                  <div class="col-lg-6"><div class="mb-2"><label class="form-label" for="exampleForm.ControlTextarea1">Status<span class="text-danger">*</span>:</label>
+                <input disabled="Live" name="status" placeholder="Live" type="text" id="exampleForm.ControlTextarea1" class="form-control" /></div></div>
               </div>
            
-              <div class="row"><div class="col-lg-6"><div class="mb-2"><label class="form-label" for="exampleForm.ControlTextarea1">Status<span class="text-danger">*</span>:</label>
-                <input disabled="" name="status" placeholder="Live" type="text" id="exampleForm.ControlTextarea1" class="form-control" /></div></div></div><div class="row"><div class="text-start d-flex align-items-center justify-content-center col">
+              <div class="row">
+             
+
+                </div><div class="row"><div class="text-start d-flex align-items-center justify-content-center col">
                   <button type="submit" class="btn btn-sm  text-white pt-1 pb-1 mt-3 web_button  btn btn-info">Add</button></div></div>
             </form>
           </div>
