@@ -19,6 +19,7 @@ const Update = ({ modal, closeModal, editData }) => {
         handleSubmit,
         control,
         watch,
+        setValue,
         reset,
         formState: { errors },
     } = useForm();
@@ -48,11 +49,12 @@ const Update = ({ modal, closeModal, editData }) => {
             startDate: handleDate(editData?.startDate),
             endDate: handleDate(editData?.endDate),
             expectedEndDate: handleDate(editData?.CompilationDate),
-            projecttype: editData?.projectType,
+            project_type: editData?.project_type,
             technology: editData?.technology,
             projectStatus: editData?.projectstatus,
             expectedEndDate: handleDate(editData?.expectedDate)
         });
+        
     }, [modal]);
 
     const removehandle = (selectedList, removedItem) => {
@@ -84,23 +86,26 @@ const Update = ({ modal, closeModal, editData }) => {
       
     }
 
-    console.log(editData, 'pppppp');
+
     const onSubmit = (data) => {
         let body = {
-            _id: editData?._id,
+            projectId: editData?._id,
             projectName: data?.projectName,
             startDate: data?.startDate,
             endDate: data?.endDate,
             clientName: data?.clientName,
-            projectType: data?.projecttype,
+            //project_type: data?.project_type,
             technology: addValue,
-            projectStatus: data?.projectstatus,
+           // projectStatus: data?.projectstatus,
+           projectDesc:""
         };
+        
         dispatch(updateProject(body));
     };
-    console.log(store, '//////////////////////////////////////////////////');
-    console.log(sucesshandel, '//////////////////////////////////////////////////');
-
+    const selectedValues = editData?.technology?.map((item)=>{
+       return item.techName;
+    })
+   
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
             console.log(sucesshandel, '//////////////////////////////////////////////////');
@@ -122,9 +127,11 @@ const Update = ({ modal, closeModal, editData }) => {
         for (let i = 0; i < getTechnology?.length; i++) {
             getTechnologyname.push(getTechnology[i]?.techName);
         }
-       setSelected(getTechnologyname);
+       setSelected(getTechnologyname);      
        
     }, [modal]);
+
+  
     return (
         <>
             <Modal show={modal} onHide={closeModal} size="lg">
@@ -221,14 +228,14 @@ const Update = ({ modal, closeModal, editData }) => {
                                             <Form.Label>
                                                 Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Select {...register('projecttype', { required: true })}>
+                                            <Form.Select {...register('project_type', { required: true })}>
                                                 <option>Choose an Project Type </option>
                                                 <option value="T&M">T&M</option>
                                                 <option value="Fixed Cost">Fixed Cost</option>
                                                 <option value=" Hourly">Hourly</option>
                                                 <option value="Dedicated team">Dedicated team</option>
                                             </Form.Select>
-                                            {errors.projecttype?.type === 'required' && (
+                                            {errors.project_type?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>
@@ -248,8 +255,9 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 onRemove={removehandle}
                                                 onSelect={addhandle}
                                                 isObject={false}
-                                                options={selected}
-                                                showCheckbox
+                                                options={selected}    
+                                                selectedValues={selectedValues}
+                                                
                                             />
                                             {errors.technology?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>

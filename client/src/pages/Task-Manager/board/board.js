@@ -7,10 +7,12 @@ import TaskCard from './TaskCard';
 import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
+import RightBar from '../../../layouts/AddRightSideBar';
 
 const Container = styled.div`
   display: flex;
 `;
+
 
 const TaskList = styled.div`
   min-height: 100px;
@@ -39,14 +41,11 @@ const Title = styled.span`
 `;
 
 
-
-
-
-const Boards = () => {
+const Boards = (props) => {
   const dispatch = useDispatch();
   const store = useSelector(state => state)
   const successHandle = store?.getAllTaskReducer
-
+  const [showModal, setShowModal] = useState(false);
   const [columns, setColumns] = useState(columnsFromBackend);
   console.log(columns, "Ritika")
 
@@ -118,35 +117,54 @@ const Boards = () => {
   }
   return (
 
-    <DragDropContext
-      onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+    <>
 
-    >
-      {successHandle.loading ? (<MainLoader />) : <Container>
-        <TaskColumnStyles>
-          {Object.entries(columns).map(([columnId, column], index) => {
-            console.log(column, "######################")
-            return (
-              <Droppable key={columnId} droppableId={columnId} onClick={(column) => { handelupdatetask(column) }}>
-                {(provided, snapshot) => (
-                  <TaskList class="three"
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                  >
-                    <Title class="">{column.title}</Title>
-                    {column.items.map((item, index) => (
-                      <TaskCard key={item} item={item} index={index} />
-                    ))}
-                    {provided.placeholder}
-                  </TaskList>
-                )}
-              </Droppable>
-            );
-          })}
-        </TaskColumnStyles>
-      </Container>}
+     <div className='add_task'>
+     <button
+          type="button"
+          className="mybutton btn btn-info"
+          onClick={() => {
+            console.log("button click");
+            setShowModal(!showModal);
+          }}
+        >
+          Add Task
+        </button>
+        <RightBar showModal={showModal} setShowModal={setShowModal}/>
+     </div>
 
-    </DragDropContext>
+      <DragDropContext
+        onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+
+      >
+        {successHandle.loading ? (<MainLoader />) : <Container>
+          <TaskColumnStyles>
+            {Object.entries(columns).map(([columnId, column], index) => {
+              console.log(column, "######################")
+              return (
+                <Droppable key={columnId} droppableId={columnId} onClick={(column) => { handelupdatetask(column) }}>
+                  {(provided, snapshot) => (
+                    <TaskList class="three"
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      <Title class="">{column.title}</Title>
+                      {column.items.map((item, index) => (
+                        <TaskCard key={item} item={item} index={index} />
+                      ))}
+                      {provided.placeholder}
+                    </TaskList>
+                  )}
+                </Droppable>
+              );
+            })}
+          </TaskColumnStyles>
+        </Container>}
+
+      </DragDropContext>
+    
+    </>
+
   );
 };
 
