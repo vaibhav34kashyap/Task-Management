@@ -34,9 +34,9 @@ const createtask = async (req, res) => {
 const getTasks = async (req, res) => {
     try {
         const pageSize = 5;
-        const totalCount = await taskModel.countDocuments({activeStatus : req.query.activeStatus});
+        const totalCount = await taskModel.countDocuments({ activeStatus: req.query.activeStatus });
 
-        const tasks = await taskModel.find({activeStatus : req.query.activeStatus}).populate([
+        const tasks = await taskModel.find({ activeStatus: req.query.activeStatus }).populate([
             { path: 'projectId', select: 'projectName' },
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
@@ -94,16 +94,16 @@ const deleteTask = async (req, res) => {
     }
 }
 
-// update Status of a task
-const updateTaskStatus = async (req, res,) => {
-    try {
-        await taskModel.findByIdAndUpdate({ _id: req.body.taskId }, { status: req.body.status }, { new: true });
-        return res.status(200).json({ status: "200", message: "Task Status updated successfully" });
-    }
-    catch (error) {
-        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
-    }
-}
+// // update Status of a task
+// const updateTaskStatus = async (req, res,) => {
+//     try {
+//         await taskModel.findByIdAndUpdate({ _id: req.body.taskId }, { status: req.body.status }, { new: true });
+//         return res.status(200).json({ status: "200", message: "Task Status updated successfully" });
+//     }
+//     catch (error) {
+//         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+//     }
+// }
 
 // update Active inactive Status of a task
 const updateTaskActiveStatus = async (req, res,) => {
@@ -120,8 +120,8 @@ const updateTaskActiveStatus = async (req, res,) => {
 const getSprintTasks = async (req, res) => {
     try {
         const pageSize = 5;
-        const totalCount = await taskModel.countDocuments({ sprintId: req.query.sprintId });
-        const result = await taskModel.find({ sprintId: req.query.sprintId })
+        const totalCount = await taskModel.countDocuments({ sprintId: req.query.sprintId, activeStatus: req.query.activeStatus } );
+        const result = await taskModel.find({ sprintId: req.query.sprintId , activeStatus: req.query.activeStatus })
             .sort({ createdAt: -1 })
             .limit(pageSize)
             .skip((parseInt(req.query.skip) - 1) * pageSize);
@@ -154,5 +154,5 @@ const getTasksAccToStatus = async (req, res) => {
 }
 
 module.exports = {
-    createtask, getTasks, getATask, updateTask, deleteTask, updateTaskStatus, updateTaskActiveStatus, getSprintTasks, getTasksAccToStatus
+    createtask, getTasks, getATask, updateTask, deleteTask,/* updateTaskStatus,*/ updateTaskActiveStatus, getSprintTasks, getTasksAccToStatus
 };

@@ -9,10 +9,10 @@ export const MileStoneDelete = "/milestone/updateStatus"
 export const MileStoneAdd = "/milestone/add"
 export const ParticularMilestoneDetail = "/milestone/getmilestonebyid/";
 export const AddSprint = "/sprint/add";
-export const GetAllSprints = "/sprint";
+export const GetAllSprints = "/sprint?";
 export const DeleteSprint = "/sprint/updateStatus";
-export const ParticularSprintDetail = "/sprint/getsprintbyid/";
-export const getAllSingleSprint = "/sprint/getAMilestoneAllSprints?id="
+export const ParticularSprintDetail =" /sprint/getAMilestoneAllSprints?id=";
+export const getAllSingleSprint ="/sprint/getAMilestoneAllSprints?id="
 // create task 
 export const CREATE_TASK = "/task/createtask";
 export const UPDATE_MILESTONE = "/milestone/update";
@@ -23,6 +23,7 @@ export const SingleMilestone = "/milestone/getAProjectMilestones?id="
 export const SingleSprintTask = "/task/getSprintTasks?sprintId="
 export const GetAllTask = "/task/getTasksAccToStatus"
 export const UpdateTask = "/task/updatetaskdetails"
+export const DeleteTask = "/task/updateTaskActiveStatus"
 export const InviteUser = "/users/register"
 export const AddTechnology ="/technology/addTechnology"
 export const GetTechnology ="/technology/getTechnology?status="
@@ -32,3 +33,4 @@ export const AddCategoryTechnology ="/technology/addTechCategory"
 export const GetCategoryTechnology ="/technology/getTechCategory?status="
 export const UpdateCategoryTechnology ="/technology/updateTechCategory"
 export const DeleteCategoryTechnologyy ="/technology/updateTechCategoryStatus"
+export const GetAllRoles ="/roles/getAllRoles"

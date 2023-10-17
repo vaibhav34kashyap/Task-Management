@@ -11,3 +11,6 @@ export function deleteUserApi(data): any {
 export function InviteUserApi(data): any {
     return api.create(URL.InviteUser , data.payload)
 }
+export function getallRolesApi(data): any {
+    return api.get(URL.GetAllRoles, data.payload)
+}

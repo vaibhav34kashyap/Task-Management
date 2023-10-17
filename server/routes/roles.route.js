@@ -1,10 +1,11 @@
 const express = require('express');
 const rolesRoute = express.Router();
 const roles = require('../controller/roles.controller');
-const { verifyUser } = require('../middleware/jwt.auth');
+const { verifyUser, verifyAdmin } = require('../middleware/jwt.auth');
 
-rolesRoute.post('/addRole', roles.addRole);
+rolesRoute.post('/addRole',verifyAdmin, roles.addRole);
 rolesRoute.get('/getRoles', verifyUser, roles.getRoles);
-rolesRoute.delete('/deleteRole', roles.deleteRole);
+rolesRoute.get('/getAllRoles', verifyAdmin, roles.getAllRoles);
+rolesRoute.delete('/deleteRole', verifyAdmin,roles.deleteRole);
 
 module.exports = rolesRoute;

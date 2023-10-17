@@ -131,30 +131,6 @@ export default function RightBar(props) {
                   </div></div>
               </div>
               <div class="row">
-              
-                <div class="col-lg-12">
-                  <div class="mb-2"><label class="form-label" for="exampleForm.ControlTextarea1">Priority
-                    <span class="text-danger">*</span>:</label>
-                    <div className="priority_status">
-                      <div className="priority">
-                        <label>Low</label>
-                        <input type="radio" value={'Low'} id="exampleForm.ControlTextarea1" {...register("priority")} />
-                      </div>
-                      <div className="priority">
-                        <label>Medium</label>
-                        <input placeholder="Please Enter priority" value={'Medium'} type="radio" id="exampleForm.ControlTextarea1"  {...register("priority")} />
-                      </div>
-                      <div className="priority">
-                        <label>High</label>
-                        <input placeholder="Please Enter priority" value={'high'} type="radio" id="exampleForm.ControlTextarea1"  {...register("priority")} />
-                      </div>
-
-
-                    </div>
-
-                  </div></div>
-              </div>
-              <div class="row">
                 <div class="col-lg-6">
                   <div class="mb-2"><label class="form-label" for="exampleForm.ControlTextarea1">Start Date<span class="text-danger">*</span>:</label>
                     <input placeholder="Please start Date " type="date" id="exampleForm.ControlTextarea1" class="form-control" {...register("start_date")} />
@@ -162,7 +138,17 @@ export default function RightBar(props) {
                 </div>
                 <div class="col-lg-6"><div class="mb-2"><label class="form-label" for="exampleForm.ControlTextarea1">End Date<span class="text-danger">*</span>:</label>
                   <input placeholder="Please end Date" type="date" id="exampleForm.ControlTextarea1" class="form-control" {...register("last_date")} /></div></div>
-              </div><div class="row"><div class="col-lg-6"><div class="mb-2"><label class="form-label" for="exampleForm.ControlTextarea1">Status<span class="text-danger">*</span>:</label>
+              </div>
+              <div class="row">
+              
+                <div class="col-lg-12">
+                 
+                    <div class="mb-1"><label class="form-label" for="exampleForm.ControlInput1"> Priority <span class="text-danger">*</span>:</label><select name="Priority" class="form-select" id="exampleForm.ControlInput1"><option>-------select----</option><option value="1">High</option><option value="2">Medium</option><option value="3">Low</option></select></div>
+
+                  </div>
+              </div>
+           
+              <div class="row"><div class="col-lg-6"><div class="mb-2"><label class="form-label" for="exampleForm.ControlTextarea1">Status<span class="text-danger">*</span>:</label>
                 <input disabled="" name="status" placeholder="Live" type="text" id="exampleForm.ControlTextarea1" class="form-control" /></div></div></div><div class="row"><div class="text-start d-flex align-items-center justify-content-center col">
                   <button type="submit" class="btn btn-sm  text-white pt-1 pb-1 mt-3 web_button  btn btn-info">Add</button></div></div>
             </form>
