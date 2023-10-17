@@ -5,6 +5,7 @@ import { Row, Col, Card, CardBody } from "reactstrap";
 import { generateQuoteMap } from "./mockData";
 
 import Board from "./board/Board";
+import { Button } from "react-bootstrap";
 
  function Boards() {
   const data = {
@@ -15,7 +16,6 @@ import Board from "./board/Board";
   return (
     <>
     
-
       <Board initial={data.medium} withScrollableColumns />
     </>
   );

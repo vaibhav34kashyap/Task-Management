@@ -15,6 +15,8 @@ const GET_All_TASK_INITIAL_STATE = {
     loading:false,
     message:""
 }
+
+
 export const createTaskReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case TASK_TYPES.CREATE_TASK_LOADING:
@@ -94,6 +96,7 @@ export const getAllTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) =>
 
     }
 };
+
 export const UpdateTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) => {
     switch (action.type) {
         case TASK_TYPES.UPDATE_TASK_LOADING:

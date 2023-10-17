@@ -25,6 +25,7 @@ import logo from '../assets/images/logo-light.png';
 
 //constants
 import * as layoutConstants from '../constants/layout';
+import TimeLine from './../pages/profile2/TimeLine';
 
 // get the notifications
 const Notifications = [
@@ -173,8 +174,11 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
     return (
         <>
-            <div className={classNames('navbar-custom', navbarCssClasses)}>
-                <div className={containerCssClasses}>
+        
+            <div className={classNames('navbar-custom', navbarCssClasses)} >
+          
+            <div className={containerCssClasses}>
+            <div className='topbarinfo'>
                     {!hideLogo && (
                         <Link to="/" className="topnav-logo">
                             <span className="topnav-logo-lg">
@@ -185,9 +189,26 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </span>
                         </Link>
                     )}
-                   
+                         <div className='lefbar_info'>
+                         {(layoutType === layoutConstants.LAYOUT_VERTICAL || layoutType === layoutConstants.LAYOUT_FULL) && (
+                        <button className="button-menu-mobile open-left" onClick={handleLeftMenuCallBack}>
+                            <i className="mdi mdi-menu" />
+                        </button>
+                    )}
+                    <div class="menuinfo">
+                    <ul>
+                        
+                   <li><Link to=''>Apps</Link></li>
+                            <li><Link to=''>Projects</Link></li>
+                            <li><Link to=''>Filters</Link></li>
+                            <li><Link to=''>Dashboard</Link></li>
+                            <li><Link to=''>Teams</Link></li>
+                    </ul>
+                   </div>
+                         </div> 
+                  
 
-                    <ul className="list-unstyled topbar-menu float-end mb-0">
+                    <ul className="list-unstyled topbar-menu float-end mb-0 topbarr">
 {/*                    
                         <li className="notification-list topbar-dropdown d-xl-none">
                             <SearchDropdown />
@@ -202,7 +223,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                         <li className="dropdown notification-list d-none d-sm-inline-block">
                             <AppsDropdown />
                         </li>  */}
-
+                        
                         <li className="notification-list">
                             <button
                                 className="nav-link dropdown-toggle end-bar-toggle arrow-none btn btn-link shadow-none"
@@ -210,7 +231,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                 <i className="dripicons-gear noti-icon"></i>
                             </button>
                         </li>
-                        <li className="dropdown notification-list">
+                        <li className="dropdown notification-list listlist">
                             <ProfileDropdown
                                 profilePic={profilePic}
                                 menuItems={ProfileMenus}
@@ -221,11 +242,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                     </ul>
 
                     {/* {/ toggle for vertical layout /} */}
-                    {(layoutType === layoutConstants.LAYOUT_VERTICAL || layoutType === layoutConstants.LAYOUT_FULL) && (
-                        <button className="button-menu-mobile open-left" onClick={handleLeftMenuCallBack}>
-                            <i className="mdi mdi-menu" />
-                        </button>
-                    )}
+                 
 
                     {/* {/ toggle for horizontal layout /} */}
                     {layoutType === layoutConstants.LAYOUT_HORIZONTAL && (
@@ -254,6 +271,25 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                     <TopbarSearch />
                 </div>
             </div>
+            
+                
+            </div>
+            <div className='project_detail'>
+                <div className='project_name'><h3>Task Manager</h3></div>
+                <div className='taskinfo' >
+                    <ul>
+                        <li> <Link to="">List</Link>  </li>
+                        <li> <Link to="">Board</Link>  </li>
+                        <li> <Link to="">Calendar</Link>  </li>
+                        <li> <Link to="">TimeLine</Link>  </li>
+                        <li> <Link to="">Pages</Link>  </li>
+                        <li> <Link to="">Report </Link>  </li>
+                        <li> <Link to="">Issues</Link>  </li>
+                    </ul>
+                </div>
+            </div>
+            
+            
         </>
     );
 };

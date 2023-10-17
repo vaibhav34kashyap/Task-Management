@@ -34,7 +34,9 @@ const Column = (props) => {
   const quotes = props.quotes;
   const index = props.index;
   return (
-    <Draggable draggableId={title} index={index}>
+    <>
+
+<Draggable draggableId={title} index={index}>
       {(provided, snapshot) => (
         <Container ref={provided.innerRef} {...provided.draggableProps}>
           <Header isDragging={snapshot.isDragging}>
@@ -60,6 +62,7 @@ const Column = (props) => {
         </Container>
       )}
     </Draggable>
+    </>
   );
 };
 

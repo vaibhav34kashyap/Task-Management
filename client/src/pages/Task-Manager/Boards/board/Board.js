@@ -85,6 +85,7 @@ const Board = ({
 
   return (
     <>
+    
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
           droppableId="board"

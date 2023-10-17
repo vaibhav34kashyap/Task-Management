@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
@@ -43,11 +44,9 @@ const Create = ({ modal, closeModal }) => {
             endDate: data?.endDate,
             project_type: data?.project_type,
             technology:addValue,
-            projectStatus: 'Live',
-
+            projectStatus: data?.projectDec,
              
         };
-        console.log(body, 'dhdfhfdhfghgf');
         dispatch(addProject(body));
     };
     useEffect(() => {
@@ -242,6 +241,23 @@ const Create = ({ modal, closeModal }) => {
                                                 type="text"
                                                 {...register('status', { required: true, disabled: true })}
                                                 placeholder="Live"
+                                            />
+                                            {errors.status?.type === 'required' && (
+                                                <span className="text-danger"> This feild is required *</span>
+                                            )}
+                                        </Form.Group>
+                                    </Col>
+                                    
+                                    <Col lg={6}>
+                                        <Form.Group className="mb-2" controlId="exampleForm.ControlTextarea1">
+                                            <Form.Label>
+                                                Status<span className="text-danger">*</span>:
+                                            </Form.Label>
+                                            
+                                            <Form.Control
+                                                
+                                                {...register('projectDec', { required: true, disabled: true })}
+                                                placeholder="Description"
                                             />
                                             {errors.status?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>

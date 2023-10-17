@@ -43,7 +43,9 @@ const TaskInformation = styled.div`
 
 const TaskCard = ({ item, index }) => {
   return (
-    <Draggable key={item.id} draggableId={item.id} index={index}>
+   <>
+  
+     <Draggable key={item.id} draggableId={item.id} index={index}>
       {(provided) => (
         <div
           ref={provided.innerRef}
@@ -67,6 +69,7 @@ const TaskCard = ({ item, index }) => {
         </div>
       )}
     </Draggable>
+   </>
   );
 };
 
