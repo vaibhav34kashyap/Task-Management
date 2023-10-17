@@ -36,6 +36,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
             assigneeId: val?.Assignee,
             reporterId: val?.Reporter,
             priority: val?.Priority,
+            status:1
         };
         dispatch(createTask(body));
     };
@@ -111,7 +112,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     Milestone<span className="text-danger">*</span>:
                                                 </Form.Label>
 
-                                                <Form.Select {...register('Milestone', { required: true })} >
+                                                <Form.Select {...register('Milestone', { required: true })}>
                                                     {/* <option value={''}>--Select--</option> */}
                                                     {store?.getSigleMileStone?.data?.Response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.title} </option>
@@ -131,12 +132,8 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                 <Form.Label>
                                                     Sprint <span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                {/* <Form.Control type="text" {...register('Sprint', { required: true })} />{' '}
-                                                {errors.Sprint?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
-                                                )} */}
+
                                                 <Form.Select {...register('Sprint', { required: true })}>
-                                                    {/* <option value={''}>--Select--</option> */}
                                                     {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.sprintName} </option>
                                                     ))}
@@ -188,14 +185,6 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     {' '}
                                                     Assignee <span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                {/* <Form.Control
-                                                    type="text"
-                                                    placeholder = ' Enter Task Assignee'
-                                                    {...register('Assignee', { required: true })}
-                                                />{' '}
-                                                {errors.Assignee?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
-                                                )} */}
 
                                                 <Form.Select {...register('Assignee', { required: true })}>
                                                     <option value={''}>--Select--</option>
@@ -280,6 +269,27 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                 )}
                                             </Form.Group>
                                         </Col>
+                                    </Row>
+                                </Col>
+                                <Col lg={12}>
+                                    <Row>
+                                        <Col lg={6}>
+                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                <Form.Label>
+                                                    {' '}
+                                                    Status <span className="text-danger">*</span>:
+                                                </Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="To-Do"
+                                                    {...register('status', { required: true ,disabled: true})}
+                                                />
+                                                {errors.status?.type === 'required' && (
+                                                    <span className="text-danger"> This feild is required *</span>
+                                                )}
+                                            </Form.Group>
+                                        </Col>
+                                        
                                     </Row>
                                 </Col>
                             </Row>
