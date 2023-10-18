@@ -28,7 +28,7 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             projectDesc: {
                 type: String,
             },
-            status: {
+            activeStatus: {
                 type: Boolean,
                 default: true
             },
