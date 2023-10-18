@@ -1,4 +1,4 @@
-const projectModel = require('../models/projects');
+const projectModel = require('../models/project.model');
 const teamModel = require('../models/team');
 const milestoneModel = require('../models/milestone');
 
