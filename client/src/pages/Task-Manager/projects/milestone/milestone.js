@@ -209,7 +209,7 @@ const Milestone = () => {
                                                     }}
                                                 /></td>
 
-                                                            <td> {moment(item?.startDate).format('L')}</td>
+                                                            <td> {moment(item?.start_date).format('L')}</td>
                                                             <td>{moment(item?.completion_date).format('L')}</td>
                                                             <td> <Form.Check
                                                                 type="switch"
