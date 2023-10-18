@@ -32,7 +32,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
             sprintDesc:description,
             startDate: val?.Startdate,
             endDate: val?.Enddate,
-            sprintStatus: val?.Status,
+        
         };
         dispatch(addSprint(body));
     };
@@ -133,18 +133,7 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
                                             )}
                                         </Form.Group>
                                     </Col>
-                                    <Col lg={12}>
-                                        <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
-                                            <Form.Label>
-                                                {' '}
-                                                Status <span className="text-danger">*</span>:
-                                            </Form.Label>
-                                            <Form.Control type="text" {...register('Status', { required: true })} />{' '}
-                                            {errors.Status?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )}
-                                        </Form.Group>
-                                    </Col>
+                 
                                 </Row>
                                 <Row>
                                     <Col className="text-start d-flex align-items-center justify-content-center">

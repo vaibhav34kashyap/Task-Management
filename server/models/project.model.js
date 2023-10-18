@@ -12,13 +12,6 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
                 type: [mongoose.Types.ObjectId],
                 ref : 'Technology'
             },
-            // projectLead: {
-            //     type: String,
-            //     required: false
-            // },
-            // projectIcon: {
-            //     type: String,
-            // },
             startDate: {
                 type: Date
             },
