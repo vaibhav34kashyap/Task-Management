@@ -1,4 +1,4 @@
-const techCategoryModel = require('../models/tech_category.model');
+const techCategoryModel = require('../models/techCategory.model');
 const technologyModel = require('../models/technology.model');
 
 

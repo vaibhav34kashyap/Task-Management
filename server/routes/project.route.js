@@ -1,6 +1,6 @@
 const express = require('express');
 const projectRoute = express.Router();
-const projectPath = require('../controller/projects');
+const projectPath = require('../controller/project.controller');
 const { verifyAdmin } = require('../middleware/jwt.auth');
 
 projectRoute.get('/getProjects', projectPath.getProjects);

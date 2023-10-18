@@ -1,5 +1,5 @@
 const taskmmodel = require('../models/task.model');
-const projectModel = require('../models/projects');
+const projectModel = require('../models/project.model');
 const subtaskmodel = require('../models/sub_task')
 const getSearchData = async (req, res) => {
     try {
