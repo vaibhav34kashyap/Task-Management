@@ -67,7 +67,7 @@ const Update = ({ modal, closeModal, editData }) => {
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
             ToastHandle('success', 'Updated Successfully');
-            CloseModaal('render');
+            closeModal('render');
         } else if (sucesshandel?.data?.status == 400) {
             ToastHandle('error', sucesshandel?.data?.message);
         } else if (sucesshandel?.data?.status == 500) {
