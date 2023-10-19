@@ -108,13 +108,7 @@ const Boards = (props) => {
       })
     }
   }, [successHandle])
-  const handelupdatetask = (ele) => {
-    let body = {
-      _id: ele?.id,
-      status: ele?.status
-    }
-    dispatch(updateTask(body))
-  }
+  
   return (
 
     <>
@@ -142,7 +136,7 @@ const Boards = (props) => {
             {Object.entries(columns).map(([columnId, column], index) => {
               console.log(column, "######################")
               return (
-                <Droppable key={columnId} droppableId={columnId} onClick={(column) => { handelupdatetask(column) }}>
+                <Droppable key={columnId} droppableId={columnId}>
                   {(provided, snapshot) => (
                     <TaskList class="three"
                       ref={provided.innerRef}
