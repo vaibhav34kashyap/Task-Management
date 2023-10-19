@@ -1,5 +1,4 @@
 const userModel = require("../models/users.model");
-const teamModel = require("../models/team");
 const nodemailer = require("../middleware/nodemailer");
 const bcrypt = require("bcrypt");
 const { accessToken } = require("../middleware/jwt.auth");
@@ -297,6 +296,26 @@ const deleteUsers = async (req, res) => {
     }
   } catch (err) {
     return res.status(200).json({ status: '500', message: 'Something went wrong' })
+  }
+}
+const searchUser = async (req, res) => {
+  try {
+      const value = req.body.searchvalue;
+      const userSearch = await userModel.find({
+          $or: [
+              { userName: { $regex: value, $options: "i" } },
+              { email: { $regex: value, $options: "i" } },
+          ],
+      })
+      if (userSearch <= 0) {
+          return res.status(200).json({ status: "400", message: 'No record found' });
+      } else {
+          return res.status(200).json({ status: "200", data: userSearch, message: 'Record found' });
+      }
+
+  } catch (err) {
+      console.log(err);
+      return res.status(200).json({ status: "500", message: 'Something went wrong' });
   }
 }
 

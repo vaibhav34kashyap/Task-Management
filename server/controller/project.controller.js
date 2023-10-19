@@ -1,5 +1,4 @@
 const projectModel = require('../models/project.model');
-const teamModel = require('../models/team');
 const milestoneModel = require('../models/milestone');
 
 // Get all Projects WRT status

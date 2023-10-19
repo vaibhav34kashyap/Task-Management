@@ -1,7 +1,6 @@
 const activitySchema = require('../models/activity');
 const taskSchema = require('../models/task.model');
-const subtaskSchema = require('../models//sub_task');
-const { default: mongoose } = require('mongoose');
+
 const addtaskActivity = async (req, res) => {
     try {
         const _id = mongoose.Types.ObjectId(req.params.taskid);
