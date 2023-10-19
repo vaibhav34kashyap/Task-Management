@@ -19,8 +19,10 @@ axios.interceptors.response.use(
         if (error && error.response && error.response.status === 404) {
             // window.location.href = '/not-found';
         } else if (error && error.response && error.response.status === 403) {
+            // alert(error)
             window.location.href = '/access-denied';
-        } else {
+        } 
+        else {
             switch (error.response.status) {
                 case 401:
                     message = 'Invalid credentials';
@@ -48,6 +50,7 @@ const AUTH_SESSION_KEY = 'hyper_user';
  * @param {*} token
  */
 const setAuthorization = (token) => {
+    
     if (token) axios.defaults.headers.common['Authorization'] = 'JWT ' + token;
     else delete axios.defaults.headers.common['Authorization'];
 };
@@ -110,7 +113,8 @@ class APICore {
     /**
      * post given data to url
      */
-    create = (url, data) => {
+    create = (url, data) => {        
+        console.log("dsgewhgoewhgowhgoiweohghoiweghoiew",data)
         return axios.post(url, data);
     };
 

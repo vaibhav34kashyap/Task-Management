@@ -14,7 +14,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
     const [description, setDescription] = useState('');
     const store = useSelector((state) => state);
     const errorhandel = store?.createTaskReducer;
-    console.log(projectid, 'newwwwwww');
+    
     const {
         register,
         handleSubmit,

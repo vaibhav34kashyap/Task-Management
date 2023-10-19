@@ -15,5 +15,9 @@ export function UpdateTaskApi(data): any {
     return api.update(URL.UpdateTask, data.payload);
 }
 export function deleteTaskApi(data): any {
-    return api.update(URL.DeleteTask, data.payload);
+    return api.delete(URL.DeleteTask+ data.payload);
+}
+
+export function updateTaskStatusApi(data): any {
+    return api.update(URL.UpdateTaskStatus, data.payload);
 }

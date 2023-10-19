@@ -1,33 +1,43 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch,useSelector } from "react-redux";
-import {createTask} from '../../../client/src/redux/actions'
+import { createTask } from "../redux/actions";
 import { useParams } from "react-router-dom";
 
 
 export default function RightBar(props) {
-  const { showModal, setShowModal, content } = props;
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  const { projectId,milestoneId,spriteId} = useParams();
+ 
+ 
+  const { showModal, setShowModal, content,projectId,mileStoneId,sprintId } = props;
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  
   const dispatch=useDispatch()
 
   const onSubmit=(e)=>{
-    const dataList = {
-      projectId:projectId,
-      milestoneId:milestoneId,
-      sprintId:spriteId,
+    const dataList ={
+      projectId:sessionStorage.getItem('projectId'),
+      milestoneId:sessionStorage.getItem('mileStoneId'),
+      sprintId:sessionStorage.getItem('sprintId'),
       summary:e.Summary,
-      Description:e.Description,
-      AssigneeId:e.Assignee,
+      description:e.Description,
+      assigneeId:e.Assignee,
       reporterId:e.Report,
       priority:e.priority,
       startDate:e.start_date,
-      dueDate:e.dueDate,
-      status:1
-    }
-
-    // dispatch(createTask(dataList))
-    console.log(dataList)
+      dueDate:e.last_date,
+      status:1,
+  }
+if(sessionStorage.getItem('projectId') !== '' && sessionStorage.getItem('mileStoneId') !== '' && sessionStorage.getItem('sprintId') !== ''){
+  dispatch(createTask(dataList))
+}
+else{
+  alert("plsease select project");
+}
+    
+    sessionStorage.setItem('projectId','')
+    sessionStorage.setItem('mileStoneId','')
+    sessionStorage.setItem('sprintId','')
+    setShowModal(false);
   }
   
 
@@ -113,6 +123,7 @@ export default function RightBar(props) {
                 <div class="col-lg-6">
                   <div class="mb-2">
                     <label class="form-label" for="exampleForm.ControlInput1">Description  <span class="text-danger">*</span>:</label>
+                    
                     <input placeholder="Please Enter Description" type="text" id="exampleForm.ControlInput1" class="form-control" {...register("Description")} />
                   </div></div>
 
@@ -122,12 +133,23 @@ export default function RightBar(props) {
             
                 <div class="col-lg-6"><div class="mb-2"><label class="form-label" for="exampleForm.ControlTextarea1">Assignee
                   <span class="text-danger">*</span>:</label>
-                  <input placeholder="Please Enter Assignee" type="text" id="exampleForm.ControlTextarea1" class="form-control" {...register("Assignee")} />
+
+                  <select name="Assignee" class="form-select"  id="exampleForm.ControlInput1" {...register("Assignee")}>
+                  <option value="">--Select--</option><option value="651fe69edc2c29808d08a6e5"> 
+                  Ajay </option><option value="65264cca1ba6b52acbea2731"> 
+                  Demo </option><option value="652695c3950dc346ff6fee62"> Ritika </option>
+                  <option value="652f5c3f87988c4f0654b966"> new </option>
+                  </select>
+
+                  {/* <input placeholder="Please Enter Assignee" type="text" id="exampleForm.ControlTextarea1" class="form-control" {...register("Assignee")} /> */}
                 </div></div>
                 <div class="col-lg-6">
                   <div class="mb-2">
                     <label class="form-label" for="exampleForm.ControlInput1">Report  <span class="text-danger">*</span>:</label>
-                    <input placeholder="Please Enter Report" type="text" id="exampleForm.ControlInput1" class="form-control"  {...register("Report")} />
+                    <select name="Reporter" defaultValue='Admin' class="form-select" id="exampleForm.ControlInput1" {...register("Report")}><option value="">--Select--</option>
+                    <option value="651fb9421a1c8c7b228c3ed5"> Admin </option>
+                    <option value="651fba4a271bfb7c6008f9cc"> Employee </option></select>
+                    {/* <input placeholder="Please Enter Report" type="text" id="exampleForm.ControlInput1" class="form-control"  {...register("Report")} /> */}
                   </div></div>
               </div>
               <div class="row">
@@ -144,7 +166,7 @@ export default function RightBar(props) {
                 <div class="col-lg-6">
                  
                     <div class="mb-1"><label class="form-label" for="exampleForm.ControlInput1"> Priority <span class="text-danger">*</span>:</label>
-                    <select name="Priority" class="form-select" id="exampleForm.ControlInput1"><option>-----select----</option><option value="1">High</option>
+                    <select name="Priority" class="form-select" id="exampleForm.ControlInput1" {...register("priority")}><option>-----select----</option><option value="1">High</option>
                     <option value="2">Medium</option><option value="3">Low</option></select>
                     </div>
 

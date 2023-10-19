@@ -172,3 +172,19 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
     color: #323b47 !important;
     padding: 0px 49px 0px 0px;
 }
+
+.action_icon {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.action_icon button {
+    background: transparent;
+    border: 0px;
+    padding: 0px;
+}
+
+.action_icon button:first-child {
+    margin-right: 8px;
+}

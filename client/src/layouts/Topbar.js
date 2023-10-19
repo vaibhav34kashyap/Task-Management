@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 
+
 // actions
 import { showRightSidebar, changeSidebarType } from '../redux/actions';
 import {getAllProjects} from '../../src/redux/projects/action'
 import { getallMileStones,getMileStoneById } from '../redux/actions';
-import { getAllSprint } from '../redux/actions';
+import { getAllSprint,getSingleSprint } from '../redux/actions';
 // components
 import LanguageDropdown from '../components/LanguageDropdown';
 import NotificationDropdown from '../components/NotificationDropdown';
@@ -24,6 +25,9 @@ import avatar2 from '../assets/images/users/avatar-4.jpg';
 import logoSmDark from '../assets/images/logo_sm_dark.png';
 import logoSmLight from '../assets/images/logo_sm.png';
 import logo from '../assets/images/logo-light.png';
+import Boards from '../pages/Task-Manager/board/board';
+import RightBar from './AddRightSideBar';
+
 
 //constants
 import * as layoutConstants from '../constants/layout';
@@ -134,10 +138,12 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const [isopen, setIsopen] = useState(false);
     const allProjects = store?.getProject?.data?.response;
     const getAllMilestoneData = store?.getAllMileStones?.data?.response;
-    const getAllSprintData = store?.getAllSprints?.data?.response;
+    const getAllSingleSprints = store?.getAllSingleSprints?.data?.Response;
     const [projectId ,setProjectId] = useState('');
-
-    console.log("store datarererherhherher",store)
+    const [projectNameHeading ,setProjectName] = useState('select Project Name');
+    const [mileStoneId ,setMileStoneId] = useState('');
+    const [sprintId ,setSprintId] = useState('');
+    const [mileStoneData,setmileStoneData]  = useState([]);    
     
     const navbarCssClasses = navCssClasses || '';
     const containerCssClasses = !hideLogo ? 'container-fluid' : '';
@@ -153,21 +159,29 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         };
         dispatch(getAllProjects(data))
         dispatch(getallMileStones({status:1}))
-        dispatch(getAllSprint());        
+        console.log("all porjec",store)
     },[])
 
     const onChangeProject =(e)=>{   
-        setProjectId(e.target.value) 
-       
-        getAllMilestoneData?.filter((item)=>{
+       // setProjectId(e.target.value) 
+        sessionStorage.setItem("projectId",e.target.value)
+       const projectData = allProjects?.filter((item)=>item._id == e.target.value);
+       console.log("Data name",projectData)
+       setProjectName(projectData[0].projectName)
+       const data =  getAllMilestoneData?.filter((item)=>{
             return item.project_id === e.target.value;
         })
+        setmileStoneData(data);
         
     }
     const onChangeMilestone =(e)=>{
-       
-     
-        console.log("sprint fata",store?.getAllSprints?.data?.response?.filter((item)=>item.project_id===projectId))
+        //setMileStoneId(e.target.value)
+        sessionStorage.setItem("mileStoneId",e.target.value)
+        dispatch(getSingleSprint({status:true ,id:e.target.value}));  
+    }
+    const onChangeSprint =(e)=>{
+        //setSprintId(e.target.value)
+        sessionStorage.setItem("sprintId",e.target.value)
     }
 
     /**
@@ -248,13 +262,13 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </select>
                             <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeMilestone}>
                                 <option>--Select MileStone--</option>
-                                {getAllMilestoneData?.map((item,index)=>
+                                {mileStoneData?.map((item,index)=>
                                     <option key={index} value={item._id}>{item.title}</option>
                                 )}
                             </select>
-                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1">
+                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeSprint}>
                                 <option>--Select Sprint--</option>
-                                {getAllSprintData?.map((item,index)=>
+                                {getAllSingleSprints?.map((item,index)=>
                                     <option key={index} value={item._id}>{item.sprintName}</option>
                                 )}
                             </select>
@@ -332,7 +346,10 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                 
             </div>
             <div className='project_detail'>
-                <div className='project_name'><h3>Task Manager</h3></div>
+                <div className='project_name'>
+                 
+            <h3>{projectNameHeading}</h3>
+                </div>
                 <div className='taskinfo' >
                     <ul>
                         <li> <Link to="">List</Link>  </li>
@@ -345,7 +362,6 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                     </ul>
                 </div>
             </div>
-            
             
         </>
     );
