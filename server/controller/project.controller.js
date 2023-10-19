@@ -1,43 +1,24 @@
 const projectModel = require('../models/project.model');
-const teamModel = require('../models/team');
 const milestoneModel = require('../models/milestone');
 
 // Get all Projects WRT status
 const getProjects = async (req, res) => {
     try {
-        const project = await projectModel.find({ activeStatus: req.query.activeStatus }).populate('technology','techName');
-        return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: project })
+        const projects = await projectModel.find({ activeStatus: req.query.activeStatus }).populate('technology', 'techName').sort({ createdAt: -1 });
+        return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects })
     } catch (err) {
-        return res.status(200).json({ status: '400', message: 'Something went wrong' })
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error });
     }
 }
 
+// Get A Project By id
 const getProjectById = async (req, res) => {
-
     try {
-        // const _id = req.body._id
-        let project = await projectModel.findById({ _id: req.params.id });
-
-        if (project) {
-            return res.status(200).json({ status: '200', project: project, message: 'Success' })
-        }
-    } catch (err) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong' })
+        const project = await projectModel.findById({ _id: req.query.projectId }).populate('technology', 'techName');
+        return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: project })
+    } catch (error) {
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error });
     }
-
-}
-
-const getProjectMilestone = async (req, res) => {
-    try {
-        // const project_id = req.body.project_id
-        let milestone = await milestoneModel.find({ project_id: req.params.id });
-        if (milestone) {
-            return res.status(200).json({ status: '200', project: milestone, message: 'Success' })
-        }
-    } catch (err) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong' })
-    }
-
 }
 
 // Add a new Project
@@ -70,9 +51,9 @@ const addProject = async (req, res) => {
 // Update a project
 const updateProject = async (req, res) => {
     try {
-        await projectModel.findByIdAndUpdate({_id : req.body.projectId }, req.body, {new : true });
-        return res.status(200).json({status : "200", message : "Project updated successfully"})
-    } catch (err) {
+        await projectModel.findByIdAndUpdate({ _id: req.body.projectId }, req.body, { new: true });
+        return res.status(200).json({ status: "200", message: "Project updated successfully" })
+    } catch (error) {
         return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
     }
 }
@@ -81,10 +62,9 @@ const updateProject = async (req, res) => {
 const updateStatus = async (req, res) => {
     try {
         await projectModel.findByIdAndUpdate({ _id: req.body.projectId }, { activeStatus: req.body.activeStatus });
-        return res.status(200).json({ status: '200', message: 'Project status updated Successfully' });
-    } catch (err) {
-        console.log(err);
-        return res.status(200).json({ status: '500', message: 'Something went wrong' })
+        return res.status(200).json({ status: '200', message: 'Project Active InActive status updated Successfully' });
+    } catch (error) {
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
     }
 }
 
@@ -109,4 +89,4 @@ const projectAssigned = async (req, res) => {
     }
 }
 
-module.exports = { getProjects, addProject, updateProject, getProjectMilestone, updateStatus, getProjectById, projectAssigned, };
+module.exports = { getProjects, addProject, updateProject, updateStatus, getProjectById, projectAssigned, };
