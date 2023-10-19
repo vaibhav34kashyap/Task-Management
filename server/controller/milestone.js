@@ -4,26 +4,14 @@ const taskmmodel = require('../models/task.model');
 // Get all Milestones WRT status
 const getMilestones = async (req, res) => {
     try {
-        const milestone = await milestoneModel.find({ status: req.query.status });
+        const milestone = await milestoneModel.find({ status: req.query.status }).sort({ createdAt: -1 });
         return res.status(200).json({ status: '200', message: 'Milestones fetched successfully', response: milestone })
-    } catch (err) {
-        console.log(err);
-        res.status(200).json({ status: "500", message: "something went wrong" })
+    } catch (error) {
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
     }
 }
 
-const InprogressMilestone = async (req, res) => {
-    try {
-        const milestone = await milestoneModel.find({ status: 'in-progress' })
-        if (milestone.length > 0) {
-            res.status(200).json({ status: "200", data: milestone, message: "In-progress milestone" })
-        } else {
-            res.status(200).json({ status: "404", data: milestone, message: "Not Found" })
-        }
-    } catch (err) {
-        res.status(200).json({ status: "500", message: "something went wrong" })
-    }
-}
+
 const getSingleMileston = async (req, res) => {
     try {
         const milestoneData = await milestoneModel.findById({ _id: req.params.id })
@@ -36,18 +24,7 @@ const getSingleMileston = async (req, res) => {
         res.status(200).json({ status: "500", message: "something went wrong" })
     }
 }
-const getMilestoneById = async (req, res) => {
-    try {
-        const milestoneData = await taskmmodel.find({ milestone_id: req.body.milestone_id })
-        if (milestoneData.length > 0) {
-            res.status(200).json({ status: "200", data: milestoneData, message: "Milestone" })
-        } else {
-            res.status(200).json({ status: "404", message: "Not Found" })
-        }
-    } catch (err) {
-        res.status(200).json({ status: "500", message: "something went wrong" })
-    }
-}
+
 const addMilestone = async (req, res) => {
     try {
         const objData = {
@@ -96,23 +73,22 @@ const updateStatus = async (req, res) => {
         await milestoneModel.findByIdAndUpdate({ _id: req.body.id }, { status: req.body.status });
         return res.status(200).json({ status: '200', message: 'Milestone status updated Successfully' });
     } catch (err) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong' })
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
     }
 }
 
 // Get all milestones of a project
 const getAProjectMilestones = async (req, res) => {
     try {
-        const result = await milestoneModel.find({ $and: [{ project_id: req.query.id }, { status: req.query.status }] });
+        const result = await milestoneModel.find({ $and: [{ project_id: req.query.id }, { status: req.query.status }] }).sort({ createdAt: -1 });
         return res.status(200).json({ status: "200", message: "All milestones fetched successfully", Response: result });
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ status: '500', message: 'Something went wrong' });
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error });
     }
 }
 
 
 module.exports = {
-    getMilestones, InprogressMilestone, getMilestoneById,
+    getMilestones,
     addMilestone, updateMilestone, updateStatus, getSingleMileston, getAProjectMilestones
 }
