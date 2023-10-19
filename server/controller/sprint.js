@@ -4,46 +4,23 @@ const taskModel = require('../models/task.model')
 // Get all sprints WRT status
 const getSprints = async (req, res) => {
     try {
-        const sprint = await sprintModel.find({ status: req.query.status }).populate('milestone_id', 'title');
-        return res.status(200).json({ status: '200', message: 'Sprints fetched successfully', response: sprint })
+        const sprints = await sprintModel.find({ status: req.query.status }).populate('milestone_id', 'title').sort({ createdAt: -1 });
+        return res.status(200).json({ status: '200', message: 'Sprints Data fetched successfully', response: sprints });
     } catch (err) {
         return res.status(200).json({ status: '404', message: 'Something went wrong' });
     }
 }
 
-
+// Get A sprint by ID
 const getSprintById = async (req, res) => {
-    const id = req.body._id
     try {
-        const result = await sprintModel.findById({ _id: req.params.id });
-        if (result) {
-            return res.status(200).json({ status: '200', data: result, message: 'Success' });
-        } else {
-            return res.status(200).json({ status: '400', message: 'Error' });
-        }
-    } catch (err) {
-        console.log(err);
+        const sprint = await sprintModel.findById({ _id: req.query.sprintId });
+        return res.status(200).json({ status: '200', message: 'Sprint data fetched successfully', response: sprint })
+    } catch (error) {
         return res.status(200).json({ status: '404', message: 'Something went wrong' });
     }
 }
-const sigleMilestoneSprints = async (req, res) => {
-    const milestone_id = req.body.milestone_id
-    try {
-        const result = await sprintModel.find({
-            $and: [
-                { milestone_id: milestone_id }, { deleteStatus: true },
-            ]
-        });
-        if (result) {
-            return res.status(200).json({ status: '200', sprint: result, message: 'Success' });
-        } else {
-            return res.status(200).json({ status: '400', message: 'Data not found' });
-        }
-    } catch (err) {
-        console.log(err);
-        return res.status(200).json({ status: '404', message: 'Something went wrong' });
-    }
-}
+
 const getAllTaskBySprint = async (req, res) => {
     const sprint_id = req.body.sprint_id
     try {
@@ -87,34 +64,35 @@ const addSprint = async (req, res) => {
         return res.status(200).json({ status: '500', message: 'Something went wrong', error: err });
     }
 }
+
+// Update a Sprint
 const updateSprint = async (req, res) => {
     try {
-        let _id = req.body._id;
-        const result = await sprintModel.findByIdAndUpdate(_id, req.body, { new: true });
-        return res.status(200).json({ status: '200', result, message: 'Updated sprint' });
-    } catch (err) {
-        console.log(err);
+        await sprintModel.findByIdAndUpdate({_id : req.body.sprintId}, req.body, { new: true });
+        return res.status(200).json({ status: '200', message: 'Sprints updated Successfully'})
+    } catch (error) {
         return res.status(200).json({ status: '404', message: 'Something went wrong' });
     }
 }
+
 // update sprint status
 const updateStatus = async (req, res) => {
     try {
         await sprintModel.findByIdAndUpdate({ _id: req.body.id }, { status: req.body.status })
         return res.status(200).json({ status: '200', message: 'Sprint status updated Successfully' });
-    } catch (err) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong' });
+    } catch (error) {
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
     }
 }
 
 // To get all sprints of a milestone
 const getAMilestoneAllSprints = async (req, res) => {
     try {
-        const result = await sprintModel.find({ $and: [{ milestone_id: req.query.id }, { status: req.query.status }] });
+        const result = await sprintModel.find({ $and: [{ milestone_id: req.query.id }, { status: req.query.status }] }).sort({ createdAt: -1 });
         return res.status(200).json({ status: '200', message: "ALL sprints fecteched successfully", Response: result })
     } catch (error) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong' });
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
     }
 }
 
-module.exports = { getSprints, getSprintById, addSprint, updateSprint, updateStatus, sigleMilestoneSprints, getAllTaskBySprint, getAMilestoneAllSprints }
+module.exports = { getSprints, getSprintById, addSprint, updateSprint, updateStatus, getAllTaskBySprint, getAMilestoneAllSprints }
