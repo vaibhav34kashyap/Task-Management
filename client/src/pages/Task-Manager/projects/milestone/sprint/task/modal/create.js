@@ -31,7 +31,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
             projectId: val?.projectname,
             description: description,
             summary: val?.summary,
-            startDate: val?.Startdate,
+            startDate: val?.startdate,
             dueDate: val?.dueDate,
             assigneeId: val?.Assignee,
             reporterId: val?.Reporter,
@@ -94,7 +94,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     Project<span className="text-danger">*</span>:
                                                 </Form.Label>
 
-                                                <Form.Select {...register('projectname', { required: true })}>
+                                                <Form.Select {...register('projectname', { required: true ,disabled:true })}>
                                                     {/* <option value={''}>--Select--</option> */}
                                                     {store?.getProject?.data?.response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.projectName} </option>
@@ -112,7 +112,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     Milestone<span className="text-danger">*</span>:
                                                 </Form.Label>
 
-                                                <Form.Select {...register('Milestone', { required: true })}>
+                                                <Form.Select {...register('Milestone', { required: true, disabled:true })}>
                                                     {/* <option value={''}>--Select--</option> */}
                                                     {store?.getSigleMileStone?.data?.Response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.title} </option>
@@ -133,7 +133,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     Sprint <span className="text-danger">*</span>:
                                                 </Form.Label>
 
-                                                <Form.Select {...register('Sprint', { required: true })}>
+                                                <Form.Select {...register('Sprint', { required: true,disabled:true })}>
                                                     {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.sprintName} </option>
                                                     ))}

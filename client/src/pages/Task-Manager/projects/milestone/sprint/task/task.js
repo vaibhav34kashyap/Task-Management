@@ -28,6 +28,7 @@ const Task = () => {
     const [editData, setEditData] = useState();
     const [render, setRender] = useState(false);
     const [statusModal, setStatusModal] = useState(false);
+    const [activeStatus,setActiveStatus] = useState(true);
 
     const getSingleSprintTask = store?.getSigleSprintTask?.data?.response;
     const deletehandle = store?.deleteTask?.data;
@@ -37,7 +38,7 @@ const Task = () => {
     };
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getsingleSprintTask({ id: spriteId, skip: value }));
+        dispatch(getsingleSprintTask({ id: spriteId, skip: value ,activeStatus:activeStatus }));
     };
     const CloseModal = (val) => {
         if (val == 'render') {
@@ -48,6 +49,7 @@ const Task = () => {
     const handleActive = (val) => {
         if (val) {
             setStatus(1);
+            setActiveStatus(true)
             let data = {
                 id: spriteId,
                 activeStatus:true,
@@ -56,7 +58,8 @@ const Task = () => {
             };
             dispatch(getsingleSprintTask(data));
         } else {
-            setStatus(0);
+         setStatus(0);
+         setActiveStatus(false)
             let data = {
                 id: spriteId,
                 activeStatus:false,
@@ -90,12 +93,18 @@ const Task = () => {
             dispatch(deleteTask(body));
         }
         setStatusModal(false);
+        setStatus(1)
+
     };
     const handelUpdate = (data) => {
         setEditData(data);
         SetEditOpenModal(true);
     };
-    const CloseUpdateModal = () => {
+ 
+    const CloseUpdateModal = (val) => {
+        if (val == 'render') {
+            setRender(!render);
+        }
         SetEditOpenModal(false);
     };
     useEffect(() => {
@@ -107,7 +116,7 @@ const Task = () => {
         };
         dispatch(getAllProjects(body));
         dispatch(getsingleMileStone({ id: projectId, status: 1 }));
-        dispatch(getSprintById({ status: 1, id: milestoneId }));
+        // dispatch(getSprintById({ status: 1, id: milestoneId }));
         dispatch(getSingleSprint({ status: 1, id: milestoneId }));
         dispatch(getAllRoles());
         dispatch(getAllUsers());
@@ -177,7 +186,7 @@ const Task = () => {
                                             <tbody>
                                                 {getSingleSprintTask?.map((item, index) => (
                                                     <tr>
-                                                        <td>{index + 1}</td>
+                                                        <td>{(skip - 1) * 5 + index + 1}</td>
                                                         <td>{item?.summary}</td>
                                                         <td>  <div
                                                     dangerouslySetInnerHTML={{

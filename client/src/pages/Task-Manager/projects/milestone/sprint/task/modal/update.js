@@ -117,7 +117,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         Project<span className="text-danger">*</span>:
                                                     </Form.Label>
 
-                                                    <Form.Select {...register('projectname', { required: true })}>
+                                                    <Form.Select {...register('projectname', { required: true ,disabled:true })}>
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getProject?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.projectName} </option>
@@ -135,7 +135,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         Milestone<span className="text-danger">*</span>:
                                                     </Form.Label>
 
-                                                    <Form.Select {...register('Milestone', { required: true })}>
+                                                    <Form.Select {...register('Milestone', { required: true ,disabled:true})}>
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getSigleMileStone?.data?.Response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.title} </option>
@@ -156,7 +156,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         Sprint <span className="text-danger">*</span>:
                                                     </Form.Label>
 
-                                                    <Form.Select {...register('Sprint', { required: true })}>
+                                                    <Form.Select {...register('Sprint', { required: true ,disabled:true })}>
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.sprintName} </option>
