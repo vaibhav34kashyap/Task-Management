@@ -85,12 +85,10 @@ const updateTask = async (req, res,) => {
 // Delete A Task
 const deleteTask = async (req, res) => {
     try {
-        const result = await taskModel.findByIdAndDelete({ _id: req.query.taskId });
-        if (result) {
-            return res.status(200).json({ status: '200', message: 'Task Deleted successfully' })
-        }
+        await taskModel.findByIdAndDelete({ _id: req.query.taskId });
+        return res.status(200).json({ status: '200', message: 'Task Deleted successfully' })
     } catch (err) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong', erroe: err.message })
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: err.message })
     }
 }
 
