@@ -46,7 +46,7 @@ function* getAllSprintFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getallSprintApi, { payload });
-        
+      
         if (response.data.status) {
             yield put({
                 type: SprintTypes.GET_ALL_SPRINT_SUCCESS,

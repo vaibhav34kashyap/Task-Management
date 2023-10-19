@@ -1,12 +1,15 @@
 // @flow
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 
+
 // actions
 import { showRightSidebar, changeSidebarType } from '../redux/actions';
-
+import {getAllProjects} from '../../src/redux/projects/action'
+import { getallMileStones,getMileStoneById } from '../redux/actions';
+import { getAllSprint,getSingleSprint } from '../redux/actions';
 // components
 import LanguageDropdown from '../components/LanguageDropdown';
 import NotificationDropdown from '../components/NotificationDropdown';
@@ -22,10 +25,16 @@ import avatar2 from '../assets/images/users/avatar-4.jpg';
 import logoSmDark from '../assets/images/logo_sm_dark.png';
 import logoSmLight from '../assets/images/logo_sm.png';
 import logo from '../assets/images/logo-light.png';
+import Boards from '../pages/Task-Manager/board/board';
+import RightBar from './AddRightSideBar';
+
 
 //constants
 import * as layoutConstants from '../constants/layout';
 import TimeLine from './../pages/profile2/TimeLine';
+import MileStone from './../pages/Task-Manager/AllMillstones/mileStone/index';
+
+
 
 // get the notifications
 const Notifications = [
@@ -127,7 +136,15 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [isopen, setIsopen] = useState(false);
-
+    const allProjects = store?.getProject?.data?.response;
+    const getAllMilestoneData = store?.getAllMileStones?.data?.response;
+    const getAllSingleSprints = store?.getAllSingleSprints?.data?.Response;
+    const [projectId ,setProjectId] = useState('');
+    const [projectNameHeading ,setProjectName] = useState('select Project Name');
+    const [mileStoneId ,setMileStoneId] = useState('');
+    const [sprintId ,setSprintId] = useState('');
+    const [mileStoneData,setmileStoneData]  = useState([]);    
+    
     const navbarCssClasses = navCssClasses || '';
     const containerCssClasses = !hideLogo ? 'container-fluid' : '';
 
@@ -135,6 +152,37 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         layoutType: state.Layout.layoutType,
         leftSideBarType: state.Layout.leftSideBarType,
     }));
+
+    useEffect(()=>{
+        let data = {
+            status: 1,
+        };
+        dispatch(getAllProjects(data))
+        dispatch(getallMileStones({status:1}))
+        console.log("all porjec",store)
+    },[])
+
+    const onChangeProject =(e)=>{   
+       // setProjectId(e.target.value) 
+        sessionStorage.setItem("projectId",e.target.value)
+       const projectData = allProjects?.filter((item)=>item._id == e.target.value);
+       console.log("Data name",projectData)
+       setProjectName(projectData[0].projectName)
+       const data =  getAllMilestoneData?.filter((item)=>{
+            return item.project_id === e.target.value;
+        })
+        setmileStoneData(data);
+        
+    }
+    const onChangeMilestone =(e)=>{
+        //setMileStoneId(e.target.value)
+        sessionStorage.setItem("mileStoneId",e.target.value)
+        dispatch(getSingleSprint({status:true ,id:e.target.value}));  
+    }
+    const onChangeSprint =(e)=>{
+        //setSprintId(e.target.value)
+        sessionStorage.setItem("sprintId",e.target.value)
+    }
 
     /**
      * Toggle the leftmenu when having mobile screen
@@ -170,6 +218,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
      */
     const handleRightSideBar = () => {
         dispatch(showRightSidebar());
+        
     };
 
     return (
@@ -198,11 +247,33 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                     <div class="menuinfo">
                     <ul>
                         
-                   <li><Link to=''>Apps</Link></li>
-                            <li><Link to=''>Projects</Link></li>
+                            <li><Link to=''>Apps</Link></li>
                             <li><Link to=''>Filters</Link></li>
                             <li><Link to=''>Dashboard</Link></li>
                             <li><Link to=''>Teams</Link></li>
+                            <li>
+                            <div class="project_names">
+                            {/* <label class="form-label" for="exampleForm.ControlInput1"> Projects <span class="text-danger">*</span>:</label> */}
+                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeProject}>
+                                <option>--Select Project--</option>
+                                {allProjects?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.projectName}</option>
+                                )}
+                            </select>
+                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeMilestone}>
+                                <option>--Select MileStone--</option>
+                                {mileStoneData?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.title}</option>
+                                )}
+                            </select>
+                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeSprint}>
+                                <option>--Select Sprint--</option>
+                                {getAllSingleSprints?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.sprintName}</option>
+                                )}
+                            </select>
+                            </div>
+                            </li>
                     </ul>
                    </div>
                          </div> 
@@ -275,7 +346,10 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                 
             </div>
             <div className='project_detail'>
-                <div className='project_name'><h3>Task Manager</h3></div>
+                <div className='project_name'>
+                 
+            <h3>{projectNameHeading}</h3>
+                </div>
                 <div className='taskinfo' >
                     <ul>
                         <li> <Link to="">List</Link>  </li>
@@ -288,7 +362,6 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                     </ul>
                 </div>
             </div>
-            
             
         </>
     );

@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
 import { columnsFromBackend } from './data';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable,Draggable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
 import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
+import {updateTaskStatus} from '../../../../src/redux/task/action'
+
+
 
 const Container = styled.div`
   display: flex;
@@ -45,12 +48,16 @@ const Boards = (props) => {
   const dispatch = useDispatch();
   const store = useSelector(state => state)
   const successHandle = store?.getAllTaskReducer
+
+
+
   const [showModal, setShowModal] = useState(false);
   const [columns, setColumns] = useState(columnsFromBackend);
-  console.log(columns, "Ritika")
 
   const onDragEnd = (result, columns, setColumns) => {
-    console.log(result, columns, setColumns)
+    console.log("colun", columns)
+
+
     if (!result.destination) return;
     const { source, destination } = result;
     if (source.droppableId !== destination.droppableId) {
@@ -71,7 +78,10 @@ const Boards = (props) => {
           items: destItems,
         },
       });
-    } else {
+      
+      handelupdatetask(destItems);
+    } 
+    else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];
       const [removed] = copiedItems.splice(source.index, 1);
@@ -83,11 +93,13 @@ const Boards = (props) => {
           items: copiedItems,
         },
       });
+      
     }
   };
 
   useEffect(() => {
     dispatch(getAllTask())
+  
   }, [])
   useEffect(() => {
 
@@ -110,11 +122,23 @@ const Boards = (props) => {
   }, [successHandle])
   const handelupdatetask = (ele) => {
     let body = {
-      _id: ele?.id,
-      status: ele?.status
+      taskId: ele[0].id,
+      status: 2
     }
-    dispatch(updateTask(body))
+    
+    // console.log("body dataaaaa",body)
+    dispatch(updateTaskStatus(body))
+   
   }
+
+  const handel= () => {
+    
+    alert()
+    // console.log("body dataaaaa",body)
+    ///dispatch(updateTask(body))
+   
+  }
+  console.log("dsgsgsbhsr",columns)
   return (
 
     <>
@@ -130,27 +154,27 @@ const Boards = (props) => {
         >
           Add Task
         </button>
-        <RightBar showModal={showModal} setShowModal={setShowModal}/>
+        <RightBar className="d-none" projectId={props.projectId} mileStoneId={props.mileStoneId} sprintId={props.sprintId} showModal={showModal} setShowModal={setShowModal}/>
      </div>
 
-      <DragDropContext
-        onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+      <DragDropContext  onDragEnd={(result) => onDragEnd(result, columns, setColumns)} 
 
       >
         {successHandle.loading ? (<MainLoader />) : <Container>
-          <TaskColumnStyles>
+          <TaskColumnStyles >
             {Object.entries(columns).map(([columnId, column], index) => {
-              console.log(column, "######################")
+             
               return (
-                <Droppable key={columnId} droppableId={columnId} onClick={(column) => { handelupdatetask(column) }}>
+                <Droppable key={columnId} droppableId={columnId}>
+                
                   {(provided, snapshot) => (
-                    <TaskList class="three"
+                    <TaskList class="three" 
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                     >
                       <Title class="">{column.title}</Title>
                       {column.items.map((item, index) => (
-                        <TaskCard key={item} item={item} index={index} />
+                        <TaskCard key={item} item={item} index={index}  />
                       ))}
                       {provided.placeholder}
                     </TaskList>
