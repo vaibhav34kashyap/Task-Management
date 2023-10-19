@@ -162,7 +162,12 @@ const Sprint = () => {
                                             <tr>
                                                 <td>{index + 1}</td>
                                                 <td>{item?.sprintName}</td>
-                                                <td>{item?.sprintDesc}</td>
+                                                <td>
+                                                <div
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: item?.sprintDesc,
+                                                    }}
+                                                /></td>
 
                                                 <td>  {moment(item?.startDate).format('L')}</td>
                                                 <td>{moment(item?.endDate).format('L')}</td>

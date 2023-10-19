@@ -93,10 +93,10 @@ function* updateProjectFunction({ payload }) {
                 type: ProjectTypes.UPDATE_PROJECT_DETAILS_ERROR,
                 payload: { ...response.data }
             });
-            yield put({
-                type: ProjectTypes.UPDATE_PROJECT_DETAILS_RESET,
-                payload: {},
-            });
+            // yield put({
+            //     type: ProjectTypes.UPDATE_PROJECT_DETAILS_RESET,
+            //     payload: {},
+            // });
         }
 
     } catch (error) {
@@ -104,10 +104,10 @@ function* updateProjectFunction({ payload }) {
             type: ProjectTypes.UPDATE_PROJECT_DETAILS_ERROR,
             payload: { message: error }
         });
-        yield put({
-            type: ProjectTypes.UPDATE_PROJECT_DETAILS_RESET,
-            payload: {},
-        });
+        // yield put({
+        //     type: ProjectTypes.UPDATE_PROJECT_DETAILS_RESET,
+        //     payload: {},
+        // });
     }
 }
 function* deleteProjectFunction({ payload }) {

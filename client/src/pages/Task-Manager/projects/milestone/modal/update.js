@@ -10,12 +10,15 @@ import { updateMileStone } from '../../../../../redux/milestone/action';
 import { Container, Form } from 'react-bootstrap';
 import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 const Update = ({ modal, closeModal, editData }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const sucesshandel = store?.updateMilestone
+    const [description, setDescription] = useState('');
     const [editorState, setEditorState] = useState(
         () => EditorState.createEmpty(),
     );
@@ -23,11 +26,10 @@ const Update = ({ modal, closeModal, editData }) => {
     useEffect(() => {
         reset({
             title: editData?.title,
-            Description: editorState,
             startDate: handleDate(editData?.start_date),
             endDate: handleDate(editData?.completion_date),
 
-        });
+        });setDescription(editData?.description);
     }, [modal]);
     const handleDate = (data) => {
         let date = new Date(data);
@@ -41,8 +43,7 @@ const Update = ({ modal, closeModal, editData }) => {
         let body = {
             _id: editData?._id,
             title: data?.title,
-            projectName: editorState,
-            description: data?.Description,
+            description: description,
             start_date: data?.startDate,
             completion_date: data?.endDate,
         };
@@ -114,20 +115,21 @@ const Update = ({ modal, closeModal, editData }) => {
                                         <Form.Label className='mb-0'>
                                             Description <span className="text-danger">*</span>:
                                         </Form.Label>
-                                        <Editor
-
-                                            editorState={editorState}
-                                            onEditorStateChange={setEditorState}
-
-                                        />
-                                        {/* <Form.Control
-                                                type="text"
-                                                placeholder="Please Enter Client Name"
-                                                {...register('Description', { required: true })}
+                                        <CKEditor
+                                                config={{
+                                                    ckfinder: {
+                                                        // Upload the images to the server using the CKFinder QuickUpload command.
+                                                        uploadUrl:
+                                                            'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
+                                                    },
+                                                }}
+                                                editor={ClassicEditor}
+                                                data={description}
+                                                onChange={(event, editor) => {
+                                                    const data = editor.getData();
+                                                    setDescription(data);
+                                                }}
                                             />
-                                            {errors.Description?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )} */}
                                     </Form.Group>
                                 </Col>
 

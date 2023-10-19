@@ -7,17 +7,18 @@ import ToastHandle from '../../../../../../../constants/toaster/toaster';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSprint } from '../../../../../../../redux/sprint/action';
 import MainLoader from '../../../../../../../constants/Loader/loader';
-// import MainLoader from '../../../../constants/Loader/loader';
-import { EditorState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { updateTask } from '../../../../../../../redux/actions';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const Update = ({ modal, CloseModal, editData }) => {
-    console.log(editData,"update")
+    console.log(editData, 'update');
+    const [description, setDescription] = useState('');
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    const sucesshandel = store?.updateSprint;
-    const loaderhandel = store?.updateSprint;
+    const sucesshandel = store?.UpdateTaskReducer;
+    const loaderhandel = store?.UpdateTaskReducer;
     const {
         register,
         handleSubmit,
@@ -31,23 +32,23 @@ const Update = ({ modal, CloseModal, editData }) => {
     };
     const onSubmit = (data) => {
         let body = {
-            taskId : editData?._id,
-            projectId : data?.projectname,
-            milestoneId : data?.Milestone,
-            sprintId : data?.Sprint,
-            summary :data?.summary,
-            description: data?.Description,
-            assigneeId : data?.Assignee,
-            reporterId : data?.Reporter,
-            priority : data?.priority ,
-            startDate : data?.startDate,
-            dueDate : data?.dueDate,
-
+            taskId: editData?._id,
+            projectId: data?.projectname,
+            milestoneId: data?.Milestone,
+            sprintId: data?.Sprint,
+            summary: data?.summary,
+            description: description,
+            assigneeId: data?.Assignee,
+            reporterId: data?.Reporter,
+            priority: data?.priority,
+            startDate: data?.startDate,
+            dueDate: data?.dueDate,
+            status: data?.status,
         };
         console.log('editsprit', body);
-        dispatch(updateSprint(body));
+        dispatch(updateTask(body));
     };
-  
+
     useEffect(() => {
         reset({
             Milestone: editData?.milestoneId,
@@ -55,14 +56,13 @@ const Update = ({ modal, CloseModal, editData }) => {
             Sprint: editData?.sprintId,
             startDate: handleDate(editData?.createdAt),
             dueDate: handleDate(editData?.dueDate),
-            summary:editData?.summary,
-            Description:editData?.description,
-            Assignee:editData?.assigneeId,
-            Reporter:editData?.reporterId,
-            priority:editData?.priority,
-
-
+            summary: editData?.summary,
+            Assignee: editData?.assigneeId,
+            Reporter: editData?.reporterId,
+            priority: editData?.priority,
+            status: editData?.status,
         });
+        setDescription(editData?.description);
     }, [modal]);
     console.log(editData, 'pppppp');
     const handleDate = (data) => {
@@ -117,7 +117,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         Project<span className="text-danger">*</span>:
                                                     </Form.Label>
 
-                                                    <Form.Select {...register('projectname', { required: true })}>
+                                                    <Form.Select {...register('projectname', { required: true ,disabled:true })}>
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getProject?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.projectName} </option>
@@ -135,11 +135,11 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         Milestone<span className="text-danger">*</span>:
                                                     </Form.Label>
 
-                                                    <Form.Select {...register('Milestone', { required: true })}>
+                                                    <Form.Select {...register('Milestone', { required: true ,disabled:true})}>
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getSigleMileStone?.data?.Response?.map((ele, ind) => (
-                                                        <option value={ele?._id}> {ele?.title} </option>
-                                                    ))}
+                                                            <option value={ele?._id}> {ele?.title} </option>
+                                                        ))}
                                                     </Form.Select>
                                                     {errors.Milestone?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>
@@ -155,12 +155,12 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                     <Form.Label>
                                                         Sprint <span className="text-danger">*</span>:
                                                     </Form.Label>
-                                                 
-                                                    <Form.Select {...register('Sprint', { required: true })}>
+
+                                                    <Form.Select {...register('Sprint', { required: true ,disabled:true })}>
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
-                                                        <option value={ele?._id}> {ele?.sprintName} </option>
-                                                    ))}
+                                                            <option value={ele?._id}> {ele?.sprintName} </option>
+                                                        ))}
                                                     </Form.Select>
                                                     {errors.Sprint?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>
@@ -193,14 +193,21 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         {' '}
                                                         Description<span className="text-danger">*</span>:
                                                     </Form.Label>
-                                                    <Form.Control
-                                                        type="text"
-                                                        placeholder=" Enter Task Description"
-                                                        {...register('Description', { required: true })}
-                                                    />{' '}
-                                                    {errors.Description?.type === 'required' && (
-                                                        <span className="text-danger"> This feild is required *</span>
-                                                    )}
+                                                    <CKEditor
+                                                config={{
+                                                    ckfinder: {
+                                                        // Upload the images to the server using the CKFinder QuickUpload command.
+                                                        uploadUrl:
+                                                            'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
+                                                    },
+                                                }}
+                                                editor={ClassicEditor}
+                                                data={description}
+                                                onChange={(event, editor) => {
+                                                    const data = editor.getData();
+                                                    setDescription(data);
+                                                }}
+                                            />
                                                 </Form.Group>
                                             </Col>
                                             <Col lg={6}>
@@ -209,7 +216,6 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         {' '}
                                                         Assignee <span className="text-danger">*</span>:
                                                     </Form.Label>
-
 
                                                     <Form.Select {...register('Assignee', { required: true })}>
                                                         <option value={''}>--Select--</option>
@@ -233,11 +239,11 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         Reporter<span className="text-danger">*</span>:
                                                     </Form.Label>
                                                     <Form.Select {...register('Reporter', { required: true })}>
-                                                    <option value={''}>--Select--</option>
-                                                    {store?.getAllRoles?.data?.response?.map((ele, ind) => (
-                                                        <option value={ele?._id}> {ele?.role} </option>
-                                                    ))}
-                                                </Form.Select>
+                                                        <option value={''}>--Select--</option>
+                                                        {store?.getAllRoles?.data?.response?.map((ele, ind) => (
+                                                            <option value={ele?._id}> {ele?.role} </option>
+                                                        ))}
+                                                    </Form.Select>
                                                     {errors.Reporter?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>
                                                     )}
@@ -290,6 +296,28 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         {...register('dueDate', { required: true })}
                                                     />{' '}
                                                     {errors.dueDate?.type === 'required' && (
+                                                        <span className="text-danger"> This feild is required *</span>
+                                                    )}
+                                                </Form.Group>
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                    <Col lg={12}>
+                                        <Row>
+                                            <Col lg={6}>
+                                                <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                    <Form.Label>
+                                                        {' '}
+                                                        Status <span className="text-danger">*</span>:
+                                                    </Form.Label>
+                                                    <Form.Select {...register('status', { required: true })}>
+                                                        <option>-------select----</option>
+                                                        <option value="1">todo</option>
+                                                        <option value="2">inProgress</option>
+                                                        <option value="3">done</option>
+                                                        <option value="4">review</option>
+                                                    </Form.Select>
+                                                    {errors.status?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>
                                                     )}
                                                 </Form.Group>

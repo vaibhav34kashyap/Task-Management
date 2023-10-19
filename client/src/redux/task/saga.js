@@ -114,10 +114,10 @@ function* updateTaskFunction({ payload }) {
                 type: TASK_TYPES.UPDATE_TASK_SUCCESS,
                 payload: { ...response.data },
             });
-            // yield put({
-            //     type: TASK_TYPES.UPDATE_TASK_RESET,
-            //     payload: {},
-            // });
+            yield put({
+                type: TASK_TYPES.UPDATE_TASK_RESET,
+                payload: {},
+            });
         }
         else {
             yield put({

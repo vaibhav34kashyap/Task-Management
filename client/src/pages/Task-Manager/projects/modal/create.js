@@ -41,13 +41,11 @@ const Create = ({ modal, closeModal }) => {
             clientName: data?.clientName,
             startDate: data?.startDate,
             endDate: data?.endDate,
-            projectType: addValue,
+            project_type: data?.project_type,
             technology:addValue,
-            projectStatus: 'Live',
-
-             //iska koi parameter hoga usme 
+            projectStatus: data?.projectDec,
+             
         };
-        console.log(body, 'dhdfhfdhfghgf');
         dispatch(addProject(body));
     };
     useEffect(() => {
@@ -164,14 +162,14 @@ const Create = ({ modal, closeModal }) => {
                                             <Form.Label>
                                                 Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Select {...register('projecttype', { required: true })}>
+                                            <Form.Select {...register('project_type', { required: true })}>
                                                 <option>Choose an Project Type </option>
                                                 <option value="T&M">T&M</option>
                                                 <option value="Fixed Cost">Fixed Cost</option>
                                                 <option value=" Hourly">Hourly</option>
                                                 <option value="Dedicated team">Dedicated team</option>
                                             </Form.Select>
-                                            {errors.projecttype?.type === 'required' && (
+                                            {errors.project_type?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>
@@ -248,6 +246,8 @@ const Create = ({ modal, closeModal }) => {
                                             )}
                                         </Form.Group>
                                     </Col>
+                                    
+                                  
                                 </Row>
                                 <Row>
                                     <Col className="text-start d-flex align-items-center justify-content-center">

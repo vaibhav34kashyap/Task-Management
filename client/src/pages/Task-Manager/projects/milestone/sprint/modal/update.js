@@ -10,11 +10,14 @@ import MainLoader from '../../../../../../constants/Loader/loader';
 // import MainLoader from '../../../../constants/Loader/loader';
 import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 const Update = ({ modal, closeModal, editData }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    const [description, setDescription] = useState('');
     const sucesshandel = store?.updateSprint;
     const loaderhandel = store?.updateSprint;
     const {
@@ -32,27 +35,25 @@ const Update = ({ modal, closeModal, editData }) => {
         let body = {
             _id: editData?._id,
             sprintName: data?.title,
-            sprintDesc: data?.Description,
+            sprintDesc: description,
             startDate: data?.startDate,
             endDate: data?.endDate,
         };
-        console.log("editsprit", body)
+        console.log('editsprit', body);
         dispatch(updateSprint(body));
     };
     //editor state
-    const [editorState, setEditorState] = useState(
-        () => EditorState.createEmpty(),
-    );
+    const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
     const textEditorOnchange = (e) => {
-        console.log(e, 'edi')
-    }
+        console.log(e, 'edi');
+    };
     useEffect(() => {
         reset({
             title: editData?.sprintName,
-            Description: editData?.sprintDesc,
             startDate: handleDate(editData?.startDate),
             endDate: handleDate(editData?.endDate),
         });
+        setDescription(editData?.sprintDesc);
     }, [modal]);
     console.log(editData, 'pppppp');
     const handleDate = (data) => {
@@ -66,7 +67,7 @@ const Update = ({ modal, closeModal, editData }) => {
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
             ToastHandle('success', 'Updated Successfully');
-            CloseModaal('render');
+            closeModal('render');
         } else if (sucesshandel?.data?.status == 400) {
             ToastHandle('error', sucesshandel?.data?.message);
         } else if (sucesshandel?.data?.status == 500) {
@@ -98,7 +99,6 @@ const Update = ({ modal, closeModal, editData }) => {
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Row>
                                     <Col lg={12}>
-
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
                                                 Sprint Name<span className="text-danger">*</span>:
@@ -118,24 +118,21 @@ const Update = ({ modal, closeModal, editData }) => {
                                             <Form.Label>
                                                 Description <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <dvi className=""
-                                            >
-                                                <Editor
-                                                    // {...register('Description', { required: true })}
-                                                    editorState={editorState}
-                                                    onEditorStateChange={setEditorState}
-                                                    onChange={(e) => { textEditorOnchange(e) }}
-
-                                                />
-                                            </dvi>
-                                            {/* <Form.Control
-                                                type="text"
-                                                placeholder="Please Enter Description Name"
-                                                {...register('Description', { required: true })}
+                                            <CKEditor
+                                                config={{
+                                                    ckfinder: {
+                                                        // Upload the images to the server using the CKFinder QuickUpload command.
+                                                        uploadUrl:
+                                                            'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
+                                                    },
+                                                }}
+                                                editor={ClassicEditor}
+                                                data={description}
+                                                onChange={(event, editor) => {
+                                                    const data = editor.getData();
+                                                    setDescription(data);
+                                                }}
                                             />
-                                            {errors.Description?.type === 'required' && (
-                                                <span className="text-danger"> This feild is required *</span>
-                                            )} */}
                                         </Form.Group>
                                     </Col>
 

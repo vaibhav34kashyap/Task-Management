@@ -51,14 +51,14 @@ const Projects = () => {
     const handleYes = () => {
         if (checkedStatus) {
             let body = {
-                id: checkedData._id,
-                status: true,
+                projectId: checkedData._id,
+                activeStatus: true,
             };
             dispatch(deleteProject(body));
         } else {
             let body = {
-                id: checkedData._id,
-                status: false,
+                projectId: checkedData._id,
+                activeStatus: false,
             };
             dispatch(deleteProject(body));
         }
@@ -175,7 +175,7 @@ const Projects = () => {
                                                     <span className="namelink"> {ele?.clientName}</span>
                                                 </td>
                                                 <td>
-                                                    <span className="namelink"> {ele?.projectType}</span>
+                                                    <span className="namelink"> {ele?.project_type}</span>
                                                 </td>
                                                 <td>
                                                     <span className="namelink">
@@ -191,7 +191,8 @@ const Projects = () => {
                                                 <td>
                                                     <Form.Check
                                                         type="switch"
-                                                        checked={ele?.status}
+                                                        checked={ele?.activeStatus
+                                                        }
                                                         onChange={(e) => handleStatusChange(e, ele)}
                                                     />
                                                 </td>

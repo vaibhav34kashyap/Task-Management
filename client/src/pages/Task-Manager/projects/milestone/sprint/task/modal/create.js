@@ -7,11 +7,11 @@ import { useForm } from 'react-hook-form';
 import { Row, Col, Button, CloseButton, Card } from 'react-bootstrap';
 import { createTask } from '../../../../../../../redux/task/action';
 import ToastHandle from '../../../../../../../constants/toaster/toaster';
-import { getAllProjects } from '../../../../../../../redux/projects/action';
-import { getallMileStones, getsingleMileStone } from '../../../../../../../redux/milestone/action';
-import { getAllSprint, getSingleSprint } from '../../../../../../../redux/sprint/action';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
     const dispatch = useDispatch();
+    const [description, setDescription] = useState('');
     const store = useSelector((state) => state);
     const errorhandel = store?.createTaskReducer;
     console.log(projectid, 'newwwwwww');
@@ -29,13 +29,14 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
             sprintId: val?.Sprint,
             milestoneId: val?.Milestone,
             projectId: val?.projectname,
-            description: val?.Description,
+            description: description,
             summary: val?.summary,
-            startDate: val?.Startdate,
+            startDate: val?.startdate,
             dueDate: val?.dueDate,
             assigneeId: val?.Assignee,
             reporterId: val?.Reporter,
             priority: val?.Priority,
+            status:1
         };
         dispatch(createTask(body));
     };
@@ -93,7 +94,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     Project<span className="text-danger">*</span>:
                                                 </Form.Label>
 
-                                                <Form.Select {...register('projectname', { required: true })}>
+                                                <Form.Select {...register('projectname', { required: true ,disabled:true })}>
                                                     {/* <option value={''}>--Select--</option> */}
                                                     {store?.getProject?.data?.response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.projectName} </option>
@@ -111,7 +112,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     Milestone<span className="text-danger">*</span>:
                                                 </Form.Label>
 
-                                                <Form.Select {...register('Milestone', { required: true })} >
+                                                <Form.Select {...register('Milestone', { required: true, disabled:true })}>
                                                     {/* <option value={''}>--Select--</option> */}
                                                     {store?.getSigleMileStone?.data?.Response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.title} </option>
@@ -131,12 +132,8 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                 <Form.Label>
                                                     Sprint <span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                {/* <Form.Control type="text" {...register('Sprint', { required: true })} />{' '}
-                                                {errors.Sprint?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
-                                                )} */}
-                                                <Form.Select {...register('Sprint', { required: true })}>
-                                                    {/* <option value={''}>--Select--</option> */}
+
+                                                <Form.Select {...register('Sprint', { required: true,disabled:true })}>
                                                     {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.sprintName} </option>
                                                     ))}
@@ -172,14 +169,20 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     {' '}
                                                     Description<span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    placeholder=" Enter Task Description"
-                                                    {...register('Description', { required: true })}
-                                                />{' '}
-                                                {errors.Description?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
-                                                )}
+                                                <CKEditor
+                                                editor={ClassicEditor}
+                                                config={{
+                                                    ckfinder: {
+                                                        uploadUrl:
+                                                            'https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
+                                                    },
+                                                }}
+                                                data=""
+                                                onChange={(event, editor) => {
+                                                    const data = editor.getData();
+                                                    setDescription(data);
+                                                }}
+                                            />
                                             </Form.Group>
                                         </Col>
                                         <Col lg={6}>
@@ -188,14 +191,6 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                     {' '}
                                                     Assignee <span className="text-danger">*</span>:
                                                 </Form.Label>
-                                                {/* <Form.Control
-                                                    type="text"
-                                                    placeholder = ' Enter Task Assignee'
-                                                    {...register('Assignee', { required: true })}
-                                                />{' '}
-                                                {errors.Assignee?.type === 'required' && (
-                                                    <span className="text-danger"> This feild is required *</span>
-                                                )} */}
 
                                                 <Form.Select {...register('Assignee', { required: true })}>
                                                     <option value={''}>--Select--</option>
@@ -280,6 +275,27 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                 )}
                                             </Form.Group>
                                         </Col>
+                                    </Row>
+                                </Col>
+                                <Col lg={12}>
+                                    <Row>
+                                        <Col lg={6}>
+                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                <Form.Label>
+                                                    {' '}
+                                                    Status <span className="text-danger">*</span>:
+                                                </Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="To-Do"
+                                                    {...register('status', { required: true ,disabled: true})}
+                                                />
+                                                {errors.status?.type === 'required' && (
+                                                    <span className="text-danger"> This feild is required *</span>
+                                                )}
+                                            </Form.Group>
+                                        </Col>
+                                        
                                     </Row>
                                 </Col>
                             </Row>

@@ -19,6 +19,7 @@ const Update = ({ modal, closeModal, editData }) => {
         handleSubmit,
         control,
         watch,
+        setValue,
         reset,
         formState: { errors },
     } = useForm();
@@ -48,62 +49,56 @@ const Update = ({ modal, closeModal, editData }) => {
             startDate: handleDate(editData?.startDate),
             endDate: handleDate(editData?.endDate),
             expectedEndDate: handleDate(editData?.CompilationDate),
-            projecttype: editData?.projectType,
+            project_type: editData?.project_type,
             technology: editData?.technology,
-            projectStatus: editData?.projectstatus,
-            expectedEndDate: handleDate(editData?.expectedDate)
+            projectstatus: editData?.projectStatus,
+            expectedEndDate: handleDate(editData?.expectedDate),
+            // status :editData?.projectStatus
         });
     }, [modal]);
 
     const removehandle = (selectedList, removedItem) => {
         const remove = getTechnology.filter((ele, ind) => {
             return ele?.techName == removedItem;
-        }); 
+        });
         // make a separate copy of the array
-        var index = addValue.indexOf(remove[0]._id)
+        var index = addValue.indexOf(remove[0]._id);
         if (index !== -1) {
             addValue.splice(index, 1);
-            setAddValue(addValue)
-            console.log("remove",addValue)
+            setAddValue(addValue);
+        } else {
+            setAddValue(null);
         }
-        else{
-            setAddValue(null)
-        }     
-       
-        
     };
-  
 
-    const addhandle=(selectedList,selectItem)=> {
-             const add = getTechnology.filter((ele, ind) => {
+    const addhandle = (selectedList, selectItem) => {
+        const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
-        }); 
-        setAddValue([...addValue, add[0]._id])
-        console.log(addValue,"addvalue info")
-        
-      
-    }
+        });
+        setAddValue([...addValue, add[0]._id]);
+    };
 
-    console.log(editData, 'pppppp');
     const onSubmit = (data) => {
         let body = {
-            _id: editData?._id,
+            projectId: editData?._id,
             projectName: data?.projectName,
             startDate: data?.startDate,
             endDate: data?.endDate,
             clientName: data?.clientName,
-            projectType: data?.projecttype,
+            project_type: data?.project_type,
             technology: addValue,
             projectStatus: data?.projectstatus,
+           
         };
+
         dispatch(updateProject(body));
     };
-    console.log(store, '//////////////////////////////////////////////////');
-    console.log(sucesshandel, '//////////////////////////////////////////////////');
+    const selectedValues = editData?.technology?.map((item) => {
+        return item.techName;
+    });
 
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
-            console.log(sucesshandel, '//////////////////////////////////////////////////');
             ToastHandle('success', 'Updated Successfully');
             closeModal('render');
         } else if (sucesshandel?.data?.status == 400) {
@@ -111,20 +106,17 @@ const Update = ({ modal, closeModal, editData }) => {
         } else if (sucesshandel?.data?.status == 500) {
             ToastHandle('error', sucesshandel?.data?.message);
         }
-        
-       
     }, [sucesshandel]);
-    
+
     useEffect(() => {
-        
         const getTechnologyname = [];
         dispatch(getAllTechnology({ status: true }));
         for (let i = 0; i < getTechnology?.length; i++) {
             getTechnologyname.push(getTechnology[i]?.techName);
         }
-       setSelected(getTechnologyname);
-       
+        setSelected(getTechnologyname);
     }, [modal]);
+
     return (
         <>
             <Modal show={modal} onHide={closeModal} size="lg">
@@ -215,20 +207,19 @@ const Update = ({ modal, closeModal, editData }) => {
                                     </Col>
                                 </Row>
                                 <Row>
-
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
                                             <Form.Label>
                                                 Type Of Project <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Select {...register('projecttype', { required: true })}>
+                                            <Form.Select {...register('project_type', { required: true })}>
                                                 <option>Choose an Project Type </option>
                                                 <option value="T&M">T&M</option>
                                                 <option value="Fixed Cost">Fixed Cost</option>
                                                 <option value=" Hourly">Hourly</option>
                                                 <option value="Dedicated team">Dedicated team</option>
                                             </Form.Select>
-                                            {errors.projecttype?.type === 'required' && (
+                                            {errors.project_type?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>
@@ -244,12 +235,12 @@ const Update = ({ modal, closeModal, editData }) => {
                                                 <option Value="Mobile">Mobile</option>
                                             </Form.Select> */}
                                             <Multiselect
-                                            {...register('technology', { required: true })}
+                                                {...register('technology', { required: false })}
                                                 onRemove={removehandle}
                                                 onSelect={addhandle}
                                                 isObject={false}
                                                 options={selected}
-                                                showCheckbox
+                                                selectedValues={selectedValues}
                                             />
                                             {errors.technology?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
@@ -265,10 +256,9 @@ const Update = ({ modal, closeModal, editData }) => {
                                             </Form.Label>
                                             <Form.Select {...register('projectstatus', { required: true })}>
                                                 <option>Choose an Project Status</option>
-                                                <option value="Live">Live</option>
-                                                <option value="Completed">Completed</option>
-                                                <option value=" Hold">Hold</option>
-
+                                                <option value="1">Live</option>
+                                                <option value="2">Completed</option>
+                                                <option value="3">Hold</option>
                                             </Form.Select>
                                             {errors.projectstatus?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
@@ -276,7 +266,6 @@ const Update = ({ modal, closeModal, editData }) => {
                                         </Form.Group>
                                     </Col>
                                 </Row>
-
 
                                 <Row>
                                     <Col className="text-start d-flex align-items-center justify-content-center">
