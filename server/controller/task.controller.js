@@ -4,7 +4,8 @@ const taskModel = require('../models/task.model');
 const createtask = async (req, res) => {
     try {
         const { projectId, milestoneId, sprintId, summary, description, assigneeId, reporterId, startDate, dueDate, status } = req.body
-
+console.log(req.body,";;;;;;;;;;;;;;;;;;;");
+        console.log(req.body.reporterId,'dfghkjhfhsdfg');
         const existingtask = await taskModel.findOne({ summary: summary });
         if (existingtask) {
             return res.status(200).json({ status: "400", message: "Task already exists" });
@@ -22,7 +23,8 @@ const createtask = async (req, res) => {
                 dueDate: dueDate,
                 status: status
             })
-            return res.status(200).json({ status: "200", message: "Task created successfully", response: task });
+            console.log(task,"///////////////////////");
+            return res.status(200).json({ status: "200", message: "Task created successfully", response: task});
         }
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -34,7 +36,6 @@ const getTasks = async (req, res) => {
     try {
         const pageSize = 5;
         const totalCount = await taskModel.countDocuments({ activeStatus: req.query.activeStatus });
-
         const tasks = await taskModel.find({ activeStatus: req.query.activeStatus }).populate([
             { path: 'projectId', select: 'projectName' },
             { path: 'milestoneId', select: 'title' },
@@ -47,7 +48,6 @@ const getTasks = async (req, res) => {
             .skip((parseInt(req.query.skip) - 1) * pageSize);
 
         const totalPages = Math.ceil(totalCount / pageSize);
-
         return res.status(200).json({ status: "200", message: "All Tasks fetched successfully", response: tasks, totalCount, totalPages });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
