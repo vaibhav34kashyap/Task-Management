@@ -1,27 +1,29 @@
 const milestoneModel = require('../models/milestone');
-const taskmmodel = require('../models/task.model');
 
 // Get all Milestones WRT status
 const getMilestones = async (req, res) => {
     try {
-        const milestone = await milestoneModel.find({ status: req.query.status }).sort({ createdAt: -1 });
-        return res.status(200).json({ status: '200', message: 'Milestones fetched successfully', response: milestone })
+        const pageSize = 10;
+        const totalCount = await milestoneModel.countDocuments({ status: req.query.status });
+        const milestones = await milestoneModel.find({ status: req.query.status })
+            .sort({ createdAt: -1 })
+            .limit(pageSize)
+            .skip((parseInt(req.query.skip) - 1) * pageSize);
+        const totalPages = Math.ceil(totalCount / pageSize);
+
+        return res.status(200).json({ status: '200', message: 'Milestones Data fetched successfully', response: milestones, totalCount, totalPages })
     } catch (error) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
     }
 }
 
-
-const getSingleMileston = async (req, res) => {
+// Get A milestone by Id
+const getMilestoneById = async (req, res) => {
     try {
-        const milestoneData = await milestoneModel.findById({ _id: req.params.id })
-        if (milestoneData) {
-            res.status(200).json({ status: "200", data: milestoneData, message: "Milestone get successfully!" })
-        } else {
-            res.status(200).json({ status: "404", message: "Not Found" })
-        }
-    } catch (err) {
-        res.status(200).json({ status: "500", message: "something went wrong" })
+        const milestone = await milestoneModel.findById({ _id: req.query.milestoneId });
+        return res.status(200).json({ status: '200', message: 'Milestone fetched successfully', response: milestone })
+    } catch (error) {
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
     }
 }
 
@@ -72,23 +74,30 @@ const updateStatus = async (req, res) => {
     try {
         await milestoneModel.findByIdAndUpdate({ _id: req.body.id }, { status: req.body.status });
         return res.status(200).json({ status: '200', message: 'Milestone status updated Successfully' });
-    } catch (err) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
+    } catch (error) {
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
     }
 }
 
 // Get all milestones of a project
 const getAProjectMilestones = async (req, res) => {
     try {
-        const result = await milestoneModel.find({ $and: [{ project_id: req.query.id }, { status: req.query.status }] }).sort({ createdAt: -1 });
-        return res.status(200).json({ status: "200", message: "All milestones fetched successfully", Response: result });
+        const pageSize = 10;
+        const totalCount = await milestoneModel.countDocuments({ $and: [{ project_id: req.query.id }, { status: req.query.status }] });
+        const result = await milestoneModel.find({ $and: [{ project_id: req.query.id }, { status: req.query.status }] })
+            .sort({ createdAt: -1 })
+            .limit(pageSize)
+            .skip((parseInt(req.query.skip) - 1) * pageSize);
+        const totalPages = Math.ceil(totalCount / pageSize);
+
+        return res.status(200).json({ status: "200", message: "All milestones fetched successfully", Response: result, totalCount, totalPages });
     } catch (error) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message });
+        return res.status(500).json({ status: "500", message: 'Something went wrong', error: error.message });
     }
 }
 
 
 module.exports = {
     getMilestones,
-    addMilestone, updateMilestone, updateStatus, getSingleMileston, getAProjectMilestones
+    addMilestone, updateMilestone, updateStatus, getMilestoneById, getAProjectMilestones
 }

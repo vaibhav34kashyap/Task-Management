@@ -139,7 +139,6 @@ const getSprintTasks = async (req, res) => {
 // Get tasks according to status
 const getTasksAccToStatus = async (req, res) => {
     try {
-        // var resp = null;
         const todoCount = await taskModel.countDocuments({ status: 1 });
         const todo = await taskModel.find({ status: 1 }).sort({ createdAt: -1 }).populate([
             { path: 'projectId', select: 'projectName' },
@@ -147,9 +146,8 @@ const getTasksAccToStatus = async (req, res) => {
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
             { path: 'reporterId', select: 'userName' }
-        ])
-        // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
-        
+        ]);
+
         const inProgressCount = await taskModel.countDocuments({ status: 2 });
         const inProgress = await taskModel.find({ status: 2 }).sort({ createdAt: -1 }).populate([
             { path: 'projectId', select: 'projectName' },
@@ -157,28 +155,27 @@ const getTasksAccToStatus = async (req, res) => {
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
             { path: 'reporterId', select: 'userName' }
-        ])
-        // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
+        ]);
 
-        const doneCount = await taskModel.countDocuments({ status: 3 });
-        const done = await taskModel.find({ status: 3 }).sort({ createdAt: -1 }).populate([
+        const holdCount = await taskModel.countDocuments({ status: 3 })
+        const hold = await taskModel.find({ status: 3 }).sort({ createdAt: -1 }).populate([
             { path: 'projectId', select: 'projectName' },
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
             { path: 'reporterId', select: 'userName' }
-        ])
-        // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
-        
-        const holdCount = await taskModel.countDocuments({ status: 4 })
-        const hold = await taskModel.find({ status: 4 }).sort({ createdAt: -1 }).populate([
+        ]);
+
+        const doneCount = await taskModel.countDocuments({ status: 4 });
+        const done = await taskModel.find({ status: 4 }).sort({ createdAt: -1 }).populate([
             { path: 'projectId', select: 'projectName' },
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
             { path: 'reporterId', select: 'userName' }
-        ])
-        res.status(200).json({ status: '200', message: "fetched successfully", Response: todo,todoCount, inProgress,inProgressCount, done,doneCount, hold,holdCount });
+        ]);
+
+        res.status(200).json({ status: '200', message: "fetched successfully", Response: todo, todoCount, inProgress, inProgressCount, hold, holdCount, done, doneCount });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
