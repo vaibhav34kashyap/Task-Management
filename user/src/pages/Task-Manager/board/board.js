@@ -48,19 +48,23 @@ const Boards = (props) => {
   const dispatch = useDispatch();
   const store = useSelector(state => state)
   const successHandle = store?.getAllTaskReducer
+  console.log("successHandle",successHandle)
 
 
 
   const [showModal, setShowModal] = useState(false);
+  const [destinationId, setDestinationId] = useState('');
   const [columns, setColumns] = useState(columnsFromBackend);
 
   const onDragEnd = (result, columns, setColumns) => {
-    console.log("colun", columns)
+    console.log("colunhhhhhhhh", columns)
 
 
     if (!result.destination) return;
     const { source, destination } = result;
+    
     if (source.droppableId !== destination.droppableId) {
+      
       const sourceColumn = columns[source.droppableId];
       const destColumn = columns[destination.droppableId];
       const sourceItems = [...sourceColumn.items];
@@ -78,8 +82,42 @@ const Boards = (props) => {
           items: destItems,
         },
       });
+      if(destColumn.title == "In Progress"){
+        let body = {
+          taskId: result.draggableId,
+          status: 2
+        }
+        // alert('hhdgh')
       
-      handelupdatetask(destItems);
+          dispatch(updateTaskStatus(body))
+        
+      
+      }
+    //   else if(destColumn.title == "Done"){
+    //     let body = {
+    //       taskId: result.draggableId,
+    //       status: 3
+    //     }
+    //     setTimeout(()=>{
+    //       dispatch(updateTaskStatus(body))   
+    //       },10000)
+    //     // alert('hhdgh')
+    //     // dispatch(updateTaskStatus(body))
+    //   }
+    //  else if(destColumn.title == "To-do"){
+    //     let body = {
+    //       taskId: result.draggableId,
+    //       status: 1
+    //     }
+    //     setTimeout(()=>{
+
+    //       dispatch(updateTaskStatus(body))   
+    //       },10000)
+    //       console.log('updatetaskdataaaaa',updateTaskStatus)
+    //     // alert('hhdgh')
+    //     // dispatch(updateTaskStatus(body))
+    //   }
+      sessionStorage.setItem("destinationCol",destColumn.title)
     } 
     else {
       const column = columns[source.droppableId];
@@ -92,8 +130,9 @@ const Boards = (props) => {
           ...column,
           items: copiedItems,
         },
+        
       });
-      
+     console.log("copy",copiedItems)
     }
   };
 
@@ -113,6 +152,11 @@ const Boards = (props) => {
           title: 'In Progress',
           items: successHandle?.data?.inProgress?.map((ele) => { return { ...ele, id: ele._id } }),
         },
+        
+        [uuidv4()]: {
+          title: 'Hold',
+          items: successHandle?.data?.hold?.map((ele) => { return { ...ele, id: ele._id }}),
+      },
         [uuidv4()]: {
           title: 'Done',
           items: successHandle?.data?.done?.map((ele) => { return { ...ele, id: ele._id } }),
@@ -120,25 +164,31 @@ const Boards = (props) => {
       })
     }
   }, [successHandle])
+ // const [body,setBody] = useState({});
+
   const handelupdatetask = (ele) => {
-    let body = {
-      taskId: ele[0].id,
-      status: 2
+    if(sessionStorage.getItem('destinationCol') == "To-do"){
+      
+      let body = {
+        taskId: ele.draggableId,
+        status: 2
+      }
+      
+      setTimeout(()=>{
+        dispatch(updateTaskStatus(body))   
+        },5000)
+      
     }
+   
+    //console.log("body dataaaaa",ele)
+    //console.log(sessionStorage.getItem('des'))
     
-    // console.log("body dataaaaa",body)
-    dispatch(updateTaskStatus(body))
    
   }
 
-  const handel= () => {
-    
-    alert()
-    // console.log("body dataaaaa",body)
-    ///dispatch(updateTask(body))
-   
-  }
-  console.log("dsgsgsbhsr",columns)
+  
+  
+
   return (
 
     <>
@@ -157,7 +207,7 @@ const Boards = (props) => {
         <RightBar className="d-none" projectId={props.projectId} mileStoneId={props.mileStoneId} sprintId={props.sprintId} showModal={showModal} setShowModal={setShowModal}/>
      </div>
 
-      <DragDropContext  onDragEnd={(result) => onDragEnd(result, columns, setColumns)} 
+      <DragDropContext  onDragEnd={(result) => onDragEnd(result, columns, setColumns)} onDragStart={(result)=>handelupdatetask(result)}
 
       >
         {successHandle.loading ? (<MainLoader />) : <Container>
@@ -171,7 +221,8 @@ const Boards = (props) => {
                     <TaskList class="three" 
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                    >
+                      
+                    > 
                       <Title class="">{column.title}</Title>
                       {column.items.map((item, index) => (
                         <TaskCard key={item} item={item} index={index}  />
