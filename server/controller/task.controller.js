@@ -5,7 +5,8 @@ const assignUserModel = require('../models/assignUser.model');
 const createtask = async (req, res) => {
     try {
         const { projectId, milestoneId, sprintId, summary, description, assigneeId, reporterId, startDate, dueDate, status } = req.body
-
+console.log(req.body,";;;;;;;;;;;;;;;;;;;");
+        console.log(req.body.reporterId,'dfghkjhfhsdfg');
         const existingtask = await taskModel.findOne({ summary: summary });
         if (existingtask) {
             return res.status(200).json({ status: "400", message: "Task already exists" });
@@ -41,20 +42,20 @@ const getTasks = async (req, res) => {
         const pageSize = 5;
         const totalCount = await taskModel.countDocuments({ activeStatus: req.query.activeStatus });
 
-        // const tasks = await taskModel.find({ activeStatus: req.query.activeStatus }).populate([
-        //     { path: 'projectId', select: 'projectName' },
-        //     { path: 'milestoneId', select: 'title' },
-        //     { path: 'sprintId', select: 'sprintName' },
-        //     { path: 'assigneeId', select: 'userName' },
-        //     { path: 'reporterId', select: 'role' }
-        // ])
-        //     .sort({ createdAt: -1 })
-        //     .limit(pageSize)
-        //     .skip((parseInt(req.query.skip) - 1) * pageSize);
+        const tasks = await taskModel.find({ activeStatus: req.query.activeStatus }).populate([
+            { path: 'projectId', select: 'projectName' },
+            { path: 'milestoneId', select: 'title' },
+            { path: 'sprintId', select: 'sprintName' },
+            { path: 'assigneeId', select: 'userName' },
+            { path: 'reporterId', select: 'role' }
+        ])
+            .sort({ createdAt: -1 })
+            .limit(pageSize)
+            .skip((parseInt(req.query.skip) - 1) * pageSize);
 
-        // const totalPages = Math.ceil(totalCount / pageSize);
+        const totalPages = Math.ceil(totalCount / pageSize);
 
-        const tasks = assignUserModel.find({ assigneeId : req.query.assigneeId, })
+        // const tasks = assignUserModel.find({ assigneeId : req.query.assigneeId, })
 
         return res.status(200).json({ status: "200", message: "All Tasks fetched successfully", response: tasks, totalCount, totalPages });
     } catch (error) {
