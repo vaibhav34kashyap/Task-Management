@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 
 // actions
-import { showRightSidebar, changeSidebarType } from '../redux/actions';
+import { showRightSidebar, changeSidebarType, getsingleMileStone } from '../redux/actions';
 import {getAllProjects} from '../../src/redux/projects/action'
 import { getallMileStones,getMileStoneById } from '../redux/actions';
 import { getAllSprint,getSingleSprint } from '../redux/actions';
@@ -220,6 +220,12 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         dispatch(showRightSidebar());
         
     };
+    useEffect(() => {
+   
+        dispatch(getsingleMileStone({ id: projectId, status: 1 }));
+        // dispatch(getSprintById({ status: 1, id: milestoneId }));
+        dispatch(getSingleSprint({ status: 1, id: mileStoneId }));
+    }, []);
 
     return (
         <>
