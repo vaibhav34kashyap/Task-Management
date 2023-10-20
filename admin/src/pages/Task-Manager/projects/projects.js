@@ -9,8 +9,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import MainLoader from '../../../constants/Loader/loader';
 import ToastHandle from '../../../constants/toaster/toaster';
 import moment from 'moment';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const Projects = () => {
+
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [openModal, setOpenModal] = useState(false);
@@ -19,6 +22,7 @@ const Projects = () => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [deletemodal, setDeleteModal] = useState(false);
     const [editData, setEditData] = useState();
+    const [skip, setSkip] = useState(1);
     const getProjectList = store?.getProject;
     const deletehandle = store?.deleteProject?.data;
     const [status, setStatus] = useState(1);
@@ -79,22 +83,27 @@ const Projects = () => {
             setStatus(1);
             let data = {
                 status: 1,
+                skip 
             };
             dispatch(getAllProjects(data));
         } else {
             setStatus(0);
             let data = {
                 status: 0,
+                skip
             };
             dispatch(getAllProjects(data));
         }
     };
     useEffect(() => {
+        console.log(skip)
         let body = {
             status: status,
+            skip: skip,
+            
         };
         dispatch(getAllProjects(body));
-    }, [render]);
+    }, []);
     useEffect(() => {
         if (deletehandle?.status == 200) {
             ToastHandle('success', deletehandle?.message);
@@ -105,7 +114,10 @@ const Projects = () => {
             ToastHandle('error', deletehandle?.message);
         }
     }, [deletehandle]);
-
+    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setSkip(value);
+        dispatch(getAllProjects({status: status, skip: value  }));
+    };
     return (
         <>
             <div>
@@ -167,7 +179,7 @@ const Projects = () => {
                                     {store?.getProject?.data?.response?.map((ele, ind) => {
                                         return (
                                             <tr className="align-middle">
-                                                <th scope="row">{ind + 1}</th>
+                                                <th scope="row">{(skip - 1) * 10 + ind + 1}</th>
                                                 <td className="cp">
                                                     <span className="namelink"> {ele?.projectName} </span>
                                                 </td>
@@ -191,8 +203,7 @@ const Projects = () => {
                                                 <td>
                                                     <Form.Check
                                                         type="switch"
-                                                        checked={ele?.activeStatus
-                                                        }
+                                                        checked={ele?.activeStatus}
                                                         onChange={(e) => handleStatusChange(e, ele)}
                                                     />
                                                 </td>
@@ -221,6 +232,21 @@ const Projects = () => {
                             </Table>
                         )}
                     </Card.Body>
+                    <Row>
+                        <Col lg={12} className="d-flex justify-content-end mt-3">
+                            {store?.getProject?.data?.totalPages > 0 && (
+                                <Stack spacing={2}>
+                                    <Pagination
+                                        defaultPage={skip}
+                                        count={store?.getProject?.data?.totalPages}
+                                        color="primary"
+                                        variant="outlined"
+                                        onChange={handlePaginationChange}
+                                    />
+                                </Stack>
+                            )}
+                        </Col>
+                    </Row>
                 </Card>
 
                 <Create modal={openModal} closeModal={closeModal} />
