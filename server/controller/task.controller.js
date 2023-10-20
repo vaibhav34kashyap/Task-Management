@@ -1,4 +1,5 @@
 const taskModel = require('../models/task.model');
+const assignUserModel = require('../models/assignUser.model');
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -17,14 +18,18 @@ console.log(req.body,";;;;;;;;;;;;;;;;;;;");
                 sprintId: sprintId,
                 summary: summary,
                 description: description,
-                assigneeId: assigneeId, // One who is doing work
-                reporterId: reporterId, // one who will assignee report after work done
+
                 startDate: startDate,
                 dueDate: dueDate,
                 status: status
+            });
+            await assignUserModel.create({
+                assigneeId: assigneeId, // One who is doing work
+                reporterId: reporterId, // one who will assignee report after work done
+                taskId: task._id
             })
-            console.log(task,"///////////////////////");
-            return res.status(200).json({ status: "200", message: "Task created successfully", response: task});
+
+            return res.status(200).json({ status: "200", message: "Task created successfully", response: task });
         }
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -36,18 +41,22 @@ const getTasks = async (req, res) => {
     try {
         const pageSize = 5;
         const totalCount = await taskModel.countDocuments({ activeStatus: req.query.activeStatus });
+
         const tasks = await taskModel.find({ activeStatus: req.query.activeStatus }).populate([
             { path: 'projectId', select: 'projectName' },
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
+            { path: 'reporterId', select: 'role' }
         ])
             .sort({ createdAt: -1 })
             .limit(pageSize)
             .skip((parseInt(req.query.skip) - 1) * pageSize);
 
         const totalPages = Math.ceil(totalCount / pageSize);
+
+        // const tasks = assignUserModel.find({ assigneeId : req.query.assigneeId, })
+
         return res.status(200).json({ status: "200", message: "All Tasks fetched successfully", response: tasks, totalCount, totalPages });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -62,7 +71,7 @@ const getATask = async (req, res) => {
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
+            { path: 'reporterId', select: 'role' }
         ])
         return res.status(200).json({ status: "200", message: "Task Details fetched successfully", response: task });
     } catch (error) {
@@ -123,7 +132,7 @@ const getSprintTasks = async (req, res) => {
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
+            { path: 'reporterId', select: 'role' }
         ])
             .sort({ createdAt: -1 })
             .limit(pageSize)
@@ -145,7 +154,7 @@ const getTasksAccToStatus = async (req, res) => {
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
+            { path: 'reporterId', select: 'role' }
         ]);
 
         const inProgressCount = await taskModel.countDocuments({ status: 2 });
@@ -154,7 +163,7 @@ const getTasksAccToStatus = async (req, res) => {
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
+            { path: 'reporterId', select: 'role' }
         ]);
 
         const holdCount = await taskModel.countDocuments({ status: 3 })
@@ -163,7 +172,7 @@ const getTasksAccToStatus = async (req, res) => {
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
+            { path: 'reporterId', select: 'role' }
         ]);
 
         const doneCount = await taskModel.countDocuments({ status: 4 });
@@ -172,7 +181,7 @@ const getTasksAccToStatus = async (req, res) => {
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
+            { path: 'reporterId', select: 'role' }
         ]);
 
         res.status(200).json({ status: '200', message: "fetched successfully", Response: todo, todoCount, inProgress, inProgressCount, hold, holdCount, done, doneCount });

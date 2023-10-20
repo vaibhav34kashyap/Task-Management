@@ -20,14 +20,6 @@ const tasks = mongoose.model(
         description: {
             type: String
         },
-        assigneeId: {
-            type: mongoose.Types.ObjectId,
-            ref: 'User'
-        },
-        reporterId: {
-            type: mongoose.Types.ObjectId,
-            ref: 'User'
-        },
         priority: {
             type: Number,
             default : 2 // 1=high, 2=medium, 3=low
