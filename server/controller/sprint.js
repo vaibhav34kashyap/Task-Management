@@ -91,7 +91,7 @@ const getAMilestoneAllSprints = async (req, res) => {
         const result = await sprintModel.find({ $and: [{ milestone_id: req.query.id }, { status: req.query.status }] }).sort({ createdAt: -1 });
         return res.status(200).json({ status: '200', message: "ALL sprints fecteched successfully", Response: result })
     } catch (error) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
     }
 }
 

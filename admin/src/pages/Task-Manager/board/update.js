@@ -3,18 +3,17 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Card, Button, Alert, CloseButton } from 'react-bootstrap';
-import ToastHandle from '../../../../../../../constants/toaster/toaster';
+import ToastHandle from '../../../constants/toaster/toaster';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateSprint } from '../../../../../../../redux/sprint/action';
-import MainLoader from '../../../../../../../constants/Loader/loader';
+// import { updateSprint } from '../../../../../../../redux/sprint/action';
+import MainLoader from '../../../constants/Loader/loader';
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { updateTask } from '../../../../../../../redux/actions';
+import { updateTask } from '../../../redux/actions';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-const Update = ({ modal, CloseModal, editData }) => {
+const Update = ({ modal, closeModal, editData }) => {
     console.log(editData, 'update');
- 
     const [description, setDescription] = useState('');
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -32,7 +31,7 @@ const Update = ({ modal, CloseModal, editData }) => {
         formState: { errors },
     } = useForm();
     const CloseModaal = () => {
-        CloseModal();
+        closeModal();
     };
     const onSubmit = (data) => {
         let body = {
@@ -55,14 +54,14 @@ const Update = ({ modal, CloseModal, editData }) => {
 
     useEffect(() => {
         reset({
-            Milestone: editData?.milestoneId,
-            projectname: editData?.projectId,
-            Sprint: editData?.sprintId,
+            Milestone: editData?.milestoneId?._id,
+            projectname: editData?.projectId?._id,
+            Sprint: editData?.sprintId?.id,
             startDate: handleDate(editData?.createdAt),
             dueDate: handleDate(editData?.dueDate),
             summary: editData?.summary,
-            Assignee: editData?.assigneeId,
-            Reporter: editData?.reporterId,
+            Assignee: editData?.assigneeId?._id,
+            Reporter: editData?.reporterId?._id,
             priority: editData?.priority,
             status: editData?.status,
         });
@@ -81,7 +80,7 @@ const Update = ({ modal, CloseModal, editData }) => {
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
             ToastHandle('success', 'Updated Successfully');
-            CloseModal('render');
+            closeModal('render');
         } else if (sucesshandel?.data?.status == 400) {
             ToastHandle('error', sucesshandel?.data?.message);
         } else if (sucesshandel?.data?.status == 500) {
@@ -90,7 +89,7 @@ const Update = ({ modal, CloseModal, editData }) => {
     }, [sucesshandel]);
     return (
         <>
-            <Modal show={modal} onHide={CloseModaal} size={'lg'}>
+            <Modal show={modal} onHide={closeModal} size={'lg'}>
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
@@ -100,7 +99,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                 </Modal.Title>
                             </Col>
                             <Col lg={5} className="text-end pt-2">
-                                <CloseButton onClick={CloseModal} />
+                                <CloseButton onClick={closeModal} />
                             </Col>
                         </Row>
                     </Col>
@@ -356,4 +355,5 @@ const Update = ({ modal, CloseModal, editData }) => {
     );
 };
 
-export default Update;
+
+export default Update

@@ -17,19 +17,20 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 const Update = ({ modal, closeModal, editData }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    const sucesshandel = store?.updateMilestone
+    const sucesshandel = store?.updateMilestone;
+    // disable previous date
+    const today = new Date().toISOString().split('T')[0];
+    //
     const [description, setDescription] = useState('');
-    const [editorState, setEditorState] = useState(
-        () => EditorState.createEmpty(),
-    );
-    console.log(editorState, 'stttttt')
+    const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+    console.log(editorState, 'stttttt');
     useEffect(() => {
         reset({
             title: editData?.title,
             startDate: handleDate(editData?.start_date),
             endDate: handleDate(editData?.completion_date),
-
-        });setDescription(editData?.description);
+        });
+        setDescription(editData?.description);
     }, [modal]);
     const handleDate = (data) => {
         let date = new Date(data);
@@ -47,8 +48,8 @@ const Update = ({ modal, closeModal, editData }) => {
             start_date: data?.startDate,
             completion_date: data?.endDate,
         };
-        dispatch(updateMileStone(body)); closeModal('render');
-
+        dispatch(updateMileStone(body));
+        closeModal('render');
     };
 
     const {
@@ -60,12 +61,12 @@ const Update = ({ modal, closeModal, editData }) => {
         formState: { errors },
     } = useForm();
     const CloseModal = () => {
-        closeModal()
-    }
+        closeModal();
+    };
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
             // console.log(sucesshandel, sucesshandel?.message);
-            ToastHandle('success', "Updated Successfully");
+            ToastHandle('success', 'Updated Successfully');
             closeModal('render');
         } else if (sucesshandel?.data?.status == 400) {
             ToastHandle('error', sucesshandel?.data?.message);
@@ -75,7 +76,7 @@ const Update = ({ modal, closeModal, editData }) => {
     }, [sucesshandel]);
     return (
         <>
-            <Modal show={modal} onHide={CloseModal} >
+            <Modal show={modal} onHide={CloseModal}>
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
@@ -111,25 +112,27 @@ const Update = ({ modal, closeModal, editData }) => {
                                     </Form.Group>
                                 </Col>
                                 <Col lg={12}>
-                                    <Form.Group className="mb-2 border d-flex align-content-center flex-column" controlId="exampleForm.ControlTextarea1">
-                                        <Form.Label className='mb-0'>
+                                    <Form.Group
+                                        className="mb-2 border d-flex align-content-center flex-column"
+                                        controlId="exampleForm.ControlTextarea1">
+                                        <Form.Label className="mb-0">
                                             Description <span className="text-danger">*</span>:
                                         </Form.Label>
                                         <CKEditor
-                                                config={{
-                                                    ckfinder: {
-                                                        // Upload the images to the server using the CKFinder QuickUpload command.
-                                                        uploadUrl:
-                                                            'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
-                                                    },
-                                                }}
-                                                editor={ClassicEditor}
-                                                data={description}
-                                                onChange={(event, editor) => {
-                                                    const data = editor.getData();
-                                                    setDescription(data);
-                                                }}
-                                            />
+                                            config={{
+                                                ckfinder: {
+                                                    // Upload the images to the server using the CKFinder QuickUpload command.
+                                                    uploadUrl:
+                                                        'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
+                                                },
+                                            }}
+                                            editor={ClassicEditor}
+                                            data={description}
+                                            onChange={(event, editor) => {
+                                                const data = editor.getData();
+                                                setDescription(data);
+                                            }}
+                                        />
                                     </Form.Group>
                                 </Col>
 
@@ -140,6 +143,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                         </Form.Label>
                                         <Form.Control
                                             type="date"
+                                            min={today}
                                             {...register('startDate', { required: true })}
                                             placeholder="Please start Date "
                                         />
@@ -155,6 +159,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                         </Form.Label>
                                         <Form.Control
                                             type="date"
+                                            min={today}
                                             {...register('endDate', { required: true })}
                                             placeholder="Please end Date"
                                         />
@@ -177,10 +182,9 @@ const Update = ({ modal, closeModal, editData }) => {
                         </Form>
                     </Card>
                 </Modal.Body>
-
             </Modal>
         </>
-    )
-}
+    );
+};
 
-export default Update
+export default Update;

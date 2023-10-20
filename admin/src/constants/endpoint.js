@@ -23,7 +23,7 @@ export const SingleMilestone = "/milestone/getAProjectMilestones?id="
 export const SingleSprintTask = "/task/getSprintTasks?sprintId="
 export const GetAllTask = "/task/getTasksAccToStatus"
 export const UpdateTask = "/task/updateTask"
-export const DeleteTask = "/task/deletetask?"
+export const DeleteTask = "/task/deletetask?taskId="
 export const UpdateTaskStatus = "/task/updateTaskStatus"
 
 export const InviteUser = "/users/register"
