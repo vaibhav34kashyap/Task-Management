@@ -40,7 +40,7 @@ const tasks = mongoose.model(
         },
         status: {
             type: Number,
-            default: 1 // 1=,todo, 2=inProgress, 3=done, 4=hold, 
+            default: 1 // 1=,todo, 2=inProgress, 3=hold, 4=done 
         },
         activeStatus: {
             type: Boolean,

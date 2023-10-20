@@ -4,10 +4,17 @@ const taskModel = require('../models/task.model')
 // Get all sprints WRT status
 const getSprints = async (req, res) => {
     try {
-        const sprints = await sprintModel.find({ status: req.query.status }).populate('milestone_id', 'title').sort({ createdAt: -1 });
-        return res.status(200).json({ status: '200', message: 'Sprints Data fetched successfully', response: sprints });
+        const pageSize = 10;
+        const totalCount = await sprintModel.countDocuments({ status: req.query.status });
+        const sprints = await sprintModel.find({ status: req.query.status }).populate('milestone_id', 'title')
+            .sort({ createdAt: -1 })
+            .limit(pageSize)
+            .skip((parseInt(req.query.skip) - 1) * pageSize);
+        const totalPages = Math.ceil(totalCount / pageSize);
+
+        return res.status(200).json({ status: '200', message: 'Sprints Data fetched successfully', response: sprints, totalCount, totalPages });
     } catch (err) {
-        return res.status(200).json({ status: '404', message: 'Something went wrong' });
+        return res.status(500).json({ status: '500', message: 'Something went wrong' });
     }
 }
 
@@ -68,8 +75,8 @@ const addSprint = async (req, res) => {
 // Update a Sprint
 const updateSprint = async (req, res) => {
     try {
-        await sprintModel.findByIdAndUpdate({_id : req.body.sprintId}, req.body, { new: true });
-        return res.status(200).json({ status: '200', message: 'Sprints updated Successfully'})
+        await sprintModel.findByIdAndUpdate({ _id: req.body.sprintId }, req.body, { new: true });
+        return res.status(200).json({ status: '200', message: 'Sprints updated Successfully' })
     } catch (error) {
         return res.status(200).json({ status: '404', message: 'Something went wrong' });
     }
@@ -81,17 +88,24 @@ const updateStatus = async (req, res) => {
         await sprintModel.findByIdAndUpdate({ _id: req.body.id }, { status: req.body.status })
         return res.status(200).json({ status: '200', message: 'Sprint status updated Successfully' });
     } catch (error) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
+        return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });
     }
 }
 
 // To get all sprints of a milestone
 const getAMilestoneAllSprints = async (req, res) => {
     try {
-        const result = await sprintModel.find({ $and: [{ milestone_id: req.query.id }, { status: req.query.status }] }).sort({ createdAt: -1 });
-        return res.status(200).json({ status: '200', message: "ALL sprints fecteched successfully", Response: result })
+        const pageSize = 10;
+        const totalCount = await sprintModel.countDocuments({ $and: [{ milestone_id: req.query.id }, { status: req.query.status }] })
+        const result = await sprintModel.find({ $and: [{ milestone_id: req.query.id }, { status: req.query.status }] })
+            .sort({ createdAt: -1 })
+            .limit(pageSize)
+            .skip((parseInt(req.query.skip) - 1) * pageSize);
+        const totalPages = Math.ceil(totalCount / pageSize);
+
+        return res.status(200).json({ status: '200', message: "ALL sprints fecteched successfully", Response: result, totalCount, totalPages })
     } catch (error) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
+        return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });
     }
 }
 
