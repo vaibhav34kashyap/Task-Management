@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
+import "../global.css";
+
 
 
 // actions
@@ -33,7 +35,6 @@ import RightBar from './AddRightSideBar';
 import * as layoutConstants from '../constants/layout';
 import TimeLine from './../pages/profile2/TimeLine';
 import MileStone from './../pages/Task-Manager/AllMillstones/mileStone/index';
-
 
 
 // get the notifications
@@ -257,9 +258,30 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             <li><Link to=''>Filters</Link></li>
                             <li><Link to=''>Dashboard</Link></li>
                             <li><Link to=''>Teams</Link></li>
-                            <li>
+                            <li><div className  ="project_names">
+
+                            <select name="Assignee" className="form-select op1 " id="exampleForm.ControlInput1" onChange={onChangeProject} >
+                                <option > Projects</option>
+                                {allProjects?.map((item,index)=>    
+                                    <option className='project_opt' key={index} value={item._id}>{item.projectName}</option>
+                                )}
+                            </select></div></li>
+                            <li><div className  ="project_names">   <select name="Assignee" className="form-select  op2" id="exampleForm.ControlInput1" onChange={onChangeMilestone}>
+                                <option> MileStone</option>
+                                {mileStoneData?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.title}</option>
+                                )}
+                            </select></div></li>
+                            <li><div className="project_names" >
+                            <select name="Assignee" className="form-select  op3" id="exampleForm.ControlInput1" onChange={onChangeSprint}>
+                                <option> Sprint</option>
+                                {getAllSingleSprints?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.sprintName}</option>
+                                )}
+                            </select></div></li>
+                            {/* <li>
                             <div class="project_names">
-                            {/* <label class="form-label" for="exampleForm.ControlInput1"> Projects <span class="text-danger">*</span>:</label> */}
+                           
                             <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeProject}>
                                 <option>--Select Project--</option>
                                 {allProjects?.map((item,index)=>
@@ -279,8 +301,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                 )}
                             </select>
                             </div>
-                            </li>
+                            </li> */}
                     </ul>
+                    
                    </div>
                          </div> 
                   
