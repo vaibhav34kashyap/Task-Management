@@ -69,7 +69,7 @@ const getUserAssignments = async (req, res) => {
             { path: 'sprintId', select: 'sprintName' },
             { path: 'taskId', select: 'summary' },
             { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
+            { path: 'reporterId', select: 'role' }
         ]);
         return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result })
     } catch (error) {

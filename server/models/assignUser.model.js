@@ -24,7 +24,7 @@ const assignUser = mongoose.model(
         },
         reporterId: {
             type: mongoose.Types.ObjectId,
-            ref: 'User'
+            ref: 'roles'
         }
     },
         {
