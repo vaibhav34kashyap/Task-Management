@@ -20,6 +20,9 @@ const Update = ({ modal, closeModal, editData }) => {
     const [description, setDescription] = useState('');
     const sucesshandel = store?.updateSprint;
     const loaderhandel = store?.updateSprint;
+    // disable previous date
+    const today = new Date().toISOString().split('T')[0];
+    //
     const {
         register,
         handleSubmit,
@@ -33,7 +36,7 @@ const Update = ({ modal, closeModal, editData }) => {
     };
     const onSubmit = (data) => {
         let body = {
-            _id: editData?._id,
+            sprintId: editData?._id,
             sprintName: data?.title,
             sprintDesc: description,
             startDate: data?.startDate,
@@ -41,11 +44,6 @@ const Update = ({ modal, closeModal, editData }) => {
         };
         console.log('editsprit', body);
         dispatch(updateSprint(body));
-    };
-    //editor state
-    const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
-    const textEditorOnchange = (e) => {
-        console.log(e, 'edi');
     };
     useEffect(() => {
         reset({
@@ -143,6 +141,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
+                                                min={today}
                                                 {...register('startDate', { required: true })}
                                                 placeholder="Please start Date "
                                             />
@@ -158,6 +157,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
+                                                min={today}
                                                 {...register('endDate', { required: true })}
                                                 placeholder="Please end Date"
                                             />

@@ -170,9 +170,33 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
     border-right: 0px;
     border-top: 0px;
     color: #323b47 !important;
-    padding: 0px 49px 0px 0px;
+
+    border-bottom:none;
+}
+.op1{
+    padding-right: 0px !important;
+}
+.op2{
+    padding-right: 30px !important;
+}
+.op3{
+    padding-right: 30px !important;
 }
 
+option{
+    border:none !important;
+    /* padding-left:10px; */
+}
+.project_opt:hover{
+    background-color:cadetblue;
+    transform: scale(1.5) !important;
+
+}
+
+.form-select{
+    /* padding-left: 0% !important; */
+    padding-right: auto !important;
+}
 .action_icon {
     display: flex;
     width: 100%;

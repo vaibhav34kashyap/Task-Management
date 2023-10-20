@@ -1,10 +1,12 @@
 const taskModel = require('../models/task.model');
+const assignUserModel = require('../models/assignUser.model');
 
 // Create or add tasks
 const createtask = async (req, res) => {
     try {
         const { projectId, milestoneId, sprintId, summary, description, assigneeId, reporterId, startDate, dueDate, status } = req.body
-
+console.log(req.body,";;;;;;;;;;;;;;;;;;;");
+        console.log(req.body.reporterId,'dfghkjhfhsdfg');
         const existingtask = await taskModel.findOne({ summary: summary });
         if (existingtask) {
             return res.status(200).json({ status: "400", message: "Task already exists" });
@@ -16,12 +18,17 @@ const createtask = async (req, res) => {
                 sprintId: sprintId,
                 summary: summary,
                 description: description,
-                assigneeId: assigneeId, // One who is doing work
-                reporterId: reporterId, // one who will assignee report after work done
+
                 startDate: startDate,
                 dueDate: dueDate,
                 status: status
+            });
+            await assignUserModel.create({
+                assigneeId: assigneeId, // One who is doing work
+                reporterId: reporterId, // one who will assignee report after work done
+                taskId: task._id
             })
+
             return res.status(200).json({ status: "200", message: "Task created successfully", response: task });
         }
     } catch (error) {
@@ -40,13 +47,15 @@ const getTasks = async (req, res) => {
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
+            { path: 'reporterId', select: 'role' }
         ])
             .sort({ createdAt: -1 })
             .limit(pageSize)
             .skip((parseInt(req.query.skip) - 1) * pageSize);
 
         const totalPages = Math.ceil(totalCount / pageSize);
+
+        // const tasks = assignUserModel.find({ assigneeId : req.query.assigneeId, })
 
         return res.status(200).json({ status: "200", message: "All Tasks fetched successfully", response: tasks, totalCount, totalPages });
     } catch (error) {
@@ -62,7 +71,7 @@ const getATask = async (req, res) => {
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
+            { path: 'reporterId', select: 'role' }
         ])
         return res.status(200).json({ status: "200", message: "Task Details fetched successfully", response: task });
     } catch (error) {
@@ -123,7 +132,7 @@ const getSprintTasks = async (req, res) => {
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
+            { path: 'reporterId', select: 'role' }
         ])
             .sort({ createdAt: -1 })
             .limit(pageSize)
@@ -139,46 +148,43 @@ const getSprintTasks = async (req, res) => {
 // Get tasks according to status
 const getTasksAccToStatus = async (req, res) => {
     try {
-        // var resp = null;
         const todoCount = await taskModel.countDocuments({ status: 1 });
         const todo = await taskModel.find({ status: 1 }).sort({ createdAt: -1 }).populate([
             { path: 'projectId', select: 'projectName' },
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
-        ])
-        // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
-        
+            { path: 'reporterId', select: 'role' }
+        ]);
+
         const inProgressCount = await taskModel.countDocuments({ status: 2 });
         const inProgress = await taskModel.find({ status: 2 }).sort({ createdAt: -1 }).populate([
             { path: 'projectId', select: 'projectName' },
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
-        ])
-        // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
+            { path: 'reporterId', select: 'role' }
+        ]);
 
-        const doneCount = await taskModel.countDocuments({ status: 3 });
-        const done = await taskModel.find({ status: 3 }).sort({ createdAt: -1 }).populate([
+        const holdCount = await taskModel.countDocuments({ status: 3 })
+        const hold = await taskModel.find({ status: 3 }).sort({ createdAt: -1 }).populate([
             { path: 'projectId', select: 'projectName' },
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
-        ])
-        // res.status(200).json({ status : '200', message : "fetched successfully", Response : resp});
-        
-        const holdCount = await taskModel.countDocuments({ status: 4 })
-        const hold = await taskModel.find({ status: 4 }).sort({ createdAt: -1 }).populate([
+            { path: 'reporterId', select: 'role' }
+        ]);
+
+        const doneCount = await taskModel.countDocuments({ status: 4 });
+        const done = await taskModel.find({ status: 4 }).sort({ createdAt: -1 }).populate([
             { path: 'projectId', select: 'projectName' },
             { path: 'milestoneId', select: 'title' },
             { path: 'sprintId', select: 'sprintName' },
             { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
-        ])
-        res.status(200).json({ status: '200', message: "fetched successfully", Response: todo,todoCount, inProgress,inProgressCount, done,doneCount, hold,holdCount });
+            { path: 'reporterId', select: 'role' }
+        ]);
+
+        res.status(200).json({ status: '200', message: "fetched successfully", Response: todo, todoCount, inProgress, inProgressCount, hold, holdCount, done, doneCount });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }

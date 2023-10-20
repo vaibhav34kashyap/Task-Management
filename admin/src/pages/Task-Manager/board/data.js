@@ -57,6 +57,10 @@ export const columnsFromBackend = {
     items: [],
   },
   [uuidv4()]: {
+    title: 'Hold',
+    items: [],
+  },
+  [uuidv4()]: {
     title: 'Done',
     items: [],
   },

@@ -23,9 +23,10 @@ const Create = ({ modal, closeModal }) => {
     const [selected, setSelected] = useState([]);
     const errorhandel = store?.addProject;
     const loaderhandel = store?.addProject;
-    //const [removeValue, setRemoveValue] = useState([]);
     const [addValue, setAddValue] = useState([]);
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
+    // disable previous date
+    const today = new Date().toISOString().split('T')[0];
     const {
         register,
         handleSubmit,
@@ -34,7 +35,7 @@ const Create = ({ modal, closeModal }) => {
         reset,
         formState: { errors },
     } = useForm();
-    console.log(addValue,"select")
+    console.log(addValue, 'select');
     const onSubmit = (data) => {
         let body = {
             projectName: data?.projectName,
@@ -42,9 +43,8 @@ const Create = ({ modal, closeModal }) => {
             startDate: data?.startDate,
             endDate: data?.endDate,
             project_type: data?.project_type,
-            technology:addValue,
+            technology: addValue,
             projectStatus: data?.projectDec,
-             
         };
         dispatch(addProject(body));
     };
@@ -64,31 +64,25 @@ const Create = ({ modal, closeModal }) => {
     const removehandle = (selectedList, removedItem) => {
         const remove = getTechnology.filter((ele, ind) => {
             return ele?.techName == removedItem;
-        }); 
+        });
         // make a separate copy of the array
-        var index = addValue.indexOf(remove[0]._id)
+        var index = addValue.indexOf(remove[0]._id);
         if (index !== -1) {
             addValue.splice(index, 1);
-            setAddValue(addValue)
-            console.log("remove",addValue)
+            setAddValue(addValue);
+            console.log('remove', addValue);
+        } else {
+            setAddValue(null);
         }
-        else{
-            setAddValue(null)
-        }     
-       
-        
     };
-  
 
-    const addhandle=(selectedList,selectItem)=> {
-             const add = getTechnology.filter((ele, ind) => {
+    const addhandle = (selectedList, selectItem) => {
+        const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
-        }); 
-        setAddValue([...addValue, add[0]._id])
-        console.log(addValue,"addvalue info")
-        
-      
-    }
+        });
+        setAddValue([...addValue, add[0]._id]);
+        console.log(addValue, 'addvalue info');
+    };
     useEffect(() => {
         const getTechnologyname = [];
         dispatch(getAllTechnology({ status: true }));
@@ -191,8 +185,6 @@ const Create = ({ modal, closeModal }) => {
                                                 options={selected}
                                                 showCheckbox
                                             />
-                                            
-
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -205,6 +197,7 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
+                                                min={today} // Set the minimum date to today
                                                 {...register('startDate', { required: true })}
                                                 placeholder="Please start Date "
                                             />
@@ -220,6 +213,7 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
+                                                min={today} 
                                                 {...register('endDate', { required: true })}
                                                 placeholder="Please end Date"
                                             />
@@ -246,8 +240,6 @@ const Create = ({ modal, closeModal }) => {
                                             )}
                                         </Form.Group>
                                     </Col>
-                                    
-                                  
                                 </Row>
                                 <Row>
                                     <Col className="text-start d-flex align-items-center justify-content-center">

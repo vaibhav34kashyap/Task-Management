@@ -14,7 +14,9 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
     const [description, setDescription] = useState('');
     const store = useSelector((state) => state);
     const errorhandel = store?.createTaskReducer;
-    
+      // disable previous date
+      const today = new Date().toISOString().split('T')[0];
+      //
     const {
         register,
         handleSubmit,
@@ -253,6 +255,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                 </Form.Label>
                                                 <Form.Control
                                                     type="date"
+                                                    min={today}
                                                     {...register('startdate', { required: true })}
                                                 />{' '}
                                                 {errors.estimatedate?.type === 'required' && (
@@ -268,6 +271,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                 </Form.Label>
                                                 <Form.Control
                                                     type="date"
+                                                    min={today}
                                                     {...register('dueDate', { required: true })}
                                                 />{' '}
                                                 {errors.dueDate?.type === 'required' && (

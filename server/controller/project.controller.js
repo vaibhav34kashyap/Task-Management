@@ -1,25 +1,4 @@
 const projectModel = require('../models/project.model');
-const milestoneModel = require('../models/milestone');
-
-// Get all Projects WRT status
-const getProjects = async (req, res) => {
-    try {
-        const projects = await projectModel.find({ activeStatus: req.query.activeStatus }).populate('technology', 'techName').sort({ createdAt: -1 });
-        return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects })
-    } catch (err) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error });
-    }
-}
-
-// Get A Project By id
-const getProjectById = async (req, res) => {
-    try {
-        const project = await projectModel.findById({ _id: req.query.projectId }).populate('technology', 'techName');
-        return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: project })
-    } catch (error) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error });
-    }
-}
 
 // Add a new Project
 const addProject = async (req, res) => {
@@ -44,7 +23,34 @@ const addProject = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
-        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
+    }
+}
+
+// Get all Projects WRT status
+const getProjects = async (req, res) => {
+    try {
+        const pageSize = 10;
+        const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus });
+        const projects = await projectModel.find({ activeStatus: req.query.activeStatus }).populate('technology', 'techName')
+            .sort({ createdAt: -1 })
+            .limit(pageSize)
+            .skip((parseInt(req.query.skip) - 1) * pageSize);
+        const totalPages = Math.ceil(totalCount / pageSize);
+
+        return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects, totalCount, totalPages })
+    } catch (error) {
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message });
+    }
+}
+
+// Get A Project By id
+const getProjectById = async (req, res) => {
+    try {
+        const project = await projectModel.findById({ _id: req.query.projectId }).populate('technology', 'techName');
+        return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: project })
+    } catch (error) {
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message });
     }
 }
 
@@ -54,7 +60,7 @@ const updateProject = async (req, res) => {
         await projectModel.findByIdAndUpdate({ _id: req.body.projectId }, req.body, { new: true });
         return res.status(200).json({ status: "200", message: "Project updated successfully" })
     } catch (error) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
     }
 }
 
@@ -64,29 +70,10 @@ const updateStatus = async (req, res) => {
         await projectModel.findByIdAndUpdate({ _id: req.body.projectId }, { activeStatus: req.body.activeStatus });
         return res.status(200).json({ status: '200', message: 'Project Active InActive status updated Successfully' });
     } catch (error) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong', error: message.error })
+        return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
     }
 }
 
-const projectAssigned = async (req, res) => {
-    try {
-        const objData = {
-            name: req.body.name,
-            userId: req.body.userId,
-            projectId: req.body.projectId,
-            deleteStatus: true
-        }
-        const existProject = await teamModel.findOne({ $and: [{ userId: req.body.userId }, { projectId: req.body.projectId }] })
-        if (!existProject) {
-            const result = await teamModel.create(objData);
-            res.status(200).json({ status: "200", data: result, message: "Assined successfully" });
 
-        } else {
-            res.status(200).json({ status: "400", message: "Already Assigned to this user" });
-        }
-    } catch (err) {
-        res.status(200).json({ status: '500', message: 'Something went wrong' })
-    }
-}
 
-module.exports = { getProjects, addProject, updateProject, updateStatus, getProjectById, projectAssigned, };
+module.exports = { addProject, getProjects, updateProject, updateStatus, getProjectById, };

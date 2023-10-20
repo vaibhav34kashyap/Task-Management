@@ -48,7 +48,7 @@ const updateTechCategoryStatus = async (req, res) => {
 const addTechnology = async (req, res) => {
     try {
         const result = await technologyModel.create({
-            techCategory_id : req.body.techCategory_id,
+            techCategory_id: req.body.techCategory_id,
             techName: req.body.techName
         });
         return res.status(200).json({ status: '200', message: 'Technology Added Successfully', response: result })
@@ -98,7 +98,7 @@ const getTechCategoryTechnologies = async (req, res) => {
 }
 
 
-module.exports = { 
+module.exports = {
     addTechCategory, getTechCategory, updateTechCategory, updateTechCategoryStatus,
     addTechnology, getTechnology, updateTechnology, updateTechnologyStatus, getTechCategoryTechnologies
- }
+}

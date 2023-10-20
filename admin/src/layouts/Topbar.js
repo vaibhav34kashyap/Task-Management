@@ -3,10 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
+import "../global.css";
+
 
 
 // actions
-import { showRightSidebar, changeSidebarType } from '../redux/actions';
+import { showRightSidebar, changeSidebarType, getsingleMileStone } from '../redux/actions';
 import {getAllProjects} from '../../src/redux/projects/action'
 import { getallMileStones,getMileStoneById } from '../redux/actions';
 import { getAllSprint,getSingleSprint } from '../redux/actions';
@@ -33,7 +35,6 @@ import RightBar from './AddRightSideBar';
 import * as layoutConstants from '../constants/layout';
 import TimeLine from './../pages/profile2/TimeLine';
 import MileStone from './../pages/Task-Manager/AllMillstones/mileStone/index';
-
 
 
 // get the notifications
@@ -156,6 +157,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     useEffect(()=>{
         let data = {
             status: 1,
+            skip:1
         };
         dispatch(getAllProjects(data))
         dispatch(getallMileStones({status:1}))
@@ -220,6 +222,12 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         dispatch(showRightSidebar());
         
     };
+    useEffect(() => {
+   
+        dispatch(getsingleMileStone({ id: projectId, status: 1 }));
+        // dispatch(getSprintById({ status: 1, id: milestoneId }));
+        dispatch(getSingleSprint({ status: 1, id: mileStoneId }));
+    }, []);
 
     return (
         <>
@@ -251,9 +259,30 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             <li><Link to=''>Filters</Link></li>
                             <li><Link to=''>Dashboard</Link></li>
                             <li><Link to=''>Teams</Link></li>
-                            <li>
+                            <li><div className  ="project_names">
+
+                            <select name="Assignee" className="form-select op1 " id="exampleForm.ControlInput1" onChange={onChangeProject} >
+                                <option > Projects</option>
+                                {allProjects?.map((item,index)=>    
+                                    <option className='project_opt' key={index} value={item._id}>{item.projectName}</option>
+                                )}
+                            </select></div></li>
+                            <li><div className  ="project_names">   <select name="Assignee" className="form-select  op2" id="exampleForm.ControlInput1" onChange={onChangeMilestone}>
+                                <option> MileStone</option>
+                                {mileStoneData?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.title}</option>
+                                )}
+                            </select></div></li>
+                            <li><div className="project_names" >
+                            <select name="Assignee" className="form-select  op3" id="exampleForm.ControlInput1" onChange={onChangeSprint}>
+                                <option> Sprint</option>
+                                {getAllSingleSprints?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.sprintName}</option>
+                                )}
+                            </select></div></li>
+                            {/* <li>
                             <div class="project_names">
-                            {/* <label class="form-label" for="exampleForm.ControlInput1"> Projects <span class="text-danger">*</span>:</label> */}
+                           
                             <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeProject}>
                                 <option>--Select Project--</option>
                                 {allProjects?.map((item,index)=>
@@ -273,8 +302,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                 )}
                             </select>
                             </div>
-                            </li>
+                            </li> */}
                     </ul>
+                    
                    </div>
                          </div> 
                   
