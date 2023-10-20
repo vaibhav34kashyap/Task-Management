@@ -45,7 +45,8 @@ function* getProjectFunction({ payload }) {
             payload: {}
         })
         const response = yield call(getProjectApi, { payload });
-        console.log(response,"bbbvvv")
+        console.log(payload, ".......")
+
         if (response.data.status) {
             yield put({
                 type: ProjectTypes.GET_PROJECT_SUCCESS,

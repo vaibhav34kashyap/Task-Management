@@ -156,6 +156,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     useEffect(()=>{
         let data = {
             status: 1,
+            skip:1
         };
         dispatch(getAllProjects(data))
         dispatch(getallMileStones({status:1}))
