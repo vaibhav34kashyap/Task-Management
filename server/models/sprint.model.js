@@ -1,6 +1,16 @@
 const mongoose = require('mongoose'), { Schema } = mongoose,
 
     sprintSchema = new Schema({
+        projectId: {
+            type: mongoose.Types.ObjectId,
+            ref: 'projects',
+            required: true
+        },
+        milestoneId: {
+            type: mongoose.Types.ObjectId,
+            required: true,
+            ref: 'milestone'
+        },
         sprintName: {
             type: String,
             required: true
@@ -17,16 +27,7 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             type: Date,
             required: false
         },
-        milestone_id: {
-            type: mongoose.Types.ObjectId,
-            required: true,
-            ref: 'milestone'
-        },
-        project_id: {
-            type: mongoose.Types.ObjectId,
-            required: true
-        },
-        status: {
+        activeStatus: {
             type: Boolean,
             default: true
         },
