@@ -3,26 +3,24 @@ const projectModel = require('../models/project.model');
 // Add a new Project
 const addProject = async (req, res) => {
     try {
-        let existingProjectName = await projectModel.findOne({ projectName: req.body.projectName });
+        const { projectName, clientName, technology, startDate, endDate, projectDesc, projectType } = req.body;
+
+        const existingProjectName = await projectModel.findOne({ projectName: projectName });
         if (existingProjectName) {
             return res.status(200).json({ status: '400', message: 'Project Name Already exist' });
-        }
-
-        const objData = {
-            projectName: req.body.projectName,
-            clientName: req.body.clientName,
-            technology: req.body.technology,
-            startDate: req.body.startDate,
-            endDate: req.body.endDate,
-            projectDesc: req.body.projectDesc,
-            project_type: req.body.project_type
-        }
-        let result = await projectModel.create(objData)
-        if (result) {
-            return res.status(200).json({ status: '200', message: 'project created successfully!', response: result });
+        } else {
+            const result = await projectModel.create({
+                projectName,
+                clientName,
+                technology,
+                startDate,
+                endDate,
+                projectDesc,
+                projectType
+            })
+            return res.status(200).json({ status: '200', message: 'Project created successfully', response: result });
         }
     } catch (error) {
-        console.log(error);
         return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
     }
 }
@@ -64,7 +62,7 @@ const updateProject = async (req, res) => {
     }
 }
 
-// update project status
+// update A project ActiveStatus
 const updateStatus = async (req, res) => {
     try {
         await projectModel.findByIdAndUpdate({ _id: req.body.projectId }, { activeStatus: req.body.activeStatus });
