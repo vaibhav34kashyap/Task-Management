@@ -36,18 +36,20 @@ const TaskInformation = styled.div`
     svg{
       width: 12px !important;
       height: 12px !important;
-      margin-right: 12px; */
+      margin-right: import Column from './../Boards/board/Column';
+12px; */
     /* margin-top: 2px; */
     /* } */
     /* } */
 `;
 
-const TaskCard = ({ item, index}) => {
+const TaskCard = ({ item, index,Column}) => {
 
   const dispatch = useDispatch();
 const deleteData=(id)=>{
 dispatch(deleteTask({taskId:id}))
 }
+
 
   return (
    <>
