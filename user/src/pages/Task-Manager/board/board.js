@@ -87,37 +87,22 @@ const Boards = (props) => {
           taskId: result.draggableId,
           status: 2
         }
-        // alert('hhdgh')
-      
           dispatch(updateTaskStatus(body))
-        
-      
       }
-    //   else if(destColumn.title == "Done"){
-    //     let body = {
-    //       taskId: result.draggableId,
-    //       status: 3
-    //     }
-    //     setTimeout(()=>{
-    //       dispatch(updateTaskStatus(body))   
-    //       },10000)
-    //     // alert('hhdgh')
-    //     // dispatch(updateTaskStatus(body))
-    //   }
-    //  else if(destColumn.title == "To-do"){
-    //     let body = {
-    //       taskId: result.draggableId,
-    //       status: 1
-    //     }
-    //     setTimeout(()=>{
-
-    //       dispatch(updateTaskStatus(body))   
-    //       },10000)
-    //       console.log('updatetaskdataaaaa',updateTaskStatus)
-    //     // alert('hhdgh')
-    //     // dispatch(updateTaskStatus(body))
-    //   }
-      sessionStorage.setItem("destinationCol",destColumn.title)
+      else if(destColumn.title == "Done"){
+        let body = {
+          taskId: result.draggableId,
+          status: 3
+        }
+        dispatch(updateTaskStatus(body))
+      }
+     else if(destColumn.title == "To-do"){
+        let body = {
+          taskId: result.draggableId,
+          status: 1
+        }
+        dispatch(updateTaskStatus(body))
+      }
     } 
     else {
       const column = columns[source.droppableId];

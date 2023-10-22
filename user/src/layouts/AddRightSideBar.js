@@ -127,7 +127,6 @@ else{
                     <input placeholder="Please Enter Description" type="text" id="exampleForm.ControlInput1" class="form-control" {...register("Description")} />
                   </div></div>
 
-
               </div>
               <div class="row">
             
@@ -176,8 +175,6 @@ else{
               </div>
            
               <div class="row">
-             
-
                 </div><div class="row"><div class="text-start d-flex align-items-center justify-content-center col">
                   <button type="submit" class="btn btn-sm  text-white pt-1 pb-1 mt-3 web_button  btn btn-info">Add</button></div></div>
             </form>
