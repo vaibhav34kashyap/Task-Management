@@ -29,14 +29,20 @@ const addProject = async (req, res) => {
 const getProjects = async (req, res) => {
     try {
         const pageSize = 10;
-        const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus });
-        const projects = await projectModel.find({ activeStatus: req.query.activeStatus }).populate('technology', 'techName')
-            .sort({ createdAt: -1 })
-            .limit(pageSize)
-            .skip((parseInt(req.query.skip) - 1) * pageSize);
-        const totalPages = Math.ceil(totalCount / pageSize);
+        if(parseInt(req.query.skip) ===0){
+            const projects = await projectModel.find({ activeStatus: req.query.activeStatus }).populate('technology', 'techName')
+                .sort({ createdAt: -1 })
+            return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects })
+        } else {
+            const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus });
+            const projects = await projectModel.find({ activeStatus: req.query.activeStatus }).populate('technology', 'techName')
+                .sort({ createdAt: -1 })
+                .limit(pageSize)
+                .skip((parseInt(req.query.skip) - 1) * pageSize);
+            const totalPages = Math.ceil(totalCount / pageSize);
 
-        return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects, totalCount, totalPages })
+            return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects, totalCount, totalPages })
+        }
     } catch (error) {
         return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message });
     }

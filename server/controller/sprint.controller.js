@@ -92,13 +92,19 @@ const getAMilestoneAllSprints = async (req, res) => {
     try {
         const pageSize = 10;
         if(parseInt(req.query.skip) ===0){
+            if(req.query.milestoneId){
+                const milestones = await milestoneModel.find({ activeStatus: req.query.activeStatus,  milestoneId: req.query.milestoneId }).populate('projectId', 'projectName')
+                .sort({ createdAt: -1 })
+            return res.status(200).json({ status: '200', message: 'Milestones Data fetched successfully', response: milestones })
+            }
+            else{
             const sprints = await sprintModel.find({ activeStatus: req.query.activeStatus }).populate([
                 { path: 'projectId', select: 'projectName' },
                 { path: 'milestoneId', select: 'title' },
             ])
                 .sort({ createdAt: -1 });
             return res.status(200).json({ status: '200', message: 'Sprints Data fetched successfully', response: sprints });
-        }
+        }}
         else{
         const totalCount = await sprintModel.countDocuments({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: req.query.activeStatus }] })
         const result = await sprintModel.find({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: req.query.activeStatus }] }).populate([

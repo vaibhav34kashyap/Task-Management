@@ -75,10 +75,17 @@ const getAProjectMilestones = async (req, res) => {
     try {
         const pageSize = 10;
         if (parseInt(req.query.skip) === 0) {
+            if(req.query.projectId){
+                const milestones = await milestoneModel.find({ activeStatus: req.query.activeStatus, projectId: req.query.projectId }).populate('projectId', 'projectName')
+                .sort({ createdAt: -1 })
+            return res.status(200).json({ status: '200', message: 'Milestones Data fetched successfully', response: milestones })
+            }
+            else{
             const milestones = await milestoneModel.find({ activeStatus: req.query.activeStatus }).populate('projectId', 'projectName')
                 .sort({ createdAt: -1 })
             return res.status(200).json({ status: '200', message: 'Milestones Data fetched successfully', response: milestones })
         }
+    }
         else {
             const totalCount = await milestoneModel.countDocuments({ $and: [{ projectId: req.query.projectId }, { activeStatus: req.query.activeStatus }] });
             const result = await milestoneModel.find({ $and: [{ projectId: req.query.projectId }, { activeStatus: req.query.activeStatus }] }).populate('projectId', 'projectName')
