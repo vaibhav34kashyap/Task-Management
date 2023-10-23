@@ -7,7 +7,7 @@ const addSprint = async (req, res) => {
 
         const existingSprintName = await sprintModel.findOne({ sprintName: sprintName });
         if (existingSprintName) {
-            return res.status(200).json({ status: '400', message: 'Sprint Name already existed'});
+            return res.status(200).json({ status: '400', message: 'Sprint Name already existed' });
         } else {
             const result = await sprintModel.create({
                 projectId,
@@ -25,34 +25,34 @@ const addSprint = async (req, res) => {
 }
 
 // Get all sprints WRT status
-const getSprints = async (req, res) => {
-    try {
-        const pageSize = 1;
-        let skip = parseInt(req.query.skip);
+// const getSprints = async (req, res) => {
+//     try {
+//         const pageSize = 1;
+//         let skip = parseInt(req.query.skip);
+//         if (skip === 0) {
+//             const sprints = await sprintModel.find({ activeStatus: req.query.activeStatus }).populate([
+//                 { path: 'projectId', select: 'projectName' },
+//                 { path: 'milestoneId', select: 'title' },
+//             ])
+//                 .sort({ createdAt: -1 });
+//             return res.status(200).json({ status: '200', message: 'Sprints Data fetched successfully', response: sprints });
+//         } else {
+//             const totalCount = await sprintModel.countDocuments({ activeStatus: req.query.activeStatus });
+//             const sprints = await sprintModel.find({ activeStatus: req.query.activeStatus }).populate([
+//                 { path: 'projectId', select: 'projectName' },
+//                 { path: 'milestoneId', select: 'title' },
+//             ])
+//                 .sort({ createdAt: -1 })
+//                 .limit(pageSize)
+//                 .skip((parseInt(req.query.skip) - 1) * pageSize);
+//             const totalPages = Math.ceil(totalCount / pageSize);
 
-        if (skip === 0) {
-            // If skip is 0, don't skip any records.
-            skip = 0;
-        } else {
-            // Calculate the correct number of records to skip based on the requested page.
-            skip = (skip - 1) * pageSize;
-        }
-        const totalCount = await sprintModel.countDocuments({ activeStatus: req.query.activeStatus });
-        const sprints = await sprintModel.find({ activeStatus: req.query.activeStatus }).populate([
-            { path: 'projectId', select: 'projectName' },
-            { path: 'milestoneId', select: 'title' },
-        ])
-            .sort({ createdAt: -1 })
-            .limit(pageSize)
-            .skip(skip);
-        // .skip((parseInt(req.query.skip) - 1) * pageSize);
-        const totalPages = Math.ceil(totalCount / pageSize);
-
-        return res.status(200).json({ status: '200', message: 'Sprints Data fetched successfully', response: sprints, totalCount, totalPages });
-    } catch (error) {
-        return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });
-    }
-}
+//             return res.status(200).json({ status: '200', message: 'Sprints Data fetched successfully', response: sprints, totalCount, totalPages });
+//         }
+//     } catch (error) {
+//         return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });
+//     }
+// }
 
 // Get A sprint by ID
 const getSprintById = async (req, res) => {
@@ -80,7 +80,7 @@ const updateSprint = async (req, res) => {
 // update sprint status
 const updateStatus = async (req, res) => {
     try {
-        await sprintModel.findByIdAndUpdate({ _id: req.body.id }, { activeStatus: req.body.activeStatus })
+        await sprintModel.findByIdAndUpdate({ _id: req.body.sprintId }, { activeStatus: req.body.activeStatus })
         return res.status(200).json({ status: '200', message: 'Sprint status updated Successfully' });
     } catch (error) {
         return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });
@@ -91,8 +91,23 @@ const updateStatus = async (req, res) => {
 const getAMilestoneAllSprints = async (req, res) => {
     try {
         const pageSize = 10;
-        const totalCount = await sprintModel.countDocuments({ $and: [{ milestoneId: req.query.id }, { activeStatus: req.query.activeStatus }] })
-        const result = await sprintModel.find({ $and: [{ milestoneId: req.query.id }, { activeStatus: req.query.activeStatus }] }).populate([
+        if(parseInt(req.query.skip) ===0){
+            if(req.query.milestoneId){
+                const milestones = await sprintModel.find({ activeStatus: req.query.activeStatus,  milestoneId: req.query.milestoneId }).populate('projectId', 'projectName')
+                .sort({ createdAt: -1 })
+            return res.status(200).json({ status: '200', message: 'Milestones Data fetched successfully', response: milestones })
+            }
+            else{
+            const sprints = await sprintModel.find({ activeStatus: req.query.activeStatus }).populate([
+                { path: 'projectId', select: 'projectName' },
+                { path: 'milestoneId', select: 'title' },
+            ])
+                .sort({ createdAt: -1 });
+            return res.status(200).json({ status: '200', message: 'Sprints Data fetched successfully', response: sprints });
+        }}
+        else{
+        const totalCount = await sprintModel.countDocuments({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: req.query.activeStatus }] })
+        const result = await sprintModel.find({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: req.query.activeStatus }] }).populate([
             { path: 'projectId', select: 'projectName' },
             { path: 'milestoneId', select: 'title' },
         ])
@@ -102,9 +117,10 @@ const getAMilestoneAllSprints = async (req, res) => {
         const totalPages = Math.ceil(totalCount / pageSize);
 
         return res.status(200).json({ status: '200', message: "ALL sprints fecteched successfully", Response: result, totalCount, totalPages })
-    } catch (error) {
+    
+    }} catch (error) {
         return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });
     }
 }
 
-module.exports = { getSprints, getSprintById, addSprint, updateSprint, updateStatus, getAMilestoneAllSprints }
+module.exports = {  getSprintById, addSprint, updateSprint, updateStatus, getAMilestoneAllSprints }

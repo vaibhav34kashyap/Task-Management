@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import MainLoader from '../../../constants/Loader/loader';
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { updateTask } from '../../../redux/actions';
+import { getSingleSprint, getsingleMileStone, updateTask } from '../../../redux/actions';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const UpdateTask = ({ modal, closeModal, editData }) => {
@@ -17,6 +17,8 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const [description, setDescription] = useState('');
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    const [hideMilestone ,setHideMilestone] = useState(true);
+    const [hideSprint ,setHideSprint] = useState(true);
     const sucesshandel = store?.UpdateTaskReducer;
     const loaderhandel = store?.UpdateTaskReducer;
     // disable previous date
@@ -33,6 +35,20 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const CloseModaal = () => {
         closeModal();
     };
+    const projectHandel=(e)=>{
+        const id=e.target.value
+if (id){
+    setHideMilestone(false)
+    dispatch(getsingleMileStone({ id:id,activeStatus: 1 ,skip:0 }));
+}
+    }
+    const milestoneHandel=(e)=>{
+        const id=e.target.value
+        if (id){
+            setHideSprint(false)
+            dispatch(getSingleSprint({ activeStatus:1, id: id ,skip :0}));
+        }
+    }
     const onSubmit = (data) => {
         let body = {
             taskId: editData?._id,
@@ -56,7 +72,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
         reset({
             Milestone: editData?.milestoneId?._id,
             projectname: editData?.projectId?._id,
-            Sprint: editData?.sprintId?.id,
+            Sprint: editData?.sprintId?._id,
             startDate: handleDate(editData?.createdAt),
             dueDate: handleDate(editData?.dueDate),
             summary: editData?.summary,
@@ -123,11 +139,13 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     <Form.Select
                                                         {...register('projectname', {
                                                             required: true,
-                                                            disabled: true,
-                                                        })}>
+                                                           
+                                                        })}
+                                                        onChange={(e)=>{projectHandel(e)}}
+                                                       >
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getProject?.data?.response?.map((ele, ind) => (
-                                                            <option value={ele?._id}> {ele?.projectName} </option>
+                                                            <option value={ele?._id} > {ele?.projectName} </option>
                                                         ))}
                                                     </Form.Select>
                                                     {errors.projectname?.type === 'required' && (
@@ -143,9 +161,10 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
 
                                                     <Form.Select
-                                                        {...register('Milestone', { required: true, disabled: true })}>
-                                                        {/* <option value={''}>--Select--</option> */}
-                                                        {store?.getSigleMileStone?.data?.Response?.map((ele, ind) => (
+                                                        {...register('Milestone', { required: true,disabled:hideMilestone  })}
+                                                        onChange={(e)=>{milestoneHandel(e)}}>
+                                                        <option value={''}>--Select--</option>
+                                                        {store?.getSigleMileStone?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.title} </option>
                                                         ))}
                                                     </Form.Select>
@@ -165,9 +184,9 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
 
                                                     <Form.Select
-                                                        {...register('Sprint', { required: true, disabled: true })}>
-                                                        {/* <option value={''}>--Select--</option> */}
-                                                        {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
+                                                        {...register('Sprint', { required: true,  disabled:hideSprint })}>
+                                                        <option value={''}>--Select--</option>
+                                                        {store?.getAllSingleSprints?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.sprintName} </option>
                                                         ))}
                                                     </Form.Select>
