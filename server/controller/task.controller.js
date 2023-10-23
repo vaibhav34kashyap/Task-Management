@@ -1,6 +1,6 @@
 const taskModel = require('../models/task.model');
 const assignUserModel = require('../models/assignUser.model');
-const userModel = require("../models/users.model");
+const mongoose = require('mongoose')
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -56,94 +56,229 @@ const createtask = async (req, res) => {
 
 const getTasks = async (req, res) => {
     try {
-  const tasks = await taskModel.aggregate([
-    {
-        $lookup: {
-            from: 'assignusers',
-            localField: '_id',
-            foreignField: 'taskId',
-            as: 'assignees',
-        },
-    },
-    {
-        $lookup: {
-            from: 'users',
-            localField: 'assignees.assigneeId',
-            foreignField: '_id',
-            as: 'assigneeInfo',
-        },
-    },
-    {
-        $lookup: {
-            from: 'roles',
-            localField: 'assignees.reporterId',
-            foreignField: '_id',
-            as: 'reporterInfo',
-        },
-    },
-    {
-        $lookup: {
-            from: 'projects',
-            localField: 'projectId',
-            foreignField: '_id',
-            as: 'projects',
-        },
-    },
-    {
-        $lookup: {
-            from: 'milestones',
-            localField: 'milestoneId',
-            foreignField: '_id',
-            as: 'milestones',
-        },
-    },
-    {
-        $unwind: '$assignees' // Unwind the assignees array
-    },
-    {
-        $addFields: {
-            'assignees.assigneeInfo': {
-                $arrayElemAt: [
-                    {
-                        $filter: {
-                            input: '$assigneeInfo',
-                            as: 'info',
-                            cond: { $eq: ['$$info._id', '$assignees.assigneeId'] },
+        const pageSize = 10;
+        if (req.query.skip===0) {
+            const totalCount = await taskModel.countDocuments({ sprintId: req.query.sprintId, activeStatus: req.query.activeStatus });
+            const tasks = await taskModel.aggregate([
+                {
+                    $match: { sprintId: new mongoose.Types.ObjectId(req.query.sprintId), activeStatus: req.query.activeStatus }
+                },
+                {
+                    $lookup: {
+                        from: 'projects',
+                        localField: 'projectId',
+                        foreignField: '_id',
+                        as: 'projects',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'milestones',
+                        localField: 'milestoneId',
+                        foreignField: '_id',
+                        as: 'milestones',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'sprints',
+                        localField: 'sprintId',
+                        foreignField: '_id',
+                        as: 'sprints',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'assignusers',
+                        localField: '_id',
+                        foreignField: 'taskId',
+                        as: 'assignees',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'assignees.assigneeId',
+                        foreignField: '_id',
+                        as: 'assigneeInfo',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'roles',
+                        localField: 'assignees.reporterId',
+                        foreignField: '_id',
+                        as: 'reporterInfo',
+                    },
+                },
+                {
+                    $unwind: '$assignees' // Unwind the assignees array
+                },
+                {
+                    $addFields: {
+                        'assignees.assigneeInfo': {
+                            $arrayElemAt: [
+                                {
+                                    $filter: {
+                                        input: '$assigneeInfo',
+                                        as: 'info',
+                                        cond: { $eq: ['$$info._id', '$assignees.assigneeId'] },
+                                    },
+                                },
+                                0,
+                            ],
+                        },
+                        'assignees.reporterId': '$assignees.reporterId',
+                        'assignees.reporterInfo': {
+                            $arrayElemAt: [
+                                {
+                                    $filter: {
+                                        input: '$reporterInfo',
+                                        as: 'reporter',
+                                        cond: { $eq: ['$$reporter._id', '$assignees.reporterId'] },
+                                    },
+                                },
+                                0,
+                            ],
                         },
                     },
-                    0,
-                ],
-            },
-            'assignees.reporterId': '$assignees.reporterId',
-            'assignees.reporterInfo': {
-                $arrayElemAt: [
-                    {
-                        $filter: {
-                            input: '$reporterInfo',
-                            as: 'reporter',
-                            cond: { $eq: ['$$reporter._id', '$assignees.reporterId'] },
+                },
+                {
+                    $group: {
+                        _id: '$_id',
+                        summary: { $first: '$summary' },
+                        description: { $first: '$description' },
+                        priority: { $first: '$priority' },
+                        startDate: { $first: '$startDate' },
+                        dueDate: { $first: '$dueDate' },
+                        dueDate: { $first: '$dueDate' },
+                        status: { $first: '$status' },
+                        activeStatus: { $first: '$activeStatus' },
+                        projectInfo: { $first: '$projects' },
+                        milestoneInfo: { $first: '$milestones' },
+                        sprintInfo: { $first: '$sprints' },
+                        assignees: { $push: '$assignees' }
+                    },
+                },
+            ])
+                .sort({ createdAt: -1 })
+                .limit(pageSize)
+                .skip((parseInt(req.query.skip) - 1) * pageSize);
+            const totalPages = Math.ceil(totalCount / pageSize);
+
+            return res.status(200).json({ status: "200", message: "All Tasks fetched successfully", response: tasks, totalCount, totalPages });
+        }
+        else {
+            const totalCount = await taskModel.countDocuments({ activeStatus: req.query.activeStatus });
+            const tasks = await taskModel.aggregate([
+                {
+                    $match: { activeStatus: req.query.activeStatus }
+                },
+                {
+                    $lookup: {
+                        from: 'projects',
+                        localField: 'projectId',
+                        foreignField: '_id',
+                        as: 'projects',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'milestones',
+                        localField: 'milestoneId',
+                        foreignField: '_id',
+                        as: 'milestones',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'sprints',
+                        localField: 'sprintId',
+                        foreignField: '_id',
+                        as: 'sprints',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'assignusers',
+                        localField: '_id',
+                        foreignField: 'taskId',
+                        as: 'assignees',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'assignees.assigneeId',
+                        foreignField: '_id',
+                        as: 'assigneeInfo',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'roles',
+                        localField: 'assignees.reporterId',
+                        foreignField: '_id',
+                        as: 'reporterInfo',
+                    },
+                },
+                {
+                    $unwind: '$assignees' // Unwind the assignees array
+                },
+                {
+                    $addFields: {
+                        'assignees.assigneeInfo': {
+                            $arrayElemAt: [
+                                {
+                                    $filter: {
+                                        input: '$assigneeInfo',
+                                        as: 'info',
+                                        cond: { $eq: ['$$info._id', '$assignees.assigneeId'] },
+                                    },
+                                },
+                                0,
+                            ],
+                        },
+                        'assignees.reporterId': '$assignees.reporterId',
+                        'assignees.reporterInfo': {
+                            $arrayElemAt: [
+                                {
+                                    $filter: {
+                                        input: '$reporterInfo',
+                                        as: 'reporter',
+                                        cond: { $eq: ['$$reporter._id', '$assignees.reporterId'] },
+                                    },
+                                },
+                                0,
+                            ],
                         },
                     },
-                    0,
-                ],
-            },
-        },
-    },
-    {
-        $group: {
-            _id: '$_id',
-            // Add other fields you need to preserve here
-            assignees: { $push: '$assignees' },
-            assignees: { $first: '$projects' },
-            assignees: { $first: '$milestones' },
-            summary: { $first: '$summary' },
+                },
+                {
+                    $group: {
+                        _id: '$_id',
+                        summary: { $first: '$summary' },
+                        description: { $first: '$description' },
+                        priority: { $first: '$priority' },
+                        startDate: { $first: '$startDate' },
+                        dueDate: { $first: '$dueDate' },
+                        dueDate: { $first: '$dueDate' },
+                        status: { $first: '$status' },
+                        activeStatus: { $first: '$activeStatus' },
+                        projectInfo: { $first: '$projects' },
+                        milestoneInfo: { $first: '$milestones' },
+                        sprintInfo: { $first: '$sprints' },
+                        assignees: { $push: '$assignees' }
+                    },
+                },
+            ])
+                .sort({ createdAt: -1 })
+                .limit(pageSize)
+                .skip((parseInt(req.query.skip) - 1) * pageSize);
+            const totalPages = Math.ceil(totalCount / pageSize);
 
-        },
-    },
-]);
-
-        
-        return res.status(200).json({ status: "200", message: "All Tasks fetched successfully", response: tasks });
+            return res.status(200).json({ status: "200", message: "All Tasks fetched successfully", response: tasks, totalCount, totalPages });
+        }
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
@@ -209,7 +344,7 @@ const updateTaskActiveStatus = async (req, res,) => {
 // Get all tasks of a sprint
 const getSprintTasks = async (req, res) => {
     try {
-        const pageSize = 5;
+        const pageSize = 10;
         const totalCount = await taskModel.countDocuments({ sprintId: req.query.sprintId, activeStatus: req.query.activeStatus });
         const result = await taskModel.find({ sprintId: req.query.sprintId, activeStatus: req.query.activeStatus }).populate([
             { path: 'projectId', select: 'projectName' },
