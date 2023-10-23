@@ -50,7 +50,7 @@ const Title = styled.span`
     align-self: flex-start;
 `;
 
-const Boards = (props) => {
+const Boards = (props) => { 
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.getAllTaskReducer;
@@ -155,7 +155,15 @@ const Boards = (props) => {
             ToastHandle('error', statushandle?.data?.message);
         }
     }, [statushandle]);
-   
+   useEffect(() => {
+    let body = {
+        status :1,
+        skip: 1    
+    };
+    dispatch(getAllProjects(body));
+    dispatch(getsingleMileStone({ id:"" ,activeStatus: 1 ,skip:0 }));
+    dispatch(getSingleSprint({ activeStatus: 1, id: "" ,skip:0 }));
+}, [])
     return (
         <>
             <div className="add_task">

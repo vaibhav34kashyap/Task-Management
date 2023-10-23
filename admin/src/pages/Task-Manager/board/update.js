@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import MainLoader from '../../../constants/Loader/loader';
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { updateTask } from '../../../redux/actions';
+import { getSingleSprint, getsingleMileStone, updateTask } from '../../../redux/actions';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const UpdateTask = ({ modal, closeModal, editData }) => {
@@ -33,6 +33,16 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const CloseModaal = () => {
         closeModal();
     };
+    const projectHandel=(e)=>{
+if (e.target.value){
+    dispatch(getsingleMileStone({ id:e.target.value,activeStatus: 1 ,skip:0 }));
+}
+    }
+    const milestoneHandel=(e)=>{
+        if (e.target.value){
+            dispatch(getSingleSprint({ activeStatus:1, id: e.target.value ,skip :0}));
+        }
+    }
     const onSubmit = (data) => {
         let body = {
             taskId: editData?._id,
@@ -123,11 +133,13 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     <Form.Select
                                                         {...register('projectname', {
                                                             required: true,
-                                                            disabled: true,
-                                                        })}>
+                                                           
+                                                        })}
+                                                        onClick={(e)=>{projectHandel(e)}}
+                                                       >
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getProject?.data?.response?.map((ele, ind) => (
-                                                            <option value={ele?._id}> {ele?.projectName} </option>
+                                                            <option value={ele?._id} > {ele?.projectName} </option>
                                                         ))}
                                                     </Form.Select>
                                                     {errors.projectname?.type === 'required' && (
@@ -143,9 +155,10 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
 
                                                     <Form.Select
-                                                        {...register('Milestone', { required: true, disabled: true })}>
+                                                        {...register('Milestone', { required: true,  })}
+                                                        onClick={(e)=>{milestoneHandel(e)}}>
                                                         {/* <option value={''}>--Select--</option> */}
-                                                        {store?.getSigleMileStone?.data?.Response?.map((ele, ind) => (
+                                                        {store?.getSigleMileStone?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.title} </option>
                                                         ))}
                                                     </Form.Select>
@@ -165,9 +178,9 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
 
                                                     <Form.Select
-                                                        {...register('Sprint', { required: true, disabled: true })}>
+                                                        {...register('Sprint', { required: true,  })}>
                                                         {/* <option value={''}>--Select--</option> */}
-                                                        {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
+                                                        {store?.getAllSingleSprints?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.sprintName} </option>
                                                         ))}
                                                     </Form.Select>

@@ -2,7 +2,7 @@ import React ,{useState ,useEffect} from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import styled from '@emotion/styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteTask } from '../../../redux/actions';
+import { deleteTask, } from '../../../redux/actions';
 import Modal from 'react-bootstrap/Modal';
 import {Button} from 'react-bootstrap';
 import ToastHandle from '../../../constants/toaster/toaster';
@@ -83,6 +83,8 @@ const TaskCard = ({ item, index, Column ,closeModal }) => {
             ToastHandle('error', deletehandel?.data?.message);
         }
     }, [deletehandel]);
+
+
     return (
         <>
             <Draggable key={item.id} draggableId={item.id} index={index}>
