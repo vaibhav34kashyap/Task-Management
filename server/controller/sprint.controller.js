@@ -93,7 +93,7 @@ const getAMilestoneAllSprints = async (req, res) => {
         const pageSize = 10;
         if(parseInt(req.query.skip) ===0){
             if(req.query.milestoneId){
-                const milestones = await milestoneModel.find({ activeStatus: req.query.activeStatus,  milestoneId: req.query.milestoneId }).populate('projectId', 'projectName')
+                const milestones = await sprintModel.find({ activeStatus: req.query.activeStatus,  milestoneId: req.query.milestoneId }).populate('projectId', 'projectName')
                 .sort({ createdAt: -1 })
             return res.status(200).json({ status: '200', message: 'Milestones Data fetched successfully', response: milestones })
             }
