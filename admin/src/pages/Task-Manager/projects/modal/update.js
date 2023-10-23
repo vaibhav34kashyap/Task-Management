@@ -47,7 +47,7 @@ const Update = ({ modal, closeModal, editData }) => {
             startDate: handleDate(editData?.startDate),
             endDate: handleDate(editData?.endDate),
             expectedEndDate: handleDate(editData?.CompilationDate),
-            project_type: editData?.project_type,
+            project_type: editData?.projectType,
             technology: editData?.technology,
             projectstatus: editData?.projectStatus,
             expectedEndDate: handleDate(editData?.expectedDate),
@@ -83,7 +83,7 @@ const Update = ({ modal, closeModal, editData }) => {
             startDate: data?.startDate,
             endDate: data?.endDate,
             clientName: data?.clientName,
-            project_type: data?.project_type,
+            projectType: data?.project_type,
             technology: addValue,
             projectStatus: data?.projectstatus,
            

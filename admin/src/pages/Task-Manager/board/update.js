@@ -12,7 +12,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { updateTask } from '../../../redux/actions';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-const Update = ({ modal, closeModal, editData }) => {
+const UpdateTask = ({ modal, closeModal, editData }) => {
     console.log(editData, 'update');
     const [description, setDescription] = useState('');
     const dispatch = useDispatch();
@@ -356,4 +356,4 @@ const Update = ({ modal, closeModal, editData }) => {
 };
 
 
-export default Update
+export default UpdateTask

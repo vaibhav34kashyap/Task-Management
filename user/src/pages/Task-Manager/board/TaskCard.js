@@ -43,7 +43,7 @@ const TaskInformation = styled.div`
     /* } */
 `;
 
-const TaskCard = ({ item, index,Column}) => {
+const TaskCard = ({ item, index}) => {
 
   const dispatch = useDispatch();
 const deleteData=(id)=>{
