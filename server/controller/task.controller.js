@@ -43,13 +43,14 @@ const getTasks = async (req, res) => {
                 totalCount = await taskModel.countDocuments(query);
                 query.sprintId = new mongoose.Types.ObjectId(req.query.sprintId);
                 query.activeStatus = JSON.parse(req.query.activeStatus);
-                var pageSize = totalCount;
+                totalCount = await taskModel.countDocuments(query);
+                var pageSize = totalCount === 0 ? 1 : totalCount;
                 var skip = 1
             }
-            if (req.query.activeStatus) {
+else{
+                    query.activeStatus = JSON.parse(req.query.activeStatus);
                 totalCount = await taskModel.countDocuments(query);
-                query.activeStatus = JSON.parse(req.query.activeStatus);
-                var pageSize = totalCount;
+                var pageSize = totalCount === 0 ? 1 : totalCount;
                 var skip = 1
             }
         }
