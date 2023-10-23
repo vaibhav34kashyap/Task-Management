@@ -91,7 +91,7 @@ const updateStatus = async (req, res) => {
 const getAMilestoneAllSprints = async (req, res) => {
     try {
         const pageSize = 10;
-        if(req.query.skip===0){
+        if(parseInt(req.query.skip) ===0){
             const sprints = await sprintModel.find({ activeStatus: req.query.activeStatus }).populate([
                 { path: 'projectId', select: 'projectName' },
                 { path: 'milestoneId', select: 'title' },

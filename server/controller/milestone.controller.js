@@ -74,7 +74,8 @@ const updateStatus = async (req, res) => {
 const getAProjectMilestones = async (req, res) => {
     try {
         const pageSize = 10;
-        if(req.query.skip ===0){
+        if(parseInt(req.query.skip) ===0){
+            console.log('fchgvhbjknj');
             const milestones = await milestoneModel.find({ activeStatus: req.query.activeStatus }).populate('projectId', 'projectName')
             .sort({ createdAt: -1 })
         return res.status(200).json({ status: '200', message: 'Milestones Data fetched successfully', response: milestones})
