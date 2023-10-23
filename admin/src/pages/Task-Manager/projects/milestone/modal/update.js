@@ -27,8 +27,8 @@ const Update = ({ modal, closeModal, editData }) => {
     useEffect(() => {
         reset({
             title: editData?.title,
-            startDate: handleDate(editData?.start_date),
-            endDate: handleDate(editData?.completion_date),
+            startDate: handleDate(editData?.startDate),
+            endDate: handleDate(editData?.completionDate),
         });
         setDescription(editData?.description);
     }, [modal]);
@@ -42,11 +42,11 @@ const Update = ({ modal, closeModal, editData }) => {
     };
     const onSubmit = (data) => {
         let body = {
-            _id: editData?._id,
+            id: editData?._id,
             title: data?.title,
             description: description,
-            start_date: data?.startDate,
-            completion_date: data?.endDate,
+            startDate: data?.startDate,
+            completionDate: data?.endDate,
         };
         dispatch(updateMileStone(body));
         closeModal('render');

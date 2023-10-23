@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
 import { updateTaskStatus } from '../../../../src/redux/task/action';
+import ToastHandle from '../../../constants/toaster/toaster';
 import {
     deleteTask,
     getAllProjects,
@@ -38,6 +39,7 @@ const TaskColumnStyles = styled.div`
     display: flex;
     width: 100%;
     min-height: 80vh;
+    overflow: auto;
 `;
 
 const Title = styled.span`
@@ -52,12 +54,13 @@ const Boards = (props) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.getAllTaskReducer;
-
+    const statushandle = store?.updateTaskStatus;
+    const [render, setRender] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
-
+   
     const onDragEnd = (result, columns, setColumns) => {
-        console.log('colun', columns);
+        console.log('colun', result);
 
         if (!result.destination) return;
         const { source, destination } = result;
@@ -80,7 +83,7 @@ const Boards = (props) => {
                 },
             });
 
-            handelupdatetask(destItems);
+            handelupdatetask(result);
         } else {
             const column = columns[source.droppableId];
             const copiedItems = [...column.items];
@@ -98,29 +101,29 @@ const Boards = (props) => {
 
     useEffect(() => {
         dispatch(getAllTask());
-    }, []);
+    }, [render]);
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
             setColumns({
-                [uuidv4()]: {
+                [1]: {
                     title: 'To-do',
                     items: successHandle?.data?.Response?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
-                [uuidv4()]: {
+                [2]: {
                     title: 'In Progress',
                     items: successHandle?.data?.inProgress?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
-                [uuidv4()]: {
+                [3]: {
                     title: 'Hold',
                     items: successHandle?.data?.hold?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
-                [uuidv4()]: {
+                [4]: {
                     title: 'Done',
                     items: successHandle?.data?.done?.map((ele) => {
                         return { ...ele, id: ele._id };
@@ -131,31 +134,28 @@ const Boards = (props) => {
     }, [successHandle]);
     const handelupdatetask = (ele) => {
         let body = {
-            taskId: ele[0].id,
-            status: 2,
+            taskId: ele?.draggableId,
+            status: ele?.destination?.droppableId,
         };
-
-        // console.log("body dataaaaa",body)
         dispatch(updateTaskStatus(body));
+        dispatch(getAllTask());
     };
-
-    const handel = () => {
-        alert();
-        // console.log("body dataaaaa",body)
-        ///dispatch(updateTask(body))
+    const closeModal = (val) => {
+        if (val == 'render') {
+            setRender(!render);
+        }
     };
-    console.log('dsgsgsbhsr', columns);
-       useEffect(() => {
-        let body = {
-            status: 1,
-        };
-        // dispatch(getAllProjects(body));
-        // dispatch(getsingleMileStone({ id: projectId, status: 1 }));
-        // // dispatch(getSprintById({ status: 1, id: milestoneId }));
-        // dispatch(getSingleSprint({ status: 1, id: milestoneId }));
-        dispatch(getAllRoles());
-        dispatch(getAllUsers());
-    }, []);
+    useEffect(() => {
+        if (statushandle?.data?.status == 200) {
+            ToastHandle('success', statushandle?.data?.message);
+            closeModal("render");
+        } else if (statushandle?.data?.status == 400) {
+            ToastHandle('error', statushandle?.data?.message);
+        } else if (statushandle?.data?.status == 500) {
+            ToastHandle('error', statushandle?.data?.message);
+        }
+    }, [statushandle]);
+   
     return (
         <>
             <div className="add_task">
@@ -194,7 +194,7 @@ const Boards = (props) => {
                                                 {...provided.droppableProps}>
                                                 <Title class="">{column.title}</Title>
                                                 {column.items.map((item, index) => (
-                                                    <TaskCard key={item} item={item} index={index} />
+                                                    <TaskCard key={item} item={item} index={index} closeModal={closeModal} />
                                                 ))}
                                                 {provided.placeholder}
                                             </TaskList>

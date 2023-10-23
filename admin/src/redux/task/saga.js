@@ -47,7 +47,7 @@ function* getSingleSprintTaskFunction({ payload }) {
         if (response.data.status) {
             yield put({
                 type: TASK_TYPES.GET_SINGLE_SPRINT_TASK_SUCCESS,
-                payload: { ...response.data },
+                payload: { ...response?.data },
             });
             // yield put({
             //     type: TASK_TYPES.GET_SINGLE_SPRINT_TASK_RESET,
@@ -57,7 +57,7 @@ function* getSingleSprintTaskFunction({ payload }) {
         else {
             yield put({
                 type: TASK_TYPES.GET_SINGLE_SPRINT_TASK_ERROR,
-                payload: { ...response.data }
+                payload: { ...response?.data }
             });
         }
 

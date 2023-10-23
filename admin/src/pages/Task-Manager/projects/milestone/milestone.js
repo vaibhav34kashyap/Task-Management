@@ -13,6 +13,8 @@ import MainLoader from '../../../../constants/Loader/loader';
 import Modal from 'react-bootstrap/Modal';
 import ToastHandle from '../../../../constants/toaster/toaster';
 import Update from './modal/update';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 // import ToastHandle from '../../../constants/toaster/toaster';
 const Milestone = () => {
     const { id } = useParams();
@@ -22,15 +24,15 @@ const Milestone = () => {
     const [openModel, setOpenModel] = useState(false);
     const [render, setRender] = useState(false);
     const [status, setStatus] = useState(1);
-    const GetDataById = store?.getProjectById?.data?.project;
     const GetSinglemilstonesData = store?.getSigleMileStone?.data?.Response;
     const loaderhandel = store?.getSigleMileStone;
+    const [skip, setSkip] = useState(1);
     const [checkedStatus, setCheckedStatus] = useState();
     const [statusModal, setStatusModal] = useState(false);
     const [checkedData, setCheckedData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const [editData, setEditData] = useState();
-    const deletehandle = store?.deleteMileStone?.data
+    const deletehandle = store?.deleteMileStone?.data;
     const closeModal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -42,17 +44,23 @@ const Milestone = () => {
             setStatus(1);
             let data = {
                 id: id,
-                status: 1,
+                activeStatus: 1,
+                skip
             };
             dispatch(getsingleMileStone(data));
         } else {
             setStatus(0);
             let data = {
                 id: id,
-                status: 0,
+                activeStatus: 0,
+                skip
             };
             dispatch(getsingleMileStone(data));
         }
+    };
+    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setSkip(value);
+        dispatch(getsingleMileStone({ id: id, activeStatus: status ,skip: value }));
     };
     const handleStatusChange = (e, data) => {
         if (e.target.checked) {
@@ -67,14 +75,14 @@ const Milestone = () => {
         if (checkedStatus) {
             let body = {
                 id: checkedData._id,
-                status: true
-            }
+                activeStatus: true,
+            };
             dispatch(deleteMileStone(body));
         } else {
             let body = {
                 id: checkedData._id,
-                status: false
-            }
+                activeStatus: false,
+            };
             dispatch(deleteMileStone(body));
         }
         setStatusModal(false);
@@ -98,12 +106,10 @@ const Milestone = () => {
         } else if (deletehandle?.status == 500) {
             ToastHandle('error', deletehandle?.message);
         }
-    }, [deletehandle])
+    }, [deletehandle]);
     useEffect(() => {
-        dispatch(getProjectsById(id));
-        dispatch(getsingleMileStone({id:id ,status:status}));
+        dispatch(getsingleMileStone({ id: id, activeStatus: status ,skip }));
     }, [render]);
-
 
     return (
         <>
@@ -130,36 +136,8 @@ const Milestone = () => {
                     <MainLoader />
                 ) : (
                     <>
-                        <Row>
-                            <Col lg={12}>
-                                <Row>
-                                    <Col className="text-center" lg={12}>
-                                        <h4> Project</h4>
-                                    </Col>
-                                    <Row>
-                                        <Col lg={12} className='d-flex justify-content-between'>
-                                            <div className='d-flex'><h5 className='p-0 m-0'>Project Name :</h5>
-                                                <p className='p-0 m-0'>{GetDataById?.projectName}</p></div>
-                                            <div className='d-flex '><h5 className='p-0 m-0'>Client Name :</h5>
-                                                <p className='p-0 m-0'>{GetDataById?.clientName}</p></div>
-                                            <div className='d-flex '><h5 className='p-0 m-0'>Project Type :</h5>
-                                                <p className='p-0 m-0'>{GetDataById?.projectType}</p></div>
-                                            <div className='d-flex '><h5 className='p-0 m-0'>Project Start Date :</h5>
-                                                <p className='p-0 m-0'> {moment(GetDataById?.startDate).format('L')}</p></div>
-                                            <div className='d-flex '><h5 className='p-0 m-0'>Project End Date :</h5>
-                                                <p className='p-0 m-0'> {moment(GetDataById?.endDate).format('L')}</p></div>
-                                        </Col>
-                                    </Row>
-
-
-
-
-                                </Row>
-                            </Col>
-
-
-                        </Row>
-                        <Card className='mt-3'>
+                    
+                        <Card className="mt-3">
                             <Card.Body>
                                 <Col className="mx-auto" lg={12}>
                                     <Row>
@@ -167,14 +145,22 @@ const Milestone = () => {
                                             <div className="d-flex col-4">
                                                 <div className="row d-flex align-items-center">
                                                     <div
-                                                        className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'}`}>
-                                                        <p className="p-0 m-0 p-1 cp" onClick={() => handleActive(true)}>
+                                                        className={`col-auto  cp ${
+                                                            status == 1 ? 'Active_data' : 'InActive_data'
+                                                        }`}>
+                                                        <p
+                                                            className="p-0 m-0 p-1 cp"
+                                                            onClick={() => handleActive(true)}>
                                                             Active
                                                         </p>
                                                     </div>
                                                     <div
-                                                        className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'}`}>
-                                                        <p className=" p-0 m-0 p-1 cp" onClick={() => handleActive(false)}>
+                                                        className={`col-auto  cp ${
+                                                            status == 0 ? 'Active_data' : 'InActive_data'
+                                                        }`}>
+                                                        <p
+                                                            className=" p-0 m-0 p-1 cp"
+                                                            onClick={() => handleActive(false)}>
                                                             Deactive
                                                         </p>
                                                     </div>
@@ -185,9 +171,8 @@ const Milestone = () => {
                                             </div>
                                         </div>
                                         <Col className="" lg={12}>
-
                                             <Table striped>
-                                                <thead >
+                                                <thead>
                                                     <tr>
                                                         <th>#</th>
                                                         <th> MileStone Name</th>
@@ -201,51 +186,72 @@ const Milestone = () => {
                                                 <tbody>
                                                     {GetSinglemilstonesData?.map((item, index) => (
                                                         <tr>
-                                                            <td>{index + 1}</td>
+                                                            <td>{(skip - 1) * 10 + index + 1}</td>
                                                             <td>{item?.title}</td>
-                                                            <td>  <div
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: item?.description,
-                                                    }}
-                                                /></td>
+                                                            <td>
+                                                                {' '}
+                                                                <div
+                                                                    dangerouslySetInnerHTML={{
+                                                                        __html: item?.description,
+                                                                    }}
+                                                                />
+                                                            </td>
 
-                                                            <td> {moment(item?.start_date).format('L')}</td>
-                                                            <td>{moment(item?.completion_date).format('L')}</td>
-                                                            <td> <Form.Check
-                                                                type="switch"
-                                                                checked={item?.status}
-                                                                onChange={(e) => handleStatusChange(e, item)}
-                                                            /></td>
-                                                            <td> <Row>
-                                                                <Col>
-                                                                    <p className="action-icon m-0 p-0 ">
-                                                                        <Link to={`/dashboard/singleMilestonesprint/projectId=/${item?.project_id}&milestoneId=/${item?._id}`}>
-                                                                            <i className="mdi mdi-eye m-0 p-0"></i>
-                                                                        </Link>
-                                                                    </p>
-                                                                    <p className="action-icon m-0 p-0  ">
-                                                                        <i
-                                                                            onClick={() => {
-                                                                                handelUpdate(item);
-                                                                            }}
-                                                                            className="uil-edit-alt m-0 p-0"
-                                                                        ></i>
-                                                                    </p>
-
-                                                                </Col>
-                                                            </Row></td>
+                                                            <td> {moment(item?.startDate).format('L')}</td>
+                                                            <td>{moment(item?.completionDate).format('L')}</td>
+                                                            <td>
+                                                                {' '}
+                                                                <Form.Check
+                                                                    type="switch"
+                                                                    checked={item?.activeStatus}
+                                                                    onChange={(e) => handleStatusChange(e, item)}
+                                                                />
+                                                            </td>
+                                                            <td>
+                                                                {' '}
+                                                                <Row>
+                                                                    <Col>
+                                                                        <p className="action-icon m-0 p-0 ">
+                                                                            <Link
+                                                                                to={`/dashboard/singleMilestonesprint/projectId=/${item?.projectId?._id}&milestoneId=/${item?._id}`}>
+                                                                                <i className="mdi mdi-eye m-0 p-0"></i>
+                                                                            </Link>
+                                                                        </p>
+                                                                        <p className="action-icon m-0 p-0  ">
+                                                                            <i
+                                                                                onClick={() => {
+                                                                                    handelUpdate(item);
+                                                                                }}
+                                                                                className="uil-edit-alt m-0 p-0"></i>
+                                                                        </p>
+                                                                    </Col>
+                                                                </Row>
+                                                            </td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
                                             </Table>
-
                                         </Col>
                                     </Row>
                                 </Col>
+                                <Row>
+                                    <Col lg={12} className="d-flex justify-content-end mt-3">
+                                        {store?.getSigleMileStone?.data?.totalPages > 0 && (
+                                            <Stack spacing={2}>
+                                                <Pagination
+                                                    defaultPage={skip}
+                                                    count={store?.getSigleMileStone?.data?.totalPages}
+                                                    color="primary"
+                                                    variant="outlined"
+                                                    onChange={handlePaginationChange}
+                                                />
+                                            </Stack>
+                                        )}
+                                    </Col>
+                                </Row>
                             </Card.Body>
                         </Card>
                     </>
-
                 )}
 
                 <Create modal={openModel} closeModal={closeModal} />
