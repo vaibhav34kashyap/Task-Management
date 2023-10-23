@@ -43,8 +43,7 @@ const Create = ({ modal, closeModal }) => {
             endDate: data?.endDate,
             project_type: data?.project_type,
             technology:addValue,
-            projectStatus: data?.projectDec,
-             
+            projectStatus: data?.projectDec,   
         };
         dispatch(addProject(body));
     };
@@ -78,16 +77,12 @@ const Create = ({ modal, closeModal }) => {
        
         
     };
-  
-
     const addhandle=(selectedList,selectItem)=> {
              const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
         }); 
         setAddValue([...addValue, add[0]._id])
-        console.log(addValue,"addvalue info")
-        
-      
+        console.log(addValue,"addvalue info")  
     }
     useEffect(() => {
         const getTechnologyname = [];

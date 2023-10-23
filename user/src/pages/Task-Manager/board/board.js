@@ -8,7 +8,10 @@ import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
-import {updateTaskStatus} from '../../../../src/redux/task/action'
+import {updateTaskStatus} from '../../../../src/redux/task/action';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
 
 
 
@@ -183,6 +186,10 @@ const Boards = (props) => {
   
   
 
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   return (
 
     <>
@@ -231,6 +238,7 @@ const Boards = (props) => {
         </Container>}
 
       </DragDropContext>
+     
     
     </>
 

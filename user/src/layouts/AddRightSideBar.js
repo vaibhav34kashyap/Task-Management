@@ -241,8 +241,8 @@ export default function RightBar(props) {
                                             name="Priority"
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
-                                            {...register('priority')}>
-                                            <option>-----select----</option>
+                                            {...register('priority')}  disabled="Medium">
+                                            <option>Medium</option>
                                             <option value="1">High</option>
                                             <option value="2">Medium</option>
                                             <option value="3">Low</option>

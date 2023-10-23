@@ -3,6 +3,9 @@ import { Draggable } from 'react-beautiful-dnd';
 import styled from '@emotion/styled';
 import { deleteTask } from '../../../redux/actions';
 import { useDispatch } from 'react-redux';
+import Button from 'react-bootstrap/Button';
+import { useState } from 'react';
+import Modal from 'react-bootstrap/Modal';
 // import CustomAvatar from '../TableComponents/CustomAvatar'
 // import { ReactComponent as RedArrow } from '../../assets/icons/High.svg'
 // import { ReactComponent as YellowArrow } from '../../assets/icons/Medium.svg'
@@ -37,7 +40,9 @@ const TaskInformation = styled.div`
       width: 12px !important;
       height: 12px !important;
       margin-right: import Column from './../Boards/board/Column';
-12px; */
+12px; */import Summary from './../../apps/Ecommerce/Checkout/Summary';
+import Milestone from './../projects/milestone/milestone';
+
     /* margin-top: 2px; */
     /* } */
     /* } */
@@ -50,6 +55,9 @@ const deleteData=(id)=>{
 dispatch(deleteTask({taskId:id}))
 }
 
+const [show, setShow] = useState(false);
+const handleClose = () => setShow(false);
+const handleShow = () => setShow(true);
 
   return (
    <>
@@ -61,7 +69,8 @@ dispatch(deleteTask({taskId:id}))
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <TaskInformation>
+          <TaskInformation onClick={handleShow} >
+          
           <div className='action_icon'>
           <button type='button' ><i class="uil-edit-alt m-0 p-0"></i></button>
           <button type='button' onClick={()=>deleteData(item.id)} ><i class="mdi mdi-delete m-0 p-0"></i></button>
@@ -69,7 +78,7 @@ dispatch(deleteTask({taskId:id}))
           </div>
 
             <p>{item.summary}</p>
-            <p>{item.description}</p>
+            {item.description}
             <div className="secondary-details">
               <p>
                 <span>
@@ -81,6 +90,51 @@ dispatch(deleteTask({taskId:id}))
         </div>
       )}
     </Draggable>
+
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Task Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+ 
+        </Modal.Body>
+        <ul style={{listStyle:"none"}}>
+          <li>
+          <b> Summary: </b></li>
+          <li>{item.summary}</li>
+          <li><b>Description:</b></li>
+          <li>{item.description}</li>
+          <li><b>Start Date :</b></li>
+          <li>{item?.createdAt ? (moment(item?.createdAt).format('ll')) : ""}</li>
+          <li>Project Name:</li>
+          <li>{item.projectName}</li>
+          <li>Milestone</li>
+          <li>{item.Milestone}</li>
+          <li><b>Priority</b></li>
+          <li>{item.priority}</li>
+          <li><b>End Date </b></li>
+          <li>{item?.createdAt ? (moment(item?.createdAt).format('ll')) : ""}</li>
+          <li>Report Name</li>
+          <li>{item.report} </li>
+          <li>assign id</li>
+          <li>{item.assign}</li>
+ 
+          
+
+        </ul>
+        
+      
+          
+        {/* <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer> */}
+      </Modal>
    </>
   );
 };
