@@ -7,7 +7,7 @@ const addSprint = async (req, res) => {
 
         const existingSprintName = await sprintModel.findOne({ sprintName: sprintName });
         if (existingSprintName) {
-            return res.status(200).json({ status: '400', message: 'Sprint Name already existed', response: result });
+            return res.status(200).json({ status: '400', message: 'Sprint Name already existed'});
         } else {
             const result = await sprintModel.create({
                 projectId,
@@ -27,7 +27,16 @@ const addSprint = async (req, res) => {
 // Get all sprints WRT status
 const getSprints = async (req, res) => {
     try {
-        const pageSize = 10;
+        const pageSize = 1;
+        let skip = parseInt(req.query.skip);
+
+        if (skip === 0) {
+            // If skip is 0, don't skip any records.
+            skip = 0;
+        } else {
+            // Calculate the correct number of records to skip based on the requested page.
+            skip = (skip - 1) * pageSize;
+        }
         const totalCount = await sprintModel.countDocuments({ activeStatus: req.query.activeStatus });
         const sprints = await sprintModel.find({ activeStatus: req.query.activeStatus }).populate([
             { path: 'projectId', select: 'projectName' },
@@ -35,7 +44,8 @@ const getSprints = async (req, res) => {
         ])
             .sort({ createdAt: -1 })
             .limit(pageSize)
-            .skip((parseInt(req.query.skip) - 1) * pageSize);
+            .skip(skip);
+        // .skip((parseInt(req.query.skip) - 1) * pageSize);
         const totalPages = Math.ceil(totalCount / pageSize);
 
         return res.status(200).json({ status: '200', message: 'Sprints Data fetched successfully', response: sprints, totalCount, totalPages });
