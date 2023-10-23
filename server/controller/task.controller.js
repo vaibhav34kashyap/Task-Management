@@ -1,6 +1,6 @@
+const mongoose = require('mongoose');
 const taskModel = require('../models/task.model');
 const assignUserModel = require('../models/assignUser.model');
-const mongoose = require('mongoose')
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -38,8 +38,7 @@ const getTasks = async (req, res) => {
         var totalPages = 0
         const query = {};
         var totalCount = 0;
-        if (parseInt(req.query.skip) === 0) 
-        {
+        if (parseInt(req.query.skip) === 0) {
             if (req.query.sprintId) {
                 totalCount = await taskModel.countDocuments(query);
                 query.sprintId = new mongoose.Types.ObjectId(req.query.sprintId);
@@ -57,6 +56,9 @@ const getTasks = async (req, res) => {
         }
         else {
             query.activeStatus = JSON.parse(req.query.activeStatus);
+            if (req.query.sprintId) {
+                query.sprintId = new mongoose.Types.ObjectId(req.query.sprintId);
+            }
             var pageSize = 10;
             var skip = req.query.skip;
         }
@@ -161,7 +163,6 @@ const getTasks = async (req, res) => {
                     assignees: { $first: { $arrayElemAt: [['$assignees'], 0] } },
                 }
             }
-            
         ]).sort({ createdAt: -1 })
             .limit(pageSize)
             .skip((parseInt(skip) - 1) * pageSize);
@@ -187,15 +188,32 @@ const getATask = async (req, res) => {
 }
 
 // Update Task
-const updateTask = async (req, res,) => {
+const updateTask = async (req, res) => {
     try {
-        await taskModel.findByIdAndUpdate({ _id: req.body.taskId }, req.body, { new: true });
-        await assignUserModel.findByIdAndUpdate({ _id: req.body.taskId }, req.body, { new: true })
+        const taskId = req.body.taskId; // Get the taskId from the request body
+        const obj = {
+            summary: req.body.summary,
+            description: req.body.description,
+            priority: req.body.priority,
+            startDate: req.body.startDate,
+            dueDate: req.body.dueDate,
+            status: req.body.status
+        };
+        const secObj = {
+            assigneeId: req.body.assigneeId,
+            reporterId: req.body.reporterId
+        };
+
+        await taskModel.findByIdAndUpdate(taskId, obj, { new: true });
+
+        await assignUserModel.findOne({ taskId: req.body.taskId }, secObj, { new: true });
+
         return res.status(200).json({ status: "200", message: "Task updated successfully" });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
 }
+
 
 // Delete A Task
 const deleteTask = async (req, res) => {
@@ -208,42 +226,11 @@ const deleteTask = async (req, res) => {
     }
 }
 
-// update Status of a task
-const updateTaskStatus = async (req, res,) => {
-    try {
-        await taskModel.findByIdAndUpdate({ _id: req.body.taskId }, { status: req.body.status }, { new: true });
-        return res.status(200).json({ status: "200", message: "Task Status updated successfully" });
-    } catch (error) {
-        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
-    }
-}
-
 // update Active inactive Status of a task
 const updateTaskActiveStatus = async (req, res,) => {
     try {
         await taskModel.findByIdAndUpdate({ _id: req.body.taskId }, { activeStatus: req.body.activeStatus }, { new: true });
         return res.status(200).json({ status: "200", message: "Task Active Inactive Status updated successfully" });
-    } catch (error) {
-        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
-    }
-}
-
-// Get all tasks of a sprint
-const getSprintTasks = async (req, res) => {
-    try {
-        const pageSize = 10;
-        const totalCount = await taskModel.countDocuments({ sprintId: req.query.sprintId, activeStatus: req.query.activeStatus });
-        const result = await taskModel.find({ sprintId: req.query.sprintId, activeStatus: req.query.activeStatus }).populate([
-            { path: 'projectId', select: 'projectName' },
-            { path: 'milestoneId', select: 'title' },
-            { path: 'sprintId', select: 'sprintName' }
-        ])
-            .sort({ createdAt: -1 })
-            .limit(pageSize)
-            .skip((parseInt(req.query.skip) - 1) * pageSize);
-        const totalPages = Math.ceil(totalCount / pageSize);
-
-        return res.status(200).json({ status: "200", message: "Sprint tasks fetched successfully", response: result, totalCount, totalPages });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
@@ -287,5 +274,5 @@ const getTasksAccToStatus = async (req, res) => {
 }
 
 module.exports = {
-    createtask, getTasks, getATask, updateTask, deleteTask, updateTaskStatus, updateTaskActiveStatus, getSprintTasks, getTasksAccToStatus
+    createtask, getTasks, getATask, updateTask, deleteTask, updateTaskActiveStatus, getTasksAccToStatus
 };
