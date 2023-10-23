@@ -48,18 +48,19 @@ const Boards = (props) => {
   const dispatch = useDispatch();
   const store = useSelector(state => state)
   const successHandle = store?.getAllTaskReducer
-  console.log("successHandle",successHandle)
+  
 
-
+  useEffect(() => {
+    dispatch(getAllTask())
+  
+  }, [])
 
   const [showModal, setShowModal] = useState(false);
   const [destinationId, setDestinationId] = useState('');
   const [columns, setColumns] = useState(columnsFromBackend);
 
   const onDragEnd = (result, columns, setColumns) => {
-    console.log("colunhhhhhhhh", columns)
-
-
+  
     if (!result.destination) return;
     const { source, destination } = result;
     
@@ -87,37 +88,33 @@ const Boards = (props) => {
           taskId: result.draggableId,
           status: 2
         }
-        // alert('hhdgh')
-      
           dispatch(updateTaskStatus(body))
-        
-      
+          dispatch(getAllTask())
       }
-    //   else if(destColumn.title == "Done"){
-    //     let body = {
-    //       taskId: result.draggableId,
-    //       status: 3
-    //     }
-    //     setTimeout(()=>{
-    //       dispatch(updateTaskStatus(body))   
-    //       },10000)
-    //     // alert('hhdgh')
-    //     // dispatch(updateTaskStatus(body))
-    //   }
-    //  else if(destColumn.title == "To-do"){
-    //     let body = {
-    //       taskId: result.draggableId,
-    //       status: 1
-    //     }
-    //     setTimeout(()=>{
-
-    //       dispatch(updateTaskStatus(body))   
-    //       },10000)
-    //       console.log('updatetaskdataaaaa',updateTaskStatus)
-    //     // alert('hhdgh')
-    //     // dispatch(updateTaskStatus(body))
-    //   }
-      sessionStorage.setItem("destinationCol",destColumn.title)
+      else if(destColumn.title == "Hold"){
+        let body = {
+          taskId: result.draggableId,
+          status: 3
+        }
+        dispatch(updateTaskStatus(body))
+        dispatch(getAllTask())
+      }
+      else if(destColumn.title == "Done"){
+        let body = {
+          taskId: result.draggableId,
+          status: 4
+        }
+        dispatch(updateTaskStatus(body))
+        dispatch(getAllTask())
+      }
+     else if(destColumn.title == "To-do"){
+        let body = {
+          taskId: result.draggableId,
+          status: 1
+        }
+        dispatch(updateTaskStatus(body))
+        dispatch(getAllTask())
+      }
     } 
     else {
       const column = columns[source.droppableId];
@@ -136,10 +133,7 @@ const Boards = (props) => {
     }
   };
 
-  useEffect(() => {
-    dispatch(getAllTask())
   
-  }, [])
   useEffect(() => {
 
     if (successHandle?.data?.status == 200) {
@@ -225,7 +219,7 @@ const Boards = (props) => {
                     > 
                       <Title class="">{column.title}</Title>
                       {column.items.map((item, index) => (
-                        <TaskCard key={item} item={item} index={index}  />
+                        <TaskCard key={item.id} item={item} index={index}  />
                       ))}
                       {provided.placeholder}
                     </TaskList>
