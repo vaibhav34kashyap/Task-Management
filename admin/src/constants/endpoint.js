@@ -11,14 +11,14 @@ export const ParticularMilestoneDetail = "/milestone/getmilestonebyid/";
 export const AddSprint = "/sprint/add";
 export const GetAllSprints = "/sprint?";
 export const DeleteSprint = "/sprint/updateStatus";
-export const getAllSingleSprint ="/sprint/getAMilestoneAllSprints?id="
+export const getAllSingleSprint ="/sprint/getAMilestoneAllSprints?milestoneId="
 // create task 
 export const CREATE_TASK = "/task/createtask";
 export const UPDATE_MILESTONE = "/milestone/update";
 export const ALL_USERS = "/users";
 export const deleteUsers = "/users/usersDelete/";
 export const UpdateSprint = "/sprint/update";
-export const SingleMilestone = "/milestone/getAProjectMilestones?id="
+export const SingleMilestone = "/milestone/getAProjectMilestones?projectId="
 export const SingleSprintTask = "/task/getSprintTasks?sprintId="
 export const GetAllTask = "/task/getTasksAccToStatus"
 export const UpdateTask = "/task/updateTask"
