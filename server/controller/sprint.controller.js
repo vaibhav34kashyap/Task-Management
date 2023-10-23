@@ -80,7 +80,7 @@ const updateSprint = async (req, res) => {
 // update sprint status
 const updateStatus = async (req, res) => {
     try {
-        await sprintModel.findByIdAndUpdate({ _id: req.body.id }, { activeStatus: req.body.activeStatus })
+        await sprintModel.findByIdAndUpdate({ _id: req.body.sprintId }, { activeStatus: req.body.activeStatus })
         return res.status(200).json({ status: '200', message: 'Sprint status updated Successfully' });
     } catch (error) {
         return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });
@@ -100,8 +100,8 @@ const getAMilestoneAllSprints = async (req, res) => {
             return res.status(200).json({ status: '200', message: 'Sprints Data fetched successfully', response: sprints });
         }
         else{
-        const totalCount = await sprintModel.countDocuments({ $and: [{ milestoneId: req.query.id }, { activeStatus: req.query.activeStatus }] })
-        const result = await sprintModel.find({ $and: [{ milestoneId: req.query.id }, { activeStatus: req.query.activeStatus }] }).populate([
+        const totalCount = await sprintModel.countDocuments({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: req.query.activeStatus }] })
+        const result = await sprintModel.find({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: req.query.activeStatus }] }).populate([
             { path: 'projectId', select: 'projectName' },
             { path: 'milestoneId', select: 'title' },
         ])
