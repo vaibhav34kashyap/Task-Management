@@ -20,12 +20,12 @@ export const deleteSprint = (data): AuthAction => ({
     type: SprintTypes.DELETE_SPRINT,
     payload: data
 })
-export const getSprintById = (data): AuthAction => ({
-    type: SprintTypes.GET_SPRINT_BY_ID,
-    payload: data
-})
 
 export const updateSprint = (data): AuthAction => ({
     type: SprintTypes.UPDATE_SPRINT,
+    payload: data
+})
+export const getSprintId= (data): AuthAction => ({
+    type: "sprintId",
     payload: data
 })

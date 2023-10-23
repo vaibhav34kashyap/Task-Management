@@ -103,7 +103,7 @@ const Projects = () => {
             
         };
         dispatch(getAllProjects(body));
-    }, []);
+    }, [render]);
     useEffect(() => {
         if (deletehandle?.status == 200) {
             ToastHandle('success', deletehandle?.message);
@@ -187,7 +187,7 @@ const Projects = () => {
                                                     <span className="namelink"> {ele?.clientName}</span>
                                                 </td>
                                                 <td>
-                                                    <span className="namelink"> {ele?.project_type}</span>
+                                                    <span className="namelink"> {ele?.projectType}</span>
                                                 </td>
                                                 <td>
                                                     <span className="namelink">

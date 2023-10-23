@@ -34,7 +34,7 @@ const Sprint = () => {
         SetOpenModal(false);
     };
     useEffect(() => {
-        dispatch(getSprintById(id));
+        // dispatch(getSprintById(id));
         dispatch(getsingleSprintTask({ id: id, skip: 1 }))
     }, [render]);
 
