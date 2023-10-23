@@ -38,7 +38,8 @@ const getTasks = async (req, res) => {
         var totalPages = 0
         const query = {};
         var totalCount = 0;
-        if (parseInt(req.query.skip) === 0) {
+        if (parseInt(req.query.skip) === 0) 
+        {
             if (req.query.sprintId) {
                 totalCount = await taskModel.countDocuments(query);
                 query.sprintId = new mongoose.Types.ObjectId(req.query.sprintId);
@@ -47,8 +48,8 @@ const getTasks = async (req, res) => {
                 var pageSize = totalCount === 0 ? 1 : totalCount;
                 var skip = 1
             }
-else{
-                    query.activeStatus = JSON.parse(req.query.activeStatus);
+            else {
+                query.activeStatus = JSON.parse(req.query.activeStatus);
                 totalCount = await taskModel.countDocuments(query);
                 var pageSize = totalCount === 0 ? 1 : totalCount;
                 var skip = 1
@@ -152,15 +153,15 @@ else{
                     priority: { $first: '$priority' },
                     startDate: { $first: '$startDate' },
                     dueDate: { $first: '$dueDate' },
-                    dueDate: { $first: '$dueDate' },
                     status: { $first: '$status' },
                     activeStatus: { $first: '$activeStatus' },
-                    projectInfo: { $first: '$projects' },
-                    milestoneInfo: { $first: '$milestones' },
-                    sprintInfo: { $first: '$sprints' },
-                    assignees: { $push: '$assignees' }
-                },
-            },
+                    projectInfo: { $first: { $arrayElemAt: ['$projects', 0] } },
+                    milestoneInfo: { $first: { $arrayElemAt: ['$milestones', 0] } },
+                    sprintInfo: { $first: { $arrayElemAt: ['$sprints', 0] } },
+                    assignees: { $first: { $arrayElemAt: [['$assignees'], 0] } },
+                }
+            }
+            
         ]).sort({ createdAt: -1 })
             .limit(pageSize)
             .skip((parseInt(skip) - 1) * pageSize);
