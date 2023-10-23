@@ -74,13 +74,13 @@ const Milestone = () => {
     const handleYes = () => {
         if (checkedStatus) {
             let body = {
-                id: checkedData._id,
+                milestoneId: checkedData._id,
                 activeStatus: true,
             };
             dispatch(deleteMileStone(body));
         } else {
             let body = {
-                id: checkedData._id,
+                milestoneId: checkedData._id,
                 activeStatus: false,
             };
             dispatch(deleteMileStone(body));

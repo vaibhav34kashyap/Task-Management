@@ -79,13 +79,13 @@ const Sprint = () => {
     const handleYes = () => {
         if (checkedStatus) {
             let body = {
-                id: checkedData._id,
+                sprintId: checkedData._id,
                 activeStatus: true,
             };
             dispatch(deleteSprint(body));
         } else {
             let body = {
-                id: checkedData._id,
+                sprintId: checkedData._id,
                 activeStatus: false,
             };
             dispatch(deleteSprint(body));
