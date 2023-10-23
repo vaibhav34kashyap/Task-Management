@@ -14,12 +14,6 @@ import { Select } from 'react-select';
 const Create = ({ modal, closeModal }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    const options = [
-        { label: 'React ', value: 'React' },
-        { label: 'Node', value: 'Node' },
-        { label: 'Angular', value: 'Angular' },
-        { label: 'Flutter', value: 'Flutter' },
-    ];
     const [selected, setSelected] = useState([]);
     const errorhandel = store?.addProject;
     const loaderhandel = store?.addProject;
@@ -42,9 +36,8 @@ const Create = ({ modal, closeModal }) => {
             clientName: data?.clientName,
             startDate: data?.startDate,
             endDate: data?.endDate,
-            project_type: data?.project_type,
-            technology: addValue,
-            projectStatus: data?.projectDec,
+            projectType: data?.project_type,
+            technology: addValue
         };
         dispatch(addProject(body));
     };

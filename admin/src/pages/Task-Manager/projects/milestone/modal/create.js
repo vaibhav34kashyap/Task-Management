@@ -31,12 +31,12 @@ const Create = ({ modal, closeModal }) => {
     const dispatch = useDispatch();
     const onSubmit = (data) => {
         const milStones = {
-            project_id: id,
+            projectId: id,
             title: data.Title,
             description: description,
-            start_date: data.Start_date,
-            completion_date: data.End_date,
-            status: 'new',
+            startDate: data.Start_date,
+            completionDate: data.End_date,
+            
         };
         dispatch(addAllmilstones(milStones));
         closeModal();

@@ -26,11 +26,11 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
         reset,
         formState: { errors },
     } = useForm();
-
+console.log(projectId,"projectId")
     const onSubmit = (val) => {
         let body = {
-            project_id: projectId,
-            milestone_id: milestoneId,
+            projectId: projectId,
+            milestoneId: milestoneId,
             sprintName: val?.Name,
             sprintDesc: description,
             startDate: val?.Startdate,

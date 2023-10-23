@@ -137,31 +137,7 @@ export const deleteSprint = (state = DELETE_SPRINT_INITIAL_STATE, action) => {
 
     }
 };
-export const getSingleSprintReducer = (state = GET_SINGLE_SPRINT_INITIAL_STATE, action) => {
-    switch (action.type) {
-        case SprintTypes.GET_SPRINT_BY_ID_LOADING:
-            return {
-                data: GET_SINGLE_SPRINT_INITIAL_STATE.data,
-                loading: true,
-            };
-        case SprintTypes.GET_SPRINT_BY_ID_SUCCESS:
-            return {
-                data: action?.payload,
-                loading: false,
-            };
 
-
-        case SprintTypes.GET_SPRINT_BY_ID_ERROR:
-            return {
-                data: [],
-                loading: false,
-                message: action?.payload,
-            };
-        default:
-            return { ...state };
-
-    }
-};
 export const updateSprint = (state = UPDATE_SPRINT_INITIAL_STATE, action) => {
     switch (action.type) {
         case SprintTypes.UPDATE_SPRINT_LOADING:
@@ -187,6 +163,19 @@ export const updateSprint = (state = UPDATE_SPRINT_INITIAL_STATE, action) => {
                 loading: false,
                 message: action?.payload,
             };
+        default:
+            return { ...state };
+
+    }
+};
+export const getSprintId = (state = {data:""}, action) => {
+    switch (action.type) {
+        case "sprintId":
+            return {
+                data: action.payload,
+                
+            };
+      
         default:
             return { ...state };
 

@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React ,{useState ,useEffect} from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import styled from '@emotion/styled';
-import { deleteTask, getAllProjects, getAllRoles, getAllUsers, getSingleSprint, getsingleMileStone } from '../../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import { deleteTask } from '../../../redux/actions';
+import Modal from 'react-bootstrap/Modal';
+import {Button} from 'react-bootstrap';
 import ToastHandle from '../../../constants/toaster/toaster';
+import UpdateTask from "./update"
 // import CustomAvatar from '../TableComponents/CustomAvatar'
 // import { ReactComponent as RedArrow } from '../../assets/icons/High.svg'
 // import { ReactComponent as YellowArrow } from '../../assets/icons/Medium.svg'
 // import { ReactComponent as BlueArrow } from '../../assets/icons/Low.svg'
 import moment from 'moment';
-import Update from './update';
 const TaskInformation = styled.div`
     display: flex;
     flex-direction: column;
@@ -38,44 +40,49 @@ const TaskInformation = styled.div`
     svg{
       width: 12px !important;
       height: 12px !important;
-      margin-right: 12px; */
+      margin-right: import Column from './../Boards/board/Column';
+12px; */
     /* margin-top: 2px; */
     /* } */
     /* } */
 `;
 
-const TaskCard = ({ item, index }) => {
-
-    const dispatch = useDispatch();
-    const store = useSelector((state) => state);
-    const [openEditModal, setOpenEditModal] = useState(false);
+const TaskCard = ({ item, index, Column ,closeModal }) => {
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [deleteId, setDeleteId] = useState();
     const [editData, setEditData] = useState();
-    const [render, setRender] = useState(false);
-    const deletehandle = store?.deleteTask;
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const store = useSelector((state) => state);
+    const deletehandel = store?.deleteTask
+    const dispatch = useDispatch();
+    const deleteData = (id) => {
+        setDeleteId(id);
+        setDeleteModal(true);
+    };
+    const handleYes = () => {
+        dispatch(deleteTask({ taskId: deleteId }));
+        setDeleteModal(false)
+    };
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
     };
     const closeupdatemodal = (val) => {
-        if (val == 'render') {
-            setRender(!render);
-        }
+        closeModal()
         setOpenEditModal(false);
     };
-    const deleteData = (id) => {
-        dispatch(deleteTask({ taskId: id }));
-    };
- 
     useEffect(() => {
-        if (deletehandle?.status == 200) {
-            ToastHandle('success', deletehandle?.data?.message);
-            // closeModal('render');
-        } else if (deletehandle?.status == 400) {
-            ToastHandle('error', deletehandle?.data?.message);
-        } else if (deletehandle?.status == 500) {
-            ToastHandle('error', deletehandle?.data?.message);
+        if (deletehandel?.data?.status == 200) {
+            ToastHandle('success', deletehandel?.data?.message);
+            console.log(deletehandel ,"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
+            setDeleteModal(false)
+            closeModal("render");
+        } else if (deletehandel?.data?.status == 400) {
+            ToastHandle('error', deletehandel?.data?.message);
+        } else if (deletehandel?.data?.status == 500) {
+            ToastHandle('error', deletehandel?.data?.message);
         }
-    }, [deletehandle]);
+    }, [deletehandel]);
     return (
         <>
             <Draggable key={item.id} draggableId={item.id} index={index}>
@@ -84,16 +91,14 @@ const TaskCard = ({ item, index }) => {
                         <TaskInformation>
                             <div className="action_icon">
                                 <button type="button">
-                                    <i
-                                        class="uil-edit-alt m-0 p-0"
-                                        onClick={() => {
-                                            handelUpdate(item);
-                                        }}></i>
+                                    <i class="uil-edit-alt m-0 p-0" onClick={()=>{handelUpdate(item)
+                                    }}></i>
                                 </button>
-                                <button type="button" onClick={() => deleteData(item._id)}>
+                                <button type="button" onClick={() => deleteData(item.id)}>
                                     <i class="mdi mdi-delete m-0 p-0"></i>
                                 </button>
                             </div>
+
                             <p>{item.summary}</p>
                             <p>{item.description}</p>
                             <div className="secondary-details">
@@ -105,7 +110,23 @@ const TaskCard = ({ item, index }) => {
                     </div>
                 )}
             </Draggable>
-            <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
+            {/* delete modal */}
+            <Modal show={deleteModal} onHide={() => setDeleteModal(false)}>
+                <Modal.Body>Are you sure you want to delete this Task ?</Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            setDeleteModal(false);
+                        }}>
+                        No
+                    </Button>
+                    <Button className=" web_button " variant="primary" onClick={() => handleYes()}>
+                        Yes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
         </>
     );
 };
