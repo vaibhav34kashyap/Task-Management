@@ -53,7 +53,7 @@ const getMilestoneById = async (req, res) => {
 // Update a Milestone
 const updateMilestone = async (req, res) => {
     try {
-        await milestoneModel.findByIdAndUpdate({ _id: req.body.id }, req.body, { new: true });
+        await milestoneModel.findByIdAndUpdate({ _id: req.body.milestoneId }, req.body, { new: true });
         return res.status(200).json({ status: '200', message: 'Milestone updated Successfully' });
     } catch (error) {
         return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
@@ -63,7 +63,7 @@ const updateMilestone = async (req, res) => {
 // update Milestone ActiveStatus
 const updateStatus = async (req, res) => {
     try {
-        await milestoneModel.findByIdAndUpdate({ _id: req.body.id }, { activeStatus: req.body.activeStatus });
+        await milestoneModel.findByIdAndUpdate({ _id: req.body.milestoneId }, { activeStatus: req.body.activeStatus });
         return res.status(200).json({ status: '200', message: 'Milestone status updated Successfully' });
     } catch (error) {
         return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message })
@@ -74,28 +74,27 @@ const updateStatus = async (req, res) => {
 const getAProjectMilestones = async (req, res) => {
     try {
         const pageSize = 10;
-        if(parseInt(req.query.skip) ===0){
-            console.log('fchgvhbjknj');
+        if (parseInt(req.query.skip) === 0) {
             const milestones = await milestoneModel.find({ activeStatus: req.query.activeStatus }).populate('projectId', 'projectName')
-            .sort({ createdAt: -1 })
-        return res.status(200).json({ status: '200', message: 'Milestones Data fetched successfully', response: milestones})
+                .sort({ createdAt: -1 })
+            return res.status(200).json({ status: '200', message: 'Milestones Data fetched successfully', response: milestones })
         }
-        else{
-        const totalCount = await milestoneModel.countDocuments({ $and: [{ projectId: req.query.id }, { activeStatus: req.query.activeStatus }] });
-        const result = await milestoneModel.find({ $and: [{ projectId: req.query.id }, { activeStatus: req.query.activeStatus }] }).populate('projectId', 'projectName')
-            .sort({ createdAt: -1 })
-            .limit(pageSize)
-            .skip((parseInt(req.query.skip) - 1) * pageSize);
-        const totalPages = Math.ceil(totalCount / pageSize);
+        else {
+            const totalCount = await milestoneModel.countDocuments({ $and: [{ projectId: req.query.projectId }, { activeStatus: req.query.activeStatus }] });
+            const result = await milestoneModel.find({ $and: [{ projectId: req.query.projectId }, { activeStatus: req.query.activeStatus }] }).populate('projectId', 'projectName')
+                .sort({ createdAt: -1 })
+                .limit(pageSize)
+                .skip((parseInt(req.query.skip) - 1) * pageSize);
+            const totalPages = Math.ceil(totalCount / pageSize);
 
-        return res.status(200).json({ status: "200", message: "All milestones fetched successfully", Response: result, totalCount, totalPages });
-        }}
-     catch (error) {
+            return res.status(200).json({ status: "200", message: "All milestones fetched successfully", Response: result, totalCount, totalPages });
+        }
+    } catch (error) {
         return res.status(500).json({ status: "500", message: 'Something went wrong', error: error.message });
     }
 }
 
 
 module.exports = {
-     addMilestone, updateMilestone, updateStatus, getMilestoneById, getAProjectMilestones
+    addMilestone, updateMilestone, updateStatus, getMilestoneById, getAProjectMilestones
 }

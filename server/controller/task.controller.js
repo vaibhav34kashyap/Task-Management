@@ -82,6 +82,22 @@ const getTasks = async (req, res) => {
         },
     },
     {
+        $lookup: {
+            from: 'projects',
+            localField: 'projectId',
+            foreignField: '_id',
+            as: 'projects',
+        },
+    },
+    {
+        $lookup: {
+            from: 'milestones',
+            localField: 'milestoneId',
+            foreignField: '_id',
+            as: 'milestones',
+        },
+    },
+    {
         $unwind: '$assignees' // Unwind the assignees array
     },
     {
@@ -118,6 +134,8 @@ const getTasks = async (req, res) => {
             _id: '$_id',
             // Add other fields you need to preserve here
             assignees: { $push: '$assignees' },
+            assignees: { $first: '$projects' },
+            assignees: { $first: '$milestones' },
             summary: { $first: '$summary' },
 
         },
