@@ -19,7 +19,7 @@ export const ALL_USERS = "/users";
 export const deleteUsers = "/users/usersDelete/";
 export const UpdateSprint = "/sprint/update";
 export const SingleMilestone = "/milestone/getAProjectMilestones?projectId="
-export const SingleSprintTask = "/task/getSprintTasks?sprintId="
+export const SingleSprintTask = "/task/getTasks?sprintId="
 export const GetAllTask = "/task/getTasksAccToStatus"
 export const UpdateTask = "/task/updateTask"
 export const DeleteTask = "/task/deletetask?taskId="
