@@ -17,6 +17,8 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const [description, setDescription] = useState('');
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    const [hideMilestone ,setHideMilestone] = useState(true);
+    const [hideSprint ,setHideSprint] = useState(true);
     const sucesshandel = store?.UpdateTaskReducer;
     const loaderhandel = store?.UpdateTaskReducer;
     // disable previous date
@@ -34,13 +36,17 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
         closeModal();
     };
     const projectHandel=(e)=>{
-if (e.target.value){
-    dispatch(getsingleMileStone({ id:e.target.value,activeStatus: 1 ,skip:0 }));
+        const id=e.target.value
+if (id){
+    setHideMilestone(false)
+    dispatch(getsingleMileStone({ id:id,activeStatus: 1 ,skip:0 }));
 }
     }
     const milestoneHandel=(e)=>{
-        if (e.target.value){
-            dispatch(getSingleSprint({ activeStatus:1, id: e.target.value ,skip :0}));
+        const id=e.target.value
+        if (id){
+            setHideSprint(false)
+            dispatch(getSingleSprint({ activeStatus:1, id: id ,skip :0}));
         }
     }
     const onSubmit = (data) => {
@@ -66,7 +72,7 @@ if (e.target.value){
         reset({
             Milestone: editData?.milestoneId?._id,
             projectname: editData?.projectId?._id,
-            Sprint: editData?.sprintId?.id,
+            Sprint: editData?.sprintId?._id,
             startDate: handleDate(editData?.createdAt),
             dueDate: handleDate(editData?.dueDate),
             summary: editData?.summary,
@@ -135,7 +141,7 @@ if (e.target.value){
                                                             required: true,
                                                            
                                                         })}
-                                                        onClick={(e)=>{projectHandel(e)}}
+                                                        onChange={(e)=>{projectHandel(e)}}
                                                        >
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getProject?.data?.response?.map((ele, ind) => (
@@ -155,9 +161,9 @@ if (e.target.value){
                                                     </Form.Label>
 
                                                     <Form.Select
-                                                        {...register('Milestone', { required: true,  })}
-                                                        onClick={(e)=>{milestoneHandel(e)}}>
-                                                        {/* <option value={''}>--Select--</option> */}
+                                                        {...register('Milestone', { required: true,disabled:hideMilestone  })}
+                                                        onChange={(e)=>{milestoneHandel(e)}}>
+                                                        <option value={''}>--Select--</option>
                                                         {store?.getSigleMileStone?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.title} </option>
                                                         ))}
@@ -178,8 +184,8 @@ if (e.target.value){
                                                     </Form.Label>
 
                                                     <Form.Select
-                                                        {...register('Sprint', { required: true,  })}>
-                                                        {/* <option value={''}>--Select--</option> */}
+                                                        {...register('Sprint', { required: true,  disabled:hideSprint })}>
+                                                        <option value={''}>--Select--</option>
                                                         {store?.getAllSingleSprints?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.sprintName} </option>
                                                         ))}

@@ -134,9 +134,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const store = useSelector((state) => state);
     const [isopen, setIsopen] = useState(false);
     const allProjects = store?.getProject?.data?.response;
-    const getsingleMilestoneData = store?.getSigleMileStone?.data?.Response;
-    const getAllSingleSprints = store?.getAllSingleSprints?.data?.Response;
-    const [projectId, setProjectId] = useState('');
+    const getsingleMilestoneData = store?.getSigleMileStone?.data?.response;
+    const getAllSingleSprints = store?.getAllSingleSprints?.data?.response;
     const [projectNameHeading, setProjectName] = useState('select Project Name');
     const [mileStoneId, setMileStoneId] = useState('');
     const [sprintId, setSprintId] = useState('');
@@ -197,22 +196,19 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const onChangeProject = (e) => {
         dispatch(getProjectId(e.target.value));
         setProjectName(e.target.value);
-        setProjectId(e.target.value);
+        const id=e.target.value
+        if (id){
+              
+        dispatch(getsingleMileStone({ id: id, activeStatus: 1, skip: 0 }));
+        }
+     
     };
     const onChangeMilestone = (e) => {
         dispatch(getMilestonetId(e.target.value))
-        setMileStoneId(e.target.value);
+       const id = e.target.value
+       dispatch(getSingleSprint({ activeStatus: 1, id: id, skip: 0 }));
     };
-    const onChangeSprint = (e) => {
-        dispatch(getSprintId(e.target.value))
-        setSprintId(e.target.value);
-    };
-    const handelmilestone = () => {
-        dispatch(getsingleMileStone({ id: projectId, activeStatus: 1, skip: 1 }));
-    };
-    const handlesprint = () => {
-        dispatch(getSingleSprint({ activeStatus: 1, id: mileStoneId, skip: 1 }));
-    };
+   
     return (
         <>
             <div className={classNames('navbar-custom', navbarCssClasses)}>
@@ -256,7 +252,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                                 className="form-select op1 "
                                                 id="exampleForm.ControlInput1"
                                                 onChange={onChangeProject}
-                                                onClick={handleProject}>
+                                                onClick={handleProject}
+                                                >
                                                 <option> Projects</option>
                                                 {allProjects?.map((item, index) => (
                                                     <option className="project_opt" key={index} value={item._id}>
@@ -274,7 +271,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                                 className="form-select  op2"
                                                 id="exampleForm.ControlInput1"
                                                 onChange={onChangeMilestone}
-                                                onClick={handelmilestone}>
+                                               
+                                                >
                                                 <option> MileStone</option>
                                                 {getsingleMilestoneData?.map((item, index) => (
                                                     <option key={index} value={item._id}>
@@ -290,8 +288,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                                 name="Assignee"
                                                 className="form-select  op3"
                                                 id="exampleForm.ControlInput1"
-                                                onChange={onChangeSprint}
-                                                onClick={handlesprint}>
+                                               
+                                                >
                                                 <option> Sprint</option>
                                                 {getAllSingleSprints?.map((item, index) => (
                                                     <option key={index} value={item._id}>
