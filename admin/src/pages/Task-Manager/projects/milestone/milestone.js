@@ -46,6 +46,7 @@ const Milestone = () => {
                 id: id,
                 activeStatus: 1,
                 skip
+                ,mileStoneId:"" 
             };
             dispatch(getsingleMileStone(data));
         } else {
@@ -53,14 +54,14 @@ const Milestone = () => {
             let data = {
                 id: id,
                 activeStatus: 0,
-                skip
+                skip,mileStoneId:"" 
             };
             dispatch(getsingleMileStone(data));
         }
     };
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getsingleMileStone({ id: id, activeStatus: status ,skip: value }));
+        dispatch(getsingleMileStone({ id: id, activeStatus: status ,skip: value ,mileStoneId:"" }));
     };
     const handleStatusChange = (e, data) => {
         if (e.target.checked) {
@@ -108,7 +109,7 @@ const Milestone = () => {
         }
     }, [deletehandle]);
     useEffect(() => {
-        dispatch(getsingleMileStone({ id: id, activeStatus: status ,skip }));
+        dispatch(getsingleMileStone({ id: id, activeStatus: status ,skip ,mileStoneId:"" }));
     }, [render]);
 
     return (
