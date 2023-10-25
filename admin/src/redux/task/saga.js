@@ -218,26 +218,26 @@ export function* createTaskSaga(): any {
 export function* getSingleSprintTaskSaga(): any {
     yield takeEvery(TASK_TYPES.GET_SINGLE_SPRINT_TASK, getSingleSprintTaskFunction);
 }
-export function* getAllTask(): any {
+export function* getAllTaskSaga(): any {
     yield takeEvery(TASK_TYPES.GET_ALL_TASK, getAllTaskFunction);
 }
-export function* updateTask(): any {
+export function* updateTaskSaga(): any {
     yield takeEvery(TASK_TYPES.UPDATE_TASK, updateTaskFunction);
 }
-export function* deleteTask(): any {
+export function* deleteTaskSaga(): any {
     yield takeEvery(TASK_TYPES.DELETE_TASK, deleteTaskFunction);
 }
-export function* updateTaskStatus(): any {
+export function* updateTaskStatusSaga(): any {
     yield takeEvery(TASK_TYPES.UPDATE_TASK_STATUS, updateTaskStatusFunction);
 }
 function* AllTaskSaga(): any {
     yield all([
         fork(createTaskSaga),
         fork(getSingleSprintTaskSaga),
-        fork(getAllTask),
-        fork(updateTask),
-        fork(deleteTask),
-        fork(updateTaskStatus)
+        fork(getAllTaskSaga),
+        fork(updateTaskSaga),
+        fork(deleteTaskSaga),
+        fork(updateTaskStatusSaga)
     ])
 }
 export default AllTaskSaga;

@@ -107,25 +107,25 @@ const Boards = (props) => {
             setColumns({
                 [1]: {
                     title: 'To-do',
-                    items: successHandle?.data?.Response?.map((ele) => {
+                    items: successHandle?.data?.Response?.tasks?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
                 [2]: {
                     title: 'In Progress',
-                    items: successHandle?.data?.inProgress?.map((ele) => {
+                    items: successHandle?.data?.inProgress?.tasks?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
                 [3]: {
                     title: 'Hold',
-                    items: successHandle?.data?.hold?.map((ele) => {
+                    items: successHandle?.data?.hold?.tasks?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
                 [4]: {
                     title: 'Done',
-                    items: successHandle?.data?.done?.map((ele) => {
+                    items: successHandle?.data?.done?.tasks?.map((ele) => {
                         return { ...ele, id: ele._id };
                     }),
                 },
@@ -158,7 +158,7 @@ const Boards = (props) => {
    useEffect(() => {
     let body = {
         status :1,
-        skip: 1    
+        skip: 0    
     };
     dispatch(getAllProjects(body));
     dispatch(getsingleMileStone({ id:"" ,activeStatus: 1 ,skip:0 }));

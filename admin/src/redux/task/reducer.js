@@ -15,6 +15,11 @@ const GET_All_TASK_INITIAL_STATE = {
     loading:false,
     message:""
 }
+const UPDATE_TASK_INITIAL_STATE = {
+    data:[],
+    loading:false,
+    message:""
+}
 const UPDATE_STATUS_TASK_INITIAL_STATE = {
     data:[],
     loading:false,
@@ -82,6 +87,7 @@ export const getSigleSprintTask = (state = GET_SINGLE_SPRINTTASK_INITIAL_STATE, 
 };
 
 export const getAllTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) => {
+    console.log(action, "actionnnn")
     switch (action.type) {
         case TASK_TYPES.GET_ALL_TASK_LOADING:
             return {
@@ -107,11 +113,11 @@ export const getAllTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) =>
     }
 };
 
-export const UpdateTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) => {
+export const UpdateTaskReducer = (state = UPDATE_TASK_INITIAL_STATE, action) => {
     switch (action.type) {
         case TASK_TYPES.UPDATE_TASK_LOADING:
             return {
-                data: GET_All_TASK_INITIAL_STATE.data,
+                data: UPDATE_TASK_INITIAL_STATE.data,
                 loading: true,
             };
         case TASK_TYPES.UPDATE_TASK_SUCCESS:
@@ -121,7 +127,7 @@ export const UpdateTaskReducer = (state = GET_All_TASK_INITIAL_STATE, action) =>
             };
             case TASK_TYPES.UPDATE_TASK_RESET:
                 return {
-                    data: GET_All_TASK_INITIAL_STATE.data,
+                    data: UPDATE_TASK_INITIAL_STATE.data,
                     loading: false
                 }
 
