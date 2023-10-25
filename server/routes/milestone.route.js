@@ -5,6 +5,6 @@ const milestone = require('../controller/milestone.controller');
 milestoneRoute.post('/add', milestone.addMilestone);
 milestoneRoute.put('/update', milestone.updateMilestone);
 milestoneRoute.put('/updateStatus', milestone.updateStatus);
-milestoneRoute.get('/getAProjectMilestones', milestone.getAProjectMilestones);
+milestoneRoute.get('/getAProjectMilestones', milestone.getMilestonesWRTConditons);
 
 module.exports = milestoneRoute
