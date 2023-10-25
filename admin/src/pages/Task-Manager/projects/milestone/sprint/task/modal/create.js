@@ -28,9 +28,9 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
 
     const onSubmit = (val) => {
         let body = {
-            sprintId: val?.Sprint,
-            milestoneId: val?.Milestone,
-            projectId: val?.projectname,
+            sprintId: sprintid,
+            milestoneId: milestoneid,
+            projectId: projectid,
             description: description,
             summary: val?.summary,
             startDate: val?.startdate,

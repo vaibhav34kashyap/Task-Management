@@ -3,13 +3,18 @@ export const AddProject = "/project/addProject";
 export const GetAllProject = "/project/getProjects?activeStatus=";
 export const UpdateProjectDetails = "/project/update";
 export const DeleteProject = "/project/updateStatus";
+// // 
 export const GetProjectById = "/project/getbyprojectid/";
+
 export const GetAllMileStones = "/milestone?";
+// // 
 export const MileStoneDelete = "/milestone/updateStatus"
 export const MileStoneAdd = "/milestone/add"
-export const ParticularMilestoneDetail = "/milestone/getmilestonebyid/";
 export const AddSprint = "/sprint/add";
+// // 
+export const ParticularMilestoneDetail = "/milestone/getmilestonebyid/";
 export const GetAllSprints = "/sprint?";
+// // 
 export const DeleteSprint = "/sprint/updateStatus";
 export const getAllSingleSprint ="/sprint/getAMilestoneAllSprints?milestoneId="
 // create task 
