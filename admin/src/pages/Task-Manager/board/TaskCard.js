@@ -1,12 +1,12 @@
-import React ,{useState ,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import styled from '@emotion/styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteTask, } from '../../../redux/actions';
+import { deleteTask } from '../../../redux/task/action';
 import Modal from 'react-bootstrap/Modal';
-import {Button} from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import ToastHandle from '../../../constants/toaster/toaster';
-import UpdateTask from "./update"
+import UpdateTask from './update';
 // import CustomAvatar from '../TableComponents/CustomAvatar'
 // import { ReactComponent as RedArrow } from '../../assets/icons/High.svg'
 // import { ReactComponent as YellowArrow } from '../../assets/icons/Medium.svg'
@@ -47,13 +47,13 @@ const TaskInformation = styled.div`
     /* } */
 `;
 
-const TaskCard = ({ item, index, Column ,closeModal }) => {
+const TaskCard = ({ item, index, Column, closeModal }) => {
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState();
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const store = useSelector((state) => state);
-    const deletehandel = store?.deleteTask
+    const deletehandel = store?.deleteTask;
     const dispatch = useDispatch();
     const deleteData = (id) => {
         setDeleteId(id);
@@ -61,29 +61,28 @@ const TaskCard = ({ item, index, Column ,closeModal }) => {
     };
     const handleYes = () => {
         dispatch(deleteTask({ taskId: deleteId }));
-        setDeleteModal(false)
+        setDeleteModal(false);
     };
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
     };
     const closeupdatemodal = (val) => {
-        closeModal()
+        closeModal();
         setOpenEditModal(false);
     };
+    
     useEffect(() => {
         if (deletehandel?.data?.status == 200) {
             ToastHandle('success', deletehandel?.data?.message);
-            console.log(deletehandel ,"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
-            setDeleteModal(false)
-            closeModal("render");
+            setDeleteModal(false);
+            closeModal('render');
         } else if (deletehandel?.data?.status == 400) {
             ToastHandle('error', deletehandel?.data?.message);
         } else if (deletehandel?.data?.status == 500) {
             ToastHandle('error', deletehandel?.data?.message);
         }
     }, [deletehandel]);
-
 
     return (
         <>
@@ -93,8 +92,11 @@ const TaskCard = ({ item, index, Column ,closeModal }) => {
                         <TaskInformation>
                             <div className="action_icon">
                                 <button type="button">
-                                    <i class="uil-edit-alt m-0 p-0" onClick={()=>{handelUpdate(item)
-                                    }}></i>
+                                    <i
+                                        class="uil-edit-alt m-0 p-0"
+                                        onClick={() => {
+                                            handelUpdate(item);
+                                        }}></i>
                                 </button>
                                 <button type="button" onClick={() => deleteData(item.id)}>
                                     <i class="mdi mdi-delete m-0 p-0"></i>
@@ -102,7 +104,12 @@ const TaskCard = ({ item, index, Column ,closeModal }) => {
                             </div>
 
                             <p>{item.summary}</p>
-                            <p>{item.description}</p>
+                            <p>
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: item?.description,
+                                    }}></div>
+                            </p>
                             <div className="secondary-details">
                                 <p>
                                     <span>{item?.createdAt ? moment(item?.createdAt).format('ll') : ''}</span>
