@@ -208,7 +208,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
        const id = e.target.value
        dispatch(getSingleSprint({ activeStatus: 1, id: id, skip: 0 }));
     };
-   
+   const sprinthandel=(e)=>{
+    dispatch(getSprintId(e.target.value))
+   }
     return (
         <>
             <div className={classNames('navbar-custom', navbarCssClasses)}>
@@ -288,7 +290,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                                 name="Assignee"
                                                 className="form-select  op3"
                                                 id="exampleForm.ControlInput1"
-                                               
+                                                onChange={sprinthandel}
                                                 >
                                                 <option> Sprint</option>
                                                 {getAllSingleSprints?.map((item, index) => (

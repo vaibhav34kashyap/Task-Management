@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import react, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { createTask } from '../redux/actions';
+import { createTask, getAllRoles, getAllUsers } from '../redux/actions';
 import { useParams } from 'react-router-dom';
-
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 export default function RightBar(props) {
     const {
         register,
@@ -12,9 +13,11 @@ export default function RightBar(props) {
     } = useForm();
     const { showModal, setShowModal, content } = props;
     const store = useSelector((state) => state);
+    const [description, setDescription] = useState('');
     const projectId = store?.getProjectId?.data;
     const milestoneId = store?.getMilestoneId?.data;
     const sprintid = store?.getSprintId?.data;
+    // const sucesshandel =store?.createTaskReducer?.data
     const dispatch = useDispatch();
 
     const onSubmit = (e) => {
@@ -23,7 +26,7 @@ export default function RightBar(props) {
             milestoneId: milestoneId,
             sprintId: sprintid,
             summary: e.Summary,
-            description: e.Description,
+            description: description,
             assigneeId: e.Assignee,
             reporterId: e.Report,
             priority: e.priority,
@@ -38,7 +41,20 @@ export default function RightBar(props) {
         }
         setShowModal(false);
     };
-
+    useEffect(() => {
+        dispatch(getAllRoles());
+        dispatch(getAllUsers());
+    }, []);
+    // useEffect(() => {
+    //     if (sucesshandel?.data?.status == 200) {
+    //         ToastHandle('success', 'Updated Successfully');
+    //         closeModal('render');
+    //     } else if (sucesshandel?.data?.status == 400) {
+    //         ToastHandle('error', sucesshandel?.data?.message);
+    //     } else if (sucesshandel?.data?.status == 500) {
+    //         ToastHandle('error', sucesshandel?.data?.message);
+    //     }
+    // }, [sucesshandel]);
     return (
         <div className={showModal ? 'rightBar show' : 'rightBar'} role="document">
             <div className="modal-content">
@@ -62,44 +78,36 @@ export default function RightBar(props) {
                     <div className="model-content-detail">
                         <form class="" onSubmit={handleSubmit(onSubmit)}>
                             <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <input
-                                            placeholder="project id"
-                                            type="hidden"
-                                            id="exampleForm.ControlInput1"
-                                            class="form-control"
-                                            {...register('projectid')}
-                                        />
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <input
-                                            placeholder="milestone id"
-                                            type="hidden"
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('milestoneid')}
-                                        />
-                                    </div>
-                                </div>
+                              
+                               
                             </div>
                             <div class="row">
-                                <div class="col-lg-6">
+                               
+                            </div>
+                            <div className="row">
+                                <div class="col-lg-12">
                                     <div class="mb-2">
-                                        <input
-                                            placeholder="sprint id"
-                                            name="clientName"
-                                            type="hidden"
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('sprintid')}
+                                        <label class="form-label" for="exampleForm.ControlInput1">
+                                            Description <span class="text-danger">*</span>:
+                                        </label>
+
+                                        <CKEditor
+                                            editor={ClassicEditor}
+                                            config={{
+                                                ckfinder: {
+                                                    uploadUrl:
+                                                        'https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
+                                                },
+                                            }}
+                                            data=""
+                                            onChange={(event, editor) => {
+                                                const data = editor.getData();
+                                                setDescription(data);
+                                            }}
                                         />
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-2">
@@ -116,23 +124,6 @@ export default function RightBar(props) {
                                         />
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlInput1">
-                                            Description <span class="text-danger">*</span>:
-                                        </label>
-
-                                        <input
-                                            placeholder="Please Enter Description"
-                                            type="text"
-                                            id="exampleForm.ControlInput1"
-                                            class="form-control"
-                                            {...register('Description')}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
@@ -152,6 +143,8 @@ export default function RightBar(props) {
                                         </select>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlInput1">
@@ -170,8 +163,6 @@ export default function RightBar(props) {
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
@@ -186,6 +177,8 @@ export default function RightBar(props) {
                                         />
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
@@ -200,8 +193,6 @@ export default function RightBar(props) {
                                         />
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-1">
                                         <label class="form-label" for="exampleForm.ControlInput1">
@@ -220,6 +211,8 @@ export default function RightBar(props) {
                                         </select>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">

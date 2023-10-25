@@ -344,8 +344,8 @@ if (id){
                                                         <option>-------select----</option>
                                                         <option value="1">todo</option>
                                                         <option value="2">inProgress</option>
-                                                        <option value="3">done</option>
-                                                        <option value="4">review</option>
+                                                        <option value="3">Hold</option>
+                                                        <option value="4">Done</option>
                                                     </Form.Select>
                                                     {errors.status?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>

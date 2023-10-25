@@ -136,6 +136,7 @@ function* updateTaskFunction({ payload }) {
     }
 }
 
+
 function* deleteTaskFunction({ payload }) {
     try {
         yield put({
