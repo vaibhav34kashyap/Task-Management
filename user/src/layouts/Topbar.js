@@ -251,10 +251,29 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             <li><Link to=''>Filters</Link></li>
                             <li><Link to=''>Dashboard</Link></li>
                             <li><Link to=''>Teams</Link></li>
-                            <li>
+                                <li><div class="project_names">
+                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1"  onChange={onChangeProject}>
+                                <option>  Select Project</option>
+                                {allProjects?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.projectName}</option>
+                                )}
+                            </select></div></li>
+                            <li><div class="project_names">   <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeMilestone}>
+                                <option>Select MileStone</option>
+                                {mileStoneData?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.title}</option>
+                                )}
+                            </select></div></li>
+                            <li><div class="project_names">
+                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeSprint}>
+                                <option>Select Sprint</option>
+                                {getAllSingleSprints?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.sprintName}</option>
+                                )}
+                            </select></div></li>
+                            {/* <li>
                             <div class="project_names">
-                            {/* <label class="form-label" for="exampleForm.ControlInput1"> Projects <span class="text-danger">*</span>:</label> */}
-                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeProject}>
+                                                        <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeProject}>
                                 <option>--Select Project--</option>
                                 {allProjects?.map((item,index)=>
                                     <option key={index} value={item._id}>{item.projectName}</option>
@@ -273,7 +292,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                 )}
                             </select>
                             </div>
-                            </li>
+                            </li> */}
                     </ul>
                    </div>
                          </div> 
