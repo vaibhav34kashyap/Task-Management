@@ -44,7 +44,7 @@ const updateStatus = async (req, res) => {
 }
 
 // Get all milestones And all milestones of a project
-const getMilestonesWRTConditons = async (req, res) => {
+const getMilestones = async (req, res) => {
     try {
         const pageSize = 10;
         let milestones = null;
@@ -64,8 +64,6 @@ const getMilestonesWRTConditons = async (req, res) => {
                     .populate('projectId', 'projectName')
                     .sort({ createdAt: -1 });
             }
-        } else if (req.query.skip === null) {
-            return res.status(400).json({ status: "400", message: 'Invalid skip parameter' });
         } else {
             const totalCount = await milestoneModel.countDocuments({ projectId: req.query.projectId, activeStatus: req.query.activeStatus });
             milestones = await milestoneModel.find({ projectId: req.query.projectId, activeStatus: req.query.activeStatus })
@@ -89,5 +87,5 @@ const getMilestonesWRTConditons = async (req, res) => {
 
 
 module.exports = {
-    addMilestone, updateMilestone, updateStatus, getMilestonesWRTConditons
+    addMilestone, updateMilestone, updateStatus, getMilestones
 }
