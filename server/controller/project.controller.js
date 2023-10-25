@@ -29,10 +29,15 @@ const addProject = async (req, res) => {
 const getProjects = async (req, res) => {
     try {
         const pageSize = 10;
-        if(parseInt(req.query.skip) ===0){
-            const projects = await projectModel.find({ activeStatus: req.query.activeStatus }).populate('technology', 'techName')
-                .sort({ createdAt: -1 })
-            return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects })
+        if (parseInt(req.query.skip) === 0) {
+            if (req.query.projectId) {
+                const project = await projectModel.findById({ _id: req.query.projectId });
+                return res.status(200).json({ status: '200', message: 'Project Details fetched successfully', response: project })
+            } else {
+                const projects = await projectModel.find({ activeStatus: req.query.activeStatus }).populate('technology', 'techName')
+                    .sort({ createdAt: -1 })
+                return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects })
+            }
         } else {
             const totalCount = await projectModel.countDocuments({ activeStatus: req.query.activeStatus });
             const projects = await projectModel.find({ activeStatus: req.query.activeStatus }).populate('technology', 'techName')
@@ -43,16 +48,6 @@ const getProjects = async (req, res) => {
 
             return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: projects, totalCount, totalPages })
         }
-    } catch (error) {
-        return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message });
-    }
-}
-
-// Get A Project By id
-const getProjectById = async (req, res) => {
-    try {
-        const project = await projectModel.findById({ _id: req.query.projectId }).populate('technology', 'techName');
-        return res.status(200).json({ status: '200', message: 'Projects fetched successfully', response: project })
     } catch (error) {
         return res.status(200).json({ status: '500', message: 'Something went wrong', error: error.message });
     }
@@ -80,4 +75,4 @@ const updateStatus = async (req, res) => {
 
 
 
-module.exports = { addProject, getProjects, updateProject, updateStatus, getProjectById, };
+module.exports = { addProject, getProjects, updateProject, updateStatus };
