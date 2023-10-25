@@ -8,9 +8,9 @@ import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
-import {updateTaskStatus} from '../../../../src/redux/task/action'
-
-
+import {updateTaskStatus} from '../../../../src/redux/task/action';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 const Container = styled.div`
   display: flex;
@@ -47,6 +47,7 @@ const Title = styled.span`
 const Boards = (props) => {
   const dispatch = useDispatch();
   const store = useSelector(state => state)
+  console.log("storeboarddata")
   const successHandle = store?.getAllTaskReducer
   
 
@@ -140,20 +141,20 @@ const Boards = (props) => {
       setColumns({
         [uuidv4()]: {
           title: 'To-do',
-          items: successHandle?.data?.Response?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.Response?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
         },
         [uuidv4()]: {
           title: 'In Progress',
-          items: successHandle?.data?.inProgress?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.inProgress?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
         },
         
         [uuidv4()]: {
           title: 'Hold',
-          items: successHandle?.data?.hold?.map((ele) => { return { ...ele, id: ele._id }}),
+          items: successHandle?.data?.hold?.tasks?.map((ele) => { return { ...ele, id: ele._id }}),
       },
         [uuidv4()]: {
           title: 'Done',
-          items: successHandle?.data?.done?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.done?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
         },
       })
     }
@@ -183,6 +184,10 @@ const Boards = (props) => {
   
   
 
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   return (
 
     <>
@@ -231,6 +236,7 @@ const Boards = (props) => {
         </Container>}
 
       </DragDropContext>
+     
     
     </>
 
