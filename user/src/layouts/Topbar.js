@@ -252,21 +252,21 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             <li><Link to=''>Dashboard</Link></li>
                             <li><Link to=''>Teams</Link></li>
                                 <li><div class="project_names">
-                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1"  onChange={onChangeProject}>
-                                <option>  Select Project</option>
+                            <select name="Assignee" class="form-select " id="exampleForm.ControlInput1"  onChange={onChangeProject}>
+                                <option>Projects</option>
                                 {allProjects?.map((item,index)=>
                                     <option key={index} value={item._id}>{item.projectName}</option>
                                 )}
                             </select></div></li>
-                            <li><div class="project_names">   <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeMilestone}>
-                                <option>Select MileStone</option>
+                            <li><div class="project_names">   <select name="Assignee" class="form-select " id="exampleForm.ControlInput1" onChange={onChangeMilestone}>
+                                <option> MileStone</option>
                                 {mileStoneData?.map((item,index)=>
                                     <option key={index} value={item._id}>{item.title}</option>
                                 )}
                             </select></div></li>
                             <li><div class="project_names">
-                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeSprint}>
-                                <option>Select Sprint</option>
+                            <select name="Assignee" class="form-select " id="exampleForm.ControlInput1" onChange={onChangeSprint}>
+                                <option> Sprint</option>
                                 {getAllSingleSprints?.map((item,index)=>
                                     <option key={index} value={item._id}>{item.sprintName}</option>
                                 )}
