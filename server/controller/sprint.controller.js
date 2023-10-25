@@ -24,49 +24,6 @@ const addSprint = async (req, res) => {
     }
 }
 
-// Get all sprints WRT status
-// const getSprints = async (req, res) => {
-//     try {
-//         const pageSize = 1;
-//         let skip = parseInt(req.query.skip);
-//         if (skip === 0) {
-//             const sprints = await sprintModel.find({ activeStatus: req.query.activeStatus }).populate([
-//                 { path: 'projectId', select: 'projectName' },
-//                 { path: 'milestoneId', select: 'title' },
-//             ])
-//                 .sort({ createdAt: -1 });
-//             return res.status(200).json({ status: '200', message: 'Sprints Data fetched successfully', response: sprints });
-//         } else {
-//             const totalCount = await sprintModel.countDocuments({ activeStatus: req.query.activeStatus });
-//             const sprints = await sprintModel.find({ activeStatus: req.query.activeStatus }).populate([
-//                 { path: 'projectId', select: 'projectName' },
-//                 { path: 'milestoneId', select: 'title' },
-//             ])
-//                 .sort({ createdAt: -1 })
-//                 .limit(pageSize)
-//                 .skip((parseInt(req.query.skip) - 1) * pageSize);
-//             const totalPages = Math.ceil(totalCount / pageSize);
-
-//             return res.status(200).json({ status: '200', message: 'Sprints Data fetched successfully', response: sprints, totalCount, totalPages });
-//         }
-//     } catch (error) {
-//         return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });
-//     }
-// }
-
-// Get A sprint by ID
-const getSprintById = async (req, res) => {
-    try {
-        const sprint = await sprintModel.findById({ _id: req.query.sprintId }).populate([
-            { path: 'projectId', select: 'projectName' },
-            { path: 'milestoneId', select: 'title' },
-        ])
-        return res.status(200).json({ status: '200', message: 'Sprint data fetched successfully', response: sprint })
-    } catch (error) {
-        return res.status(200).json({ status: '404', message: 'Something went wrong' });
-    }
-}
-
 // Update a Sprint
 const updateSprint = async (req, res) => {
     try {
@@ -91,36 +48,38 @@ const updateStatus = async (req, res) => {
 const getAMilestoneAllSprints = async (req, res) => {
     try {
         const pageSize = 10;
-        if(parseInt(req.query.skip) ===0){
-            if(req.query.milestoneId){
-                const milestones = await sprintModel.find({ activeStatus: req.query.activeStatus,  milestoneId: req.query.milestoneId }).populate('projectId', 'projectName')
-                .sort({ createdAt: -1 })
-            return res.status(200).json({ status: '200', message: 'Milestones Data fetched successfully', response: milestones })
+        if (parseInt(req.query.skip) === 0) {
+            if (req.query.milestoneId) {
+                const milestones = await sprintModel.find({ activeStatus: req.query.activeStatus, milestoneId: req.query.milestoneId }).populate('projectId', 'projectName')
+                    .sort({ createdAt: -1 })
+                return res.status(200).json({ status: '200', message: 'Milestones Data fetched successfully', response: milestones })
             }
-            else{
-            const sprints = await sprintModel.find({ activeStatus: req.query.activeStatus }).populate([
+            else {
+                const sprints = await sprintModel.find({ activeStatus: req.query.activeStatus }).populate([
+                    { path: 'projectId', select: 'projectName' },
+                    { path: 'milestoneId', select: 'title' },
+                ])
+                    .sort({ createdAt: -1 });
+                return res.status(200).json({ status: '200', message: 'Sprints Data fetched successfully', response: sprints });
+            }
+        }
+        else {
+            const totalCount = await sprintModel.countDocuments({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: req.query.activeStatus }] })
+            const result = await sprintModel.find({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: req.query.activeStatus }] }).populate([
                 { path: 'projectId', select: 'projectName' },
                 { path: 'milestoneId', select: 'title' },
             ])
-                .sort({ createdAt: -1 });
-            return res.status(200).json({ status: '200', message: 'Sprints Data fetched successfully', response: sprints });
-        }}
-        else{
-        const totalCount = await sprintModel.countDocuments({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: req.query.activeStatus }] })
-        const result = await sprintModel.find({ $and: [{ milestoneId: req.query.milestoneId }, { activeStatus: req.query.activeStatus }] }).populate([
-            { path: 'projectId', select: 'projectName' },
-            { path: 'milestoneId', select: 'title' },
-        ])
-            .sort({ createdAt: -1 })
-            .limit(pageSize)
-            .skip((parseInt(req.query.skip) - 1) * pageSize);
-        const totalPages = Math.ceil(totalCount / pageSize);
+                .sort({ createdAt: -1 })
+                .limit(pageSize)
+                .skip((parseInt(req.query.skip) - 1) * pageSize);
+            const totalPages = Math.ceil(totalCount / pageSize);
 
-        return res.status(200).json({ status: '200', message: "ALL sprints fecteched successfully", Response: result, totalCount, totalPages })
-    
-    }} catch (error) {
+            return res.status(200).json({ status: '200', message: "ALL sprints fecteched successfully", Response: result, totalCount, totalPages })
+
+        }
+    } catch (error) {
         return res.status(500).json({ status: '500', message: 'Something went wrong', error: error.message });
     }
 }
 
-module.exports = {  getSprintById, addSprint, updateSprint, updateStatus, getAMilestoneAllSprints }
+module.exports = { addSprint, updateSprint, updateStatus, getAMilestoneAllSprints }
