@@ -199,7 +199,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         const id=e.target.value
         if (id){
               
-        dispatch(getsingleMileStone({ id: id, activeStatus: 1, skip: 0 }));
+        dispatch(getsingleMileStone({ id: id, activeStatus: 1, skip: 0 ,mileStoneId:"" }));
         }
      
     };

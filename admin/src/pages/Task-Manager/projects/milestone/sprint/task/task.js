@@ -115,7 +115,7 @@ const Task = () => {
             status: 1,
         };
         dispatch(getAllProjects(body));
-        dispatch(getsingleMileStone({ id: projectId, activeStatus: 1 ,skip:1 }));
+        dispatch(getsingleMileStone({ id: projectId, activeStatus: 1 ,skip:1,mileStoneId:""  }));
         // dispatch(getSprintById({ status: 1, id: milestoneId }));
         dispatch(getSingleSprint({ activeStatus: 1, id: milestoneId , skip:1}));
         dispatch(getAllRoles());

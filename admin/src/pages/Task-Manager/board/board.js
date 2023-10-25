@@ -10,6 +10,9 @@ import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
 import { updateTaskStatus } from '../../../../src/redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
+import Modal from 'react-bootstrap/Modal';
+import { Button } from 'react-bootstrap';
+
 import {
     deleteTask,
     getAllProjects,
@@ -56,6 +59,7 @@ const Boards = (props) => {
     const successHandle = store?.getAllTaskReducer;
     const statushandle = store?.updateTaskStatus;
     const [render, setRender] = useState(false);
+    const [opendetailPage , setOpendetailPage]=useState(false)
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
    
@@ -145,6 +149,9 @@ const Boards = (props) => {
             setRender(!render);
         }
     };
+    const handleOpenDetail=()=>{
+        setOpendetailPage(true)
+    }
     useEffect(() => {
         if (statushandle?.data?.status == 200) {
             ToastHandle('success', statushandle?.data?.message);
@@ -161,7 +168,7 @@ const Boards = (props) => {
         skip: 0    
     };
     dispatch(getAllProjects(body));
-    dispatch(getsingleMileStone({ id:"" ,activeStatus: 1 ,skip:0 }));
+    dispatch(getsingleMileStone({ id:"" ,activeStatus: 1 ,skip:0 , mileStoneId:""  }));
     dispatch(getSingleSprint({ activeStatus: 1, id: "" ,skip:0 }));
 }, [])
     return (
@@ -191,7 +198,7 @@ const Boards = (props) => {
                     <MainLoader />
                 ) : (
                     <Container>
-                        <TaskColumnStyles>
+                        <TaskColumnStyles onClick={handleOpenDetail} >
                             {Object.entries(columns).map(([columnId, column], index) => {
                                 return (
                                     <Droppable key={columnId} droppableId={columnId}>
@@ -214,6 +221,19 @@ const Boards = (props) => {
                     </Container>
                 )}
             </DragDropContext>
+             {/* detail Modal */}
+             <Modal show={opendetailPage} onHide={() => setOpendetailPage(false)}>
+                <Modal.Body>Task Detail</Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            setOpendetailPage(false);
+                        }}>
+                        No
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 };
