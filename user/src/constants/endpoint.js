@@ -22,7 +22,9 @@ export const UPDATE_MILESTONE = "/milestone/update";
 export const ALL_USERS = "/users";
 export const deleteUsers = "/users/usersDelete/";
 export const UpdateSprint = "/sprint/update";
-export const SingleMilestone = "/milestone/getAProjectMilestones?id="
+// ==================================================
+export const SingleMilestone = "/milestone/getMilestones?projectId="
+//==============================================================================
 export const SingleSprintTask = "/task/getSprintTasks?sprintId="
 export const GetAllTask = "/task/getTasksAccToStatus"
 export const UpdateTask = "/task/updateTask"

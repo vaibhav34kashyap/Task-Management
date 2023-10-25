@@ -36,6 +36,7 @@ import TimeLine from './../pages/profile2/TimeLine';
 import MileStone from './../pages/Task-Manager/AllMillstones/mileStone/index';
 import {getProjectMilestones} from '../../src/redux/milestone/action'
 import {getAllMilstoneSprints} from '../../src/redux/sprint/action'
+import { getsingleMileStone } from '../../src/redux/milestone/action';
 
 
 
@@ -177,8 +178,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
        const projectData = allProjects?.filter((item)=>item._id == e.target.value);
        setProjectName(projectData[0].projectName)
        dispatch(getProjectMilestones({projectId:e.target.value,status:1})) 
-       
-       
+   
     }
     const onChangeMilestone =(e)=>{
         //setMileStoneId(e.target.value)

@@ -12,9 +12,6 @@ import {updateTaskStatus} from '../../../../src/redux/task/action';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-
-
-
 const Container = styled.div`
   display: flex;
 `;
@@ -144,20 +141,20 @@ const Boards = (props) => {
       setColumns({
         [uuidv4()]: {
           title: 'To-do',
-          items: successHandle?.data?.Response?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.Response?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
         },
         [uuidv4()]: {
           title: 'In Progress',
-          items: successHandle?.data?.inProgress?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.inProgress?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
         },
         
         [uuidv4()]: {
           title: 'Hold',
-          items: successHandle?.data?.hold?.map((ele) => { return { ...ele, id: ele._id }}),
+          items: successHandle?.data?.hold?.tasks?.map((ele) => { return { ...ele, id: ele._id }}),
       },
         [uuidv4()]: {
           title: 'Done',
-          items: successHandle?.data?.done?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.done?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
         },
       })
     }

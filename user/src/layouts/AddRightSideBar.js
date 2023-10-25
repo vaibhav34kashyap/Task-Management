@@ -1,14 +1,21 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, dispatch } from 'react-redux';
 import { createTask } from '../redux/actions';
 import { useParams } from 'react-router-dom';
-import {getassignee} from '../../src/redux/assigneeid/actions'
+// import {getassignee} from '../../src/redux/assigneeid/actions'
+import { getAllUsers,getAllRoles } from './../redux/user/action';
+
 
 export default function RightBar(props) {
     const { showModal, setShowModal, content, projectId, mileStoneId, sprintId } = props;
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    const getAllUserData=store?.getAllUsers?.data?.response
+    const getAllRole=store?.getAllRoles?.data?.response
+    // console.log("getAllRoleeeee",getAllRole)
+    // console.log("getAllUserTask",getAllUserData)
+
     console.log("storerrrrr",store)
     const id=store?.Auth?.user?.userId
     console.log("store_id",id)
@@ -18,7 +25,9 @@ export default function RightBar(props) {
         formState: { errors },
     } = useForm();
     useEffect(()=>{
-        dispatch(getassignee(id))
+        // dispatch(getassignee(id))
+        dispatch(getAllUsers())
+        dispatch(getAllRoles())
         
     },[])
     
@@ -181,7 +190,8 @@ export default function RightBar(props) {
                                             id="exampleForm.ControlInput1"
                                             {...register('Assignee')}>
                                             <option value="">--Select--</option>
-                                            {store?.getAllAssignee?.data?.response?.map((item,index)=> <option value={item?.assigneeId?._id}>{item?.assigneeId?.userName} </option>)}
+                                            {getAllUserData?.map((items,index)=><option value="">{items.userName}</option>)}
+                                            {/* {store?.getAllAssignee?.data?.response?.map((item,index)=> <option value={item?.assigneeId?._id}>{item?.assigneeId?.userName} </option>)} */}
                                            
 
                                         </select>
@@ -201,7 +211,7 @@ export default function RightBar(props) {
                                             id="exampleForm.ControlInput1"
                                             {...register('Report')}>
                                             <option value="">--Select--</option>
-                                            {store?.getAllAssignee?.data?.response?.map((item,index)=><option value={item?.reporterId?._id}> {item?.reporterId?.role} </option>)}
+                                            {getAllRole?.map((items,index)=><option value={items?.reporterId?._id}> {items.role} </option>)}
 }
                                             
                                            
