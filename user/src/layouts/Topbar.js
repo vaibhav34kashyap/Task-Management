@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
+import MainLoader from '../constants/Loader/loader';
 
 
 // actions
@@ -33,6 +34,8 @@ import RightBar from './AddRightSideBar';
 import * as layoutConstants from '../constants/layout';
 import TimeLine from './../pages/profile2/TimeLine';
 import MileStone from './../pages/Task-Manager/AllMillstones/mileStone/index';
+import {getProjectMilestones} from '../../src/redux/milestone/action'
+import {getAllMilstoneSprints} from '../../src/redux/sprint/action'
 
 
 
@@ -135,15 +138,18 @@ type TopbarProps = {
 const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: TopbarProps): React$Element<any> => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    console.log("storeeeeeee",store)
     const [isopen, setIsopen] = useState(false);
     const allProjects = store?.getProject?.data?.response;
     
-    const getAllMilestoneData = store?.getAllMileStones?.data?.response;
-    const getAllSingleSprints = store?.getAllSingleSprints?.data?.Response;
-    const [projectId ,setProjectId] = useState('');
+    const getAllMilestoneData = store?.getAllProjectMileStones?.data?.Response;
+    const getAllSingleSprints = store?.getAllMilestoneSprints?.data?.Response;
+    //==============================================================================================
+    
+    //========================================================================================================
+
+
     const [projectNameHeading ,setProjectName] = useState('Select Project Name');
-    const [mileStoneId ,setMileStoneId] = useState('');
-    const [sprintId ,setSprintId] = useState('');
     const [mileStoneData,setmileStoneData]  = useState([]);    
     
     const navbarCssClasses = navCssClasses || '';
@@ -154,31 +160,30 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         leftSideBarType: state.Layout.leftSideBarType,
     }));
 
+  const [projectId,setProjectId] = useState('');
     useEffect(()=>{
         let data = {
             status: 1,
         };
         dispatch(getAllProjects(data))
-        dispatch(getallMileStones({status:1}))
-        console.log("all porjec",store)
-    },[])
+        //dispatch(getallMileStones({status:1}))
+        dispatch(getProjectMilestones({projectId:projectId,status:1})) 
+           },[])
 
-    const onChangeProject =(e)=>{   
-       // setProjectId(e.target.value) 
+    const onChangeProject =(e)=>{  
+        
+       setProjectId(e.target.value) 
         sessionStorage.setItem("projectId",e.target.value)
        const projectData = allProjects?.filter((item)=>item._id == e.target.value);
-       console.log("Data name",projectData)
        setProjectName(projectData[0].projectName)
-       const data =  getAllMilestoneData?.filter((item)=>{
-            return item.project_id === e.target.value;
-        })
-        setmileStoneData(data);
-        
+       dispatch(getProjectMilestones({projectId:e.target.value,status:1})) 
+       
+       
     }
     const onChangeMilestone =(e)=>{
         //setMileStoneId(e.target.value)
         sessionStorage.setItem("mileStoneId",e.target.value)
-        dispatch(getSingleSprint({status:true ,id:e.target.value}));  
+        dispatch(getAllMilstoneSprints({milestoneId:e.target.value,status:1}))
     }
     const onChangeSprint =(e)=>{
         //setSprintId(e.target.value)
@@ -263,7 +268,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </select>
                             <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeMilestone}>
                                 <option>--Select MileStone--</option>
-                                {mileStoneData?.map((item,index)=>
+                                {getAllMilestoneData?.map((item,index)=>
                                     <option key={index} value={item._id}>{item.title}</option>
                                 )}
                             </select>

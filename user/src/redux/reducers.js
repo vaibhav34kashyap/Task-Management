@@ -11,6 +11,7 @@ import {
     updateMilestone,
     addAllmilstones,
     getSigleMileStone,
+    getAllProjectMileStones
 } from './milestone/reducer';
 import {
     addSprint,
@@ -19,6 +20,8 @@ import {
     getSingleSprintReducer,
     updateSprint,
     getAllSingleSprints,
+    getAllMilestoneSprints
+    
 } from './sprint/reducres';
 import { createTaskReducer, getSigleSprintTask, getAllTaskReducer, UpdateTaskReducer,deleteTask } from './task/reducer';
 import { getAllUsers, deleteUser, createUser ,getAllRoles} from './user/reducer';
@@ -32,6 +35,7 @@ import {
     UpdateTechnologyCategoryReducer,
     deleteTechnologyCategory,
 } from './technology/reducer';
+import {getAllAssignee} from './assigneeid/reducer'
 export default (combineReducers({
     Auth,
     Layout,
@@ -68,5 +72,8 @@ export default (combineReducers({
     UpdateTechnologyCategoryReducer,
     deleteTechnologyCategory,
     getAllRoles,
-    deleteTask
+    deleteTask,
+    getAllAssignee,
+    getAllProjectMileStones,
+    getAllMilestoneSprints
 }): any);

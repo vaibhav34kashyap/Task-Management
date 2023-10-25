@@ -106,7 +106,7 @@ const handleShow = () => setShow(true);
           <li><b>Description:</b></li>
           <li>{item.description}</li>
           <li><b>Start Date :</b></li>
-          <li>{item?.createdAt ? (moment(item?.createdAt).format('ll')) : ""}</li>
+          <li>{item?.startDate ? (moment(item?.startDate).format('ll')) : ""}</li>
           <li>Project Name:</li>
           <li>{item.projectName}</li>
           <li>Milestone</li>
@@ -114,11 +114,11 @@ const handleShow = () => setShow(true);
           <li><b>Priority</b></li>
           <li>{item.priority}</li>
           <li><b>End Date </b></li>
-          <li>{item?.createdAt ? (moment(item?.createdAt).format('ll')) : ""}</li>
-          <li>Report Name</li>
+          <li>{item?.dueDate?(moment(item?.dueDate).format('ll')) : ""}</li>
+          {/* <li>Report Name</li>
           <li>{item.report} </li>
           <li>assign id</li>
-          <li>{item.assign}</li>
+          <li>{item.assign}</li> */}
  
           
 

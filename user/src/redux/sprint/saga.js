@@ -1,6 +1,6 @@
 import { all, fork, put, takeEvery, call } from 'redux-saga/effects';
 import SprintTypes from './constant';
-import { addSprintApi, deleteSprintApi, getAllSingleSprintApi, getSingleSprintApi, getallSprintApi, updateSprintApi } from './api';
+import { addSprintApi, deleteSprintApi, getAllSingleSprintApi, getSingleSprintApi, getallSprintApi, updateSprintApi,getAllMilstoneSprints } from './api';
 
 
 function* addSprintFunction({ payload }) {
@@ -72,6 +72,41 @@ function* getAllSprintFunction({ payload }) {
 
     }
 }
+
+function* getAllMilstoneSprintFunction({ payload }) {
+    try {
+        yield put({
+            type: SprintTypes.GET_ALL_MILESTONE_SPRINT_LOADING,
+            payload: {}
+        })
+        const response = yield call(getAllMilstoneSprints, { payload });
+      
+        if (response.data.status) {
+            yield put({
+                type: SprintTypes.GET_ALL_MILESTONE_SPRINT_SUCCESS,
+                payload: { ...response.data },
+            });
+            // yield put({
+            //     type: SprintTypes.GET_ALL_SPRINT_RESET,
+            //     payload: {},
+            // });
+        }
+        else {
+            yield put({
+                type: SprintTypes.GET_ALL_MILESTONE_SPRINT_ERROR,
+                payload: { ...response.data }
+            });
+        }
+
+    } catch (error) {
+        yield put({
+            type: SprintTypes.GET_ALL_MILESTONE_SPRINT_ERROR,
+            payload: { message: error?.message }
+        });
+
+    }
+}
+
 function* deleteSprintFunction({ payload }) {
     try {
         yield put({
@@ -220,6 +255,10 @@ export function* addSprintSaga(): any {
 export function* getAllSprintSaga(): any {
     yield takeEvery(SprintTypes.GET_ALL_SPRINT, getAllSprintFunction);
 }
+//////////==========================================
+export function* getAllMilstoneSprintSaga(): any {
+    yield takeEvery(SprintTypes.GET_ALL_MILESTONE_SPRINT, getAllMilstoneSprintFunction);
+}
 
 export function* getAllSingleSprintSaga(): any {
     yield takeEvery(SprintTypes.GET_ALL_SINGLE_SPRINT, getAllSingleSprintFunction);
@@ -240,7 +279,8 @@ function* AllSprintSaga(): any {
         fork (deleteSprintSaga),
        fork (getSingleSprintSaga),
        fork (updateSprintSaga),
-    fork(getAllSingleSprintSaga)
+    fork(getAllSingleSprintSaga),
+    fork(getAllMilstoneSprintSaga)
     ])
 }
 export default AllSprintSaga;

@@ -5,6 +5,7 @@ export const UpdateProjectDetails = "/project/update";
 export const DeleteProject = "/project/updateStatus";
 export const GetProjectById = "/project/getbyprojectid/";
 export const GetAllMileStones = "/milestone?";
+export const ProjectAllMilestones="/milestone/getAProjectMilestones"
 export const MileStoneDelete = "/milestone/updateStatus"
 export const MileStoneAdd = "/milestone/add"
 export const ParticularMilestoneDetail = "/milestone/getmilestonebyid/";
@@ -12,7 +13,9 @@ export const AddSprint = "/sprint/add";
 export const GetAllSprints = "/sprint?";
 export const DeleteSprint = "/sprint/updateStatus";
 export const ParticularSprintDetail =" /sprint/getAMilestoneAllSprints?id=";
-export const getAllSingleSprint ="/sprint/getAMilestoneAllSprints?id="
+export const getAllSingleSprint ="/sprint/getAMilestoneAllSprints?id=";
+
+export const getAllMilstoneSprint="/sprint/getAMilestoneAllSprints";
 // create task 
 export const CREATE_TASK = "/task/createtask";
 export const UPDATE_MILESTONE = "/milestone/update";
@@ -35,3 +38,5 @@ export const GetCategoryTechnology ="/technology/getTechCategory?status="
 export const UpdateCategoryTechnology ="/technology/updateTechCategory"
 export const DeleteCategoryTechnologyy ="/technology/updateTechCategoryStatus"
 export const GetAllRoles ="/roles/getAllRoles"
+//get assignee
+export const GetAssignee ="/assignUser/getUserAssignments?assigneeId="
