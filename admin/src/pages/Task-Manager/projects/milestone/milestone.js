@@ -24,7 +24,7 @@ const Milestone = () => {
     const [openModel, setOpenModel] = useState(false);
     const [render, setRender] = useState(false);
     const [status, setStatus] = useState(1);
-    const GetSinglemilstonesData = store?.getSigleMileStone?.data?.Response;
+    const GetSinglemilstonesData = store?.getSigleMileStone?.data?.response;
     const loaderhandel = store?.getSigleMileStone;
     const [skip, setSkip] = useState(1);
     const [checkedStatus, setCheckedStatus] = useState();
