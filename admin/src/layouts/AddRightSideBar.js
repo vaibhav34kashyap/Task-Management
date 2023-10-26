@@ -18,6 +18,7 @@ export default function RightBar(props) {
     const milestoneId = store?.getMilestoneId?.data;
     const sprintid = store?.getSprintId?.data;
     // const sucesshandel =store?.createTaskReducer?.data
+    const today = new Date().toISOString().split('T')[0];
     const dispatch = useDispatch();
 
     const onSubmit = (e) => {
@@ -171,6 +172,7 @@ export default function RightBar(props) {
                                         <input
                                             placeholder="Please start Date "
                                             type="date"
+                                            min={today}
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
                                             {...register('start_date')}
@@ -187,6 +189,7 @@ export default function RightBar(props) {
                                         <input
                                             placeholder="Please end Date"
                                             type="date"
+                                            min={today}
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
                                             {...register('last_date')}
