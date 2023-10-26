@@ -20,12 +20,17 @@ const createtask = async (req, res) => {
                 startDate,
                 dueDate,
             });
-            const assignedUser = await assignUserModel.create({
-                assigneeId: assigneeId, // One who is doing work
-                reporterId: reporterId, // one who will assignee report after work done
-                taskId: task._id
-            })
-            return res.status(200).json({ status: "200", message: "Task created successfully", response: task, assignedUser });
+            if (task) {
+                const assignedUser = await assignUserModel.create({
+                    assigneeId: assigneeId, // One who is doing work
+                    reporterId: reporterId, // one who will assignee report after work done
+                    taskId: task._id
+                })
+                return res.status(200).json({ status: "200", message: "Task created successfully", response: task, assignedUser });
+            }
+            else {
+                return res.status(200).json({ status: "400", message: "Task Not created" });
+            }
         }
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -183,7 +188,7 @@ const updateTask = async (req, res) => {
             priority: req.body.priority,
             startDate: req.body.startDate,
             dueDate: req.body.dueDate,
-            status : req.body.status
+            status: req.body.status
         };
         const secObj = {
             assigneeId: req.body.assigneeId,
@@ -386,43 +391,20 @@ const getPriorityTasks = async (req, res) => {
     }
 }
 
-// // Get Status overview of tasks
-// const getTasksStatusOverview = async (req, res) => {
-//     try {
-//         const todoCount = await taskModel.countDocuments({ status: 1 });
-//         const inProgressCount = await taskModel.countDocuments({ status: 2 });
-//         const holdCount = await taskModel.countDocuments({ status: 3 });
-//         const doneCount = await taskModel.countDocuments({ status: 4 });
-
-//         return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: todoCount, inProgressCount, holdCount, doneCount });
-//     } catch (error) {
-//         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
-//     }
-// }
-
+// Get Status overview of tasks
 const getTasksStatusOverview = async (req, res) => {
     try {
-        let query = {}; // Initialize an empty query object
+        const todoCount = await taskModel.countDocuments({ status: 1 });
+        const inProgressCount = await taskModel.countDocuments({ status: 2 });
+        const holdCount = await taskModel.countDocuments({ status: 3 });
+        const doneCount = await taskModel.countDocuments({ status: 4 });
 
-        if (req.query.projectId) {
-            query.projectId = req.query.projectId;
-        }
-
-        if (req.query.milestoneId) {
-            query.milestoneId = req.query.milestoneId;
-        }
-
-        if (req.query.sprintId) {
-            query.sprintId = req.query.sprintId;
-        }
-
-        const result = await taskModel.find(query);
-
-        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: result });
+        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: todoCount, inProgressCount, holdCount, doneCount });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
 }
+
 
 
 
