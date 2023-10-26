@@ -12,16 +12,9 @@ import { updateTaskStatus } from '../../../../src/redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
-
-import {
-    deleteTask,
-    getAllProjects,
-    getAllRoles,
-    getAllUsers,
-    getSingleSprint,
-    getsingleMileStone,
-} from '../../../redux/actions';
-
+import {getSingleSprint} from "../../../redux/sprint/action";
+import {getsingleMileStone} from "../../../redux/milestone/action";
+import {getAllProjects} from "../../../redux/projects/action";
 const Container = styled.div`
     display: flex;
 `;
@@ -58,8 +51,11 @@ const Boards = (props) => {
     const store = useSelector((state) => state);
     const successHandle = store?.getAllTaskReducer;
     const statushandle = store?.updateTaskStatus;
+    const deletehandel = store?.deleteTask;
+    const updatehandel = store?.UpdateTaskReducer;
+    const Createhandel = store?.createTaskReducer;
     const [render, setRender] = useState(false);
-    const [opendetailPage , setOpendetailPage]=useState(false)
+    
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
    
@@ -149,9 +145,7 @@ const Boards = (props) => {
             setRender(!render);
         }
     };
-    const handleOpenDetail=()=>{
-        setOpendetailPage(true)
-    }
+ 
     useEffect(() => {
         if (statushandle?.data?.status == 200) {
             ToastHandle('success', statushandle?.data?.message);
@@ -162,6 +156,38 @@ const Boards = (props) => {
             ToastHandle('error', statushandle?.data?.message);
         }
     }, [statushandle]);
+    useEffect(() => {
+        if (deletehandel?.data?.status == 200) {
+            ToastHandle('success', deletehandel?.data?.message);
+            closeModal('render');
+        } else if (deletehandel?.data?.status == 400) {
+            ToastHandle('error', deletehandel?.data?.message);
+        } else if (deletehandel?.data?.status == 500) {
+            ToastHandle('error', deletehandel?.data?.message);
+        }
+    }, [deletehandel]);
+    useEffect(() => {
+        console.log(updatehandel?.data?.status , "////////")
+        if (updatehandel?.data?.status == 200) {
+            closeModal('render');
+            ToastHandle('success', 'Updated Successfully');
+        } else if (updatehandel?.data?.status == 400) {
+            ToastHandle('error', updatehandel?.data?.message);
+        } else if (updatehandel?.data?.status == 500) {
+            ToastHandle('error', updatehandel?.data?.message);
+        }
+    }, [updatehandel]);
+    useEffect(() => {
+        console.log(Createhandel?.data?.status , "////////")
+        if (Createhandel?.data?.status == 200) {
+            closeModal('render');
+            ToastHandle('success', Createhandel?.data?.message);
+        } else if (Createhandel?.data?.status == 400) {
+            ToastHandle('error', Createhandel?.data?.message);
+        } else if (Createhandel?.data?.status == 500) {
+            ToastHandle('error', Createhandel?.data?.message);
+        }
+    }, [Createhandel]);
    useEffect(() => {
     let body = {
         status :1,
@@ -198,7 +224,7 @@ const Boards = (props) => {
                     <MainLoader />
                 ) : (
                     <Container>
-                        <TaskColumnStyles onClick={handleOpenDetail} >
+                        <TaskColumnStyles >
                             {Object.entries(columns).map(([columnId, column], index) => {
                                 return (
                                     <Droppable key={columnId} droppableId={columnId}>
@@ -221,19 +247,7 @@ const Boards = (props) => {
                     </Container>
                 )}
             </DragDropContext>
-             {/* detail Modal */}
-             <Modal show={opendetailPage} onHide={() => setOpendetailPage(false)}>
-                <Modal.Body>Task Detail</Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="secondary"
-                        onClick={() => {
-                            setOpendetailPage(false);
-                        }}>
-                        No
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+         
         </>
     );
 };

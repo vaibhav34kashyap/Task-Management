@@ -18,11 +18,26 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
 
-    const sucesshandel = store?.UpdateTaskReducer;
+  
     const loaderhandel = store?.UpdateTaskReducer;
     // disable previous date
     const today = new Date().toISOString().split('T')[0];
+    // start date
+    function findMinimumStartDate(startdate1, startdate2) {
+        return new Date(Math.min(new Date(startdate1), new Date(startdate2)));
+    }
+    const startdate1 = new Date();
+    const startdate2 = editData?.startDate;
+    const minimumStartDate = findMinimumStartDate(startdate1, startdate2);
     //
+    // end date
+    function findMinimumEndDate(date1, date2) {
+        return new Date(Math.min(new Date(date1), new Date(date2)));
+    }
+    const date1 = new Date();
+    const date2 = editData?.dueDate;
+    const minimumEndDate = findMinimumEndDate(date1, date2);
+    // 
     const {
         register,
         handleSubmit,
@@ -76,18 +91,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
         return formattedDate;
     };
 
-    useEffect(() => {
-        console.log(sucesshandel?.data?.status , "////////")
-        if (sucesshandel?.data?.status == 200) {
-            closeModal('render');
-            ToastHandle('success', 'Updated Successfully');
-        } else if (sucesshandel?.data?.status == 400) {
-            ToastHandle('error', sucesshandel?.data?.message);
-        } else if (sucesshandel?.data?.status == 500) {
-            ToastHandle('error', sucesshandel?.data?.message);
-        }
-    }, [sucesshandel]);
-    console.log(sucesshandel, "success")
+
     return (
         <>
             <Modal show={modal} onHide={closeModal} size={'lg'}>
@@ -291,7 +295,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
                                                     <Form.Control
                                                         type="date"
-                                                        min={today}
+                                                        min={handleDate(minimumStartDate)}
                                                         {...register('startDate', { required: true })}
                                                     />{' '}
                                                     {errors.startDate?.type === 'required' && (
@@ -307,7 +311,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
                                                     <Form.Control
                                                         type="date"
-                                                        min={today}
+                                                        min={handleDate(minimumEndDate)}
                                                         {...register('dueDate', { required: true })}
                                                     />{' '}
                                                     {errors.dueDate?.type === 'required' && (

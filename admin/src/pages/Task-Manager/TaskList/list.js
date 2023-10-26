@@ -2,20 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ListGroup, Container, Row, Col, Link, Table, Button, Form, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import Create from './modal/create';
 import moment from 'moment';
-import { deleteTask, getsingleSprintTask } from '../../../../../../redux/task/action';
-import MainLoader from '../../../../../../constants/Loader/loader';
+import { TaskStatusAction, deleteTask, getsingleSprintTask } from '../../../redux/task/action';
+import MainLoader from '../../../constants/Loader/loader';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import Update from './modal/update';
-import { getAllProjects } from '../../../../../../redux/projects/action';
-import {  getsingleMileStone } from '../../../../../../redux/milestone/action';
-import { getSingleSprint, getSprintById } from '../../../../../../redux/sprint/action';
-import { getAllRoles, getAllUsers } from '../../../../../../redux/actions';
 import { Modal } from 'react-bootstrap';
-import ToastHandle from '../../../../../../constants/toaster/toaster';
-const Task = () => {
+import ToastHandle from '../../../constants/toaster/toaster';
+const TaskList = () => {
     const { projectId, milestoneId, spriteId } = useParams();
     const [skip, setSkip] = useState(1);
     const store = useSelector((state) => state);
@@ -28,17 +22,17 @@ const Task = () => {
     const [editData, setEditData] = useState();
     const [render, setRender] = useState(false);
     const [statusModal, setStatusModal] = useState(false);
-    const [activeStatus,setActiveStatus] = useState(true);
+    const [activeStatus, setActiveStatus] = useState(true);
 
     const getSingleSprintTask = store?.getSigleSprintTask?.data?.response;
-    const deletehandle = store?.deleteTask?.data;
+    const deletehandle = store?.TaskStatusReducer?.data;
     const loaderhandel = store?.getSigleSprintTask;
     const handleCreate = () => {
         SetOpenModal(true);
     };
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getsingleSprintTask({ id: spriteId, skip: value ,activeStatus:activeStatus }));
+        dispatch(getsingleSprintTask({ id: '', skip: value, activeStatus: activeStatus }));
     };
     const CloseModal = (val) => {
         if (val == 'render') {
@@ -49,22 +43,20 @@ const Task = () => {
     const handleActive = (val) => {
         if (val) {
             setStatus(1);
-            setActiveStatus(true)
+            setActiveStatus(true);
             let data = {
-                id: spriteId,
-                activeStatus:true,
+                id: '',
+                activeStatus: true,
                 skip: skip,
-                
             };
             dispatch(getsingleSprintTask(data));
         } else {
-         setStatus(0);
-         setActiveStatus(false)
+            setStatus(0);
+            setActiveStatus(false);
             let data = {
-                id: spriteId,
-                activeStatus:false,
+                id: '',
+                activeStatus: false,
                 skip: skip,
-                
             };
             dispatch(getsingleSprintTask(data));
         }
@@ -84,23 +76,22 @@ const Task = () => {
                 taskId: checkedData._id,
                 activeStatus: true,
             };
-            dispatch(deleteTask(body));
+            dispatch(TaskStatusAction(body));
         } else {
             let body = {
                 taskId: checkedData._id,
                 activeStatus: false,
             };
-            dispatch(deleteTask(body));
+            dispatch(TaskStatusAction(body));
         }
         setStatusModal(false);
-        setStatus(1)
-
+        setStatus(1);
     };
     const handelUpdate = (data) => {
         setEditData(data);
         SetEditOpenModal(true);
     };
- 
+
     const CloseUpdateModal = (val) => {
         if (val == 'render') {
             setRender(!render);
@@ -108,19 +99,9 @@ const Task = () => {
         SetEditOpenModal(false);
     };
     useEffect(() => {
-        dispatch(getsingleSprintTask({ id: spriteId ,activeStatus:true , skip: 1 }));
+        dispatch(getsingleSprintTask({ id: '', activeStatus: true, skip: 1 }));
     }, [render]);
-    useEffect(() => {
-        let body = {
-            status: 1,
-        };
-        dispatch(getAllProjects(body));
-        dispatch(getsingleMileStone({ id: projectId, activeStatus: 1 ,skip:0, mileStoneId:""  }));
-        // dispatch(getSprintById({ status: 1, id: milestoneId }));
-        dispatch(getSingleSprint({ activeStatus: 1, id: milestoneId , skip:1}));
-        dispatch(getAllRoles());
-        dispatch(getAllUsers());
-    }, [render]);
+
     useEffect(() => {
         if (deletehandle?.status == 200) {
             ToastHandle('success', deletehandle?.message);
@@ -177,10 +158,13 @@ const Task = () => {
 
                                                     <th> Description</th>
                                                     <th> Summary</th>
+                                                    
+                                                    <th>Assignee</th>
+                                                    <th>Reporter</th>
+                                                    <th>Priority</th>
                                                     <th> Start Date</th>
                                                     <th> End Date</th>
                                                     <th>Status</th>
-                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -188,24 +172,39 @@ const Task = () => {
                                                     <tr>
                                                         <td>{(skip - 1) * 5 + index + 1}</td>
                                                         <td>{item?.summary}</td>
-                                                        <td>  <div
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: item?.description,
-                                                    }}
-                                                /></td>
+                                                        <td>
+                                                            {' '}
+                                                            <div
+                                                                dangerouslySetInnerHTML={{
+                                                                    __html: item?.description,
+                                                                }}
+                                                            />
+                                                        </td>
 
+                                                     
+                                                        <td>{item?.assignees?.assigneeInfo?.userName}</td>
+                                                        <td>{item?.assignees?.reporterInfo?.role}</td>
+                                                        <td>
+                                                            
+                                                            {item?.priority == 1
+                                                                ? 'High'
+                                                                : '' || item?.priority == 2
+                                                                ? 'Medium'
+                                                                : '' || item?.priority == 3
+                                                                ? 'Low'
+                                                                : ''}
+                                                        </td>
                                                         <td> {moment(item?.startDate).format('L')}</td>
                                                         <td>{moment(item?.dueDate).format('L')}</td>
                                                         <td>
                                                             <Form.Check
                                                                 type="switch"
                                                                 checked={item?.activeStatus}
-                                                            
                                                                 onChange={(e) => handleStatusChange(e, item)}
                                                             />
                                                         </td>
                                                         <td>
-                                                            <Row>
+                                                            {/* <Row>
                                                                 <Col>
                                                                     <p className="action-icon m-0 p-0  ">
                                                                         <i
@@ -215,7 +214,7 @@ const Task = () => {
                                                                             }}></i>
                                                                     </p>
                                                                 </Col>
-                                                            </Row>
+                                                            </Row> */}
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -244,14 +243,14 @@ const Task = () => {
                 </Card.Body>
             </Card>
 
-            <Create
+            {/* <Create
                 modal={openModal}
                 CloseModal={CloseModal}
                 projectid={projectId}
                 milestoneid={milestoneId}
                 sprintid={spriteId}
             />
-            <Update modal={editopenModal} CloseModal={CloseUpdateModal} editData={editData} />
+            <Update modal={editopenModal} CloseModal={CloseUpdateModal} editData={editData} /> */}
             {/* delete modal */}
             <Modal show={statusModal} onHide={() => setStatusModal(false)}>
                 <Modal.Body>
@@ -274,6 +273,4 @@ const Task = () => {
     );
 };
 
-export default Task;
-
-
+export default TaskList;

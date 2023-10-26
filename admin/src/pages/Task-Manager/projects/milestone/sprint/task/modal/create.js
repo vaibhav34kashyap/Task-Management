@@ -116,7 +116,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
 
                                                 <Form.Select {...register('Milestone', { required: true, disabled:true })}>
                                                     {/* <option value={''}>--Select--</option> */}
-                                                    {store?.getSigleMileStone?.data?.Response?.map((ele, ind) => (
+                                                    {store?.getSigleMileStone?.data?.response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.title} </option>
                                                     ))}
                                                 </Form.Select>

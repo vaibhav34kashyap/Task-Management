@@ -14,7 +14,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const Update = ({ modal, CloseModal, editData }) => {
     console.log(editData, 'update');
- 
+
     const [description, setDescription] = useState('');
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
@@ -22,6 +22,21 @@ const Update = ({ modal, CloseModal, editData }) => {
     const loaderhandel = store?.UpdateTaskReducer;
     // disable previous date
     const today = new Date().toISOString().split('T')[0];
+    // start date
+    function findMinimumStartDate(startdate1, startdate2) {
+        return new Date(Math.min(new Date(startdate1), new Date(startdate2)));
+    }
+    const startdate1 = new Date();
+    const startdate2 = editData?.startDate;
+    const minimumStartDate = findMinimumStartDate(startdate1, startdate2);
+    //
+    // end date
+    function findMinimumEndDate(date1, date2) {
+        return new Date(Math.min(new Date(date1), new Date(date2)));
+    }
+    const date1 = new Date();
+    const date2 = editData?.dueDate;
+    const minimumEndDate = findMinimumEndDate(date1, date2);
     //
     const {
         register,
@@ -61,8 +76,8 @@ const Update = ({ modal, CloseModal, editData }) => {
             startDate: handleDate(editData?.startDate),
             dueDate: handleDate(editData?.dueDate),
             summary: editData?.summary,
-            Assignee: editData?.assignees[0]?.assigneeId ,
-            Reporter: editData?.assignees[0]?.reporterInfo?._id,
+            Assignee: editData?.assignees?.assigneeId,
+            Reporter: editData?.assignees?.reporterInfo?._id,
             priority: editData?.priority,
             status: editData?.status,
         });
@@ -146,7 +161,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                     <Form.Select
                                                         {...register('Milestone', { required: true, disabled: true })}>
                                                         {/* <option value={''}>--Select--</option> */}
-                                                        {store?.getSigleMileStone?.data?.Response?.map((ele, ind) => (
+                                                        {store?.getSigleMileStone?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.title} </option>
                                                         ))}
                                                     </Form.Select>
@@ -288,7 +303,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                     </Form.Label>
                                                     <Form.Control
                                                         type="date"
-                                                        min={today}
+                                                        min={handleDate(minimumStartDate)}
                                                         {...register('startDate', { required: true })}
                                                     />{' '}
                                                     {errors.startDate?.type === 'required' && (
@@ -304,7 +319,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                     </Form.Label>
                                                     <Form.Control
                                                         type="date"
-                                                        min={today}
+                                                        min={handleDate(minimumEndDate)}
                                                         {...register('dueDate', { required: true })}
                                                     />{' '}
                                                     {errors.dueDate?.type === 'required' && (

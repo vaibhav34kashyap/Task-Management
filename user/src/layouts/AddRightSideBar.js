@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector, dispatch } from 'react-redux';
 import { createTask } from '../redux/actions';
 import { useParams } from 'react-router-dom';
+import { getAllTask } from '../redux/actions';
 // import {getassignee} from '../../src/redux/assigneeid/actions'
 import { getAllUsers, getAllRoles } from './../redux/user/action';
 
@@ -22,6 +23,7 @@ export default function RightBar(props) {
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors },
     } = useForm();
     useEffect(() => {
@@ -52,6 +54,7 @@ export default function RightBar(props) {
             sessionStorage.getItem('sprintId') !== ''
         ) {
             dispatch(createTask(dataList));
+            dispatch(getAllTask())
         } else {
             alert('plsease select project');
         }
@@ -59,12 +62,21 @@ export default function RightBar(props) {
         sessionStorage.setItem('projectId', '');
         sessionStorage.setItem('mileStoneId', '');
         sessionStorage.setItem('sprintId', '');
+        setValue('Summary', '')
+        setValue('Description', '')
+        setValue('Assignee', '')
+        setValue('Report', '')
+        setValue('priority', '')
+        setValue('start_date', '')
+        setValue('last_date', '')
+
+
         setShowModal(false);
     };
 
-    useEffect(() => {
-        // call click outside
-    }, []);
+    // useEffect(() => {
+    // call click outside
+    // }, []);
 
     return (
         <div className={showModal ? 'rightBar show' : 'rightBar'} role="document">

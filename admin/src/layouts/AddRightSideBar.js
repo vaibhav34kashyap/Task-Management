@@ -7,19 +7,21 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default function RightBar(props) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-  const { showModal, setShowModal, content } = props;
-  const store = useSelector((state) => state);
-  const [description, setDescription] = useState('');
-  const projectId = store?.getProjectId?.data;
-  const milestoneId = store?.getMilestoneId?.data;
-  const sprintid = store?.getSprintId?.data;
-  // const sucesshandel =store?.createTaskReducer?.data
-  const dispatch = useDispatch();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+    const { showModal, setShowModal, content } = props;
+    const store = useSelector((state) => state);
+    const [description, setDescription] = useState('');
+    const projectId = store?.getProjectId?.data;
+    const milestoneId = store?.getMilestoneId?.data;
+    const sprintid = store?.getSprintId?.data;
+    // const sucesshandel =store?.createTaskReducer?.data
+    const today = new Date().toISOString().split('T')[0];
+    const dispatch = useDispatch();
 
   const onSubmit = (e) => {
     const dataList = {
@@ -132,104 +134,108 @@ export default function RightBar(props) {
                       <span class="text-danger">*</span>:
                     </label>
 
-                    <select
-                      name="Assignee"
-                      class="form-select"
-                      id="exampleForm.ControlInput1"
-                      {...register('Assignee')}>
-                      <option value={''}>--Select--</option>
-                      {store?.getAllUsers?.data?.response?.map((ele, ind) => (
-                        <option value={ele?._id}> {ele?.userName} </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="">
-                <div class="">
-                  <div class="mb-2">
-                    <label class="form-label" for="exampleForm.ControlInput1">
-                      Report <span class="text-danger">*</span>:
-                    </label>
-                    <select
-                      name="Reporter"
-                      defaultValue="Admin"
-                      class="form-select"
-                      id="exampleForm.ControlInput1"
-                      {...register('Report')}>
-                      <option value={''}>--Select--</option>
-                      {store?.getAllRoles?.data?.response?.map((ele, ind) => (
-                        <option value={ele?._id}> {ele?.role} </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div class="">
-                  <div class="mb-2">
-                    <label class="form-label" for="exampleForm.ControlTextarea1">
-                      Start Date<span class="text-danger">*</span>:
-                    </label>
-                    <input
-                      placeholder="Please start Date "
-                      type="date"
-                      id="exampleForm.ControlTextarea1"
-                      class="form-control"
-                      {...register('start_date')}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="">
-                <div class="">
-                  <div class="mb-2">
-                    <label class="form-label" for="exampleForm.ControlTextarea1">
-                      End Date<span class="text-danger">*</span>:
-                    </label>
-                    <input
-                      placeholder="Please end Date"
-                      type="date"
-                      id="exampleForm.ControlTextarea1"
-                      class="form-control"
-                      {...register('last_date')}
-                    />
-                  </div>
-                </div>
-                <div class="">
-                  <div class="mb-1">
-                    <label class="form-label" for="exampleForm.ControlInput1">
-                      {' '}
-                      Priority <span class="text-danger">*</span>:
-                    </label>
-                    <select
-                      name="Priority"
-                      class="form-select"
-                      id="exampleForm.ControlInput1"
-                      {...register('priority')}>
-                      <option>-----select----</option>
-                      <option value="1">High</option>
-                      <option value="2">Medium</option>
-                      <option value="3">Low</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="">
-                <div class="">
-                  <div class="mb-2">
-                    <label class="form-label" for="exampleForm.ControlTextarea1">
-                      Status<span class="text-danger">*</span>:
-                    </label>
-                    <input
-                      disabled="Live"
-                      name="status"
-                      placeholder="To-Do"
-                      type="text"
-                      id="exampleForm.ControlTextarea1"
-                      class="form-control"
-                    />
-                  </div>
-                </div>
-              </div>
+
+                                        <select
+                                            name="Assignee"
+                                            class="form-select"
+                                            id="exampleForm.ControlInput1"
+                                            {...register('Assignee')}>
+                                            <option value={''}>--Select--</option>
+                                            {store?.getAllUsers?.data?.response?.map((ele, ind) => (
+                                                <option value={ele?._id}> {ele?.userName} </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-2">
+                                        <label class="form-label" for="exampleForm.ControlInput1">
+                                            Report <span class="text-danger">*</span>:
+                                        </label>
+                                        <select
+                                            name="Reporter"
+                                            defaultValue="Admin"
+                                            class="form-select"
+                                            id="exampleForm.ControlInput1"
+                                            {...register('Report')}>
+                                            <option value={''}>--Select--</option>
+                                            {store?.getAllRoles?.data?.response?.map((ele, ind) => (
+                                                <option value={ele?._id}> {ele?.role} </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-2">
+                                        <label class="form-label" for="exampleForm.ControlTextarea1">
+                                            Start Date<span class="text-danger">*</span>:
+                                        </label>
+                                        <input
+                                            placeholder="Please start Date "
+                                            type="date"
+                                            min={today}
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('start_date')}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-2">
+                                        <label class="form-label" for="exampleForm.ControlTextarea1">
+                                            End Date<span class="text-danger">*</span>:
+                                        </label>
+                                        <input
+                                            placeholder="Please end Date"
+                                            type="date"
+                                            min={today}
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('last_date')}
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="exampleForm.ControlInput1">
+                                            {' '}
+                                            Priority <span class="text-danger">*</span>:
+                                        </label>
+                                        <select
+                                            name="Priority"
+                                            class="form-select"
+                                            id="exampleForm.ControlInput1"
+                                            {...register('priority')}>
+                                            <option>-----select----</option>
+                                            <option value="1">High</option>
+                                            <option value="2">Medium</option>
+                                            <option value="3">Low</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-2">
+                                        <label class="form-label" for="exampleForm.ControlTextarea1">
+                                            Status<span class="text-danger">*</span>:
+                                        </label>
+                                        <input
+                                            disabled="Live"
+                                            name="status"
+                                            placeholder="To-Do"
+                                            type="text"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
 
               <div class="row"></div>
               <div class="row">

@@ -7,10 +7,6 @@ export const addAllmilstones = (data): AuthAction => ({
     payload: data
 })
 
-export const getProjectMilestones = (data): AuthAction => ({
-    type: MileStoneType.GET_ALL_PROJECT_MILESTONES,
-    payload: data
-})
 export const getallMileStones = (data): AuthAction => ({
     type: MileStoneType.GET_ALL_MILESTONES,
     payload: data

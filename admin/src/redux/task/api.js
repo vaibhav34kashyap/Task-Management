@@ -24,3 +24,6 @@ export function deleteTaskApi(data): any {
 export function updateTaskStatusApi(data): any {
     return api.update(URL.UpdateTaskStatus, data.payload);
 }
+export function TaskStatusApi(data): any {
+    return api.update(URL.TaskStatus, data.payload);
+}
