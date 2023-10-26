@@ -23,5 +23,5 @@ export function UpdateMileStonesApi(data): any {
 }
 export function getSinleMileStoneApi(data): any {
     // return api.get(URL.SingleMilestone + data?.payload)
-     return api.get(`${URL.SingleMilestone}${data?.payload?.id}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}`)
+     return api.get(`${URL.SingleMilestone}${data?.payload?.id}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}&milestoneId=${data.payload.mileStoneId}`)
 }

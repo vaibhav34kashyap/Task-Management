@@ -52,6 +52,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
     const [deleteId, setDeleteId] = useState();
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
+   
     const store = useSelector((state) => state);
     const deletehandel = store?.deleteTask;
     const dispatch = useDispatch();
@@ -68,7 +69,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
         setOpenEditModal(true);
     };
     const closeupdatemodal = (val) => {
-        closeModal();
+        closeModal("render");
         setOpenEditModal(false);
     };
     
@@ -83,10 +84,11 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
             ToastHandle('error', deletehandel?.data?.message);
         }
     }, [deletehandel]);
-
+    console.log(deletehandel, "deletehandel")
+   
     return (
         <>
-            <Draggable key={item.id} draggableId={item.id} index={index}>
+            <Draggable key={item.id} draggableId={item.id} index={index} >
                 {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                         <TaskInformation>
@@ -96,9 +98,10 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                         class="uil-edit-alt m-0 p-0"
                                         onClick={() => {
                                             handelUpdate(item);
-                                        }}></i>
+                                        }}
+                                        ></i>
                                 </button>
-                                <button type="button" onClick={() => deleteData(item.id)}>
+                                <button type="button" onClick={() => deleteData(item?.id)}>
                                     <i class="mdi mdi-delete m-0 p-0"></i>
                                 </button>
                             </div>
@@ -135,8 +138,10 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+           
             <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
         </>
+        
     );
 };
 

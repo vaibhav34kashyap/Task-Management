@@ -136,7 +136,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const allProjects = store?.getProject?.data?.response;
     const getsingleMilestoneData = store?.getSigleMileStone?.data?.response;
     const getAllSingleSprints = store?.getAllSingleSprints?.data?.response;
-    const [projectNameHeading, setProjectName] = useState('select Project Name');
+    const [projectNameHeading, setProjectName] = useState('Select Project Name');
     const [mileStoneId, setMileStoneId] = useState('');
     const [sprintId, setSprintId] = useState('');
     const [mileStoneData, setmileStoneData] = useState([]);
@@ -199,7 +199,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         const id=e.target.value
         if (id){
               
-        dispatch(getsingleMileStone({ id: id, activeStatus: 1, skip: 0 }));
+        dispatch(getsingleMileStone({ id: id, activeStatus: 1, skip: 0 ,mileStoneId:"" }));
         }
      
     };

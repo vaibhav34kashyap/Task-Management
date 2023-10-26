@@ -17,8 +17,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const [description, setDescription] = useState('');
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    const [hideMilestone ,setHideMilestone] = useState(true);
-    const [hideSprint ,setHideSprint] = useState(true);
+
     const sucesshandel = store?.UpdateTaskReducer;
     const loaderhandel = store?.UpdateTaskReducer;
     // disable previous date
@@ -35,26 +34,10 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const CloseModaal = () => {
         closeModal();
     };
-    const projectHandel=(e)=>{
-        const id=e.target.value
-if (id){
-    setHideMilestone(false)
-    dispatch(getsingleMileStone({ id:id,activeStatus: 1 ,skip:0 }));
-}
-    }
-    const milestoneHandel=(e)=>{
-        const id=e.target.value
-        if (id){
-            setHideSprint(false)
-            dispatch(getSingleSprint({ activeStatus:1, id: id ,skip :0}));
-        }
-    }
+   
     const onSubmit = (data) => {
         let body = {
             taskId: editData?._id,
-            projectId: data?.projectname,
-            milestoneId: data?.Milestone,
-            sprintId: data?.Sprint,
             summary: data?.summary,
             description: description,
             assigneeId: data?.Assignee,
@@ -70,14 +53,14 @@ if (id){
 
     useEffect(() => {
         reset({
-            Milestone: editData?.milestoneId?._id,
-            projectname: editData?.projectId?._id,
-            Sprint: editData?.sprintId?._id,
-            startDate: handleDate(editData?.createdAt),
+            projectname: editData?.projectInfo?._id,
+            Milestone: editData?.milestoneInfo?._id,
+            Sprint: editData?.sprintInfo?._id,
+            startDate: handleDate(editData?.startDate),
             dueDate: handleDate(editData?.dueDate),
             summary: editData?.summary,
-            Assignee: editData?.assigneeId?._id,
-            Reporter: editData?.reporterId?._id,
+            Assignee: editData?.assignees?.assigneeId,
+            Reporter: editData?.assignees?.reporterId,
             priority: editData?.priority,
             status: editData?.status,
         });
@@ -94,15 +77,17 @@ if (id){
     };
 
     useEffect(() => {
+        console.log(sucesshandel?.data?.status , "////////")
         if (sucesshandel?.data?.status == 200) {
-            ToastHandle('success', 'Updated Successfully');
             closeModal('render');
+            ToastHandle('success', 'Updated Successfully');
         } else if (sucesshandel?.data?.status == 400) {
             ToastHandle('error', sucesshandel?.data?.message);
         } else if (sucesshandel?.data?.status == 500) {
             ToastHandle('error', sucesshandel?.data?.message);
         }
     }, [sucesshandel]);
+    console.log(sucesshandel, "success")
     return (
         <>
             <Modal show={modal} onHide={closeModal} size={'lg'}>
@@ -138,10 +123,10 @@ if (id){
 
                                                     <Form.Select
                                                         {...register('projectname', {
-                                                            required: true,
+                                                            required: true, disabled:true
                                                            
                                                         })}
-                                                        onChange={(e)=>{projectHandel(e)}}
+                                                        
                                                        >
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getProject?.data?.response?.map((ele, ind) => (
@@ -161,8 +146,8 @@ if (id){
                                                     </Form.Label>
 
                                                     <Form.Select
-                                                        {...register('Milestone', { required: true,disabled:hideMilestone  })}
-                                                        onChange={(e)=>{milestoneHandel(e)}}>
+                                                        {...register('Milestone', { required: true,disabled:true  })}
+                                                        >
                                                         <option value={''}>--Select--</option>
                                                         {store?.getSigleMileStone?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.title} </option>
@@ -184,7 +169,7 @@ if (id){
                                                     </Form.Label>
 
                                                     <Form.Select
-                                                        {...register('Sprint', { required: true,  disabled:hideSprint })}>
+                                                        {...register('Sprint', { required: true,  disabled:true })}>
                                                         <option value={''}>--Select--</option>
                                                         {store?.getAllSingleSprints?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.sprintName} </option>

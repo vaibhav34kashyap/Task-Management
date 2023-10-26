@@ -27,6 +27,11 @@ const UPDATE_SPRINT_INITIAL_STATE = {
     message: "",
     loading: false
 }
+const GET_MILESTONE_SPRINT_INITIAL_STATE = {
+    data: [],
+    message: "",
+    loading: false
+}
 export const addSprint = (state = ADD_SPRINT_INITIAL_STATE, action) => {
     switch (action.type) {
         case SprintTypes.ADD_SPRINT_LOADING:
@@ -56,21 +61,21 @@ export const addSprint = (state = ADD_SPRINT_INITIAL_STATE, action) => {
     }
 };
 // get single sprint--------------------------------
-export const getAllSingleSprints = (state = GET_SINGLE_SPRINT_INITIAL_STATE, action) => {
+export const getAllSingleSprints = (state = GET_MILESTONE_SPRINT_INITIAL_STATE, action) => {
     switch (action.type) {
-        case SprintTypes.GET_ALL_SINGLE_SPRINT_LOADING:
+        case SprintTypes.GET_ALL_MILESTONE_SPRINT_LOADING:
             return {
-                data: GET_SINGLE_SPRINT_INITIAL_STATE.data,
+                data: GET_MILESTONE_SPRINT_INITIAL_STATE.data,
                 loading: true,
             };
-        case SprintTypes.GET_ALL_SINGLE_SPRINT_SUCCESS:
+        case SprintTypes.GET_ALL_MILESTONE_SPRINT_SUCCESS:
             return {
                 data: action?.payload,
                 loading: false,
             };
 
 
-        case SprintTypes.GET_ALL_SINGLE_SPRINT_ERROR:
+        case SprintTypes.GET_ALL_MILESTONE_SPRINT_ERROR:
             return {
                 data: [],
                 loading: false,
@@ -82,6 +87,36 @@ export const getAllSingleSprints = (state = GET_SINGLE_SPRINT_INITIAL_STATE, act
     }
 };
 // end single sprint-------------------------------
+
+// get single sprint--------------------------------
+export const getAllMilestoneSprints = (state =GET_MILESTONE_SPRINT_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case SprintTypes.GET_ALL_MILESTONE_SPRINT_LOADING:
+            return {
+                data: GET_MILESTONE_SPRINT_INITIAL_STATE.data,
+                loading: true,
+            };
+        case SprintTypes.GET_ALL_MILESTONE_SPRINT_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case SprintTypes.GET_ALL_MILESTONE_SPRINT_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+// end single sprint-------------------------------
+
+
 export const getAllSprints = (state = GET_ALL_SPRINT_INITIAL_STATE, action) => {
     switch (action.type) {
         case SprintTypes.GET_ALL_SPRINT_LOADING:

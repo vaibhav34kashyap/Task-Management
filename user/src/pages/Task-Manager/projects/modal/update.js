@@ -31,6 +31,7 @@ const Update = ({ modal, closeModal, editData }) => {
     ];
     const [selected, setSelected] = useState([]);
     const [addValue, setAddValue] = useState([]);
+    console.log("addvalueeeee",addValue)
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     const handleDate = (data) => {
         let date = new Date(data);
