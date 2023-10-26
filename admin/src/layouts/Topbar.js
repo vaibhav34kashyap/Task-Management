@@ -135,11 +135,15 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const [isopen, setIsopen] = useState(false);
     const allProjects = store?.getProject?.data?.response;
     const getsingleMilestoneData = store?.getSigleMileStone?.data?.response;
+    console.log(getsingleMilestoneData, "responseeeeeeeeeeeeeeeeee")
     const getAllSingleSprints = store?.getAllSingleSprints?.data?.response;
     const [projectNameHeading, setProjectName] = useState('Select Project Name');
     const [mileStoneId, setMileStoneId] = useState('');
     const [sprintId, setSprintId] = useState('');
     const [mileStoneData, setmileStoneData] = useState([]);
+    const [milestoneid, setmilestoneid] = useState(false);
+    const [sptint, setsprint] = useState(false);
+
 
     const navbarCssClasses = navCssClasses || '';
     const containerCssClasses = !hideLogo ? 'container-fluid' : '';
@@ -149,7 +153,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         leftSideBarType: state.Layout.leftSideBarType,
     }));
 
-  
+
 
     /**
      * Toggle the leftmenu when having mobile screen
@@ -187,6 +191,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     };
 
     const handleProject = () => {
+        setmilestoneid(false);
         let data = {
             status: 1,
             skip: 1,
@@ -194,25 +199,30 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         dispatch(getAllProjects(data));
     };
     const onChangeProject = (e) => {
+        setsprint(false);
         dispatch(getProjectId(e.target.value));
         setProjectName(e.target.value);
-        const id=e.target.value
-        if (id){
-              
-        dispatch(getsingleMileStone({ id: id, activeStatus: 1, skip: 0 ,mileStoneId:"" }));
+        const id = e.target.value;
+        setmilestoneid(true);
+        if (id) {
+            dispatch(getsingleMileStone({ id: id, activeStatus: 1, skip: 0, mileStoneId: "" }));
         }
-     
+
     };
     const onChangeMilestone = (e) => {
         dispatch(getMilestonetId(e.target.value))
-       const id = e.target.value
-       dispatch(getSingleSprint({ activeStatus: 1, id: id, skip: 0 }));
+        const id = e?.target.value;
+        setsprint(true);
+        dispatch(getSingleSprint({ activeStatus: 1, id: id, skip: 0 }));
+
     };
-   const sprinthandel=(e)=>{
-    dispatch(getSprintId(e.target.value))
-   }
+    const sprinthandel = (e) => {
+        dispatch(getSprintId(e.target.value));
+
+    }
     return (
         <>
+
             <div className={classNames('navbar-custom', navbarCssClasses)}>
                 <div className={containerCssClasses}>
                     <div className="topbarinfo">
@@ -226,101 +236,85 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                 </span>
                             </Link>
                         )}
-                        <div className="lefbar_info">
-                            {(layoutType === layoutConstants.LAYOUT_VERTICAL ||
-                                layoutType === layoutConstants.LAYOUT_FULL) && (
-                                <button className="button-menu-mobile open-left" onClick={handleLeftMenuCallBack}>
-                                    <i className="mdi mdi-menu" />
-                                </button>
-                            )}
-                            <div class="menuinfo">
-                                <ul>
-                                    <li>
-                                        <Link to="">Apps</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="">Filters</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="">Dashboard</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="">Teams</Link>
-                                    </li>
-                                    <li>
-                                        <div className="project_names">
-                                            <select
-                                                name="Assignee"
-                                                className="form-select op1 "
-                                                id="exampleForm.ControlInput1"
-                                                onChange={onChangeProject}
-                                                onClick={handleProject}
-                                                >
-                                                <option> Projects</option>
-                                                {allProjects?.map((item, index) => (
-                                                    <option className="project_opt" key={index} value={item._id}>
-                                                        {item.projectName}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className="project_names">
-                                            {' '}
-                                            <select
-                                                name="Assignee"
-                                                className="form-select  op2"
-                                                id="exampleForm.ControlInput1"
-                                                onChange={onChangeMilestone}
-                                               
-                                                >
-                                                <option> MileStone</option>
-                                                {getsingleMilestoneData?.map((item, index) => (
-                                                    <option key={index} value={item._id}>
-                                                        {item.title}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className="project_names">
-                                            <select
-                                                name="Assignee"
-                                                className="form-select  op3"
-                                                id="exampleForm.ControlInput1"
-                                                onChange={sprinthandel}
-                                                >
-                                                <option> Sprint</option>
-                                                {getAllSingleSprints?.map((item, index) => (
-                                                    <option key={index} value={item._id}>
-                                                        {item.sprintName}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </li>
-                                  
-                                </ul>
-                            </div>
-                        </div>
+                        <div className='d-flex align-items-center'>
+                            <div className="lefbar_info">
+                                {(layoutType === layoutConstants.LAYOUT_VERTICAL ||
+                                    layoutType === layoutConstants.LAYOUT_FULL) && (
+                                        <button className="button-menu-mobile open-left" onClick={handleLeftMenuCallBack}>
+                                            <i className="mdi mdi-menu" />
+                                        </button>
+                                    )}
+                                <div class="menuinfo">
+                                    <ul>
+                                        <li>
+                                            <Link to="">Apps</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="">Filters</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="">Dashboard</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="">Teams</Link>
+                                        </li>
 
-                        <ul className="list-unstyled topbar-menu float-end mb-0 topbarr">
-                            {/*                    
-                        <li className="notification-list topbar-dropdown d-xl-none">
-                            <SearchDropdown />
-                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                                <div className="dropdown mx-2">
+                                    <button className="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false"
+                                        onClick={handleProject}>
+                                        Projects
+                                    </button>
+                                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li>
+                                            {allProjects?.map((item, index) => (
+                                                <li className="dropdown-item"
+                                                    onClick={onChangeProject}
+                                                >
+                                                    <option className="project_opt" key={index} value={item?._id}
+                                                    >
+                                                        {item?.projectName}
+                                                    </option>
+                                                </li>
+                                            ))}
+
+                                            {milestoneid ? (
+                                                <ul className="dropdown-menu dropdown-submenu">
+                                                    <li>
+                                                        {getsingleMilestoneData?.map((item, index) => (
+                                                            <option onClick={onChangeMilestone} key={index} value={item?._id}
+                                                            >
+                                                                {item?.title}
+                                                            </option>
+                                                        ))}
+
+                                                        {sptint ? (
+                                                            <ul className="dropdown-menu dropdown-submenu">
+                                                                {getAllSingleSprints?.map((item, index) => (
+                                                                    <li 
+                                                                    >
+                                                                        <option className="dropdown-item"
+                                                                            onClick={sprinthandel} key={index} value={item?._id}>
+                                                                            {item?.sprintName}
+                                                                        </option>
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+                                                        ) : (<div></div>)}
+                                                    </li>
+                                                </ul>
+                                            ) : (<div></div>)}
+
+                                        </li>
+                                    </ul>
+                                </div>
+                        </div>
                         
-                        <li className="dropdown notification-list topbar-dropdown d-none d-lg-block">
-                            <LanguageDropdown />
-                        </li> 
-                         <li className="dropdown notification-list">
-                            <NotificationDropdown notifications={Notifications} />
-                        </li> 
-                        <li className="dropdown notification-list d-none d-sm-inline-block">
-                            <AppsDropdown />
-                        </li>  */}
+                        <ul className="list-unstyled topbar-menu float-end mb-0 topbarr">
+                      
 
                             <li className="notification-list">
                                 <button
@@ -366,8 +360,10 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </Link>
                         )}
                         <TopbarSearch />
+
                     </div>
                 </div>
+
             </div>
             <div className="project_detail">
                 <div className="project_name">

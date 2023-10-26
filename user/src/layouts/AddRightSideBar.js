@@ -107,7 +107,7 @@ export default function RightBar(props) {
                     <div className="model-content-detail">
                         <form class="" onSubmit={handleSubmit(onSubmit)}>
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="">
                                     <div class="mb-2">
                                         {/* <label class="form-label" for="exampleForm.ControlInput1">Project  <span class="text-danger">*</span>:</label> */}
                                         <input
@@ -119,7 +119,7 @@ export default function RightBar(props) {
                                         />
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="">
                                     <div class="mb-2">
                                         {/* <label class="form-label" for="exampleForm.ControlTextarea1">Milestone
                   <span class="text-danger">*</span>:</label> */}
@@ -134,7 +134,7 @@ export default function RightBar(props) {
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="">
                                     <div class="mb-2">
                                         {/* <label class="form-label" for="exampleForm.ControlTextarea1">Sprint
                   <span class="text-danger">*</span>:</label> */}
@@ -149,15 +149,15 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
 
-                                {/* <div class="col-lg-6"><div class="mb-2"><label class="form-label" for="exampleForm.ControlInput1">Type Of Project 
+                                {/* <div class=""><div class="mb-2"><label class="form-label" for="exampleForm.ControlInput1">Type Of Project 
          <span class="text-danger">*</span>:</label><select name="project_type" class="form-select" id="exampleForm.ControlInput1">
          <option>Choose an Project Type </option><option value="T&amp;M">T&amp;M</option><option value="Fixed Cost">Fixed Cost</option>
          <option value=" Hourly">Hourly</option><option value="Dedicated team">Dedicated team</option></select></div>
          </div> */}
                             </div>
 
-                            <div class="row">
-                                <div class="col-lg-6">
+                            <div class="">
+                                <div class="">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Summary
@@ -172,7 +172,7 @@ export default function RightBar(props) {
                                         />
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             Description <span class="text-danger">*</span>:
@@ -188,8 +188,8 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6">
+                            <div class="">
+                                <div class="">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Assignee
@@ -211,7 +211,7 @@ export default function RightBar(props) {
                                         {/* <input placeholder="Please Enter Assignee" type="text" id="exampleForm.ControlTextarea1" class="form-control" {...register("Assignee")} /> */}
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             Report <span class="text-danger">*</span>:
@@ -232,8 +232,8 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6">
+                            <div class="">
+                                <div class="">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Start Date<span class="text-danger">*</span>:
@@ -247,7 +247,7 @@ export default function RightBar(props) {
                                         />
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             End Date<span class="text-danger">*</span>:
@@ -262,8 +262,8 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6">
+                            <div class="">
+                                <div class="">
                                     <div class="mb-1">
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             {' '}
@@ -281,7 +281,7 @@ export default function RightBar(props) {
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Status<span class="text-danger">*</span>:
@@ -298,9 +298,9 @@ export default function RightBar(props) {
                                 </div>
                             </div>
 
-                            <div class="row"></div>
+                            <div class=""></div>
                             <div class="row">
-                                <div class="text-start d-flex align-items-center justify-content-center col">
+                                <div class="text-start d-flex align-items-end justify-content-end col">
                                     <button
                                         type="submit"
                                         class="btn btn-sm  text-white pt-1 pb-1 mt-3 web_button  btn btn-info">
