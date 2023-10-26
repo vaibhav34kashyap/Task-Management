@@ -6,13 +6,7 @@ import classNames from 'classnames';
 import '../global.css';
 
 // actions
-import {
-    showRightSidebar,
-    changeSidebarType,
-    getsingleMileStone,
-    getMilestonetId,
-    getSprintId,
-} from '../redux/actions';
+import { showRightSidebar, changeSidebarType, getsingleMileStone, getMilestonetId, getSprintId } from '../redux/actions';
 import { getAllProjects } from '../../src/redux/projects/action';
 import { getallMileStones, getMileStoneById } from '../redux/actions';
 import { getAllSprint, getSingleSprint } from '../redux/actions';
@@ -155,6 +149,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         leftSideBarType: state.Layout.leftSideBarType,
     }));
 
+  
+
     /**
      * Toggle the leftmenu when having mobile screen
      */
@@ -200,19 +196,21 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const onChangeProject = (e) => {
         dispatch(getProjectId(e.target.value));
         setProjectName(e.target.value);
-        const id = e.target.value;
-        if (id) {
-            dispatch(getsingleMileStone({ id: id, activeStatus: 1, skip: 0, mileStoneId: '' }));
+        const id=e.target.value
+        if (id){
+              
+        dispatch(getsingleMileStone({ id: id, activeStatus: 1, skip: 0 ,mileStoneId:"" }));
         }
+     
     };
     const onChangeMilestone = (e) => {
-        dispatch(getMilestonetId(e.target.value));
-        const id = e.target.value;
-        dispatch(getSingleSprint({ activeStatus: 1, id: id, skip: 0 }));
+        dispatch(getMilestonetId(e.target.value))
+       const id = e.target.value
+       dispatch(getSingleSprint({ activeStatus: 1, id: id, skip: 0 }));
     };
-    const sprinthandel = (e) => {
-        dispatch(getSprintId(e.target.value));
-    };
+   const sprinthandel=(e)=>{
+    dispatch(getSprintId(e.target.value))
+   }
     return (
         <>
             <div className={classNames('navbar-custom', navbarCssClasses)}>
@@ -256,7 +254,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                                 className="form-select op1 "
                                                 id="exampleForm.ControlInput1"
                                                 onChange={onChangeProject}
-                                                onClick={handleProject}>
+                                                onClick={handleProject}
+                                                >
                                                 <option> Projects</option>
                                                 {allProjects?.map((item, index) => (
                                                     <option className="project_opt" key={index} value={item._id}>
@@ -273,7 +272,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                                 name="Assignee"
                                                 className="form-select  op2"
                                                 id="exampleForm.ControlInput1"
-                                                onChange={onChangeMilestone}>
+                                                onChange={onChangeMilestone}
+                                               
+                                                >
                                                 <option> MileStone</option>
                                                 {getsingleMilestoneData?.map((item, index) => (
                                                     <option key={index} value={item._id}>
@@ -289,7 +290,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                                 name="Assignee"
                                                 className="form-select  op3"
                                                 id="exampleForm.ControlInput1"
-                                                onChange={sprinthandel}>
+                                                onChange={sprinthandel}
+                                                >
                                                 <option> Sprint</option>
                                                 {getAllSingleSprints?.map((item, index) => (
                                                     <option key={index} value={item._id}>
@@ -299,6 +301,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                             </select>
                                         </div>
                                     </li>
+                                  
                                 </ul>
                             </div>
                         </div>
@@ -372,17 +375,13 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                 </div>
                 <div className="taskinfo">
                     <ul>
-                          <li>
+                        <li>
                             {' '}
-                            <Link to="">Summary</Link>{' '}
+                            <Link to="">List</Link>{' '}
                         </li>
                         <li>
                             {' '}
-                            <Link to="/taskList">List</Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="/dashboard/boards">Board</Link>{' '}
+                            <Link to="">Board</Link>{' '}
                         </li>
                         <li>
                             {' '}
