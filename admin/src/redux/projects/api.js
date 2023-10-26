@@ -6,7 +6,8 @@ export function addProjectApi(data): any {
     return api.create(URL.AddProject, data.payload)
 }
 export function getProjectApi(data): any {
-    return api.get(`${URL.GetAllProject}${data.payload.status}`)
+    console.log(data,"okok")
+    return api.get(`${URL.GetAllProject}${data.payload.status}&skip=${data.payload?.skip}`)
 }
 export function updateProjectApi(data): any {
     return api.update(URL.UpdateProjectDetails, data.payload)

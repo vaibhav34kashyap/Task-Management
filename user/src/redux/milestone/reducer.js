@@ -31,6 +31,11 @@ const GET_SINGLE_MILESTONE_INTIAL_STATE={
     loading: false
 }
 
+const GET_ALL_PROJECT_MILESTONE_INTIAL_STATE={
+    data: [],
+    message: "",
+    loading: false
+}
 
 export const getAllMileStones = (state = GET_ALL_MILESTONE_INTIAL_STATE, action) => {
     switch (action.type) {
@@ -47,6 +52,32 @@ export const getAllMileStones = (state = GET_ALL_MILESTONE_INTIAL_STATE, action)
 
 
         case MileStoneType.GET_ALL_MILESTONES_ERROR:
+            return {
+                data: [],
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+
+export const getAllProjectMileStones = (state = GET_ALL_PROJECT_MILESTONE_INTIAL_STATE, action) => {
+    switch (action.type) {
+        case MileStoneType.GET_ALL_PROJECT_MILESTONES_LOADING:
+            return {
+                data: GET_ALL_PROJECT_MILESTONE_INTIAL_STATE.data,
+                loading: true,
+            };
+        case MileStoneType.GET_ALL_PROJECT_MILESTONES_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+
+
+        case MileStoneType.GET_ALL_PROJECT_MILESTONES_ERROR:
             return {
                 data: [],
                 loading: false,

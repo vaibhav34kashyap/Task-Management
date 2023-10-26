@@ -20,16 +20,9 @@ const tasks = mongoose.model(
         description: {
             type: String
         },
-        assigneeId: {
-            type: mongoose.Types.ObjectId,
-            ref: 'User'
-        },
-        reporterId: {
-            type: mongoose.Types.ObjectId,
-            ref: 'User'
-        },
         priority: {
-            type: Number // 1=high, 2=medium, 3=low
+            type: Number,
+            default : 2 // 1=high, 2=medium, 3=low
         },
         startDate: {
             type: Date
@@ -39,7 +32,7 @@ const tasks = mongoose.model(
         },
         status: {
             type: Number,
-            default: 1 // 1=,todo, 2=inProgress, 3=done, 4=review, 
+            default: 1 // 1=,todo, 2=inProgress, 3=hold, 4=done 
         },
         activeStatus: {
             type: Boolean,

@@ -225,7 +225,7 @@ const Projects = () => {
 
                 <Create modal={openModal} closeModal={closeModal} />
                 <Update modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
-                {/* delete modal */}
+                
                 <Modal show={statusModal} onHide={() => setStatusModal(false)}>
                     <Modal.Body>
                         Are you sure you want to {!checkedStatus ? 'deactivate' : 'activate'} this Project ?
@@ -244,6 +244,7 @@ const Projects = () => {
                     </Modal.Footer>
                 </Modal>
             </div>
+            
         </>
     );
 };

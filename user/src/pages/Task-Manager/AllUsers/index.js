@@ -11,6 +11,7 @@ import { deleteUser, getAllUsers } from '../../../redux/user/action';
 // import Update from './Sprint/update';
 const AllUsers = () => {
     const store = useSelector((state) => state);
+    
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const [deleteId,setdeleteId]=useState()

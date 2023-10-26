@@ -23,15 +23,13 @@ const Update = ({ modal, closeModal, editData }) => {
         reset,
         formState: { errors },
     } = useForm();
-    const options = [
-        { label: 'React ', value: 'React' },
-        { label: 'Node', value: 'Node' },
-        { label: 'Angular', value: 'Angular' },
-        { label: 'Flutter', value: 'Flutter' },
-    ];
+    
     const [selected, setSelected] = useState([]);
     const [addValue, setAddValue] = useState([]);
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
+        // disable previous date
+        const today = new Date().toISOString().split('T')[0];
+        // 
     const handleDate = (data) => {
         let date = new Date(data);
         let year = date.toLocaleString('default', { year: 'numeric' });
@@ -49,7 +47,7 @@ const Update = ({ modal, closeModal, editData }) => {
             startDate: handleDate(editData?.startDate),
             endDate: handleDate(editData?.endDate),
             expectedEndDate: handleDate(editData?.CompilationDate),
-            project_type: editData?.project_type,
+            project_type: editData?.projectType,
             technology: editData?.technology,
             projectstatus: editData?.projectStatus,
             expectedEndDate: handleDate(editData?.expectedDate),
@@ -85,7 +83,7 @@ const Update = ({ modal, closeModal, editData }) => {
             startDate: data?.startDate,
             endDate: data?.endDate,
             clientName: data?.clientName,
-            project_type: data?.project_type,
+            projectType: data?.project_type,
             technology: addValue,
             projectStatus: data?.projectstatus,
            
@@ -182,6 +180,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
+                                                min={today}
                                                 {...register('startDate', { required: true })}
                                                 placeholder="Please start Date "
                                             />
@@ -197,6 +196,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
+                                                min={today}
                                                 {...register('endDate', { required: true })}
                                                 placeholder="Please end Date"
                                             />

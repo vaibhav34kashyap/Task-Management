@@ -45,6 +45,7 @@ export const data = [
     // Priority: 'Medium',
     due_date: '05-Jan-2021',
   },
+ 
 ];
 
 export const columnsFromBackend = {
@@ -54,6 +55,10 @@ export const columnsFromBackend = {
   },
   [uuidv4()]: {
     title: 'In Progress',
+    items: [],
+  },
+  [uuidv4()]: {
+    title: 'Hold',
     items: [],
   },
   [uuidv4()]: {

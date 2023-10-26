@@ -108,39 +108,6 @@ function* deleteSprintFunction({ payload }) {
 
     }
 }
-function* getSingleSprintFunction({ payload }) {
-    try {
-        yield put({
-            type: SprintTypes.GET_SPRINT_BY_ID_LOADING,
-            payload: {}
-        })
-        const response = yield call(getSingleSprintApi, { payload });
-        
-        if (response.data.status) {
-            yield put({
-                type: SprintTypes.GET_SPRINT_BY_ID_SUCCESS,
-                payload: { ...response.data },
-            });
-            // yield put({
-            //     type: SprintTypes.GET_SPRINT_BY_ID_RESET,
-            //     payload: {},
-            // });
-        }
-        else {
-            yield put({
-                type: SprintTypes.GET_SPRINT_BY_ID_ERROR,
-                payload: { ...response.data }
-            });
-        }
-
-    } catch (error) {
-        yield put({
-            type: SprintTypes.GET_SPRINT_BY_ID_ERROR,
-            payload: { message: error?.message }
-        });
-
-    }
-}
 
 function* getAllSingleSprintFunction({ payload }) {
     try {
@@ -227,9 +194,7 @@ export function* getAllSingleSprintSaga(): any {
 export function* deleteSprintSaga(): any {
     yield takeEvery(SprintTypes.DELETE_SPRINT, deleteSprintFunction);
 }
-export function* getSingleSprintSaga(): any {
-    yield takeEvery(SprintTypes.GET_SPRINT_BY_ID, getSingleSprintFunction);
-}
+
 export function* updateSprintSaga(): any {
     yield takeEvery(SprintTypes.UPDATE_SPRINT, updateSprintFunction);
 }
@@ -238,7 +203,7 @@ function* AllSprintSaga(): any {
         fork(addSprintSaga),
         fork(getAllSprintSaga),
         fork (deleteSprintSaga),
-       fork (getSingleSprintSaga),
+
        fork (updateSprintSaga),
     fork(getAllSingleSprintSaga)
     ])

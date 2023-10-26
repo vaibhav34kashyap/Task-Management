@@ -1,6 +1,11 @@
 const mongoose = require('mongoose'), { Schema } = mongoose,
 
     milestoneModel = new Schema({
+        projectId: {
+            type: mongoose.Types.ObjectId,
+            required: true,
+            ref: 'projects',
+        },
         title: {
             type: String,
             required: true
@@ -9,20 +14,15 @@ const mongoose = require('mongoose'), { Schema } = mongoose,
             type: String,
             required: false
         },
-        start_date: {
+        startDate: {
             type: Date,
             required: true
         },
-        completion_date: {
+        completionDate: {
             type: Date,
             required: true
         },
-        project_id: {
-            type: mongoose.Types.ObjectId,
-            required: true,
-            ref: 'projects',
-        },
-        status: {
+        activeStatus: {
             type: Boolean,
             default: true
         },
