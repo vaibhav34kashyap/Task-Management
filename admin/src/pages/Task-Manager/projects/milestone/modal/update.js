@@ -20,6 +20,12 @@ const Update = ({ modal, closeModal, editData }) => {
     const sucesshandel = store?.updateMilestone;
     // disable previous date
     const today = new Date().toISOString().split('T')[0];
+    function findMinimumDate(date1, date2) {
+        return new Date(Math.min(new Date(date1), new Date(date2)));
+    }
+    const date1 = new Date();
+    const date2 = editData?.startDate;
+    const minimumDate = findMinimumDate(date1, date2);
     //
     const [description, setDescription] = useState('');
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
@@ -42,7 +48,7 @@ const Update = ({ modal, closeModal, editData }) => {
     };
     const onSubmit = (data) => {
         let body = {
-            id: editData?._id,
+            milestoneId: editData?._id,
             title: data?.title,
             description: description,
             startDate: data?.startDate,
@@ -143,7 +149,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                         </Form.Label>
                                         <Form.Control
                                             type="date"
-                                            min={today}
+                                            min={handleDate(minimumDate)}
                                             {...register('startDate', { required: true })}
                                             placeholder="Please start Date "
                                         />

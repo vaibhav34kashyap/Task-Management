@@ -23,13 +23,19 @@ const Update = ({ modal, closeModal, editData }) => {
         reset,
         formState: { errors },
     } = useForm();
-    
+
     const [selected, setSelected] = useState([]);
     const [addValue, setAddValue] = useState([]);
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
-        // disable previous date
-        const today = new Date().toISOString().split('T')[0];
-        // 
+    // disable previous date
+    const today = new Date().toISOString().split('T')[0];
+    function findMinimumDate(date1, date2) {
+        return new Date(Math.min(new Date(date1), new Date(date2)));
+    }
+    const date1 = new Date();
+    const date2 = editData?.startDate;
+    const minimumDate = findMinimumDate(date1, date2);
+    //
     const handleDate = (data) => {
         let date = new Date(data);
         let year = date.toLocaleString('default', { year: 'numeric' });
@@ -86,7 +92,6 @@ const Update = ({ modal, closeModal, editData }) => {
             projectType: data?.project_type,
             technology: addValue,
             projectStatus: data?.projectstatus,
-           
         };
 
         dispatch(updateProject(body));
@@ -180,7 +185,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                min={today}
+                                                min={handleDate(minimumDate)}
                                                 {...register('startDate', { required: true })}
                                                 placeholder="Please start Date "
                                             />
