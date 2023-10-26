@@ -48,7 +48,8 @@ const Boards = (props) => {
   const dispatch = useDispatch();
   const store = useSelector(state => state)
   console.log("storeboarddata")
-  const successHandle = store?.getAllTaskReducer
+  const successHandle = store?.getAllTaskReducer;
+  const statushandle = store?.updateTaskStatus;
   
 
   useEffect(() => {

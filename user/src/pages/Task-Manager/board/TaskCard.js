@@ -9,7 +9,9 @@ import Modal from 'react-bootstrap/Modal';
 import { addComment, getComment } from '../../../redux/addcomment/actions';
 import { useForm, SubmitHandler } from "react-hook-form"
 import { CKEditor } from '@ckeditor/ckeditor5-react';
+import UpdateTask from '../board/update';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 
 
 
@@ -44,7 +46,13 @@ const TaskInformation = styled.div`
   
 `;
 
-const TaskCard = ({ item, index }) => {
+const TaskCard = ({ item, index,closeModal }) => {
+  const [editData, setEditData] = useState();
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const handelUpdate = (data) => {
+    setEditData(data);
+    setOpenEditModal(true);
+};
   const {
     register,
     handleSubmit,
@@ -53,8 +61,12 @@ const TaskCard = ({ item, index }) => {
   } = useForm()
 
   const onSubmit = (e) => {
-
   }
+
+  const closeupdatemodal = (val) => {
+    closeModal("render");
+    setOpenEditModal(false);
+};
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
   console.log("storedataaaaaa", store)
@@ -97,7 +109,9 @@ const TaskCard = ({ item, index }) => {
 
             <TaskInformation>
                 <div className='action_icon'>
-                <button type='button' onClick={handleShowData}><i class="uil-edit-alt m-0 p-0" ></i></button>
+                <button type='button'  onClick={() => {
+                                            handelUpdate(item);
+                                        }}><i class="uil-edit-alt m-0 p-0" ></i></button>
                 <button type='button' onClick={() => deleteData(item.id)} ><i class="mdi mdi-delete m-0 p-0"></i></button>
 
               </div>
@@ -299,6 +313,8 @@ const TaskCard = ({ item, index }) => {
           </Button>
         </Modal.Footer> */}
       </Modal>
+      <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
+
 
     </>
   );

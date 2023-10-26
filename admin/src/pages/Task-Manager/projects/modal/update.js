@@ -60,20 +60,16 @@ const Update = ({ modal, closeModal, editData }) => {
             return ele?.techName == removedItem;
         });
         // make a separate copy of the array
-        var index = addValue.indexOf(remove[0]._id);
-        if (index !== -1) {
-            addValue.splice(index, 1);
-            setAddValue(addValue);
-        } else {
-            setAddValue(null);
-        }
+      var data =   addValue.filter((item)=>item !== remove[0]._id)
+      setAddValue(data);
+        console.log("asfasf",data)
     };
 
     const addhandle = (selectedList, selectItem) => {
         const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
         });
-        setAddValue([...addValue, add[0]._id]);
+         setAddValue([...addValue, add[0]._id]);
     };
 
     const onSubmit = (data) => {
@@ -88,8 +84,8 @@ const Update = ({ modal, closeModal, editData }) => {
             projectStatus: data?.projectstatus,
            
         };
-
-        dispatch(updateProject(body));
+          console.log("fsadsadsadsa",addValue)
+       dispatch(updateProject(body));
     };
     const selectedValues = editData?.technology?.map((item) => {
         return item.techName;
