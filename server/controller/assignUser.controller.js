@@ -33,19 +33,19 @@ const addUserAssignments = async (req, res) => {
     }
 }
 
-// Get user assigned projects
-const getUserAssignment = async (req, res) => {
-    try {
-        const result = await assignUserModel.find({ assigneeId: req.query.assigneeId, projectId: { $exists: true } }).populate([
-            { path: 'projectId', select: 'projectName' },
-            { path: 'assigneeId', select: 'userName' },
-            { path: 'reporterId', select: 'userName' }
-        ]);
-        return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result })
-    } catch (error) {
-        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
-    }
-}
+// // Get user assigned projects
+// const getUserAssignment = async (req, res) => {
+//     try {
+//         const result = await assignUserModel.find({ assigneeId: req.query.assigneeId, projectId: { $exists: true } }).populate([
+//             { path: 'projectId', select: 'projectName' },
+//             { path: 'assigneeId', select: 'userName' },
+//             { path: 'reporterId', select: 'userName' }
+//         ]);
+//         return res.status(200).json({ status: "200", message: "Data Fetched Successfully", response: result })
+//     } catch (error) {
+//         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+//     }
+// }
 
 // Get User assignments
 const getUserAssignments = async (req, res) => {
@@ -77,4 +77,6 @@ const getUserAssignments = async (req, res) => {
     }
 }
 
-module.exports = { addUserAssignments, getUserAssignment, getUserAssignments }
+
+
+module.exports = { addUserAssignments,/* getUserAssignment,*/ getUserAssignments }

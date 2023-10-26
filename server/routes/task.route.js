@@ -10,5 +10,7 @@ taskRouter.delete("/deletetask", verifyUser, tasks.deleteTask);
 taskRouter.put("/updateTaskStatus", tasks.updateTaskStatus);
 taskRouter.put("/updateTaskActiveStatus", tasks.updateTaskActiveStatus);
 taskRouter.get("/getTasksAccToStatus", tasks.getTasksAccToStatus);
+taskRouter.get("/getPriorityTasks", tasks.getPriorityTasks);
+taskRouter.get("/getTasksStatusOverview", tasks.getTasksStatusOverview);
 
 module.exports = taskRouter;

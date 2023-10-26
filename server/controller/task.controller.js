@@ -176,7 +176,7 @@ const getTasks = async (req, res) => {
 // Update Task
 const updateTask = async (req, res) => {
     try {
-        const taskId = req.body.taskId; // Get the taskId from the request body
+        const taskId = req.body.taskId;
         const obj = {
             summary: req.body.summary,
             description: req.body.description,
@@ -191,7 +191,7 @@ const updateTask = async (req, res) => {
 
         await taskModel.findByIdAndUpdate(taskId, obj, { new: true });
 
-        await assignUserModel.findOne({ taskId: req.body.taskId }, secObj, { new: true });
+        await assignUserModel.findOneAndUpdate({ taskId }, secObj, { new: true });
 
         return res.status(200).json({ status: "200", message: "Task updated successfully" });
     } catch (error) {
@@ -360,6 +360,32 @@ const getTasksAccToStatus = async (req, res) => {
     }
 }
 
+// Priority breakdown of Tasks for a User as well as For admin
+const getPriorityTasks = async (req, res) => {
+    try {
+        const firstPriority = await taskModel.find({ priority: 1 }).sort({ createdAt: -1 });
+        const secondPriority = await taskModel.find({ priority: 2 }).sort({ createdAt: -1 });
+        const thirdPriority = await taskModel.find({ priority: 3 }).sort({ createdAt: -1 });
+        return res.status(200).json({ status: '200', message: "Prioity wise tasks fetched successfully", response: firstPriority, secondPriority, thirdPriority });
+    } catch (error) {
+        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+    }
+}
+
+// Get Status overview of tasks
+const getTasksStatusOverview = async (req, res) => {
+    try {
+        const todoCount = await taskModel.countDocuments({ status: 1 });
+        const inProgressCount = await taskModel.countDocuments({ status: 2 });
+        const holdCount = await taskModel.countDocuments({ status: 3 });
+        const doneCount = await taskModel.countDocuments({ status: 4 });
+
+        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: todoCount, inProgressCount, holdCount, doneCount });
+    } catch (error) {
+        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+    }
+}
+
 module.exports = {
-    createtask, getTasks, updateTask, deleteTask, updateTaskStatus, updateTaskActiveStatus, getTasksAccToStatus
+    createtask, getTasks, updateTask, deleteTask, updateTaskStatus, updateTaskActiveStatus, getTasksAccToStatus, getPriorityTasks, getTasksStatusOverview
 };
