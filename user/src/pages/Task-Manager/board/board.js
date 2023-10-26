@@ -185,7 +185,7 @@ const Boards = (props) => {
   
 
   const [show, setShow] = useState(false);
-
+  
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
@@ -199,6 +199,7 @@ const Boards = (props) => {
           onClick={() => {
             console.log("button click");
             setShowModal(!showModal);
+            
           }}
         >
           Add Task
