@@ -183,6 +183,7 @@ const updateTask = async (req, res) => {
             priority: req.body.priority,
             startDate: req.body.startDate,
             dueDate: req.body.dueDate,
+            status : req.body.status
         };
         const secObj = {
             assigneeId: req.body.assigneeId,
@@ -237,10 +238,21 @@ const getTasksAccToStatus = async (req, res) => {
         let inProgress = null;
         let hold = null;
         let done = null;
+        let query = {}
         for (let i = 1; i < 5; i++) {
+            if (req.query.projectId && req.query.milestoneId && req.query.sprintId) {
+                query.projectId = new mongoose.Types.ObjectId(req.query.projectId);
+                query.milestoneId = new mongoose.Types.ObjectId(req.query.milestoneId);
+                query.sprintId = new mongoose.Types.ObjectId(req.query.sprintId);
+                query.activeStatus = JSON.parse(req.query.activeStatus);
+                query.status = i
+            }
+            else {
+                query.status = i
+            }
             const tasks = await taskModel.aggregate([
                 {
-                    $match: { status: i }
+                    $match: query
                 },
                 {
                     $lookup: {
@@ -339,7 +351,7 @@ const getTasksAccToStatus = async (req, res) => {
                     }
                 }
             ])
-            let taskCount = await taskModel.countDocuments({ status: i });
+            let taskCount = await taskModel.countDocuments(query);
 
             if (i == 1) {
                 todo = { tasks, taskCount };
@@ -354,7 +366,9 @@ const getTasksAccToStatus = async (req, res) => {
                 done = { tasks, taskCount };
             }
         }
+
         return res.status(200).json({ status: '200', message: "fetched successfully", Response: todo, inProgress, hold, done });
+
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
@@ -372,19 +386,45 @@ const getPriorityTasks = async (req, res) => {
     }
 }
 
-// Get Status overview of tasks
+// // Get Status overview of tasks
+// const getTasksStatusOverview = async (req, res) => {
+//     try {
+//         const todoCount = await taskModel.countDocuments({ status: 1 });
+//         const inProgressCount = await taskModel.countDocuments({ status: 2 });
+//         const holdCount = await taskModel.countDocuments({ status: 3 });
+//         const doneCount = await taskModel.countDocuments({ status: 4 });
+
+//         return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: todoCount, inProgressCount, holdCount, doneCount });
+//     } catch (error) {
+//         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+//     }
+// }
+
 const getTasksStatusOverview = async (req, res) => {
     try {
-        const todoCount = await taskModel.countDocuments({ status: 1 });
-        const inProgressCount = await taskModel.countDocuments({ status: 2 });
-        const holdCount = await taskModel.countDocuments({ status: 3 });
-        const doneCount = await taskModel.countDocuments({ status: 4 });
+        let query = {}; // Initialize an empty query object
 
-        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: todoCount, inProgressCount, holdCount, doneCount });
+        if (req.query.projectId) {
+            query.projectId = req.query.projectId;
+        }
+
+        if (req.query.milestoneId) {
+            query.milestoneId = req.query.milestoneId;
+        }
+
+        if (req.query.sprintId) {
+            query.sprintId = req.query.sprintId;
+        }
+
+        const result = await taskModel.find(query);
+
+        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: result });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
 }
+
+
 
 module.exports = {
     createtask, getTasks, updateTask, deleteTask, updateTaskStatus, updateTaskActiveStatus, getTasksAccToStatus, getPriorityTasks, getTasksStatusOverview
