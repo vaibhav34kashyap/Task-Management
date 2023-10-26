@@ -34,7 +34,7 @@ import {
     getAllTaskReducer,
     UpdateTaskReducer,
     deleteTask,
-    updateTaskStatus
+    updateTaskStatus,TaskStatusReducer
 } from './task/reducer';
 import { getAllUsers, deleteUser, createUser, getAllRoles } from './user/reducer';
 import {
@@ -85,5 +85,5 @@ export default (combineReducers({
     deleteTask,
     getProjectId,
     updateTaskStatus,
-    getMilestoneId,getSprintId
+    getMilestoneId,getSprintId,TaskStatusReducer
 }): any);

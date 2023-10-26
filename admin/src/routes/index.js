@@ -49,7 +49,8 @@ const Sprint = React.lazy(() => import('../pages/Task-Manager/projects/milestone
 const Task = React.lazy(() => import('../pages/Task-Manager/projects/milestone/sprint/task/task'));
 const Technology  = React.lazy(() => import('../pages/Task-Manager/Technology/technology'));
 const TechnologyCategory  = React.lazy(() => import('../pages/Task-Manager/TechnologyCategory/category'));
-     
+const AllTaskList = React.lazy(() => import('../pages/Task-Manager/TaskList/list'));
+
 // AllSprint
 // const AllSprint = React.lazy(() => import('../pages/Task-Manager/All-Sprint'));
 
@@ -331,6 +332,7 @@ const AllRoutes = () => {
                             path: 'technologyCategory',
                             element: <LoadComponent component={TechnologyCategory} />,
                         },
+                      
                     ],
                 },
                 {
@@ -341,6 +343,10 @@ const AllRoutes = () => {
                             element: <LoadComponent component={UserNotFound} />,
                         }
                     ],
+                },
+                {
+                    path: '/taskList',
+                    element: <LoadComponent component={AllTaskList} />,
                 },
 
                 //new code add routing
