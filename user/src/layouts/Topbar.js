@@ -36,7 +36,7 @@ import TimeLine from './../pages/profile2/TimeLine';
 import MileStone from './../pages/Task-Manager/AllMillstones/mileStone/index';
 import {getProjectMilestones} from '../../src/redux/milestone/action'
 import {getAllMilstoneSprints} from '../../src/redux/sprint/action'
-import { getsingleMileStone } from '../../src/redux/milestone/action';
+import { getsingleMileStone,getMileStonebyprojectid } from '../../src/redux/milestone/action';
 
 
 
@@ -143,8 +143,8 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const [isopen, setIsopen] = useState(false);
     const allProjects = store?.getProject?.data?.response;
     
-    const getAllMilestoneData = store?.getAllProjectMileStones?.data?.Response;
-    const getAllSingleSprints = store?.getAllMilestoneSprints?.data?.Response;
+    const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
+    const getAllSingleSprints = store?.getAllSingleSprints?.data?.Response;
     //==============================================================================================
     
     //========================================================================================================
@@ -168,7 +168,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         };
         dispatch(getAllProjects(data))
         //dispatch(getallMileStones({status:1}))
-        dispatch(getProjectMilestones({projectId:projectId,status:1})) 
+        // dispatch(getProjectMilestones({projectId:projectId,status:1})) 
            },[])
 
     const onChangeProject =(e)=>{  
@@ -177,7 +177,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         sessionStorage.setItem("projectId",e.target.value)
        const projectData = allProjects?.filter((item)=>item._id == e.target.value);
        setProjectName(projectData[0].projectName)
-       dispatch(getProjectMilestones({projectId:e.target.value,status:1})) 
+       dispatch(getsingleMileStone({id:e.target.value,status:1})) 
    
     }
     const onChangeMilestone =(e)=>{

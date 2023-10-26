@@ -188,3 +188,6 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
 .action_icon button:first-child {
     margin-right: 8px;
 }
+.update_btn{
+    text-align: center;
+}

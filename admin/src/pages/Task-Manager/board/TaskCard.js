@@ -12,6 +12,7 @@ import UpdateTask from './update';
 // import { ReactComponent as YellowArrow } from '../../assets/icons/Medium.svg'
 // import { ReactComponent as BlueArrow } from '../../assets/icons/Low.svg'
 import moment from 'moment';
+import TaskDetailPage from './taskDetailPage';
 const TaskInformation = styled.div`
     display: flex;
     flex-direction: column;
@@ -52,9 +53,10 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
     const [deleteId, setDeleteId] = useState();
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
-   
+   const[openDetailPage,setOpenDetailPage]=useState(false)
+   const [detailData,setDetailData] = useState()
     const store = useSelector((state) => state);
-    const deletehandel = store?.deleteTask;
+  
     const dispatch = useDispatch();
     const deleteData = (id) => {
         setDeleteId(id);
@@ -72,19 +74,14 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
         closeModal("render");
         setOpenEditModal(false);
     };
-    
-    useEffect(() => {
-        if (deletehandel?.data?.status == 200) {
-            ToastHandle('success', deletehandel?.data?.message);
-            setDeleteModal(false);
-            closeModal('render');
-        } else if (deletehandel?.data?.status == 400) {
-            ToastHandle('error', deletehandel?.data?.message);
-        } else if (deletehandel?.data?.status == 500) {
-            ToastHandle('error', deletehandel?.data?.message);
-        }
-    }, [deletehandel]);
-    console.log(deletehandel, "deletehandel")
+    const handleDetailPage=(data)=>{
+        setOpenDetailPage(true)
+        setDetailData(data)
+    }
+    const closeDetailPage=()=>{
+        setOpenDetailPage(false)
+    }
+   
    
     return (
         <>
@@ -106,7 +103,9 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                 </button>
                             </div>
 
-                            <p>{item.summary}</p>
+                            <p 
+                            onClick={()=>{handleDetailPage(item)}}
+                            >{item.summary}</p>
                             <p>
                                 <div
                                     dangerouslySetInnerHTML={{
@@ -140,6 +139,7 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
             </Modal>
            
             <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
+            <TaskDetailPage modal={openDetailPage} editData={detailData} closeModal={closeDetailPage}/>
         </>
         
     );
