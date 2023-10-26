@@ -30,7 +30,11 @@ const DELETE_TASK_INITIAL_STATE = {
     loading:false,
     message:""
 }
-
+const STATUS_TASK_INITIAL_STATE = {
+    data:[],
+    loading:false,
+    message:""
+}
 
 export const createTaskReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
@@ -192,6 +196,36 @@ export const updateTaskStatus = (state = UPDATE_STATUS_TASK_INITIAL_STATE, actio
             }
 
         case TASK_TYPES.UPDATE_TASK_STATU_ERROR:
+            return {
+                data: [],
+                status: 403,
+                loading: false,
+                message: action?.payload,
+            };
+        default:
+            return { ...state };
+
+    }
+};
+export const TaskStatusReducer= (state = STATUS_TASK_INITIAL_STATE, action) => {
+    switch (action.type) {
+        case TASK_TYPES.TASK_STATUS_LOADING:
+            return {
+                data: STATUS_TASK_INITIAL_STATE.data,
+                loading: true,
+            };
+        case TASK_TYPES.TASK_STATUS_SUCCESS:
+            return {
+                data: action?.payload,
+                loading: false,
+            };
+        case TASK_TYPES.TASK_STATUS_RESET:
+            return {
+                data: STATUS_TASK_INITIAL_STATE.data,
+                loading: false
+            }
+
+        case TASK_TYPES.TASK_STATUS_ERROR:
             return {
                 data: [],
                 status: 403,

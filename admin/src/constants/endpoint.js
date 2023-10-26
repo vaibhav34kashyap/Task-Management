@@ -29,6 +29,7 @@ export const GetAllTask = "/task/getTasksAccToStatus"
 export const UpdateTask = "/task/updateTask"
 export const DeleteTask = "/task/deletetask?taskId="
 export const UpdateTaskStatus = "/task/updateTaskStatus"
+export const TaskStatus ="/task/updateTaskActiveStatus"
 
 export const InviteUser = "/users/register"
 export const AddTechnology ="/technology/addTechnology"
