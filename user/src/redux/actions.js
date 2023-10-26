@@ -5,5 +5,6 @@ export * from './milestone/action';
 export * from './sprint/action';
 export * from './task/action';
 export * from './user/action';
-export * from './technology/action'
-export * from './assigneeid/actions'
+export * from './technology/action';
+export * from './assigneeid/actions';
+export * from './addcomment/actions';

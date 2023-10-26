@@ -3,34 +3,36 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector, dispatch } from 'react-redux';
 import { createTask } from '../redux/actions';
 import { useParams } from 'react-router-dom';
+import { getAllTask } from '../redux/actions';
 // import {getassignee} from '../../src/redux/assigneeid/actions'
-import { getAllUsers,getAllRoles } from './../redux/user/action';
+import { getAllUsers, getAllRoles } from './../redux/user/action';
 
 
 export default function RightBar(props) {
     const { showModal, setShowModal, content, projectId, mileStoneId, sprintId } = props;
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    const getAllUserData=store?.getAllUsers?.data?.response
-    const getAllRole=store?.getAllRoles?.data?.response
+    const getAllUserData = store?.getAllUsers?.data?.response
+    const getAllRole = store?.getAllRoles?.data?.response
     // console.log("getAllRoleeeee",getAllRole)
     // console.log("getAllUserTask",getAllUserData)
 
-    console.log("storerrrrr",store)
-    const id=store?.Auth?.user?.userId
-    console.log("store_id",id)
+    console.log("storerrrrr", store)
+    const id = store?.Auth?.user?.userId
+    console.log("store_id", id)
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors },
     } = useForm();
-    useEffect(()=>{
+    useEffect(() => {
         // dispatch(getassignee(id))
         dispatch(getAllUsers())
         dispatch(getAllRoles())
-        
-    },[])
-    
+
+    }, [])
+
 
     const onSubmit = (e) => {
         const dataList = {
@@ -52,6 +54,7 @@ export default function RightBar(props) {
             sessionStorage.getItem('sprintId') !== ''
         ) {
             dispatch(createTask(dataList));
+            dispatch(getAllTask())
         } else {
             alert('plsease select project');
         }
@@ -59,12 +62,21 @@ export default function RightBar(props) {
         sessionStorage.setItem('projectId', '');
         sessionStorage.setItem('mileStoneId', '');
         sessionStorage.setItem('sprintId', '');
+        setValue('Summary', '')
+        setValue('Description', '')
+        setValue('Assignee', '')
+        setValue('Report', '')
+        setValue('priority', '')
+        setValue('start_date', '')
+        setValue('last_date', '')
+
+
         setShowModal(false);
     };
 
-    useEffect(() => {
-        // call click outside
-    }, []);
+    // useEffect(() => {
+    // call click outside
+    // }, []);
 
     return (
         <div className={showModal ? 'rightBar show' : 'rightBar'} role="document">
@@ -190,9 +202,9 @@ export default function RightBar(props) {
                                             id="exampleForm.ControlInput1"
                                             {...register('Assignee')}>
                                             <option value="">--Select--</option>
-                                            {getAllUserData?.map((items,index)=><option value="">{items.userName}</option>)}
+                                            {getAllUserData?.map((items, index) => <option value="">{items.userName}</option>)}
                                             {/* {store?.getAllAssignee?.data?.response?.map((item,index)=> <option value={item?.assigneeId?._id}>{item?.assigneeId?.userName} </option>)} */}
-                                           
+
 
                                         </select>
 
@@ -211,10 +223,10 @@ export default function RightBar(props) {
                                             id="exampleForm.ControlInput1"
                                             {...register('Report')}>
                                             <option value="">--Select--</option>
-                                            {getAllRole?.map((items,index)=><option value={items?.reporterId?._id}> {items.role} </option>)}
+                                            {getAllRole?.map((items, index) => <option value={items?.reporterId?._id}> {items.role} </option>)}
 }
-                                            
-                                           
+
+
                                         </select>
                                         {/* <input placeholder="Please Enter Report" type="text" id="exampleForm.ControlInput1" class="form-control"  {...register("Report")} /> */}
                                     </div>
@@ -261,7 +273,7 @@ export default function RightBar(props) {
                                             name="Priority"
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
-                                            {...register('priority')}  disabled="Medium">
+                                            {...register('priority')} disabled="Medium">
                                             <option>Medium</option>
                                             <option value="1">High</option>
                                             <option value="2">Medium</option>
