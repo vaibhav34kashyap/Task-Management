@@ -25,7 +25,7 @@ export const deleteUsers = "/users/usersDelete/";
 export const UpdateSprint = "/sprint/update";
 export const SingleMilestone = "/milestone/getMilestones?projectId="
 export const SingleSprintTask = "/task/getTasks?sprintId="
-export const GetAllTask = "/task/getTasksAccToStatus"
+export const GetAllTask = "/task/getTasksAccToStatus?projectId="
 export const UpdateTask = "/task/updateTask"
 export const DeleteTask = "/task/deletetask?taskId="
 export const UpdateTaskStatus = "/task/updateTaskStatus"

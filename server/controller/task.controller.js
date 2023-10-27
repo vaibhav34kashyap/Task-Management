@@ -249,7 +249,7 @@ const getTasksAccToStatus = async (req, res) => {
                 query.projectId = new mongoose.Types.ObjectId(req.query.projectId);
                 query.milestoneId = new mongoose.Types.ObjectId(req.query.milestoneId);
                 query.sprintId = new mongoose.Types.ObjectId(req.query.sprintId);
-                query.activeStatus = JSON.parse(req.query.activeStatus);
+                // query.activeStatus = JSON.parse(req.query.activeStatus);
                 query.status = i
             }
             else {
