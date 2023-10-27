@@ -4,7 +4,7 @@ const comments = mongoose.model(
     'Comment', mongoose.Schema({
         taskId: {
             type: mongoose.Types.ObjectId,
-            ref: ''
+            ref: 'Task'
         },
         comment: {
             type: String

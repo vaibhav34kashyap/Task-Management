@@ -20,12 +20,17 @@ const createtask = async (req, res) => {
                 startDate,
                 dueDate,
             });
-            const assignedUser = await assignUserModel.create({
-                assigneeId: assigneeId, // One who is doing work
-                reporterId: reporterId, // one who will assignee report after work done
-                taskId: task._id
-            })
-            return res.status(200).json({ status: "200", message: "Task created successfully", response: task, assignedUser });
+            if (task) {
+                const assignedUser = await assignUserModel.create({
+                    assigneeId: assigneeId, // One who is doing work
+                    reporterId: reporterId, // one who will assignee report after work done
+                    taskId: task._id
+                })
+                return res.status(200).json({ status: "200", message: "Task created successfully", response: task, assignedUser });
+            }
+            else {
+                return res.status(200).json({ status: "400", message: "Task Not created" });
+            }
         }
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -183,6 +188,7 @@ const updateTask = async (req, res) => {
             priority: req.body.priority,
             startDate: req.body.startDate,
             dueDate: req.body.dueDate,
+            status: req.body.status
         };
         const secObj = {
             assigneeId: req.body.assigneeId,
@@ -237,10 +243,21 @@ const getTasksAccToStatus = async (req, res) => {
         let inProgress = null;
         let hold = null;
         let done = null;
+        let query = {}
         for (let i = 1; i < 5; i++) {
+            if (req.query.projectId && req.query.milestoneId && req.query.sprintId) {
+                query.projectId = new mongoose.Types.ObjectId(req.query.projectId);
+                query.milestoneId = new mongoose.Types.ObjectId(req.query.milestoneId);
+                query.sprintId = new mongoose.Types.ObjectId(req.query.sprintId);
+                // query.activeStatus = JSON.parse(req.query.activeStatus);
+                query.status = i
+            }
+            else {
+                query.status = i
+            }
             const tasks = await taskModel.aggregate([
                 {
-                    $match: { status: i }
+                    $match: query
                 },
                 {
                     $lookup: {
@@ -264,6 +281,14 @@ const getTasksAccToStatus = async (req, res) => {
                         localField: 'sprintId',
                         foreignField: '_id',
                         as: 'sprints',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'comments',
+                        localField: '_id',
+                        foreignField: 'taskId',
+                        as: 'comments',
                     },
                 },
                 {
@@ -336,10 +361,11 @@ const getTasksAccToStatus = async (req, res) => {
                         milestoneInfo: { $first: { $arrayElemAt: ['$milestones', 0] } },
                         sprintInfo: { $first: { $arrayElemAt: ['$sprints', 0] } },
                         assignees: { $first: { $arrayElemAt: [['$assignees'], 0] } },
+                        comments: { $push: '$comments' },
                     }
                 }
             ])
-            let taskCount = await taskModel.countDocuments({ status: i });
+            let taskCount = await taskModel.countDocuments(query);
 
             if (i == 1) {
                 todo = { tasks, taskCount };
@@ -354,7 +380,9 @@ const getTasksAccToStatus = async (req, res) => {
                 done = { tasks, taskCount };
             }
         }
+
         return res.status(200).json({ status: '200', message: "fetched successfully", Response: todo, inProgress, hold, done });
+
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
@@ -385,6 +413,9 @@ const getTasksStatusOverview = async (req, res) => {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
 }
+
+
+
 
 module.exports = {
     createtask, getTasks, updateTask, deleteTask, updateTaskStatus, updateTaskActiveStatus, getTasksAccToStatus, getPriorityTasks, getTasksStatusOverview

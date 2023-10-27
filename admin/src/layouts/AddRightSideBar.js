@@ -5,7 +5,9 @@ import { createTask, getAllRoles, getAllUsers } from '../redux/actions';
 import { useParams } from 'react-router-dom';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 export default function RightBar(props) {
+
     const {
         register,
         handleSubmit,
@@ -21,116 +23,117 @@ export default function RightBar(props) {
     const today = new Date().toISOString().split('T')[0];
     const dispatch = useDispatch();
 
-    const onSubmit = (e) => {
-        const dataList = {
-            projectId: projectId,
-            milestoneId: milestoneId,
-            sprintId: sprintid,
-            summary: e.Summary,
-            description: description,
-            assigneeId: e.Assignee,
-            reporterId: e.Report,
-            priority: e.priority,
-            startDate: e.start_date,
-            dueDate: e.last_date,
-            status: 1,
-        };
-        if (projectId !== '' && milestoneId !== '' && sprintid !== '') {
-            dispatch(createTask(dataList));
-        } else {
-            alert('plsease select project');
-        }
-        setShowModal(false);
+  const onSubmit = (e) => {
+    const dataList = {
+      projectId: projectId,
+      milestoneId: milestoneId,
+      sprintId: sprintid,
+      summary: e.Summary,
+      description: description,
+      assigneeId: e.Assignee,
+      reporterId: e.Report,
+      priority: e.priority,
+      startDate: e.start_date,
+      dueDate: e.last_date,
+      status: 1,
     };
-    useEffect(() => {
-        dispatch(getAllRoles());
-        dispatch(getAllUsers());
-    }, []);
-    // useEffect(() => {
-    //     if (sucesshandel?.data?.status == 200) {
-    //         ToastHandle('success', 'Updated Successfully');
-    //         closeModal('render');
-    //     } else if (sucesshandel?.data?.status == 400) {
-    //         ToastHandle('error', sucesshandel?.data?.message);
-    //     } else if (sucesshandel?.data?.status == 500) {
-    //         ToastHandle('error', sucesshandel?.data?.message);
-    //     }
-    // }, [sucesshandel]);
-    return (
-        <div className={showModal ? 'rightBar show' : 'rightBar'} role="document">
-            <div className="modal-content">
-                <div className="modal-header">
-                    <h3>Add Task</h3>
-                    <button
-                        type="button"
-                        className="close "
-                        data-dismiss="modal"
-                        aria-label="Close"
-                        onClick={() => {
-                            setShowModal(false);
-                        }}>
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 className="modal-title" id="myModalLabel"></h4>
+    if (projectId !== '' && milestoneId !== '' && sprintid !== '') {
+      dispatch(createTask(dataList));
+    } else {
+      alert('plsease select project');
+    }
+    setShowModal(false);
+  };
+  useEffect(() => {
+    dispatch(getAllRoles());
+    dispatch(getAllUsers());
+  }, []);
+  // useEffect(() => {
+  //     if (sucesshandel?.data?.status == 200) {
+  //         ToastHandle('success', 'Updated Successfully');
+  //         closeModal('render');
+  //     } else if (sucesshandel?.data?.status == 400) {
+  //         ToastHandle('error', sucesshandel?.data?.message);
+  //     } else if (sucesshandel?.data?.status == 500) {
+  //         ToastHandle('error', sucesshandel?.data?.message);
+  //     }
+  // }, [sucesshandel]);
+  return (
+    <div className={showModal ? 'rightBar show' : 'rightBar'} role="document">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h3>Add Task</h3>
+          <button
+            type="button"
+            className="close "
+            data-dismiss="modal"
+            aria-label="Close"
+            onClick={() => {
+              setShowModal(false);
+            }}>
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 className="modal-title" id="myModalLabel"></h4>
+        </div>
+
+        <div className="modal-body">
+          <p>{content}</p>
+          <div className="model-content-detail">
+            <form class="" onSubmit={handleSubmit(onSubmit)}>
+              <div class="row">
+
+
+              </div>
+              <div class="row">
+
+              </div>
+              <div className="row">
+                <div class="col-lg-12">
+                  <div class="mb-2">
+                    <label class="form-label" for="exampleForm.ControlInput1">
+                      Description <span class="text-danger">*</span>:
+                    </label>
+
+                    <CKEditor
+                      editor={ClassicEditor}
+                      config={{
+                        ckfinder: {
+                          uploadUrl:
+                            'https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
+                        },
+                      }}
+                      data=""
+                      onChange={(event, editor) => {
+                        const data = editor.getData();
+                        setDescription(data);
+                      }}
+                    />
+                  </div>
                 </div>
+              </div>
+              <div class="">
+                <div class="">
+                  <div class="mb-2">
+                    <label class="form-label" for="exampleForm.ControlTextarea1">
+                      Summary
+                      <span class="text-danger">*</span>:
+                    </label>
+                    <input
+                      placeholder="Please Enter Summary"
+                      type="text"
+                      id="exampleForm.ControlTextarea1"
+                      class="form-control"
+                      {...register('Summary')}
+                    />
+                  </div>
+                </div>
+                <div class="">
+                  <div class="mb-2">
+                    <label class="form-label" for="exampleForm.ControlTextarea1">
+                      Assignee
+                      <span class="text-danger">*</span>:
+                    </label>
 
-                <div className="modal-body">
-                    <p>{content}</p>
-                    <div className="model-content-detail">
-                        <form class="" onSubmit={handleSubmit(onSubmit)}>
-                            <div class="row">
-                              
-                               
-                            </div>
-                            <div class="row">
-                               
-                            </div>
-                            <div className="row">
-                                <div class="col-lg-12">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlInput1">
-                                            Description <span class="text-danger">*</span>:
-                                        </label>
-
-                                        <CKEditor
-                                            editor={ClassicEditor}
-                                            config={{
-                                                ckfinder: {
-                                                    uploadUrl:
-                                                        'https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
-                                                },
-                                            }}
-                                            data=""
-                                            onChange={(event, editor) => {
-                                                const data = editor.getData();
-                                                setDescription(data);
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            Summary
-                                            <span class="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            placeholder="Please Enter Summary"
-                                            type="text"
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('Summary')}
-                                        />
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            Assignee
-                                            <span class="text-danger">*</span>:
-                                        </label>
 
                                         <select
                                             name="Assignee"
@@ -233,20 +236,21 @@ export default function RightBar(props) {
                                 </div>
                             </div>
 
-                            <div class="row"></div>
-                            <div class="row">
-                                <div class="text-start d-flex align-items-center justify-content-center col">
-                                    <button
-                                        type="submit"
-                                        class="btn btn-sm  text-white pt-1 pb-1 mt-3 web_button  btn btn-info">
-                                        Add
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+
+              <div class="row"></div>
+              <div class="row">
+                <div class="text-start d-flex align-items-end justify-content-end col">
+                  <button
+                    type="submit"
+                    class="btn btn-sm  text-white pt-1 pb-1 mt-3 web_button  btn btn-info">
+                    Add
+                  </button>
                 </div>
-            </div>
+              </div>
+            </form>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
