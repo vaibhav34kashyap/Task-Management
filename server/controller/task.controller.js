@@ -391,10 +391,10 @@ const getTasksAccToStatus = async (req, res) => {
 // Priority breakdown of Tasks for a User as well as For admin
 const getPriorityTasks = async (req, res) => {
     try {
-        const firstPriority = await taskModel.find({ priority: 1 }).sort({ createdAt: -1 });
-        const secondPriority = await taskModel.find({ priority: 2 }).sort({ createdAt: -1 });
-        const thirdPriority = await taskModel.find({ priority: 3 }).sort({ createdAt: -1 });
-        return res.status(200).json({ status: '200', message: "Prioity wise tasks fetched successfully", response: firstPriority, secondPriority, thirdPriority });
+        const firstPriority = await taskModel.countDocuments({ priority: 1 })
+        const secondPriority = await taskModel.countDocuments({ priority: 2 })
+        const thirdPriority = await taskModel.countDocuments({ priority: 3 })
+        return res.status(200).json({ status: '200', message: "Prioity wise tasks fetched successfully", response:{ firstPriority, secondPriority, thirdPriority} });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
