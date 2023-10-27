@@ -24,3 +24,6 @@ export function updateTaskStatusApi(data): any {
 export function TaskStatusApi(data): any {
     return api.update(URL.TaskStatus, data.payload);
 }
+export function GetTaskSummaryApi(data): any {
+    return api.get(URL.TaskSummaryDetail, data.payload);
+}

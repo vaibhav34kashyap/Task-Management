@@ -31,3 +31,7 @@ export const TaskStatusAction = (data): AuthAction => ({
     type: TASK_TYPES.TASK_STATUS,
     payload: data
 })
+export const getTaskSummmaryDetail= (data): AuthAction => ({
+    type: TASK_TYPES.GET_TASK_SUMMARY,
+    payload: data
+})
