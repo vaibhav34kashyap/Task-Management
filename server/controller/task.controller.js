@@ -7,11 +7,14 @@ const createtask = async (req, res) => {
     try {
         const { projectId, milestoneId, sprintId, summary, description, assigneeId, reporterId, startDate, dueDate } = req.body;
 
-        const existingtask = await taskModel.findOne({ summary: summary });
-        if (existingtask) {
-            return res.status(200).json({ status: "400", message: "Task already exists" });
+        const existingTask = await taskModel.findOne({ summary: new RegExp(`^${summary}$`, 'i'), sprintId: sprintId });
+        if (existingTask) {
+            return res.status(400).json({ status: '400', message: 'Task already exists' });
         } else {
+            const lastTask = await taskModel.countDocuments();
+            const taskMannualId = lastTask + 1;
             const task = await taskModel.create({
+                taskMannualId,
                 projectId,
                 milestoneId,
                 sprintId,
@@ -19,6 +22,7 @@ const createtask = async (req, res) => {
                 description,
                 startDate,
                 dueDate,
+                attachment: `http://localhost:8000/upload/${req.file.originalname}`,
             });
             if (task) {
                 const assignedUser = await assignUserModel.create({
@@ -162,6 +166,7 @@ const getTasks = async (req, res) => {
                     dueDate: { $first: '$dueDate' },
                     status: { $first: '$status' },
                     activeStatus: { $first: '$activeStatus' },
+                    attachment: { $first: '$attachment' },
                     projectInfo: { $first: { $arrayElemAt: ['$projects', 0] } },
                     milestoneInfo: { $first: { $arrayElemAt: ['$milestones', 0] } },
                     sprintInfo: { $first: { $arrayElemAt: ['$sprints', 0] } },
@@ -188,7 +193,8 @@ const updateTask = async (req, res) => {
             priority: req.body.priority,
             startDate: req.body.startDate,
             dueDate: req.body.dueDate,
-            status: req.body.status
+            status: req.body.status,
+            attachment: `http://localhost:8000/upload/${req.file.originalname}`
         };
         const secObj = {
             assigneeId: req.body.assigneeId,
@@ -357,6 +363,7 @@ const getTasksAccToStatus = async (req, res) => {
                         dueDate: { $first: '$dueDate' },
                         status: { $first: '$status' },
                         activeStatus: { $first: '$activeStatus' },
+                        attachment: { $first: '$attachment' },
                         projectInfo: { $first: { $arrayElemAt: ['$projects', 0] } },
                         milestoneInfo: { $first: { $arrayElemAt: ['$milestones', 0] } },
                         sprintInfo: { $first: { $arrayElemAt: ['$sprints', 0] } },
@@ -394,7 +401,7 @@ const getPriorityTasks = async (req, res) => {
         const firstPriority = await taskModel.countDocuments({ priority: 1 })
         const secondPriority = await taskModel.countDocuments({ priority: 2 })
         const thirdPriority = await taskModel.countDocuments({ priority: 3 })
-        return res.status(200).json({ status: '200', message: "Prioity wise tasks fetched successfully", response:{ firstPriority, secondPriority, thirdPriority} });
+        return res.status(200).json({ status: '200', message: "Prioity wise tasks fetched successfully", response: { firstPriority, secondPriority, thirdPriority } });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
@@ -403,6 +410,7 @@ const getPriorityTasks = async (req, res) => {
 // Get Status overview Count of tasks
 const getTasksStatusOverview = async (req, res) => {
     try {
+        const taskArr = [];
         const now = new Date();
         const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // Calculate the date 7 days ago
 
@@ -410,22 +418,42 @@ const getTasksStatusOverview = async (req, res) => {
             status: 1,
             createdAt: { $gte: sevenDaysAgo }
         });
+        const todoData = {
+            name: "todo",
+            count: todoCount
+        }
+        taskArr.push(todoData)
 
         const inProgressCount = await taskModel.countDocuments({
             status: 2,
             createdAt: { $gte: sevenDaysAgo }
         });
+        const inProgressData = {
+            name: "inProgress",
+            count: inProgressCount
+        }
+        taskArr.push(inProgressData)
 
         const holdCount = await taskModel.countDocuments({
             status: 3,
             createdAt: { $gte: sevenDaysAgo }
         });
+        const holdData = {
+            name: "hold",
+            count: holdCount
+        }
+        taskArr.push(holdData)
 
         const doneCount = await taskModel.countDocuments({
             status: 4,
             createdAt: { $gte: sevenDaysAgo }
         });
-        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response:{ todoCount, inProgressCount, holdCount, doneCount} });
+        const doneData = {
+            name: "Done",
+            count: doneCount
+        }
+        taskArr.push(doneData)
+        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: taskArr });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }

@@ -6,6 +6,10 @@ const comments = mongoose.model(
             type: mongoose.Types.ObjectId,
             ref: 'Task'
         },
+        userId: {
+            type: mongoose.Types.ObjectId,
+            ref: 'User'
+        },
         comment: {
             type: String
         }
@@ -15,4 +19,4 @@ const comments = mongoose.model(
         }
     )
 );
-module.exports= comments;
+module.exports = comments;

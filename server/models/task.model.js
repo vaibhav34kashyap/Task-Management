@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const tasks = mongoose.model(
     'Task', mongoose.Schema({
+        taskMannualId: {
+            type: Number,
+            required: true,
+        },
         projectId: {
             type: mongoose.Types.ObjectId,
             ref: 'projects'
@@ -22,7 +26,7 @@ const tasks = mongoose.model(
         },
         priority: {
             type: Number,
-            default : 2 // 1=high, 2=medium, 3=low
+            default: 2 // 1=high, 2=medium, 3=low
         },
         startDate: {
             type: Date
@@ -37,6 +41,9 @@ const tasks = mongoose.model(
         activeStatus: {
             type: Boolean,
             default: true
+        },
+        attachment: {
+            type: String
         }
     },
         {
