@@ -11,6 +11,9 @@ import RightBar from '../../../layouts/AddRightSideBar';
 import {updateTaskStatus} from '../../../../src/redux/task/action';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import {getsingleMileStone} from '../../../redux/milestone/action'
+import {getAllMilstoneSprints} from '../../../redux/sprint/action'
+import {getAllProjects} from '../../../redux/projects/action'
 
 const Container = styled.div`
   display: flex;
@@ -47,13 +50,21 @@ const Title = styled.span`
 const Boards = (props) => {
   const dispatch = useDispatch();
   const store = useSelector(state => state)
-  console.log("storeboarddata")
+  
   const successHandle = store?.getAllTaskReducer;
   const statushandle = store?.updateTaskStatus;
-  
+ 
 
   useEffect(() => {
     dispatch(getAllTask())
+    let body = {
+      status :1,
+      skip: 0    
+  };
+
+  dispatch(getAllProjects(body));
+    dispatch(getsingleMileStone({ id:"" ,activeStatus: 1 ,skip:0 , mileStoneId:""  }));
+    dispatch(getAllMilstoneSprints({ activeStatus: 1, id: "" ,skip:0 }));
   
   }, [])
 
@@ -131,7 +142,7 @@ const Boards = (props) => {
         },
         
       });
-     console.log("copy",copiedItems)
+     
     }
   };
 
@@ -183,7 +194,9 @@ const Boards = (props) => {
   }
 
   
-  
+  const callAlltaskData=()=>{
+    dispatch(getAllTask())
+  }
 
   const [show, setShow] = useState(false);
   
@@ -205,7 +218,7 @@ const Boards = (props) => {
         >
           Add Task
         </button>
-        <RightBar className="d-none" projectId={props.projectId} mileStoneId={props.mileStoneId} sprintId={props.sprintId} showModal={showModal} setShowModal={setShowModal}/>
+        <RightBar  callAlltaskData={callAlltaskData} className="d-none" projectId={props.projectId} mileStoneId={props.mileStoneId} sprintId={props.sprintId} showModal={showModal} setShowModal={setShowModal}/>
      </div>
 
       <DragDropContext  onDragEnd={(result) => onDragEnd(result, columns, setColumns)} onDragStart={(result)=>handelupdatetask(result)}
