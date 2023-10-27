@@ -1,7 +1,15 @@
-import React from 'react'
+import React,{useEffect}from 'react'
 import { Card, ProgressBar } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import Chart from 'react-apexcharts';
+import { getTaskSummmaryDetail } from '../../../redux/task/action';
 const Summary = () => {
+  const dispatch = useDispatch();
+    const store = useSelector((state) => state);
+    useEffect(() => {
+     dispatch(getTaskSummmaryDetail())
+    }, [])
+    
   const apexDonutOpts = {
     chart: {
         height: 340,
