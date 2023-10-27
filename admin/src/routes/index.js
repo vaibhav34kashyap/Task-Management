@@ -11,7 +11,7 @@ import VerticalLayout from '../layouts/Vertical';
 import DetachedLayout from '../layouts/Detached';
 import HorizontalLayout from '../layouts/Horizontal';
 import FullLayout from '../layouts/Full';
-import All_Sprint from '../pages/Task-Manager/All-Sprint';
+
 
 // lazy load all the views
 
@@ -50,7 +50,7 @@ const Task = React.lazy(() => import('../pages/Task-Manager/projects/milestone/s
 const Technology  = React.lazy(() => import('../pages/Task-Manager/Technology/technology'));
 const TechnologyCategory  = React.lazy(() => import('../pages/Task-Manager/TechnologyCategory/category'));
 const AllTaskList = React.lazy(() => import('../pages/Task-Manager/TaskList/list'));
-
+const Summary = React.lazy(() => import('../pages/Task-Manager/Summary/summary'));
 // AllSprint
 // const AllSprint = React.lazy(() => import('../pages/Task-Manager/All-Sprint'));
 
@@ -347,6 +347,10 @@ const AllRoutes = () => {
                 {
                     path: '/taskList',
                     element: <LoadComponent component={AllTaskList} />,
+                },
+                {
+                    path: '/summary',
+                    element: <LoadComponent component={Summary} />,
                 },
 
                 //new code add routing

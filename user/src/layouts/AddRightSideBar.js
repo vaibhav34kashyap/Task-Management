@@ -3,23 +3,25 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector, dispatch } from 'react-redux';
 import { createTask } from '../redux/actions';
 import { useParams } from 'react-router-dom';
-import { getAllTask } from '../redux/actions';
 // import {getassignee} from '../../src/redux/assigneeid/actions'
 import { getAllUsers, getAllRoles } from './../redux/user/action';
-
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { useState } from 'react';
 
 export default function RightBar(props) {
-    const { showModal, setShowModal, content, projectId, mileStoneId, sprintId } = props;
+    const { showModal, setShowModal, content, projectId, mileStoneId, sprintId,callAlltaskData } = props;
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    const [description, setDescription] = useState('');
     const getAllUserData = store?.getAllUsers?.data?.response
     const getAllRole = store?.getAllRoles?.data?.response
     // console.log("getAllRoleeeee",getAllRole)
     // console.log("getAllUserTask",getAllUserData)
 
-    console.log("storerrrrr", store)
+
     const id = store?.Auth?.user?.userId
-    console.log("store_id", id)
+   
     const {
         register,
         handleSubmit,
@@ -40,7 +42,7 @@ export default function RightBar(props) {
             milestoneId: sessionStorage.getItem('mileStoneId'),
             sprintId: sessionStorage.getItem('sprintId'),
             summary: e.Summary,
-            description: e.Description,
+            description: description,
             assigneeId: e.Assignee,
             reporterId: e.Report,
             priority: e.priority,
@@ -53,8 +55,13 @@ export default function RightBar(props) {
             sessionStorage.getItem('mileStoneId') !== '' &&
             sessionStorage.getItem('sprintId') !== ''
         ) {
+            
             dispatch(createTask(dataList));
-            dispatch(getAllTask())
+            setTimeout(() => {
+                callAlltaskData();
+            }, 1000);
+            
+            
         } else {
             alert('plsease select project');
         }
@@ -156,8 +163,41 @@ export default function RightBar(props) {
          </div> */}
                             </div>
 
-                            <div class="">
-                                <div class="">
+                            <div class="row">
+                              
+                                <div class="col-lg-12">
+                                    <div class="mb-2">
+                                        <label class="form-label" for="exampleForm.ControlInput1">
+                                            Description <span class="text-danger">*</span>:
+                                        </label>
+                                        <CKEditor
+                                            editor={ClassicEditor}
+                                            config={{
+                                                ckfinder: {
+                                                    uploadUrl:
+                                                        'https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
+                                                },
+                                            }}
+                                            data=""
+                                            onChange={(event, editor) => {
+                                                const data = editor.getData();
+                                                setDescription(data);
+                                            }}
+                                        />
+                                        
+
+
+                                         {/* <input
+                                            placeholder="Please Enter Description"
+                                            type="text"
+                                            id="exampleForm.ControlInput1"
+                                            class="form-control"
+                                            {...register('Description')}/> */}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                            <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Summary
@@ -169,21 +209,6 @@ export default function RightBar(props) {
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
                                             {...register('Summary')}
-                                        />
-                                    </div>
-                                </div>
-                                <div class="">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlInput1">
-                                            Description <span class="text-danger">*</span>:
-                                        </label>
-
-                                        <input
-                                            placeholder="Please Enter Description"
-                                            type="text"
-                                            id="exampleForm.ControlInput1"
-                                            class="form-control"
-                                            {...register('Description')}
                                         />
                                     </div>
                                 </div>
@@ -202,7 +227,7 @@ export default function RightBar(props) {
                                             id="exampleForm.ControlInput1"
                                             {...register('Assignee')}>
                                             <option value="">--Select--</option>
-                                            {getAllUserData?.map((items, index) => <option value="">{items.userName}</option>)}
+                                            {getAllUserData?.map((items, index) => <option key={index} value={items._id}>{items.userName}</option>)}
                                             {/* {store?.getAllAssignee?.data?.response?.map((item,index)=> <option value={item?.assigneeId?._id}>{item?.assigneeId?.userName} </option>)} */}
 
 
@@ -223,8 +248,8 @@ export default function RightBar(props) {
                                             id="exampleForm.ControlInput1"
                                             {...register('Report')}>
                                             <option value="">--Select--</option>
-                                            {getAllRole?.map((items, index) => <option value={items?.reporterId?._id}> {items.role} </option>)}
-}
+                                            {getAllRole?.map((items, index) => <option value={items._id}> {items.role} </option>)}
+
 
 
                                         </select>
@@ -273,10 +298,11 @@ export default function RightBar(props) {
                                             name="Priority"
                                             class="form-select"
                                             id="exampleForm.ControlInput1"
-                                            {...register('priority')} disabled="Medium">
+                                            disabled={true}
+                                            {...register('priority')} >
                                             <option>Medium</option>
                                             <option value="1">High</option>
-                                            <option value="2">Medium</option>
+                                            <option selected value="2">Medium</option>
                                             <option value="3">Low</option>
                                         </select>
                                     </div>

@@ -12,9 +12,16 @@ import { updateTaskStatus } from '../../../../src/redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
-import {getSingleSprint} from "../../../redux/sprint/action";
-import {getsingleMileStone} from "../../../redux/milestone/action";
-import {getAllProjects} from "../../../redux/projects/action";
+
+import {
+    deleteTask,
+    getAllProjects,
+    getAllRoles,
+    getAllUsers,
+    getSingleSprint,
+    getsingleMileStone,
+} from '../../../redux/actions';
+
 const Container = styled.div`
     display: flex;
 `;
@@ -58,7 +65,9 @@ const Boards = (props) => {
     
     const [showModal, setShowModal] = useState(false);
     const [columns, setColumns] = useState(columnsFromBackend);
-   
+   const sprintId = store?.getSprintId?.data
+    const projectId=store?.getProjectId?.data
+    const milestoneId = store?.getMilestoneId?.data
     const onDragEnd = (result, columns, setColumns) => {
         console.log('colun', result);
 
@@ -100,8 +109,8 @@ const Boards = (props) => {
     };
 
     useEffect(() => {
-        dispatch(getAllTask());
-    }, [render]);
+        dispatch(getAllTask({projectId:projectId , milestoneId:milestoneId , sprintId:sprintId}));
+    }, [render , sprintId]);
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
             setColumns({
@@ -138,7 +147,7 @@ const Boards = (props) => {
             status: ele?.destination?.droppableId,
         };
         dispatch(updateTaskStatus(body));
-        dispatch(getAllTask());
+        dispatch(getAllTask({projectId:projectId , milestoneId:milestoneId , sprintId:sprintId}));
     };
     const closeModal = (val) => {
         if (val == 'render') {

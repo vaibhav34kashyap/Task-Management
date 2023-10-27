@@ -371,13 +371,17 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                 </div>
                 <div className="taskinfo">
                     <ul>
-                        <li>
+                    <li>
                             {' '}
-                            <Link to="">List</Link>{' '}
+                            <Link to="/summary">Summary</Link>{' '}
                         </li>
                         <li>
                             {' '}
-                            <Link to="">Board</Link>{' '}
+                            <Link to="/taskList">List</Link>{' '}
+                        </li>
+                        <li>
+                            {' '}
+                            <Link to="/dashboard/boards">Board</Link>{' '}
                         </li>
                         <li>
                             {' '}

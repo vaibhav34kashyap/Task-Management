@@ -194,3 +194,19 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
 .update_btn{
     text-align: center;
 }
+
+.action_icon button i {
+    font-size: 20px;
+}
+
+
+
+.addcomment {
+    width: 100%;
+    text-align: right;
+}
+.addcomment form {
+    column-gap: 7px;
+    display: flex;
+    margin-bottom: 15px;
+}
