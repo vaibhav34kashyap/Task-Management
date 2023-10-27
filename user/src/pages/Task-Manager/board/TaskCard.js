@@ -6,18 +6,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { addComment, getComment } from '../../../redux/addcomment/actions';
 import { useForm, SubmitHandler } from "react-hook-form"
 import { CKEditor } from '@ckeditor/ckeditor5-react';
+import UpdateTask from '../board/update';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
+import { addComment,getComment } from '../../../redux/addcomment/actions';
+import { getsingleMileStone } from '../../../redux/milestone/action';
 
 
 
 // import CustomAvatar from '../TableComponents/CustomAvatar'
 
 import moment from 'moment';
-
 
 const TaskInformation = styled.div`
     display: flex;
@@ -44,7 +44,15 @@ const TaskInformation = styled.div`
   
 `;
 
-const TaskCard = ({ item, index }) => {
+const TaskCard = ({ item, index,closeModal }) => {
+  const [editData, setEditData] = useState();
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
+  const handelUpdate = (data) => {
+    setEditData(data);
+    setOpenEditModal(true);
+    //dispatch(getsingleMileStone({id:editData?.projectInfo?._id,status:1}))
+};
   const {
     register,
     handleSubmit,
@@ -53,11 +61,15 @@ const TaskCard = ({ item, index }) => {
   } = useForm()
 
   const onSubmit = (e) => {
-
   }
+
+  const closeupdatemodal = (val) => {
+    closeModal("render");
+    setOpenEditModal(false);
+};
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
-  console.log("storedataaaaaa", store)
+  
 
   useEffect(() => {
     //dispatch(getComment())
@@ -67,10 +79,10 @@ const TaskCard = ({ item, index }) => {
     dispatch(deleteTask({ taskId: id }))
     dispatch(getAllTask())
   }
-  const addComect = (e, item) => {
+  const addComect = (e) => {
     let data = {
-      taskId: item.id,
-      comment: txtComment
+      taskId: e.txtTaskId,
+      comment: e.txtComment
     }
     dispatch(addComment(data));
   }
@@ -97,13 +109,20 @@ const TaskCard = ({ item, index }) => {
 
             <TaskInformation>
                 <div className='action_icon'>
-                <button type='button' onClick={handleShowData}><i class="uil-edit-alt m-0 p-0" ></i></button>
+                <button type='button'  onClick={() => {
+                                            handelUpdate(item);
+                                        }}><i class="uil-edit-alt m-0 p-0" ></i></button>
                 <button type='button' onClick={() => deleteData(item.id)} ><i class="mdi mdi-delete m-0 p-0"></i></button>
 
               </div>
               <div onClick={handleShow}>
                 <p>{item.summary}</p>
-                {item.description}
+                <div
+                                                                dangerouslySetInnerHTML={{
+                                                                    __html: item?.description,
+                                                                }}></div>
+                                                               
+               
                 <div className="secondary-details">
                   <p>
                     <span>
@@ -113,10 +132,12 @@ const TaskCard = ({ item, index }) => {
                 </div>
               </div>
               <p>{item.assignees?.assigneeInfo?.userName}</p>
-              <div>
-                <form onSubmit={() => addComect(e, item)}>
-                  <input name="txtComment" placeholder='add your comment' />
-                  <button type="submit" >add</button>
+              <div className='addcomment'>
+                <form onSubmit={handleSubmit(addComect)} >
+                  {/* <input name="txtComment" placeholder='add your comment' /> */}
+                  <input type="hidden" value={item.id}  {...register('txtTaskId')}/>
+                  <input placeholder="Add Comment" {...register('txtComment')} type="text"  class="form-control"/>
+                  <button type="submit" className='btn btn-info'>add</button>
                 </form>
 
               </div>
@@ -299,6 +320,8 @@ const TaskCard = ({ item, index }) => {
           </Button>
         </Modal.Footer> */}
       </Modal>
+      <UpdateTask modal={openEditModal}  closeModal={closeupdatemodal} editData={editData} />
+
 
     </>
   );
