@@ -12,16 +12,9 @@ import { updateTaskStatus } from '../../../../src/redux/task/action';
 import ToastHandle from '../../../constants/toaster/toaster';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
-
-import {
-    deleteTask,
-    getAllProjects,
-    getAllRoles,
-    getAllUsers,
-    getSingleSprint,
-    getsingleMileStone,
-} from '../../../redux/actions';
-
+import {getSingleSprint} from "../../../redux/sprint/action";
+import {getsingleMileStone} from "../../../redux/milestone/action";
+import {getAllProjects} from "../../../redux/projects/action";
 const Container = styled.div`
     display: flex;
 `;

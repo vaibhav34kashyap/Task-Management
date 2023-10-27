@@ -22,13 +22,22 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
     const loaderhandel = store?.UpdateTaskReducer;
     // disable previous date
     const today = new Date().toISOString().split('T')[0];
-    function findMinimumDate(date1, date2) {
+    // start date
+    function findMinimumStartDate(startdate1, startdate2) {
+        return new Date(Math.min(new Date(startdate1), new Date(startdate2)));
+    }
+    const startdate1 = new Date();
+    const startdate2 = editData?.startDate;
+    const minimumStartDate = findMinimumStartDate(startdate1, startdate2);
+    //
+    // end date
+    function findMinimumEndDate(date1, date2) {
         return new Date(Math.min(new Date(date1), new Date(date2)));
     }
     const date1 = new Date();
-    const date2 = editData?.startDate;
-    const minimumDate = findMinimumDate(date1, date2);
-    //
+    const date2 = editData?.dueDate;
+    const minimumEndDate = findMinimumEndDate(date1, date2);
+    // 
     const {
         register,
         handleSubmit,
@@ -286,7 +295,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
                                                     <Form.Control
                                                         type="date"
-                                                        min={handleDate(minimumDate)}
+                                                        min={handleDate(minimumStartDate)}
                                                         {...register('startDate', { required: true })}
                                                     />{' '}
                                                     {errors.startDate?.type === 'required' && (
@@ -302,7 +311,7 @@ const UpdateTask = ({ modal, closeModal, editData }) => {
                                                     </Form.Label>
                                                     <Form.Control
                                                         type="date"
-                                                        min={today}
+                                                        min={handleDate(minimumEndDate)}
                                                         {...register('dueDate', { required: true })}
                                                     />{' '}
                                                     {errors.dueDate?.type === 'required' && (
