@@ -329,6 +329,9 @@ option{
     .icon_s{
         font-size: 22px;
     }
-    
+    .list-group-item-action:active {
+        color: #6c757d !important;
+        background-color: #232931 !important;
+    }
     
     
