@@ -56,13 +56,15 @@ const Boards = (props) => {
  
 
   useEffect(() => {
-    dispatch(getAllTask())
+    dispatch(getAllTask({id:"" ,milestoneId:"",sprintId:""}))
+
     let body = {
       status :1,
       skip: 0    
   };
 
   dispatch(getAllProjects(body));
+  
     dispatch(getsingleMileStone({ id:"" ,activeStatus: 1 ,skip:0 , mileStoneId:""  }));
     dispatch(getAllMilstoneSprints({ activeStatus: 1, id: "" ,skip:0 }));
   
