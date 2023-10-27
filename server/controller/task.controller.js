@@ -425,7 +425,7 @@ const getTasksStatusOverview = async (req, res) => {
             status: 4,
             createdAt: { $gte: sevenDaysAgo }
         });
-        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: todoCount, inProgressCount, holdCount, doneCount });
+        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response:{ todoCount, inProgressCount, holdCount, doneCount} });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
