@@ -264,12 +264,12 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </div>
 
                                 <div className="dropdown mx-2">
-                                    <button className="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false"
+                                    <button className=" bg-white border-0 dropdown-toggle" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false"
                                         onClick={handleProject}>
                                         Projects
                                     </button>
-                                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li>
+                                    <ul className="dropdown-menu " aria-labelledby="dropdownMenuButton">
+                                        <li >
                                             {allProjects?.map((item, index) => (
                                                 <li className="dropdown-item"
                                                     onClick={onChangeProject}
