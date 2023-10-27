@@ -53,10 +53,10 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
     const [deleteId, setDeleteId] = useState();
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
-   const[openDetailPage,setOpenDetailPage]=useState(false)
-   const [detailData,setDetailData] = useState()
+    const [openDetailPage, setOpenDetailPage] = useState(false);
+    const [detailData, setDetailData] = useState();
     const store = useSelector((state) => state);
-  
+
     const dispatch = useDispatch();
     const deleteData = (id) => {
         setDeleteId(id);
@@ -71,21 +71,20 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
         setOpenEditModal(true);
     };
     const closeupdatemodal = (val) => {
-        closeModal("render");
+        closeModal('render');
         setOpenEditModal(false);
     };
-    const handleDetailPage=(data)=>{
-        setOpenDetailPage(true)
-        setDetailData(data)
-    }
-    const closeDetailPage=()=>{
-        setOpenDetailPage(false)
-    }
-   
-   
+    const handleDetailPage = (data) => {
+        setOpenDetailPage(true);
+        setDetailData(data);
+    };
+    const closeDetailPage = () => {
+        setOpenDetailPage(false);
+    };
+
     return (
         <>
-            <Draggable key={item.id} draggableId={item.id} index={index} >
+            <Draggable key={item.id} draggableId={item.id} index={index}>
                 {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                         <TaskInformation>
@@ -95,26 +94,32 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                                         class="uil-edit-alt m-0 p-0"
                                         onClick={() => {
                                             handelUpdate(item);
-                                        }}
-                                        ></i>
+                                        }}></i>
                                 </button>
                                 <button type="button" onClick={() => deleteData(item?.id)}>
                                     <i class="mdi mdi-delete m-0 p-0"></i>
                                 </button>
                             </div>
 
-                            <p 
-                            onClick={()=>{handleDetailPage(item)}}
-                            >{item.summary}</p>
+                            <p
+                                onClick={() => {
+                                    handleDetailPage(item);
+                                }}>
+                                {item.summary}
+                            </p>
                             <p>
                                 <div
                                     dangerouslySetInnerHTML={{
                                         __html: item?.description,
                                     }}></div>
                             </p>
+                            <div className=" d-flex">
+                                <h5 className="m-0 p-0"> Assignee :</h5>
+                                <p className="ms-2 p-0">{item?.assignees?.assigneeInfo?.userName}</p>
+                            </div>
                             <div className="secondary-details">
                                 <p>
-                                    <span>{item?.createdAt ? moment(item?.createdAt).format('ll') : ''}</span>
+                                    <span>{item?.startDate ? moment(item?.startDate).format('ll') : ''}</span>
                                 </p>
                             </div>
                         </TaskInformation>
@@ -137,11 +142,10 @@ const TaskCard = ({ item, index, Column, closeModal }) => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-           
+
             <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
-            <TaskDetailPage modal={openDetailPage} editData={detailData} closeModal={closeDetailPage}/>
+            <TaskDetailPage modal={openDetailPage} editData={detailData} closeModal={closeDetailPage} />
         </>
-        
     );
 };
 

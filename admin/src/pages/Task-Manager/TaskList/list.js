@@ -9,6 +9,8 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { Modal } from 'react-bootstrap';
 import ToastHandle from '../../../constants/toaster/toaster';
+import Create from './modal/create'; 
+import { getAllRoles, getAllUsers } from '../../../redux/actions';
 const TaskList = () => {
     const { projectId, milestoneId, spriteId } = useParams();
     const [skip, setSkip] = useState(1);
@@ -101,7 +103,10 @@ const TaskList = () => {
     useEffect(() => {
         dispatch(getsingleSprintTask({ id: '', activeStatus: true, skip: 1 }));
     }, [render]);
-
+    useEffect(() => {
+        dispatch(getAllRoles());
+        dispatch(getAllUsers());
+    }, []);
     useEffect(() => {
         if (deletehandle?.status == 200) {
             ToastHandle('success', deletehandle?.message);
@@ -158,7 +163,7 @@ const TaskList = () => {
 
                                                     <th> Description</th>
                                                     <th> Summary</th>
-                                                    
+
                                                     <th>Assignee</th>
                                                     <th>Reporter</th>
                                                     <th>Priority</th>
@@ -181,11 +186,9 @@ const TaskList = () => {
                                                             />
                                                         </td>
 
-                                                     
                                                         <td>{item?.assignees?.assigneeInfo?.userName}</td>
                                                         <td>{item?.assignees?.reporterInfo?.role}</td>
                                                         <td>
-                                                            
                                                             {item?.priority == 1
                                                                 ? 'High'
                                                                 : '' || item?.priority == 2
@@ -243,14 +246,12 @@ const TaskList = () => {
                 </Card.Body>
             </Card>
 
-            {/* <Create
+            <Create
                 modal={openModal}
                 CloseModal={CloseModal}
-                projectid={projectId}
-                milestoneid={milestoneId}
-                sprintid={spriteId}
+                
             />
-            <Update modal={editopenModal} CloseModal={CloseUpdateModal} editData={editData} /> */}
+            {/* <Update modal={editopenModal} CloseModal={CloseUpdateModal} editData={editData} /> */}
             {/* delete modal */}
             <Modal show={statusModal} onHide={() => setStatusModal(false)}>
                 <Modal.Body>
