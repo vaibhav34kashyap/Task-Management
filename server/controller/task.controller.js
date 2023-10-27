@@ -400,14 +400,31 @@ const getPriorityTasks = async (req, res) => {
     }
 }
 
-// Get Status overview of tasks
+// Get Status overview Count of tasks
 const getTasksStatusOverview = async (req, res) => {
     try {
-        const todoCount = await taskModel.countDocuments({ status: 1 });
-        const inProgressCount = await taskModel.countDocuments({ status: 2 });
-        const holdCount = await taskModel.countDocuments({ status: 3 });
-        const doneCount = await taskModel.countDocuments({ status: 4 });
+        const now = new Date();
+        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // Calculate the date 7 days ago
 
+        const todoCount = await taskModel.countDocuments({
+            status: 1,
+            createdAt: { $gte: sevenDaysAgo }
+        });
+
+        const inProgressCount = await taskModel.countDocuments({
+            status: 2,
+            createdAt: { $gte: sevenDaysAgo }
+        });
+
+        const holdCount = await taskModel.countDocuments({
+            status: 3,
+            createdAt: { $gte: sevenDaysAgo }
+        });
+
+        const doneCount = await taskModel.countDocuments({
+            status: 4,
+            createdAt: { $gte: sevenDaysAgo }
+        });
         return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: todoCount, inProgressCount, holdCount, doneCount });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
