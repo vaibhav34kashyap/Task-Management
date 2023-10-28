@@ -248,43 +248,7 @@ function* TaskStatusFunction({ payload }) {
 
     }
 }
-function* TaskSummaryFunction({ payload }) {
-    try {
-        yield put({
-            type: TASK_TYPES.GET_TASK_SUMMARY_LOADING,
-            payload: {}
-        })
-        const response = yield call(GetTaskSummaryApi, { payload });
-        console.log("dssfksf",payload)
-        if (response.data.status) {
-            yield put({
-                type: TASK_TYPES.GET_TASK_SUMMARY_SUCCESS,
-                payload: { ...response.data },
-            });
-            // yield put({
-            //     type: TASK_TYPES.GET_TASK_SUMMARY_RESET,
-            //     payload: {},
-            // });
-        }
-        else {
-            yield put({
-                type: TASK_TYPES.GET_TASK_SUMMARY_ERROR,
-                payload: { ...response.data }
-            });
-        }
 
-    } catch (error) {
-        yield put({
-            type: TASK_TYPES.GET_TASK_SUMMARY_ERROR,
-            payload: { message: error?.message }
-        });
-        yield put({
-            type: TASK_TYPES.GET_TASK_SUMMARY_RESET,
-            payload: {},
-        });
-
-    }
-}
 export function* createTaskSaga(): any {
     yield takeEvery(TASK_TYPES.CREATE_TASK, createTaskFunction);
 }
@@ -306,9 +270,7 @@ export function* updateTaskStatusSaga(): any {
 export function* TaskStatusSaga(): any {
     yield takeEvery(TASK_TYPES.TASK_STATUS, TaskStatusFunction);
 }
-export function* TaskSummarySaga(): any {
-    yield takeEvery(TASK_TYPES.GET_TASK_SUMMARY, TaskSummaryFunction);
-}
+
 function* AllTaskSaga(): any {
     yield all([
         fork(createTaskSaga),
@@ -318,7 +280,7 @@ function* AllTaskSaga(): any {
         fork(deleteTaskSaga),
         fork(updateTaskStatusSaga),
         fork(TaskStatusSaga),
-        fork(TaskSummarySaga)
+        
     ])
 }
 export default AllTaskSaga;
