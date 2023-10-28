@@ -243,28 +243,3 @@ export const TaskStatusReducer= (state = STATUS_TASK_INITIAL_STATE, action) => {
     }
 };
 
-export const getTaskSummaryReducer = (state = GET_TASK_SUMMARY_INITIAL_STATE, action) => {
-    switch (action.type) {
-        case TASK_TYPES.GET_TASK_SUMMARY_LOADING:
-            return {
-                data: GET_TASK_SUMMARY_INITIAL_STATE.data,
-                loading: true,
-            };
-        case TASK_TYPES.GET_TASK_SUMMARY_SUCCESS:
-            return {
-                data: action?.payload,
-                loading: false,
-            };
-
-
-        case TASK_TYPES.GET_TASK_SUMMARY_ERROR:
-            return {
-                data: [],
-                loading: false,
-                message: action?.payload,
-            };
-        default:
-            return { ...state };
-
-    }
-};
