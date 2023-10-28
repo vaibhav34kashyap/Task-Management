@@ -2,10 +2,11 @@ import React,{useEffect}from 'react'
 import { Card, ProgressBar } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Chart from 'react-apexcharts';
-import { getTaskSummmaryDetail } from '../../../redux/task/action';
+import { getTaskSummmaryDetail } from '../../../redux/Summary/action';
 const Summary = () => {
   const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    const taskSummary = store?.getTaskSummaryReducer?.data?.response
     useEffect(() => {
      dispatch(getTaskSummmaryDetail())
     }, [])
