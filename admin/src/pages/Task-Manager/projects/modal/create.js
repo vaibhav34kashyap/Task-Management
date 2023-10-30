@@ -30,7 +30,7 @@ const Create = ({ modal, closeModal }) => {
     const date1 = new Date();
     const date2 = selectedenDate;
     const minimumEndDate = findMinimumEndDate(date1, date2);
-    console.log(minimumEndDate,"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+    console.log(minimumEndDate,"mindate")
     // 
     const {
         register,
@@ -176,6 +176,7 @@ const Create = ({ modal, closeModal }) => {
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>
+                                        
                                     </Col>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
@@ -213,7 +214,7 @@ const Create = ({ modal, closeModal }) => {
                                             />
                                             {errors.startDate?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
-                                            )}
+                                            )} 
                                         </Form.Group>
                                     </Col>
                                     <Col lg={6}>
