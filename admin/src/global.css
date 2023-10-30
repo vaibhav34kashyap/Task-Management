@@ -379,10 +379,13 @@ option {
     border-radius:30px !important;
 }
 .highlightOption{
-    background:#39afd1 !important;
+   background-color: white !important;
+   color:black !important;
 }
+
 .option:hover{
     background:#39afd1 !important;
+    color:white
 
 }
 .closeIcon {
@@ -391,4 +394,11 @@ option {
 .searchWrapper{
     height: 37px !important ;
     overflow: overlay !important;
+}
+.checkbox {
+    /* margin-right: 10px; */
+    display: none !important;
+}
+.hover_bg:hover{
+    background-color:#39afd1 !important;
 }
