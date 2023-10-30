@@ -377,6 +377,10 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                 </div>
                 <div className="taskinfo">
                     <ul>
+                    <li>
+                            {' '}
+                            <Link to="/summary">Summary</Link>{' '}
+                        </li>
                         <li>
                             {' '}
                             <Link to="/taskList">List</Link>{' '}
