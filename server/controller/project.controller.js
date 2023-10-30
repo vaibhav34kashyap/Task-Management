@@ -5,7 +5,8 @@ const addProject = async (req, res) => {
     try {
         const { projectName, clientName, technology, startDate, endDate, projectDesc, projectType } = req.body;
 
-        const existingProjectName = await projectModel.findOne({ projectName: projectName });
+        const projectNameRegex = new RegExp(`^${projectName}$`, 'i');
+        const existingProjectName = await projectModel.findOne({ projectName: projectNameRegex });
         if (existingProjectName) {
             return res.status(200).json({ status: '400', message: 'Project Name Already exist' });
         } else {

@@ -192,6 +192,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
     const handleProject = () => {
         setmilestoneid(false);
+        
         let data = {
             status: 1,
             skip: 1,
@@ -200,6 +201,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     };
     const onChangeProject = (e) => {
         setsprint(false);
+        
         dispatch(getProjectId(e.target.value));
         setProjectName(e.target.value);
         const id = e.target.value;
@@ -210,14 +212,18 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
     };
     const onChangeMilestone = (e) => {
+        
         dispatch(getMilestonetId(e.target.value))
         const id = e?.target.value;
         setsprint(true);
+
         dispatch(getSingleSprint({ activeStatus: 1, id: id, skip: 0 }));
 
     };
     const sprinthandel = (e) => {
         dispatch(getSprintId(e.target.value));
+        setsprint(false);
+        
 
     }
     return (
@@ -264,12 +270,12 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </div>
 
                                 <div className="dropdown mx-2">
-                                    <button className="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false"
+                                    <button className=" bg-white border-0 dropdown-toggle" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false"
                                         onClick={handleProject}>
                                         Projects
                                     </button>
-                                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li>
+                                    <ul className="dropdown-menu " aria-labelledby="dropdownMenuButton">
+                                        <li >
                                             {allProjects?.map((item, index) => (
                                                 <li className="dropdown-item"
                                                     onClick={onChangeProject}
@@ -285,7 +291,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                                 <ul className="dropdown-menu dropdown-submenu">
                                                     <li>
                                                         {getsingleMilestoneData?.map((item, index) => (
-                                                            <option onClick={onChangeMilestone} key={index} value={item?._id}
+                                                            <option className="project_opt" onClick={onChangeMilestone} key={index} value={item?._id}
                                                             >
                                                                 {item?.title}
                                                             </option>
