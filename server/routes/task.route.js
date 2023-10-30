@@ -12,6 +12,8 @@ taskRouter.put("/updateTaskStatus", verifyUser, tasks.updateTaskStatus);
 taskRouter.put("/updateTaskActiveStatus", verifyAdmin, tasks.updateTaskActiveStatus);
 taskRouter.get("/getTasksAccToStatus", verifyUser, tasks.getTasksAccToStatus);
 taskRouter.get("/getPriorityTasks", tasks.getPriorityTasks);
-taskRouter.get("/getTasksStatusOverview", tasks.getTasksStatusOverview);
+taskRouter.get("/getTasksStatusCount", tasks.getTasksStatusCount);
+taskRouter.get("/getTasksCount", tasks.getTasksCount);
+taskRouter.get("/getTasksWeekCount", tasks.getTasksWeekCount);
 
 module.exports = taskRouter;
