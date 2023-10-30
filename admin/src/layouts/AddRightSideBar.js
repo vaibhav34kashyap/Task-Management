@@ -21,23 +21,22 @@ export default function RightBar(props) {
     // const sucesshandel =store?.createTaskReducer?.data
     const today = new Date().toISOString().split('T')[0];
     const dispatch = useDispatch();
-
     const onSubmit = (e) => {
-        const dataList = {
-            projectId: projectId,
-            milestoneId: milestoneId,
-            sprintId: sprintid,
-            summary: e.Summary,
-            description: description,
-            assigneeId: e.Assignee,
-            reporterId: e.Report,
-            priority: e.priority,
-            startDate: e.start_date,
-            dueDate: e.last_date,
-            status: 1,
-        };
+        let body = new FormData();
+        body.append("projectId", projectId)
+        body.append("milestoneId", milestoneId)
+        body.append("sprintId", sprintid)
+        body.append("summary", e.Summary)
+        body.append("description",description)
+        body.append("assigneeId",e.Assignee)
+        body.append("reporterId",e.Report)
+        body.append("priority", e.priority)
+        body.append("startDate",e.start_date)
+        body.append("dueDate",e.last_date)
+        body.append("status",1)
+        body.append("attachment",e.Attachment[0])
         if (projectId !== '' && milestoneId !== '' && sprintid !== '') {
-            dispatch(createTask(dataList));
+            dispatch(createTask(body));
         } else {
             alert('plsease select project');
         }
@@ -224,6 +223,19 @@ export default function RightBar(props) {
                                             type="text"
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-2">
+                                        <label class="form-label" for="exampleForm.ControlTextarea1">
+                                        Attachment<span class="text-danger">*</span>:
+                                        </label>
+                                        <input
+                                            type="file"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('Attachment')}
                                         />
                                     </div>
                                 </div>
