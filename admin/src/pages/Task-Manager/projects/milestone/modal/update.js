@@ -17,19 +17,35 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 const Update = ({ modal, closeModal, editData }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    const sucesshandel = store?.updateMilestone
+    const sucesshandel = store?.updateMilestone;
+    // disable previous date
+    const today = new Date().toISOString().split('T')[0];
+    // start date
+    function findMinimumStartDate(startdate1, startdate2) {
+        return new Date(Math.min(new Date(startdate1), new Date(startdate2)));
+    }
+    const startdate1 = new Date();
+    const startdate2 = editData?.startDate;
+    const minimumStartDate = findMinimumStartDate(startdate1, startdate2);
+    //
+    // end date
+    function findMinimumEndDate(date1, date2) {
+        return new Date(Math.min(new Date(date1), new Date(date2)));
+    }
+    const date1 = new Date();
+    const date2 = editData?.completionDate;
+    const minimumEndDate = findMinimumEndDate(date1, date2);
+    //
     const [description, setDescription] = useState('');
-    const [editorState, setEditorState] = useState(
-        () => EditorState.createEmpty(),
-    );
-    console.log(editorState, 'stttttt')
+    const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+    console.log(editorState, 'stttttt');
     useEffect(() => {
         reset({
             title: editData?.title,
-            startDate: handleDate(editData?.start_date),
-            endDate: handleDate(editData?.completion_date),
-
-        });setDescription(editData?.description);
+            startDate: handleDate(editData?.startDate),
+            endDate: handleDate(editData?.completionDate),
+        });
+        setDescription(editData?.description);
     }, [modal]);
     const handleDate = (data) => {
         let date = new Date(data);
@@ -41,14 +57,14 @@ const Update = ({ modal, closeModal, editData }) => {
     };
     const onSubmit = (data) => {
         let body = {
-            _id: editData?._id,
+            milestoneId: editData?._id,
             title: data?.title,
             description: description,
-            start_date: data?.startDate,
-            completion_date: data?.endDate,
+            startDate: data?.startDate,
+            completionDate: data?.endDate,
         };
-        dispatch(updateMileStone(body)); closeModal('render');
-
+        dispatch(updateMileStone(body));
+        closeModal('render');
     };
 
     const {
@@ -60,12 +76,12 @@ const Update = ({ modal, closeModal, editData }) => {
         formState: { errors },
     } = useForm();
     const CloseModal = () => {
-        closeModal()
-    }
+        closeModal();
+    };
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
             // console.log(sucesshandel, sucesshandel?.message);
-            ToastHandle('success', "Updated Successfully");
+            ToastHandle('success', 'Updated Successfully');
             closeModal('render');
         } else if (sucesshandel?.data?.status == 400) {
             ToastHandle('error', sucesshandel?.data?.message);
@@ -75,7 +91,7 @@ const Update = ({ modal, closeModal, editData }) => {
     }, [sucesshandel]);
     return (
         <>
-            <Modal show={modal} onHide={CloseModal} >
+            <Modal show={modal} onHide={CloseModal}>
                 <Row className="m-0 p-0">
                     <Col lg={12}>
                         <Row>
@@ -111,25 +127,27 @@ const Update = ({ modal, closeModal, editData }) => {
                                     </Form.Group>
                                 </Col>
                                 <Col lg={12}>
-                                    <Form.Group className="mb-2 border d-flex align-content-center flex-column" controlId="exampleForm.ControlTextarea1">
-                                        <Form.Label className='mb-0'>
+                                    <Form.Group
+                                        className="mb-2 border d-flex align-content-center flex-column"
+                                        controlId="exampleForm.ControlTextarea1">
+                                        <Form.Label className="mb-0">
                                             Description <span className="text-danger">*</span>:
                                         </Form.Label>
                                         <CKEditor
-                                                config={{
-                                                    ckfinder: {
-                                                        // Upload the images to the server using the CKFinder QuickUpload command.
-                                                        uploadUrl:
-                                                            'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
-                                                    },
-                                                }}
-                                                editor={ClassicEditor}
-                                                data={description}
-                                                onChange={(event, editor) => {
-                                                    const data = editor.getData();
-                                                    setDescription(data);
-                                                }}
-                                            />
+                                            config={{
+                                                ckfinder: {
+                                                    // Upload the images to the server using the CKFinder QuickUpload command.
+                                                    uploadUrl:
+                                                        'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
+                                                },
+                                            }}
+                                            editor={ClassicEditor}
+                                            data={description}
+                                            onChange={(event, editor) => {
+                                                const data = editor.getData();
+                                                setDescription(data);
+                                            }}
+                                        />
                                     </Form.Group>
                                 </Col>
 
@@ -140,6 +158,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                         </Form.Label>
                                         <Form.Control
                                             type="date"
+                                            min={handleDate(minimumStartDate)}
                                             {...register('startDate', { required: true })}
                                             placeholder="Please start Date "
                                         />
@@ -155,6 +174,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                         </Form.Label>
                                         <Form.Control
                                             type="date"
+                                            min={handleDate(minimumEndDate)}
                                             {...register('endDate', { required: true })}
                                             placeholder="Please end Date"
                                         />
@@ -177,10 +197,9 @@ const Update = ({ modal, closeModal, editData }) => {
                         </Form>
                     </Card>
                 </Modal.Body>
-
             </Modal>
         </>
-    )
-}
+    );
+};
 
-export default Update
+export default Update;

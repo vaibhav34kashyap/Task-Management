@@ -177,12 +177,6 @@ export const updateTaskStatus = (state = UPDATE_STATUS_TASK_INITIAL_STATE, actio
                 data: action?.payload,
                 loading: false,
             };
-        case TASK_TYPES.UPDATE_TASK_STATU_RESET:
-            return {
-                data: UPDATE_STATUS_TASK_INITIAL_STATE.data,
-                loading: false
-            }
-
         case TASK_TYPES.UPDATE_TASK_STATU_ERROR:
             return {
                 data: [],

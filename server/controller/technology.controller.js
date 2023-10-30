@@ -1,7 +1,6 @@
 const techCategoryModel = require('../models/techCategory.model');
 const technologyModel = require('../models/technology.model');
 
-
 // Add  a Technology category
 const addTechCategory = async (req, res) => {
     try {
@@ -17,13 +16,12 @@ const addTechCategory = async (req, res) => {
 // Get all Technology category
 const getTechCategory = async (req, res) => {
     try {
-        const result = await techCategoryModel.find({ status: req.query.status });
+        const result = await techCategoryModel.find({ status: req.query.status }).sort({ createdAt: -1 });
         return res.status(200).json({ status: '200', message: 'Tech Category data feteched Successfully', response: result })
     } catch (err) {
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
     }
 }
-
 
 // Update a Technology category
 const updateTechCategory = async (req, res) => {
@@ -35,7 +33,6 @@ const updateTechCategory = async (req, res) => {
     }
 }
 
-
 // Update status of a Technology category
 const updateTechCategoryStatus = async (req, res) => {
     try {
@@ -46,11 +43,12 @@ const updateTechCategoryStatus = async (req, res) => {
     }
 }
 
+
 // Add  a Technology
 const addTechnology = async (req, res) => {
     try {
         const result = await technologyModel.create({
-            techCategory_id : req.body.techCategory_id,
+            techCategory_id: req.body.techCategory_id,
             techName: req.body.techName
         });
         return res.status(200).json({ status: '200', message: 'Technology Added Successfully', response: result })
@@ -62,13 +60,12 @@ const addTechnology = async (req, res) => {
 // Get all Technologies
 const getTechnology = async (req, res) => {
     try {
-        const result = await technologyModel.find({ status: req.query.status }).populate('techCategory_id');
+        const result = await technologyModel.find({ status: req.query.status }).populate('techCategory_id').sort({ createdAt: -1 });
         return res.status(200).json({ status: '200', message: 'Technology data feteched Successfully', response: result })
     } catch (err) {
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
     }
 }
-
 
 // Update a Technology
 const updateTechnology = async (req, res) => {
@@ -79,7 +76,6 @@ const updateTechnology = async (req, res) => {
         return res.status(200).json({ status: '500', message: 'Something went wrong' })
     }
 }
-
 
 // Update status of a Technology
 const updateTechnologyStatus = async (req, res) => {
@@ -94,16 +90,15 @@ const updateTechnologyStatus = async (req, res) => {
 // Get all technologies of a techCategory
 const getTechCategoryTechnologies = async (req, res) => {
     try {
-        const result = await technologyModel.find({ $and: [{ techCategory_id: req.query.id }, { status: req.query.status }] });
+        const result = await technologyModel.find({ $and: [{ techCategory_id: req.query.id }, { status: req.query.status }] }).sort({ createdAt: -1 });
         return res.status(200).json({ status: "200", message: "Technologies fetched successfully", Response: result });
     } catch (error) {
-        console.error(error);
         return res.status(500).json({ status: '500', message: 'Something went wrong' });
     }
 }
 
 
-module.exports = { 
+module.exports = {
     addTechCategory, getTechCategory, updateTechCategory, updateTechCategoryStatus,
     addTechnology, getTechnology, updateTechnology, updateTechnologyStatus, getTechCategoryTechnologies
- }
+}

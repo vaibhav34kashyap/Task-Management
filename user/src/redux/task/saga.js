@@ -185,10 +185,6 @@ function* updateTaskStatusFunction({ payload }) {
                 type: TASK_TYPES.UPDATE_TASK_STATU_SUCCESS,
                 payload: { ...response.data },
             });
-            yield put({
-                type: TASK_TYPES.UPDATE_TASK_STATU_RESET,
-                payload: {},
-            });
         }
         else {
             yield put({

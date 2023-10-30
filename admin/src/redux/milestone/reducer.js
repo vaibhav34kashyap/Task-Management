@@ -196,3 +196,16 @@ export const getSigleMileStone = (state = GET_SINGLE_MILESTONE_INTIAL_STATE, act
 
     }
 };
+export const getMilestoneId = (state = {data:""}, action) => {
+    switch (action.type) {
+        case "milestoneId":
+            return {
+                data: action.payload,
+                
+            };
+      
+        default:
+            return { ...state };
+
+    }
+};

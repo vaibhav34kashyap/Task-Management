@@ -14,7 +14,9 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
     const [description, setDescription] = useState('');
     const store = useSelector((state) => state);
     const errorhandel = store?.createTaskReducer;
-    
+      // disable previous date
+      const today = new Date().toISOString().split('T')[0];
+      //
     const {
         register,
         handleSubmit,
@@ -26,9 +28,9 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
 
     const onSubmit = (val) => {
         let body = {
-            sprintId: val?.Sprint,
-            milestoneId: val?.Milestone,
-            projectId: val?.projectname,
+            sprintId: sprintid,
+            milestoneId: milestoneid,
+            projectId: projectid,
             description: description,
             summary: val?.summary,
             startDate: val?.startdate,
@@ -114,7 +116,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
 
                                                 <Form.Select {...register('Milestone', { required: true, disabled:true })}>
                                                     {/* <option value={''}>--Select--</option> */}
-                                                    {store?.getSigleMileStone?.data?.Response?.map((ele, ind) => (
+                                                    {store?.getSigleMileStone?.data?.response?.map((ele, ind) => (
                                                         <option value={ele?._id}> {ele?.title} </option>
                                                     ))}
                                                 </Form.Select>
@@ -253,6 +255,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                 </Form.Label>
                                                 <Form.Control
                                                     type="date"
+                                                    min={today}
                                                     {...register('startdate', { required: true })}
                                                 />{' '}
                                                 {errors.estimatedate?.type === 'required' && (
@@ -268,6 +271,7 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                 </Form.Label>
                                                 <Form.Control
                                                     type="date"
+                                                    min={today}
                                                     {...register('dueDate', { required: true })}
                                                 />{' '}
                                                 {errors.dueDate?.type === 'required' && (

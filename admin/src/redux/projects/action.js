@@ -10,6 +10,10 @@ export const getAllProjects= (data): AuthAction => ({
     type: ProjectTypes.GET_PROJECT,
     payload: data
 })
+export const getProjectId= (data): AuthAction => ({
+    type: "projectId",
+    payload: data
+})
 export const updateProject = (data): AuthAction => ({
     type: ProjectTypes.UPDATE_PROJECT_DETAILS,
     payload: data

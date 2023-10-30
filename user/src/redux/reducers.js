@@ -32,6 +32,7 @@ import {
     UpdateTechnologyCategoryReducer,
     deleteTechnologyCategory,
 } from './technology/reducer';
+import { getAddCommentreducer,addComments } from './addcomment/reducers';
 export default (combineReducers({
     Auth,
     Layout,
@@ -68,5 +69,7 @@ export default (combineReducers({
     UpdateTechnologyCategoryReducer,
     deleteTechnologyCategory,
     getAllRoles,
-    deleteTask
+    deleteTask,
+    getAddCommentreducer,
+    addComments
 }): any);

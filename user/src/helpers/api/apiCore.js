@@ -8,8 +8,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.baseURL = config.API_URL;
 
 // intercepting to capture errors
-axios.interceptors.response.use(
-    (response) => {
+axios.interceptors.response.use((response) => {
         return response;
     },
     (error) => {

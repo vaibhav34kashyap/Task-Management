@@ -16,6 +16,9 @@ const Create = ({ modal, closeModal }) => {
     const [description, setDescription] = useState('');
     const sucesshandel = store?.addAllmilstones;
     const loaderhandel = store?.addAllmilstones;
+    // disable previous date
+    const today = new Date().toISOString().split('T')[0];
+    //
     const { id } = useParams();
     const {
         register,
@@ -28,12 +31,12 @@ const Create = ({ modal, closeModal }) => {
     const dispatch = useDispatch();
     const onSubmit = (data) => {
         const milStones = {
-            project_id: id,
+            projectId: id,
             title: data.Title,
             description: description,
-            start_date: data.Start_date,
-            completion_date: data.End_date,
-            status: 'new',
+            startDate: data.Start_date,
+            completionDate: data.End_date,
+            
         };
         dispatch(addAllmilstones(milStones));
         closeModal();
@@ -119,7 +122,11 @@ const Create = ({ modal, closeModal }) => {
                                                 {' '}
                                                 Start date <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control type="date" {...register('Start_date', { required: true })} />{' '}
+                                            <Form.Control
+                                                type="date"
+                                                min={today}
+                                                {...register('Start_date', { required: true })}
+                                            />
                                             {errors.Start_date?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
@@ -131,7 +138,11 @@ const Create = ({ modal, closeModal }) => {
                                                 {' '}
                                                 End date <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control type="date" {...register('End_date', { required: true })} />{' '}
+                                            <Form.Control
+                                                type="date"
+                                                min={today}
+                                                {...register('End_date', { required: true })}
+                                            />{' '}
                                             {errors.End_date?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}

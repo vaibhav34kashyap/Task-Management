@@ -14,11 +14,30 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const Update = ({ modal, CloseModal, editData }) => {
     console.log(editData, 'update');
+
     const [description, setDescription] = useState('');
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const sucesshandel = store?.UpdateTaskReducer;
     const loaderhandel = store?.UpdateTaskReducer;
+    // disable previous date
+    const today = new Date().toISOString().split('T')[0];
+    // start date
+    function findMinimumStartDate(startdate1, startdate2) {
+        return new Date(Math.min(new Date(startdate1), new Date(startdate2)));
+    }
+    const startdate1 = new Date();
+    const startdate2 = editData?.startDate;
+    const minimumStartDate = findMinimumStartDate(startdate1, startdate2);
+    //
+    // end date
+    function findMinimumEndDate(date1, date2) {
+        return new Date(Math.min(new Date(date1), new Date(date2)));
+    }
+    const date1 = new Date();
+    const date2 = editData?.dueDate;
+    const minimumEndDate = findMinimumEndDate(date1, date2);
+    //
     const {
         register,
         handleSubmit,
@@ -54,11 +73,11 @@ const Update = ({ modal, CloseModal, editData }) => {
             Milestone: editData?.milestoneId,
             projectname: editData?.projectId,
             Sprint: editData?.sprintId,
-            startDate: handleDate(editData?.createdAt),
+            startDate: handleDate(editData?.startDate),
             dueDate: handleDate(editData?.dueDate),
             summary: editData?.summary,
-            Assignee: editData?.assigneeId,
-            Reporter: editData?.reporterId,
+            Assignee: editData?.assignees?.assigneeId,
+            Reporter: editData?.assignees?.reporterInfo?._id,
             priority: editData?.priority,
             status: editData?.status,
         });
@@ -117,7 +136,11 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         Project<span className="text-danger">*</span>:
                                                     </Form.Label>
 
-                                                    <Form.Select {...register('projectname', { required: true ,disabled:true })}>
+                                                    <Form.Select
+                                                        {...register('projectname', {
+                                                            required: true,
+                                                            disabled: true,
+                                                        })}>
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getProject?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.projectName} </option>
@@ -135,9 +158,10 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         Milestone<span className="text-danger">*</span>:
                                                     </Form.Label>
 
-                                                    <Form.Select {...register('Milestone', { required: true ,disabled:true})}>
+                                                    <Form.Select
+                                                        {...register('Milestone', { required: true, disabled: true })}>
                                                         {/* <option value={''}>--Select--</option> */}
-                                                        {store?.getSigleMileStone?.data?.Response?.map((ele, ind) => (
+                                                        {store?.getSigleMileStone?.data?.response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.title} </option>
                                                         ))}
                                                     </Form.Select>
@@ -156,7 +180,8 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         Sprint <span className="text-danger">*</span>:
                                                     </Form.Label>
 
-                                                    <Form.Select {...register('Sprint', { required: true ,disabled:true })}>
+                                                    <Form.Select
+                                                        {...register('Sprint', { required: true, disabled: true })}>
                                                         {/* <option value={''}>--Select--</option> */}
                                                         {store?.getAllSingleSprints?.data?.Response?.map((ele, ind) => (
                                                             <option value={ele?._id}> {ele?.sprintName} </option>
@@ -194,20 +219,20 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         Description<span className="text-danger">*</span>:
                                                     </Form.Label>
                                                     <CKEditor
-                                                config={{
-                                                    ckfinder: {
-                                                        // Upload the images to the server using the CKFinder QuickUpload command.
-                                                        uploadUrl:
-                                                            'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
-                                                    },
-                                                }}
-                                                editor={ClassicEditor}
-                                                data={description}
-                                                onChange={(event, editor) => {
-                                                    const data = editor.getData();
-                                                    setDescription(data);
-                                                }}
-                                            />
+                                                        config={{
+                                                            ckfinder: {
+                                                                // Upload the images to the server using the CKFinder QuickUpload command.
+                                                                uploadUrl:
+                                                                    'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
+                                                            },
+                                                        }}
+                                                        editor={ClassicEditor}
+                                                        data={description}
+                                                        onChange={(event, editor) => {
+                                                            const data = editor.getData();
+                                                            setDescription(data);
+                                                        }}
+                                                    />
                                                 </Form.Group>
                                             </Col>
                                             <Col lg={6}>
@@ -278,6 +303,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                     </Form.Label>
                                                     <Form.Control
                                                         type="date"
+                                                        min={handleDate(minimumStartDate)}
                                                         {...register('startDate', { required: true })}
                                                     />{' '}
                                                     {errors.startDate?.type === 'required' && (
@@ -293,6 +319,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                     </Form.Label>
                                                     <Form.Control
                                                         type="date"
+                                                        min={handleDate(minimumEndDate)}
                                                         {...register('dueDate', { required: true })}
                                                     />{' '}
                                                     {errors.dueDate?.type === 'required' && (
@@ -314,8 +341,8 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                         <option>-------select----</option>
                                                         <option value="1">todo</option>
                                                         <option value="2">inProgress</option>
-                                                        <option value="3">done</option>
-                                                        <option value="4">review</option>
+                                                        <option value="3">Hold</option>
+                                                        <option value="4">Done</option>
                                                     </Form.Select>
                                                     {errors.status?.type === 'required' && (
                                                         <span className="text-danger"> This feild is required *</span>

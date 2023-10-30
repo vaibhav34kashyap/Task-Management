@@ -20,6 +20,24 @@ const Update = ({ modal, closeModal, editData }) => {
     const [description, setDescription] = useState('');
     const sucesshandel = store?.updateSprint;
     const loaderhandel = store?.updateSprint;
+    // disable previous date
+    const today = new Date().toISOString().split('T')[0];
+     // start date
+     function findMinimumStartDate(startdate1, startdate2) {
+        return new Date(Math.min(new Date(startdate1), new Date(startdate2)));
+    }
+    const startdate1 = new Date();
+    const startdate2 = editData?.startDate;
+    const minimumStartDate = findMinimumStartDate(startdate1, startdate2);
+    //
+    // end date
+    function findMinimumEndDate(date1, date2) {
+        return new Date(Math.min(new Date(date1), new Date(date2)));
+    }
+    const date1 = new Date();
+    const date2 = editData?.endDate;
+    const minimumEndDate = findMinimumEndDate(date1, date2);
+    //
     const {
         register,
         handleSubmit,
@@ -33,7 +51,7 @@ const Update = ({ modal, closeModal, editData }) => {
     };
     const onSubmit = (data) => {
         let body = {
-            _id: editData?._id,
+            sprintId: editData?._id,
             sprintName: data?.title,
             sprintDesc: description,
             startDate: data?.startDate,
@@ -41,11 +59,6 @@ const Update = ({ modal, closeModal, editData }) => {
         };
         console.log('editsprit', body);
         dispatch(updateSprint(body));
-    };
-    //editor state
-    const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
-    const textEditorOnchange = (e) => {
-        console.log(e, 'edi');
     };
     useEffect(() => {
         reset({
@@ -143,6 +156,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
+                                                min={handleDate(minimumStartDate)}
                                                 {...register('startDate', { required: true })}
                                                 placeholder="Please start Date "
                                             />
@@ -158,6 +172,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
+                                                min={handleDate(minimumEndDate)}
                                                 {...register('endDate', { required: true })}
                                                 placeholder="Please end Date"
                                             />
