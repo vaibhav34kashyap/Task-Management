@@ -17,7 +17,7 @@ export function getSingleSprintApi(data): any {
 }
 // -----------------------------------------------------
 export function getAllMilstoneSprints(data): any {
-    return api.get( URL.getAllMilstoneSprint+"?milestoneId="+data?.payload?.milestoneId+"&activeStatus="+data?.payload?.status)
+    return api.get(URL.getAllMilstoneSprint+"?milestoneId="+data?.payload?.milestoneId+"&activeStatus="+data?.payload?.status)
 }
 //==================================================================================
 export function getAllSingleSprintApi(data): any {

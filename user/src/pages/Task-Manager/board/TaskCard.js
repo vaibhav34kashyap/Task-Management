@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import UpdateTask from '../board/update';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -42,54 +42,75 @@ const TaskInformation = styled.div`
 `;
 
 const TaskCard = ({ item, index, closeModal }) => {
+    const store = useSelector(state => state)
+    console.log("storedata", store)
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
+    const userId = store?.Auth?.user?.userId;
+    const getComments = item?.comments;
+    console.log("getCommentsssssssssssss", getComments)
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
+
         //dispatch(getsingleMileStone({id:editData?.projectInfo?._id,status:1}))
     };
     const {
         register,
         handleSubmit,
-        watch,
         formState: { errors },
     } = useForm();
 
-    const onSubmit = (e) => {};
+
 
     const closeupdatemodal = (val) => {
         closeModal('render');
         setOpenEditModal(false);
     };
     const dispatch = useDispatch();
-    const store = useSelector((state) => state);
+
 
     useEffect(() => {
         //dispatch(getComment())
+
     }, []);
 
     const deleteData = (id) => {
         dispatch(deleteTask({ taskId: id }));
         dispatch(getAllTask());
     };
-    const addComect = (e) => {
-        let data = {
-            taskId: e.txtTaskId,
-            comment: e.txtComment,
-        };
-        dispatch(addComment(data));
-    };
+    const [allComment, setComment] = useState([])
+    useEffect(() => {
+        for (let i = 0; i < getComments?.length; i++) {
+            setComment(getComments[i]);
+        }
 
+    }, [])
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false);
+    };
     const handleShow = () => setShow(true);
 
     const [showData, setShowData] = useState(false);
 
     const handleCloseData = () => setShowData(false);
-    const handleShowData = () => setShowData(true);
+    const handleShowData = () => {
+        setShowData(true)
+
+    };
+
+    const onSubmit = (e) => {
+        const commentData = {
+            userId: userId,
+            taskId: e.taskid,
+            comment: e.comment
+        }
+
+        dispatch(addComment(commentData))
+
+    }
 
     return (
         <>
@@ -97,7 +118,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                 {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                         <TaskInformation>
-                            <div className="action_icon">
+                            {/* <div className="action_icon">
                                 <button
                                     type="button"
                                     onClick={() => {
@@ -108,7 +129,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                                 <button type="button" onClick={() => deleteData(item.id)}>
                                     <i class="mdi mdi-delete m-0 p-0"></i>
                                 </button>
-                            </div>
+                            </div> */}
                             <div onClick={handleShow}>
                                 <p>{item.summary}</p>
                                 <div
@@ -118,78 +139,95 @@ const TaskCard = ({ item, index, closeModal }) => {
 
                                 <div className="secondary-details">
                                     <p>
-                                        <span>{item?.createdAt ? moment(item?.createdAt).format('ll') : ''}</span>
+                                        <span>{item?.startDate ? moment(item?.startDate).format('ll') : ''}</span>
                                     </p>
                                 </div>
                             </div>
-                            <p>{item.assignees?.assigneeInfo?.userName}</p>
-                            <div className="addcomment">
-                                <form onSubmit={handleSubmit(addComect)}>
-                                    {/* <input name="txtComment" placeholder='add your comment' /> */}
-                                    <input type="hidden" value={item.id} {...register('txtTaskId')} />
-                                    <input
-                                        placeholder="Add Comment"
-                                        {...register('txtComment')}
-                                        type="text"
-                                        class="form-control"
-                                    />
-                                    <button type="submit" className="btn btn-info">
-                                        add
-                                    </button>
-                                </form>
-                            </div>
+                            <p>Assignee: &nbsp; {item.assignees?.assigneeInfo?.userName}</p>
+
                         </TaskInformation>
                     </div>
                 )}
             </Draggable>
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={show} onHide={handleClose} backdrop="static">
                 <Modal.Header closeButton>
                     <Modal.Title>Task Details</Modal.Title>
                 </Modal.Header>
-                <Modal.Body></Modal.Body>
+                <Modal.Body>
+                <div class="card_detail">
                 <ul style={{ listStyle: 'none' }}>
-                    <li>
-                        <b> Summary: </b>
-                    </li>
-                    <li>{item.summary}</li>
-                    <br />
-                    <br />
-                    <li>
-                        <b>Description:</b>
-                    </li>
-                    <li>{item.description}</li>
-                    <br />
-                    <br />
-                    <li>
-                        <b>Start Date :</b>
-                    </li>
-                    <li>{item?.startDate ? moment(item?.startDate).format('ll') : ''}</li>
-                    <br />
-                    <br />
-                    <li>
-                        <b>Priority</b>
-                    </li>
-                    <li>{item.priority ? 'medium' : ''}</li>
-                    <br />
-                    <br />
-                    <li>
-                        <b>End Date </b>
-                    </li>
-                    <li>{item?.dueDate ? moment(item?.dueDate).format('ll') : ''}</li>
-                    <br />
-                    <br />
-                    <li>Assignee Name</li>
-                    <li>{item.assignees?.assigneeInfo?.userName} </li>
-                    <br />
-                    <br />
-                    <li>Reporter</li>
-                    <li>{item.assignees?.reporterInfo?.role}</li> <br />
-                    <br />
-                    <li>Project Name</li>
-                    <li>{item.projectInfo?.projectName}</li>
-                </ul>
+                        <li>
+                            <b> Summary: </b>
+                        </li>
+                        <li>{item.summary}</li>
+                        <br />
+                        <br />
+                        <li>
+                            <b>Description:</b>
+                        </li>
+                        <li>{item.description}</li>
+                        <br />
+                        <br />
+                        <li>
+                            <b>Start Date :</b>
+                        </li>
+                        <li>{item?.startDate ? moment(item?.startDate).format('ll') : ''}</li>
+                        <br />
+                        <br />
+                        <li>
+                            <b>Priority</b>
+                        </li>
+                        <li>{item.priority ? 'medium' : ''}</li>
+                        <br />
+                        <br />
+                        <li>
+                            <b>End Date </b>
+                        </li>
+                        <li>{item?.dueDate ? moment(item?.dueDate).format('ll') : ''}</li>
+                        <br />
+                        <br />
+                        <li>Assignee Name</li>
+                        <li>{item.assignees?.assigneeInfo?.userName} </li>
+                        <br />
+                        <br />
+                        <li>Reporter</li>
+                        <li>{item.assignees?.reporterInfo?.role}</li> <br />
+                        <br />
+                        <li>Project Name</li>
+                        <li>{item.projectInfo?.projectName}</li>
 
+
+                    </ul>
+                </div>
+                 
+                    <hr />
+                    <div className='comments'>
+                        <h4>Activity</h4>
+                        <div className='showall'>
+                            <ul>
+                                <li>Show:</li>
+                                <li>All</li>
+                                <li>Comments</li>
+                                <li>History</li>
+                            </ul>
+                        </div>
+
+                        <div className='addcommentname'>
+                            {allComment?.map((comm, inc) =>
+                                <p>{comm?.comment}</p>
+                            )}
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                <input type="hidden" value={item.id} {...register('taskid')} />
+
+                                <input type="text" id="exampleForm.ControlTextarea1" class="form-control" placeholder='Add Comment' {...register('comment')} />
+                                <button type="submit">Add</button>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </Modal.Body>
                 {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
@@ -270,8 +308,8 @@ const TaskCard = ({ item, index, closeModal }) => {
                                         onChange={(event, editor) => {
                                             const data = editor.getData();
                                         }}
-                                        onBlur={(event, editor) => {}}
-                                        onFocus={(event, editor) => {}}
+                                        onBlur={(event, editor) => { }}
+                                        onFocus={(event, editor) => { }}
                                     />
                                     {/* <input placeholder="Please Enter Description" type="text" id="exampleForm.ControlInput1" class="form-control" name="Description" /> */}
                                 </div>

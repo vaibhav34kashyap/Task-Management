@@ -9,8 +9,8 @@ export function addTaskCommentApi(data): any {
     
 }
 
-export function getTaskCommentApi(data): any {
+// export function getTaskCommentApi(data): any {
     
-    return api.get(URL.GetTaskComment+data?.payload.taskId)
+//     return api.get(URL.GetComment+data?.payload.taskId)
     
-}
+// }

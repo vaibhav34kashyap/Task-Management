@@ -47,28 +47,28 @@ const Title = styled.span`
 `;
 
 
-const Boards = (props) => {
+const Boards = (props) => {  
   const dispatch = useDispatch();
   const store = useSelector(state => state)
   
   const successHandle = store?.getAllTaskReducer;
   const statushandle = store?.updateTaskStatus;
  
-
+const projectId=store?.getProjectId?.data
+const milstoneId=store?.getMilestoneId?.data
+const SprintId=store?.getSprintId?.data
   useEffect(() => {
-    dispatch(getAllTask({id:"" ,milestoneId:"",sprintId:""}))
-
+    dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
+    
     let body = {
       status :1,
       skip: 0    
   };
 
   dispatch(getAllProjects(body));
+
   
-    dispatch(getsingleMileStone({ id:"" ,activeStatus: 1 ,skip:0 , mileStoneId:""  }));
-    dispatch(getAllMilstoneSprints({ activeStatus: 1, id: "" ,skip:0 }));
-  
-  }, [])
+  }, [SprintId])
 
   const [showModal, setShowModal] = useState(false);
   const [destinationId, setDestinationId] = useState('');
@@ -104,7 +104,7 @@ const Boards = (props) => {
           status: 2
         }
           dispatch(updateTaskStatus(body))
-          dispatch(getAllTask())
+          dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
       }
       else if(destColumn.title == "Hold"){
         let body = {
@@ -112,7 +112,7 @@ const Boards = (props) => {
           status: 3
         }
         dispatch(updateTaskStatus(body))
-        dispatch(getAllTask())
+        dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
       }
       else if(destColumn.title == "Done"){
         let body = {
@@ -120,7 +120,7 @@ const Boards = (props) => {
           status: 4
         }
         dispatch(updateTaskStatus(body))
-        dispatch(getAllTask())
+        dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
       }
      else if(destColumn.title == "To-do"){
         let body = {
@@ -128,7 +128,7 @@ const Boards = (props) => {
           status: 1
         }
         dispatch(updateTaskStatus(body))
-        dispatch(getAllTask())
+        dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
       }
     } 
     else {
@@ -197,7 +197,7 @@ const Boards = (props) => {
 
   
   const callAlltaskData=()=>{
-    dispatch(getAllTask())
+   // dispatch(getAllTask())
   }
 
   const [show, setShow] = useState(false);

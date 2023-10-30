@@ -192,11 +192,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
     const handleProject = () => {
         setmilestoneid(false);
-        let data = {
-            status: 1,
-            skip: 1,
-        };
-        dispatch(getAllProjects(data));
+      
     };
     const onChangeProject = (e) => {
         setsprint(false);

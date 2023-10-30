@@ -1,5 +1,5 @@
 // end points
-import Addcomment from './../redux/addcomment/constants';
+
 export const AddProject = "/project/addProject";
 export const GetAllProject = "/project/getProjects?activeStatus=";
 export const UpdateProjectDetails = "/project/update";
@@ -28,7 +28,7 @@ export const SingleMilestone = "/milestone/getMilestones?"
 //==============================================================================
 
 export const SingleSprintTask = "/task/getSprintTasks?sprintId="
-export const GetAllTask = "/task/getTasksAccToStatus"
+export const GetAllTask = "/task/getTasksAccToStatus?"
 export const UpdateTask = "/task/updateTask"
 export const DeleteTask = "/task/deletetask?"
 export const UpdateTaskStatus = "/task/updateTaskStatus"
@@ -47,4 +47,5 @@ export const GetAssignee ="/assignUser/getUserAssignments?assigneeId="
 
 //add comment data
 export const AddTaskComment="/comments/addComment"
-export const GetTaskComment="/comments/getTaskComment?"
+// export const GetComment="/task/getTasksAccToStatus?projectId="
+
