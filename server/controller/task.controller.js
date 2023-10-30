@@ -159,6 +159,7 @@ const getTasks = async (req, res) => {
             {
                 $group: {
                     _id: '$_id',
+                    taskMannualId: { $first: '$taskMannualId' },
                     summary: { $first: '$summary' },
                     description: { $first: '$description' },
                     priority: { $first: '$priority' },
@@ -356,6 +357,7 @@ const getTasksAccToStatus = async (req, res) => {
                 {
                     $group: {
                         _id: '$_id',
+                        taskMannualId: { $first: '$taskMannualId' },
                         summary: { $first: '$summary' },
                         description: { $first: '$description' },
                         priority: { $first: '$priority' },
