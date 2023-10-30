@@ -37,6 +37,7 @@ import {
     updateTaskStatus,TaskStatusReducer
 } from './task/reducer';
 import { getAllUsers, deleteUser, createUser, getAllRoles } from './user/reducer';
+import {getTaskSummaryReducer,getPriorityGraphReducer} from './Summary/reducer'
 import {
     createTechnologyReducer,
     getAllTechnologyReducer,
@@ -85,5 +86,5 @@ export default (combineReducers({
     deleteTask,
     getProjectId,
     updateTaskStatus,
-    getMilestoneId,getSprintId,TaskStatusReducer
+    getMilestoneId,getSprintId,TaskStatusReducer,getTaskSummaryReducer,getPriorityGraphReducer
 }): any);

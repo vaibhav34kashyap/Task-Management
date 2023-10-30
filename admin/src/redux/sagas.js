@@ -9,6 +9,7 @@ import AllSprintSaga from './sprint/saga';
 import AllTaskSaga from './task/saga';
 import AllUsersSaga from './user/saga';
 import  AllTechnologySaga from './technology/saga';
+import AllSummarySaga from "./Summary/saga"
 export default function* rootSaga(): any {
-    yield all([authSaga(), layoutSaga() , AllProjectSaga(),AllMileStonesSaga() ,AllSprintSaga(),AllTaskSaga( ),AllUsersSaga(), AllTechnologySaga()]);
+    yield all([authSaga(), layoutSaga() , AllProjectSaga(),AllMileStonesSaga() ,AllSprintSaga(),AllTaskSaga( ),AllUsersSaga(), AllTechnologySaga(),AllSummarySaga()]);
 }

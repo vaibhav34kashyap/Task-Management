@@ -5,9 +5,9 @@ const addMilestone = async (req, res) => {
     try {
         const { projectId, title, description, startDate, completionDate, } = req.body;
 
-        const existingMilestoneTitle = await milestoneModel.findOne({ title: title })
+        const existingMilestoneTitle = await milestoneModel.findOne({ title: new RegExp(`^${title}$`, 'i'), projectId : projectId  });
         if (existingMilestoneTitle) {
-            res.status(200).json({ status: "400", message: "Title Already exist" })
+            res.status(400).json({ status: '400', message: 'Title Already Exists' });
         } else {
             const result = await milestoneModel.create({
                 projectId,
