@@ -400,17 +400,36 @@ const getTasksAccToStatus = async (req, res) => {
 // Priority breakdown of Tasks for a User as well as For admin
 const getPriorityTasks = async (req, res) => {
     try {
-        const firstPriority = await taskModel.countDocuments({ priority: 1 })
+        const taskArr = [];
+        const firstPriority = await taskModel.countDocuments({ priority: 1 });
+        const firstPriorityData = {
+            name: "firstPriority",
+            count: firstPriority
+        }
+        taskArr.push(firstPriorityData)
+
         const secondPriority = await taskModel.countDocuments({ priority: 2 })
+        const secondPriorityData = {
+            name: "secondPriority",
+            count: secondPriority
+        }
+        taskArr.push(secondPriorityData)
+
         const thirdPriority = await taskModel.countDocuments({ priority: 3 })
-        return res.status(200).json({ status: '200', message: "Prioity wise tasks fetched successfully", response: { firstPriority, secondPriority, thirdPriority } });
+        const thirdPriorityData = {
+            name: "thirdPriority",
+            count: thirdPriority
+        }
+        taskArr.push(thirdPriorityData)
+
+        return res.status(200).json({ status: '200', message: "Prioity wise tasks fetched successfully", response: taskArr });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
 }
 
 // Get Status overview Count of tasks
-const getTasksStatusOverview = async (req, res) => {
+const getTasksStatusCount = async (req, res) => {
     try {
         const taskArr = [];
         const now = new Date();
@@ -461,9 +480,46 @@ const getTasksStatusOverview = async (req, res) => {
     }
 }
 
+// Get count of all tasks
+const getTasksCount = async (req, res) => {
+    try {
+        const count = await taskModel.countDocuments();
+        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: count });
+    } catch (error) {
+        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+    }
+}
 
+// Get count of Done, updated, Created, and dueTasks of last 7 days
+const getTasksWeekCount = async (req, res) => {
+    try {
+        const now = new Date();
+        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // Calculate the date 7 days ago
 
+        const doneCount = await taskModel.countDocuments({ status: 4, createdAt: { $gte: sevenDaysAgo } });
+
+        const updatedCount = await taskModel.countDocuments({ updatedAt: { $gte: sevenDaysAgo } })
+
+        const createdCount = await taskModel.countDocuments({ createdAt: { $gte: sevenDaysAgo } })
+
+        const dueCount = await taskModel.countDocuments({ dueDate: { $lte: now, $gte: sevenDaysAgo } });
+
+        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: { doneCount, updatedCount, createdCount, dueCount } });
+    } catch (error) {
+        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+    }
+}
 
 module.exports = {
-    createtask, getTasks, updateTask, deleteTask, updateTaskStatus, updateTaskActiveStatus, getTasksAccToStatus, getPriorityTasks, getTasksStatusOverview
+    createtask,
+    getTasks,
+    updateTask,
+    deleteTask,
+    updateTaskStatus,
+    updateTaskActiveStatus,
+    getTasksAccToStatus,
+    getPriorityTasks,
+    getTasksStatusCount,
+    getTasksCount,
+    getTasksWeekCount
 };
