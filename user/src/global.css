@@ -1,3 +1,7 @@
+body{
+    font-family: 'Open Sans', sans-serif !important;
+}
+
 .table > :not(caption) > * > * {
     padding: 0.6rem 0.95rem !important;
 }
@@ -335,3 +339,57 @@ ul.list-unstyled.topbar-menu.float-end.mb-0.topbarr {
 .card_detail ul {
     padding-left: 0px;
 }
+
+
+/* start header css--------------------------------------------- */
+/* .leftside-menu {
+    background: #b88d42 !important;
+}
+
+ul.side-nav li {
+    color: #fff !important;
+}
+
+ul.side-nav li a {
+    color: #fff !important;
+    font-size: 22px !important;
+}
+
+.logo span.logo-lg {
+    padding: 10px 0px;
+    background: #b88d42;
+    border-bottom: 2px solid #936f32;
+}
+
+.logo span.logo-lg img {
+    width: 100%;
+    height: 50px;
+    padding: 0px 16px;
+}
+
+ul.side-nav {
+    margin-top: 35px;
+}
+
+ul.side-nav li {
+    background: #72614a5c;
+}
+
+ul.side-nav li:hover {
+    transition: all 0.3s linear;
+    background: #5836065c;
+}
+
+ul.side-nav i {
+    font-size: 22px !important;
+}
+.navbar-custom {
+    box-shadow: 0 14px 28px rgb(184 141 66 / 44%), 0 10px 10px rgb(0 0 0 / 0%) !important;
+    border-bottom:2px solid #ed9b055c;
+}
+
+.menuinfo ul li a {
+    font-size: 18px;
+} */
+
+/* end header css ------------------------------------------------ */
