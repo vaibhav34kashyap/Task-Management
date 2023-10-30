@@ -15,12 +15,23 @@ const Create = ({ modal, closeModal }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const [selected, setSelected] = useState([]);
+    const [selectedenDate ,setSelectedenDate] = useState()
     const errorhandel = store?.addProject;
     const loaderhandel = store?.addProject;
     const [addValue, setAddValue] = useState([]);
+    const [endDateDisable,setEndDateDisable]=useState(true)
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     // disable previous date
     const today = new Date().toISOString().split('T')[0];
+      // end date
+      function findMinimumEndDate(date1, date2) {
+        return new Date(Math.min(new Date(date1), new Date(date2)));
+    }
+    const date1 = new Date();
+    const date2 = selectedenDate;
+    const minimumEndDate = findMinimumEndDate(date1, date2);
+    console.log(minimumEndDate,"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+    // 
     const {
         register,
         handleSubmit,
@@ -76,6 +87,11 @@ const Create = ({ modal, closeModal }) => {
         setAddValue([...addValue, add[0]._id]);
         console.log(addValue, 'addvalue info');
     };
+    const handelstartDate=(e)=>{
+        console.log(e.target.value,"pppppppppppppppppppppppppppppppppp")
+        setSelectedenDate(e?.target?.value)
+        setEndDateDisable(false)
+    }
     useEffect(() => {
         const getTechnologyname = [];
         dispatch(getAllTechnology({ status: true }));
@@ -190,6 +206,7 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
+                                                onClick={(e)=>{handelstartDate(e)}}
                                                 min={today} // Set the minimum date to today
                                                 {...register('startDate', { required: true })}
                                                 placeholder="Please start Date "
@@ -206,7 +223,8 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                min={today} 
+                                                disabled={endDateDisable}
+                                                min={minimumEndDate} 
                                                 {...register('endDate', { required: true })}
                                                 placeholder="Please end Date"
                                             />
