@@ -192,7 +192,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
     const handleProject = () => {
         setmilestoneid(false);
-        
+
         let data = {
             status: 1,
             skip: 1,
@@ -201,7 +201,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     };
     const onChangeProject = (e) => {
         setsprint(false);
-        
+
         dispatch(getProjectId(e.target.value));
         setProjectName(e.target.value);
         const id = e.target.value;
@@ -212,7 +212,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
     };
     const onChangeMilestone = (e) => {
-        
+
         dispatch(getMilestonetId(e.target.value))
         const id = e?.target.value;
         setsprint(true);
@@ -223,7 +223,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
     const sprinthandel = (e) => {
         dispatch(getSprintId(e.target.value));
         setsprint(false);
-        
+
 
     }
     return (
@@ -269,13 +269,13 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                 </div>
                             </div>
 
-                                <div className="dropdown mx-2">
-                                    <button className=" bg-white border-0 dropdown-toggle" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false"
-                                        onClick={handleProject}>
-                                        Projects
-                                    </button>
-                                    <ul className="dropdown-menu " aria-labelledby="dropdownMenuButton">
-                                        <li >
+                            <div className="dropdown mx-2">
+                                <button className=" bg-white border-0 dropdown-toggle" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown" aria-expanded="false"
+                                    onClick={handleProject}>
+                                    Projects
+                                </button>
+                                    <ul className="dropdown-menu border_zero" aria-labelledby="dropdownMenuButton">
+                                        <li>
                                             {allProjects?.map((item, index) => (
                                                 <li className="dropdown-item"
                                                     onClick={onChangeProject}
@@ -286,23 +286,22 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                                     </option>
                                                 </li>
                                             ))}
-
-                                            {milestoneid ? (
-                                                <ul className="dropdown-menu dropdown-submenu">
+                                            {getsingleMilestoneData?.length ? (
+                                                <ul className="dropdown-menu dropdown-submenu border_zero  ">
                                                     <li>
                                                         {getsingleMilestoneData?.map((item, index) => (
-                                                            <option className="project_opt" onClick={onChangeMilestone} key={index} value={item?._id}
+                                                            <option className="project_opt drop_s" onClick={onChangeMilestone} key={index} value={item?._id}
                                                             >
                                                                 {item?.title}
                                                             </option>
                                                         ))}
 
                                                         {sptint ? (
-                                                            <ul className="dropdown-menu dropdown-submenu">
+                                                            <ul className="dropdown-menu dropdown-submenu border_zero ">
                                                                 {getAllSingleSprints?.map((item, index) => (
-                                                                    <li 
+                                                                    <li
                                                                     >
-                                                                        <option className="dropdown-item"
+                                                                        <option className="dropdown-item drop_s"
                                                                             onClick={sprinthandel} key={index} value={item?._id}>
                                                                             {item?.sprintName}
                                                                         </option>
@@ -316,11 +315,11 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
                                         </li>
                                     </ul>
-                                </div>
+                            </div>
                         </div>
-                        
+
                         <ul className="list-unstyled topbar-menu float-end mb-0 topbarr">
-                      
+
 
                             <li className="notification-list">
                                 <button
@@ -377,10 +376,6 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                 </div>
                 <div className="taskinfo">
                     <ul>
-                    <li>
-                            {' '}
-                            <Link to="/summary">Summary</Link>{' '}
-                        </li>
                         <li>
                             {' '}
                             <Link to="/taskList">List</Link>{' '}

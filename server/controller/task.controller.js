@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const taskModel = require('../models/task.model');
 const assignUserModel = require('../models/assignUser.model');
+const historyModel = require('../models/history.model');
 
 // Create or add tasks
 const createtask = async (req, res) => {
@@ -226,7 +227,19 @@ const deleteTask = async (req, res) => {
 // update Status of a task
 const updateTaskStatus = async (req, res,) => {
     try {
+        let existingTask = await taskModel.findById({ _id: req.body.taskId })
         await taskModel.findByIdAndUpdate({ _id: req.body.taskId }, { status: req.body.status }, { new: true });
+        const HistoryTypeEnum = {
+            CREATED: 'created',
+            UPDATED: 'updated',
+            DELETED: 'deleted',
+        };
+        await historyModel.create({
+            type: HistoryTypeEnum.UPDATED, 
+            taskId: req.body.taskId,
+            previousStatus: existingTask.status,
+            currentStatus: req.body.status
+        });
         return res.status(200).json({ status: "200", message: "Task Status updated successfully" });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
@@ -403,21 +416,21 @@ const getPriorityTasks = async (req, res) => {
         const taskArr = [];
         const firstPriority = await taskModel.countDocuments({ priority: 1 });
         const firstPriorityData = {
-            name: "firstPriority",
+            name: "highPriority",
             count: firstPriority
         }
         taskArr.push(firstPriorityData)
 
         const secondPriority = await taskModel.countDocuments({ priority: 2 })
         const secondPriorityData = {
-            name: "secondPriority",
+            name: "MediumPriority",
             count: secondPriority
         }
         taskArr.push(secondPriorityData)
 
         const thirdPriority = await taskModel.countDocuments({ priority: 3 })
         const thirdPriorityData = {
-            name: "thirdPriority",
+            name: "lowPriority",
             count: thirdPriority
         }
         taskArr.push(thirdPriorityData)
