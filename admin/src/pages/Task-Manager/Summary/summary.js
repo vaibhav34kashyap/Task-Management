@@ -2,20 +2,29 @@ import React,{useEffect ,useState}from 'react'
 import { Card, ProgressBar ,Table} from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Chart from 'react-apexcharts';
-import { getTaskSummmaryDetail } from '../../../redux/Summary/action';
+import { getPriorityGraphAction, getTaskSummmaryDetail, getTaskWeekCountAction } from '../../../redux/Summary/action';
 const Summary = () => {
   const dispatch = useDispatch();
     const store = useSelector((state) => state);
     const successHandle = store?.getTaskSummaryReducer
+    const BarGraphHandel = store?.getPriorityGraphReducer
     const [data, setData] = useState([])
-
+    const [barGraphData,setBarGraphData] = useState([])
+// Pie chart
     useEffect(() => {
         if (successHandle?.data?.status == 200) {
             setData(successHandle?.data?.response)
         }
     }, [successHandle])
     useEffect(() => {
+      if (BarGraphHandel?.data?.status == 200) {
+        setBarGraphData(BarGraphHandel?.data?.response)
+      }
+  }, [BarGraphHandel])
+    useEffect(() => {
      dispatch(getTaskSummmaryDetail())
+     dispatch(getPriorityGraphAction())
+     dispatch(getTaskWeekCountAction())
     }, [])
     
   const apexDonutOpts = {
@@ -43,8 +52,38 @@ const Summary = () => {
         },
     ],
 };
+//end 
+// graph chart
+const options = {
+  chart: {
+    type: 'bar',
+  },
+  plotOptions: {
+    bar: {
+      horizontal: false,
+      endingShape: 'rounded',
+    },
+  },
+  // colors: ['#FF5733', '#FFC300', '#DAF7A6', '#5DADE2', '#AF7AC5'], // Specify different colors for each bar
+  dataLabels: {
+    enabled: false,
+  },
+  xaxis: {
+    categories: barGraphData?.map((ele,ind)=> ele?.name),
+  },
+    colors: ['#727cf5', '#0acf97', '#fa5c7c', '#ffbc00']
+  
+};
 
-const apexDonutData = [44, 55, 41, 17];
+const series = [
+  {
+    name: 'Series 1',
+    data: barGraphData?.map((ele,ind)=> ele?.count),
+    
+
+  },
+];
+
   return (
     <div className="all_bg">
     <div className="container">
@@ -298,76 +337,7 @@ const apexDonutData = [44, 55, 41, 17];
               <h5 className="mb-3"><b>Priority breakdown</b></h5>
               <h6>You"ll need to create a few items before you can start prioritizing work. <a href className="text-decoration-none">
                   Create an item</a></h6>
-              <div className="row mt-4">
-                <div className="col-1 text-secondary ">
-                  <p className="px-4 mt-2 ">5</p>
-                </div>
-                <div className="col-11 p-1">
-                  <hr className="border-2 " />
-                </div>
-              </div>
-              <div className="row ">
-                <div className="col-1 text-secondary ">
-                  <p className="px-4 mt-2 ">4</p>
-                </div>
-                <div className="col-11 p-1">
-                  <hr className="border-2 " />
-                </div>
-              </div>
-              <div className="row ">
-                <div className="col-1 text-secondary ">
-                  <p className="px-4 mt-2 ">3</p>
-                </div>
-                <div className="col-11 p-1">
-                  <hr className="border-2 " />
-                </div>
-              </div>
-              <div className="row ">
-                <div className="col-1 text-secondary ">
-                  <p className="px-4 mt-2 ">2</p>
-                </div>
-                <div className="col-11 p-1">
-                  <hr className="border-2 " />
-                </div>
-              </div>
-              <div className="row ">
-                <div className="col-1 text-secondary ">
-                  <p className="px-4 mt-2 ">1</p>
-                </div>
-                <div className="col-11 p-1">
-                  <hr className="border-2 " />
-                </div>
-              </div>
-              <div className="row ">
-                <div className="col-1 text-secondary ">
-                  <p className="px-4 mt-2 ">0</p>
-                </div>
-                <div className="col-11 p-1">
-                  <hr className="border-2 " />
-                </div>
-              </div>
-              <div className="row mt-1">
-                <div className="col-3 text-center">
-                  <i className="bi bi-chevron-double-up i_f text-danger" />
-                  <h6 className="text-primary">Highest</h6>
-                </div>
-                <div className="col-2 text-center">
-                  <i className="bi bi-chevron-up i_f text-danger" />
-                  <h6 className="text-primary">High</h6>
-                </div>
-                <div className="col-2 text-center">
-                  <span className="i_f text-warning"><b> =</b></span>
-                  <h6 className="text-primary">Medium</h6>
-                </div>
-                <div className="col-2 text-center">
-                  <i className="bi bi-chevron-down i_f text-primary" />
-                  <h6 className="text-primary">Low</h6>
-                </div>
-                <div className="col-3 text-center">
-                  <i className="bi bi-chevron-double-down i_f text-primary" />
-                  <h6 className="text-primary">Lowest</h6>
-                </div>
-              </div>
+                  <Chart options={options} series={series} type="bar" height={350} />
             </div>
           </div>
         </div>

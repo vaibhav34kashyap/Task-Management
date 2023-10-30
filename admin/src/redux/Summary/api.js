@@ -8,3 +8,6 @@ export function GetTaskSummaryApi(data): any {
 export function GetPriorityGraphApi(data): any {
     return api.get(URL.PriorityGraph, data.payload);
 }
+export function GetTaskWeekCountApi(data): any {
+    return api.get(URL.TaskWeekCount, data.payload);
+}
