@@ -35,6 +35,11 @@ const STATUS_TASK_INITIAL_STATE = {
     loading:false,
     message:""
 }
+const GET_TASK_SUMMARY_INITIAL_STATE = {
+    data:[],
+    loading:false,
+    message:""
+}
 
 export const createTaskReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
@@ -237,3 +242,4 @@ export const TaskStatusReducer= (state = STATUS_TASK_INITIAL_STATE, action) => {
 
     }
 };
+

@@ -5,9 +5,9 @@ const addSprint = async (req, res) => {
     try {
         const { projectId, milestoneId, sprintName, sprintDesc, startDate, endDate } = req.body;
 
-        const existingSprintName = await sprintModel.findOne({ sprintName: sprintName });
+        const existingSprintName = await sprintModel.findOne({ sprintName: new RegExp(`^${sprintName}$`, 'i'), milestoneId : milestoneId });
         if (existingSprintName) {
-            return res.status(200).json({ status: '400', message: 'Sprint Name already existed' });
+            return res.status(400).json({ status: '400', message: 'Sprint Name Already Exists' });
         } else {
             const result = await sprintModel.create({
                 projectId,

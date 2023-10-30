@@ -1,12 +1,29 @@
-import React from 'react'
-import { Card, ProgressBar } from 'react-bootstrap';
+import React,{useEffect ,useState}from 'react'
+import { Card, ProgressBar ,Table} from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import Chart from 'react-apexcharts';
+import { getTaskSummmaryDetail } from '../../../redux/Summary/action';
 const Summary = () => {
+  const dispatch = useDispatch();
+    const store = useSelector((state) => state);
+    const successHandle = store?.getTaskSummaryReducer
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        if (successHandle?.data?.status == 200) {
+            setData(successHandle?.data?.response)
+        }
+    }, [successHandle])
+    useEffect(() => {
+     dispatch(getTaskSummmaryDetail())
+    }, [])
+    
   const apexDonutOpts = {
     chart: {
         height: 340,
         type: 'donut',
     },
+    labels : data?.map((ele, i) => { return ele.name }),
     colors: ['#727cf5', '#0acf97', '#fa5c7c', '#ffbc00'],
     legend: {
         show: false,
@@ -105,38 +122,30 @@ const apexDonutData = [44, 55, 41, 17];
               <div className="donut-chart">
               <Chart
                     options={apexDonutOpts}
-                    series={apexDonutData}
+                    series={data?.map((ele, i) => { return ele.count })}
+                    
                     type="donut"
                     height={222}
                     className="apex-charts mb-4 mt-4"
                 />
+
                 <ul className="legend mx-4">
-                  <li><span className="color" style={{backgroundColor: 'rgb(217, 216, 216)'}} />Open
+                  <li><span className="color" style={{backgroundColor: '#727cf5'}} />To Do
                   </li>
-                  <li><span className="color" style={{backgroundColor: 'rgb(244, 108, 108)'}} />To Do
+                  <li><span className="color" style={{backgroundColor: '#0acf97'}} /> In Progress
                   </li>
-                  <li><span className="color" style={{backgroundColor: 'rgb(100, 100, 245)'}} />In
-                    Progress</li>
-                  <li><span className="color" style={{backgroundColor: 'rgb(187, 125, 245)'}} />In
-                    Review</li>
-                  <li><span className="color" style={{backgroundColor: '#71d871'}} />Cancelled</li>
-                  <li><span className="color" style={{backgroundColor: '#59d3ec'}} />done</li>
-                  <li><span className="color" style={{backgroundColor: '#f1cc36'}} />Rejected</li>
-                  <li><b>Total</b></li>
+                  <li><span className="color" style={{backgroundColor: '#fa5c7c'}} />Hold
+                    </li>
+                  <li><span className="color" style={{backgroundColor: '#ffbc00'}} />Done
+                    </li>
+                 
+                </ul>
+                <ul>
+                {data?.map((ele, i) => { return  <li>{ele.count}</li> })}
+                 
                 </ul>
               </div>
-              <div className="donut-chart2">
-                <ul className="legend ">
-                  <li><span className="text-primary">0</span></li>
-                  <li><span className="text-primary">0</span></li>
-                  <li><span className="text-primary">0</span></li>
-                  <li><span className="text-primary">0</span></li>
-                  <li><span className="text-primary">0</span></li>
-                  <li><span className="text-primary">1</span></li>
-                  <li><span className="text-primary">0</span></li>
-                  <li><span className="text-primary">1</span></li>
-                </ul>
-              </div>
+              
             </div>
           </div>
         </div>
