@@ -1,4 +1,6 @@
+const { mongoose } = require('mongoose');
 const assignUserModel = require('../models/assignUser.model');
+const taskModel = require('../models/task.model');
 
 // Assign the user
 const addUserAssignments = async (req, res) => {
@@ -59,10 +61,7 @@ const getUserAssignments = async (req, res) => {
             query.milestoneId = { $exists: true };
         } else if (req.query.flag == 3) {
             query.sprintId = { $exists: true };
-        } else if (req.query.flag == 4) {
-            query.taskId = { $exists: true };
-        }
-
+        } 
         const result = await assignUserModel.find(query).populate([
             { path: 'projectId', select: 'projectName' },
             { path: 'milestoneId', select: 'title' },
@@ -77,6 +76,114 @@ const getUserAssignments = async (req, res) => {
     }
 }
 
+const getUserTasks = async (req, res) => {
+    try {
+        let todo = [];
+        let inProgress = [];
+        let hold = [];
+        let done = [];
+        const query = {
+            assigneeId: new mongoose.Types.ObjectId(req.user._id)
+        };
+        if (req.query.projectId && req.query.milestoneId && req.query.sprintId) {
+            const taskfind = await taskModel.find({ projectId: req.query.projectId, milestoneId: req.query.milestoneId, sprintId: req.query.sprintId });
+            const taskIds = taskfind.map(id => {
+                return id._id
+            })
+            query.taskId = { $in: taskIds }
+        }
+        const result = await assignUserModel.aggregate([
+            {
+                $match: query
+            },
+            {
+                $lookup: {
+                    from: 'tasks',
+                    localField: 'taskId',
+                    foreignField: '_id',
+                    as: 'taskDetail'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'projects',
+                    localField: 'taskDetail.projectId',
+                    foreignField: '_id',
+                    as: 'projectDetail'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'milestones',
+                    localField: 'taskDetail.milestoneId',
+                    foreignField: '_id',
+                    as: 'milestoneDetail',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'sprints',
+                    localField: 'taskDetail.sprintId',
+                    foreignField: '_id',
+                    as: 'sprintDetail',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'assigneeId',
+                    foreignField: '_id',
+                    as: 'assigneeInfo',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'roles',
+                    localField: 'reporterId',
+                    foreignField: '_id',
+                    as: 'reporterInfo',
+                },
+            },
+            {
+                $group: {
+                    _id: '$_id',
+                    projectInfo: { $first: { $arrayElemAt: ['$projectDetail', 0] } },
+                    milestoneInfo: { $first: { $arrayElemAt: ['$milestoneDetail', 0] } },
+                    sprintInfo: { $first: { $arrayElemAt: ['$sprintDetail', 0] } },
+                    taskInfo: { $first: { $arrayElemAt: ['$taskDetail', 0] } },
+                    assigneeInfo: { $first: { $arrayElemAt: ['$assigneeInfo', 0] } },
+                    reporterInfo: { $first: { $arrayElemAt: ['$reporterInfo', 0] } },
+
+                }
+            }
+        ]);
+        for (const assignment of result) {
+            if (assignment.taskInfo.status === 1) {
+                todo.push(assignment);
+            } else if (assignment.taskInfo.status === 2) {
+                inProgress.push(assignment);
+            } else if (assignment.taskInfo.status === 3) {
+                hold.push(assignment);
+            } else if (assignment.taskInfo.status === 4) {
+                done.push(assignment);
+            }
+        }
+
+        return res.status(200).json({
+            status: "200",
+            message: "Data Fetched Successfully",
+            todo: { tasks: todo, taskCount: todo.length },
+            inProgress: { tasks: inProgress, taskCount: inProgress.length },
+            hold: { tasks: hold, taskCount: hold.length },
+            done: { tasks: done, taskCount: done.length }
+        });
+    } catch (error) {
+        return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
+    }
+}
 
 
-module.exports = { addUserAssignments,/* getUserAssignment,*/ getUserAssignments }
+
+
+
+module.exports = { addUserAssignments,/* getUserAssignment,*/ getUserAssignments, getUserTasks }

@@ -6,9 +6,12 @@ export function addProjectApi(data): any {
     return api.create(URL.AddProject, data.payload)
 }
 export function getProjectApi(data): any {
+    console.log("data.payload.status",data.payload)
     return api.get(`${URL.GetAllProject}${data.payload.status}`)
+    
 }
 export function updateProjectApi(data): any {
+    console.log("update data",data.payload)
     return api.update(URL.UpdateProjectDetails, data.payload)
 }
 export function deleteProjectApi(data): any {
@@ -18,6 +21,6 @@ export function deleteProjectApi(data): any {
 }
 export function getProjectByIdApi(data): any {
     console.log(data, "bbbbbbbbb")
-    return api.get(URL.GetProjectById + data?.payload)
+    return api.get(URL.GetProjectById + data?.payload+'&projectId=')
 }
 

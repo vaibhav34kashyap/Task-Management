@@ -9,7 +9,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 export default function RightBar(props) {
     const {
         register,
-        handleSubmit,
+        handleSubmit,watch,
         formState: { errors },
     } = useForm();
     const { showModal, setShowModal, content } = props;
@@ -184,7 +184,8 @@ export default function RightBar(props) {
                                         <input
                                             placeholder="Please end Date"
                                             type="date"
-                                            min={today}
+                                            disabled={watch("start_date")== ""|| watch("start_date")== undefined }
+                                                min={watch("start_date")} 
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
                                             {...register('last_date')}

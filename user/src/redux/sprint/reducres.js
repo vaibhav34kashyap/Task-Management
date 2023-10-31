@@ -227,3 +227,17 @@ export const updateSprint = (state = UPDATE_SPRINT_INITIAL_STATE, action) => {
 
     }
 };
+
+export const getSprintId = (state = {data:""}, action) => {
+    switch (action.type) {
+        case "SprintId":
+            return {
+                data: action.payload,
+                
+            };
+      
+        default:
+            return { ...state };
+
+    }
+};

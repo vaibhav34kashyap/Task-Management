@@ -58,6 +58,7 @@
     "react-i18next": "^11.15.5",
     "react-loader-spinner": "^5.3.4",
     "react-multi-select-component": "^4.3.4",
+    "react-quill": "^2.0.0",
     "react-rating": "^2.0.5",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.2",

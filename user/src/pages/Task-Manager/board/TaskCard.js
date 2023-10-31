@@ -6,11 +6,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import UpdateTask from '../board/update';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { addComment, getComment } from '../../../redux/addcomment/actions';
+import { addComment, getComment, updateComment, deleteComment } from '../../../redux/addcomment/actions';
 import { getsingleMileStone } from '../../../redux/milestone/action';
 
 // import CustomAvatar from '../TableComponents/CustomAvatar'
@@ -42,62 +42,100 @@ const TaskInformation = styled.div`
 `;
 
 const TaskCard = ({ item, index, closeModal }) => {
+    const store = useSelector(state => state)
+    console.log("storedata", store)
     const [editData, setEditData] = useState();
     const [openEditModal, setOpenEditModal] = useState(false);
     const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
+    const userId = store?.Auth?.user?.userId;
+    const getComments = item?.comments;
+    const historyData = store?.getHistoryData?.data?.response;
+    console.log("history data", historyData)
     const handelUpdate = (data) => {
         setEditData(data);
         setOpenEditModal(true);
+
         //dispatch(getsingleMileStone({id:editData?.projectInfo?._id,status:1}))
     };
     const {
         register,
         handleSubmit,
-        watch,
+        setValue,
         formState: { errors },
     } = useForm();
 
-    const onSubmit = (e) => {};
+
 
     const closeupdatemodal = (val) => {
         closeModal('render');
         setOpenEditModal(false);
     };
     const dispatch = useDispatch();
-    const store = useSelector((state) => state);
 
-    useEffect(() => {
-        //dispatch(getComment())
-    }, []);
 
     const deleteData = (id) => {
         dispatch(deleteTask({ taskId: id }));
         dispatch(getAllTask());
     };
-    const addComect = (e) => {
-        let data = {
-            taskId: e.txtTaskId,
-            comment: e.txtComment,
-        };
-        dispatch(addComment(data));
-    };
+    const [allComment, setComment] = useState([])
 
+    useEffect(() => {
+        for (let i = 0; i < getComments?.length; i++) {
+            setComment(getComments[i]);
+        }
+
+    }, [])
+    console.log("allCommenttttttttttttttttttttt", allComment)
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false);
+    };
     const handleShow = () => setShow(true);
 
     const [showData, setShowData] = useState(false);
 
     const handleCloseData = () => setShowData(false);
-    const handleShowData = () => setShowData(true);
+    const handleShowData = () => {
+        setShowData(true)
 
+    };
+    const [getCommentId, setCommentId] = useState('');
+    const onSubmit = (e) => {
+
+        if (getCommentId == "") {
+            const commentData = {
+                userId: userId,
+                taskId: e.taskid,
+                comment: e.comment
+            }
+            dispatch(addComment(commentData))
+        }
+        else {
+            const body = {
+                commentId: getCommentId,
+                comment: e.comment
+            }
+
+            dispatch(updateComment(body))
+
+        }
+    }
+
+    const EditData = (item) => {
+        setCommentId(item?._id);
+        setValue("comment", item?.comment);
+    }
+    const DeleteData = (id) => {
+
+        dispatch(deleteComment({ commentId: id }));
+    }
     return (
         <>
             <Draggable key={item.id} draggableId={item.id} index={index}>
                 {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                         <TaskInformation>
-                            <div className="action_icon">
+                            {/* <div className="action_icon">
                                 <button
                                     type="button"
                                     onClick={() => {
@@ -108,7 +146,7 @@ const TaskCard = ({ item, index, closeModal }) => {
                                 <button type="button" onClick={() => deleteData(item.id)}>
                                     <i class="mdi mdi-delete m-0 p-0"></i>
                                 </button>
-                            </div>
+                            </div> */}
                             <div onClick={handleShow}>
                                 <p>{item.summary}</p>
                                 <div
@@ -118,78 +156,143 @@ const TaskCard = ({ item, index, closeModal }) => {
 
                                 <div className="secondary-details">
                                     <p>
-                                        <span>{item?.createdAt ? moment(item?.createdAt).format('ll') : ''}</span>
+                                        <span>{item?.startDate ? moment(item?.startDate).format('ll') : ''}</span>
                                     </p>
                                 </div>
                             </div>
-                            <p>{item.assignees?.assigneeInfo?.userName}</p>
-                            <div className="addcomment">
-                                <form onSubmit={handleSubmit(addComect)}>
-                                    {/* <input name="txtComment" placeholder='add your comment' /> */}
-                                    <input type="hidden" value={item.id} {...register('txtTaskId')} />
-                                    <input
-                                        placeholder="Add Comment"
-                                        {...register('txtComment')}
-                                        type="text"
-                                        class="form-control"
-                                    />
-                                    <button type="submit" className="btn btn-info">
-                                        add
-                                    </button>
-                                </form>
-                            </div>
+                            <p>Assignee: &nbsp; {item.assignees?.assigneeInfo?.userName}</p>
+
                         </TaskInformation>
                     </div>
                 )}
             </Draggable>
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={show} onHide={handleClose} backdrop="static">
                 <Modal.Header closeButton>
                     <Modal.Title>Task Details</Modal.Title>
                 </Modal.Header>
-                <Modal.Body></Modal.Body>
-                <ul style={{ listStyle: 'none' }}>
-                    <li>
-                        <b> Summary: </b>
-                    </li>
-                    <li>{item.summary}</li>
-                    <br />
-                    <br />
-                    <li>
-                        <b>Description:</b>
-                    </li>
-                    <li>{item.description}</li>
-                    <br />
-                    <br />
-                    <li>
-                        <b>Start Date :</b>
-                    </li>
-                    <li>{item?.startDate ? moment(item?.startDate).format('ll') : ''}</li>
-                    <br />
-                    <br />
-                    <li>
-                        <b>Priority</b>
-                    </li>
-                    <li>{item.priority ? 'medium' : ''}</li>
-                    <br />
-                    <br />
-                    <li>
-                        <b>End Date </b>
-                    </li>
-                    <li>{item?.dueDate ? moment(item?.dueDate).format('ll') : ''}</li>
-                    <br />
-                    <br />
-                    <li>Assignee Name</li>
-                    <li>{item.assignees?.assigneeInfo?.userName} </li>
-                    <br />
-                    <br />
-                    <li>Reporter</li>
-                    <li>{item.assignees?.reporterInfo?.role}</li> <br />
-                    <br />
-                    <li>Project Name</li>
-                    <li>{item.projectInfo?.projectName}</li>
-                </ul>
+                <Modal.Body>
+                    <div class="card_detail">
+                        <ul style={{ listStyle: 'none' }}>
+                            <li>
+                                <b> Summary: </b>
+                            </li>
+                            <li>{item.summary}</li>
+                            <br />
+                            <br />
+                            <li>
+                                <b>Description:</b>
+                            </li>
+                            <li>{item.description}</li>
+                            <br />
+                            <br />
+                            <li>
+                                <b>Start Date :</b>
+                            </li>
+                            <li>{item?.startDate ? moment(item?.startDate).format('ll') : ''}</li>
+                            <br />
+                            <br />
+                            <li>
+                                <b>Priority</b>
+                            </li>
+                            <li>{item.priority ? 'medium' : ''}</li>
+                            <br />
+                            <br />
+                            <li>
+                                <b>End Date </b>
+                            </li>
+                            <li>{item?.dueDate ? moment(item?.dueDate).format('ll') : ''}</li>
+                            <br />
+                            <br />
+                            <li>Assignee Name</li>
+                            <li>{item.assignees?.assigneeInfo?.userName} </li>
+                            <br />
+                            <br />
+                            <li>Reporter</li>
+                            <li>{item.assignees?.reporterInfo?.role}</li> <br />
+                            <br />
+                            <li>Project Name</li>
+                            <li>{item.projectInfo?.projectName}</li>
 
+
+                        </ul>
+                    </div>
+
+                    <hr />
+                    <div className='comments'>
+                        <h4>Activity</h4>
+                        <div className='showall'>
+                            <ul>
+                                <li>Show:</li>
+                                <li>All</li>
+                                <li>Comments</li>
+                                <li>History</li>
+                            </ul>
+                        </div>
+
+                        <div className='addcommentname'>
+                            <div className='edit_delte'>
+
+                                <div className='taskcardinfo'>
+                                    <table>
+
+                                        {allComment?.map((comm, inc) =>
+                                            <tr key={inc}>
+                                                <td>{comm?.comment}</td>
+                                                <td>
+                                                    <div class="action_icon">
+                                                        <button type="button" onClick={() => EditData(comm)} ><i class="uil-edit-alt m-0 p-0"></i></button>
+                                                        <button type="button" onClick={() => DeleteData(comm?._id)}><i class="mdi mdi-delete m-0 p-0"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )}
+
+
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                <input type="hidden" value={item.id} {...register('taskid')} />
+                                <input type="text" id="exampleForm.ControlTextarea1" class="form-control" placeholder='Add Comment' {...register('comment')} />
+                                <button type="submit">Add</button>
+                            </form>
+
+                        </div>
+                        {/* <div className="history">
+                            history:
+                            {historyData?.map((datainfo,index)=>
+                                <p>{datainfo.currentStatus}</p>
+                            )}
+                        
+                        </div> */}
+                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">All</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Profile</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Contact</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-disabled-tab" data-bs-toggle="pill" data-bs-target="#pills-disabled" type="button" role="tab" aria-controls="pills-disabled" aria-selected="false" disabled>Disabled</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">...</div>
+                            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">...</div>
+                            <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">...</div>
+                            <div class="tab-pane fade" id="pills-disabled" role="tabpanel" aria-labelledby="pills-disabled-tab" tabindex="0">...</div>
+                        </div>
+                    </div>
+
+                </Modal.Body>
                 {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
@@ -270,8 +373,8 @@ const TaskCard = ({ item, index, closeModal }) => {
                                         onChange={(event, editor) => {
                                             const data = editor.getData();
                                         }}
-                                        onBlur={(event, editor) => {}}
-                                        onFocus={(event, editor) => {}}
+                                        onBlur={(event, editor) => { }}
+                                        onFocus={(event, editor) => { }}
                                     />
                                     {/* <input placeholder="Please Enter Description" type="text" id="exampleForm.ControlInput1" class="form-control" name="Description" /> */}
                                 </div>
@@ -370,7 +473,10 @@ const TaskCard = ({ item, index, closeModal }) => {
                             </button>
                         </div>
                     </form>
+
                 </Modal.Body>
+
+
                 {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseData}>
             Close

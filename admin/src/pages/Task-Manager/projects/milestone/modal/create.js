@@ -9,9 +9,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addAllmilstones } from '../../../../../redux/milestone/action';
 import ToastHandle from '../../../../../constants/toaster/toaster';
 import MainLoader from './../../../../../constants/Loader/loader';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import { CKEditor } from '@ckeditor/ckeditor5-react';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ReactQuill from 'react-quill';
+// import 'react-quill/dist/quill.snow.css';
+import "../../../../../../node_modules/react-quill/dist/quill.snow.css";
 const Create = ({ modal, closeModal }) => {
+    
     const store = useSelector((state) => state);
     const [description, setDescription] = useState('');
     const sucesshandel = store?.addAllmilstones;
@@ -100,7 +104,7 @@ const Create = ({ modal, closeModal }) => {
                                             <Form.Label>
                                                 Description <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <CKEditor
+                                            {/* <CKEditor
                                                 editor={ClassicEditor}
                                                 config={{
                                                     ckfinder: {
@@ -113,7 +117,11 @@ const Create = ({ modal, closeModal }) => {
                                                     const data = editor.getData();
                                                     setDescription(data);
                                                 }}
-                                            />
+                                            /> */}
+                                            <ReactQuill theme="snow" value={description} onChange={(event, editor) => {
+                                                    // const data = editor.getData();
+                                                    setDescription(event);
+                                                }} />
                                         </Form.Group>
                                     </Col>
                                     <Col lg={12}>
@@ -140,7 +148,8 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                min={today}
+                                                disabled={watch("Start_date")== ""|| watch("Start_date")== undefined }
+                                                min={watch("Start_date")} 
                                                 {...register('End_date', { required: true })}
                                             />{' '}
                                             {errors.End_date?.type === 'required' && (

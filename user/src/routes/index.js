@@ -49,6 +49,8 @@ const Sprint = React.lazy(() => import('../pages/Task-Manager/projects/milestone
 const Task = React.lazy(() => import('../pages/Task-Manager/projects/milestone/sprint/task/task'));
 const Technology  = React.lazy(() => import('../pages/Task-Manager/Technology/technology'));
 const TechnologyCategory  = React.lazy(() => import('../pages/Task-Manager/TechnologyCategory/category'));
+const Summary  = React.lazy(() => import('../pages/Task-Manager/Summary/summary'));
+const Board = React.lazy(() => import('../pages/Task-Manager/board/board'));
      
 // AllSprint
 const AllSprint = React.lazy(() => import('../pages/Task-Manager/All-Sprint'));
@@ -175,6 +177,8 @@ const Widgets = React.lazy(() => import('../pages/uikit/Widgets'));
 const GoogleMaps = React.lazy(() => import('../pages/maps/GoogleMaps'));
 const VectorMaps = React.lazy(() => import('../pages/maps/VectorMaps'));
 
+
+
 const loading = () => <div className=""></div>;
 
 type LoadComponentProps = {
@@ -235,6 +239,7 @@ const AllRoutes = () => {
                         { path: 'forget-password2', element: <LoadComponent component={ForgetPassword2} /> },
                         { path: 'lock-screen2', element: <LoadComponent component={LockScreen2} /> },
                         { path: 'logout2', element: <LoadComponent component={Logout2} /> },
+                        
                     ],
                 },
                 {
@@ -295,10 +300,7 @@ const AllRoutes = () => {
                             path: 'sprint/:id',
                             element: <LoadComponent component={SingleSprintDetail} />,
                         },
-                        {
-                            path: 'boards',
-                            element: <LoadComponent component={Boards} />,
-                        },
+                    
                         {
                             path: 'allmillstones',
                             element: <LoadComponent component={AllMillStone} />,
@@ -328,9 +330,14 @@ const AllRoutes = () => {
                             element: <LoadComponent component={Technology} />,
                         },
                         {
+                            path: 'boards',
+                            element: <LoadComponent component={Boards} />,
+                        },
+                        {
                             path: 'technologyCategory',
                             element: <LoadComponent component={TechnologyCategory} />,
                         },
+                        
                     ],
                 },
                 {
@@ -342,7 +349,14 @@ const AllRoutes = () => {
                         }
                     ],
                 },
-
+                {
+                    path: 'summary',
+                    element: <LoadComponent component={Summary} />,
+                },
+                {
+                    path: 'boards',
+                    element: <LoadComponent component={Boards} />,
+                },
                 //new code add routing
                 // {
                 //     path: 'user',
