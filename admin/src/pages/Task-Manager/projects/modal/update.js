@@ -56,6 +56,7 @@ const Update = ({ modal, closeModal, editData }) => {
     };
     useEffect(() => {
         setFinalTechnology(editData?.technology);
+        setAddValue(editData?.technology);
         reset({
             projectName: editData?.projectName,
             clientName: editData?.clientName,
@@ -68,31 +69,29 @@ const Update = ({ modal, closeModal, editData }) => {
             technology: editData?.technology,
             projectstatus: editData?.projectStatus,
             expectedEndDate: handleDate(editData?.expectedDate),
-            // status :editData?.projectStatus
         });
     }, [modal]);
-    console.log(finalTechnology, 'modal');
-
     const removehandle = (selectedList, removedItem) => {
-        // console.log(removedItem);
+        console.log(selectedList);
         const remove = getTechnology.filter((ele, ind) => {
-            return ele?.techName == removedItem;
+            return ele?.techName !== removedItem;
         });
-        // console.log(remove[0]._id);
-        // make a separate copy of the array
-        // var data = addValue.filter((item) => item !== remove[0]._id);
-        const data = addValue.filter((item) => item);
-        // setAddValue(data);
-        console.log('asfasf', data);
-        // console.log(selectedList, removedItem);
+        const arr = [];
+        selectedList.forEach((element) => {
+            getTechnology.filter((ele) => {
+                if (ele?.techName === element) {
+                    arr.push(ele);
+                    return setAddValue(arr);
+                }
+            });
+        });
     };
-
     const addhandle = (selectedList, selectItem) => {
-        // const add = getTechnology.filter((ele, ind) => {
-        //     return ele?.techName == selectItem;
-        // });
-        // setAddValue([...addValue, add[0]._id]);
-        console.log(selectedList, selectItem);
+        const add = getTechnology.filter((ele, ind) => {
+            return ele?.techName == selectItem;
+        });
+        setAddValue([...addValue, add[0]]);
+        console.log(addValue, 'addvalue info');
     };
 
     const onSubmit = (data) => {
@@ -106,13 +105,12 @@ const Update = ({ modal, closeModal, editData }) => {
             technology: addValue,
             projectStatus: data?.projectstatus,
         };
-        console.log('fsadsadsadsa', addValue, ...finalTechnology);
-        //    dispatch(updateProject(body));
+        console.log('fsadsadsadsa', addValue);
+        dispatch(updateProject(body));
     };
     const selectedValues = editData?.technology?.map((item) => {
         return item.techName;
     });
-    console.log(selectedValues, 'sel');
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
             ToastHandle('success', 'Updated Successfully');
