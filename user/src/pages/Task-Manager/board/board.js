@@ -14,6 +14,7 @@ import Modal from 'react-bootstrap/Modal';
 import {getsingleMileStone} from '../../../redux/milestone/action'
 import {getAllMilstoneSprints} from '../../../redux/sprint/action'
 import {getAllProjects} from '../../../redux/projects/action'
+import {getHistory} from '../../../redux/addcomment/actions'
 
 const Container = styled.div`
   display: flex;
@@ -47,28 +48,31 @@ const Title = styled.span`
 `;
 
 
-const Boards = (props) => {
+const Boards = (props) => {  
   const dispatch = useDispatch();
   const store = useSelector(state => state)
   
   const successHandle = store?.getAllTaskReducer;
   const statushandle = store?.updateTaskStatus;
  
+const projectId=store?.getProjectId?.data
+const milstoneId=store?.getMilestoneId?.data
+const SprintId=store?.getSprintId?.data
+
+
 
   useEffect(() => {
-    dispatch(getAllTask({id:"" ,milestoneId:"",sprintId:""}))
-
+    dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
+    
     let body = {
       status :1,
       skip: 0    
   };
 
   dispatch(getAllProjects(body));
+
   
-    dispatch(getsingleMileStone({ id:"" ,activeStatus: 1 ,skip:0 , mileStoneId:""  }));
-    dispatch(getAllMilstoneSprints({ activeStatus: 1, id: "" ,skip:0 }));
-  
-  }, [])
+  }, [SprintId])
 
   const [showModal, setShowModal] = useState(false);
   const [destinationId, setDestinationId] = useState('');
@@ -104,7 +108,7 @@ const Boards = (props) => {
           status: 2
         }
           dispatch(updateTaskStatus(body))
-          dispatch(getAllTask())
+          dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
       }
       else if(destColumn.title == "Hold"){
         let body = {
@@ -112,7 +116,7 @@ const Boards = (props) => {
           status: 3
         }
         dispatch(updateTaskStatus(body))
-        dispatch(getAllTask())
+        dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
       }
       else if(destColumn.title == "Done"){
         let body = {
@@ -120,7 +124,7 @@ const Boards = (props) => {
           status: 4
         }
         dispatch(updateTaskStatus(body))
-        dispatch(getAllTask())
+        dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
       }
      else if(destColumn.title == "To-do"){
         let body = {
@@ -128,7 +132,7 @@ const Boards = (props) => {
           status: 1
         }
         dispatch(updateTaskStatus(body))
-        dispatch(getAllTask())
+        dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
       }
     } 
     else {
@@ -148,8 +152,13 @@ const Boards = (props) => {
     }
   };
 
+  useEffect(()=>{
+    dispatch(getHistory())
+  },[])
+
   
   useEffect(() => {
+  
 
     if (successHandle?.data?.status == 200) {
       setColumns({
@@ -187,19 +196,16 @@ const Boards = (props) => {
         dispatch(updateTaskStatus(body))   
         },5000)
       
-    }
+    }  
    
-    //console.log("body dataaaaa",ele)
-    //console.log(sessionStorage.getItem('des'))
-    
-   
+  }
+  
+  const callAlltaskData=()=>{
+     dispatch(getAllTask())
   }
 
   
-  const callAlltaskData=()=>{
-    dispatch(getAllTask())
-  }
-
+ 
   const [show, setShow] = useState(false);
   
   const handleClose = () => setShow(false);
@@ -241,7 +247,7 @@ const Boards = (props) => {
                     > 
                       <Title class="">{column.title}</Title>
                       {column.items.map((item, index) => (
-                        <TaskCard key={item.id} item={item} index={index}  />
+                        <TaskCard  key={item.id} item={item} index={index}  />
                       ))}
                       {provided.placeholder}
                     </TaskList>

@@ -376,6 +376,10 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                 </div>
                 <div className="taskinfo">
                     <ul>
+                    <li>
+                            {' '}
+                            <Link to="/summary">Summary</Link>{' '}
+                        </li>
                         <li>
                             {' '}
                             <Link to="/taskList">List</Link>{' '}
@@ -384,26 +388,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             {' '}
                             <Link to="/dashboard/boards">Board</Link>{' '}
                         </li>
-                        <li>
-                            {' '}
-                            <Link to="">Calendar</Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="">TimeLine</Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="">Pages</Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="">Report </Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="">Issues</Link>{' '}
-                        </li>
+                       
                     </ul>
                 </div>
             </div>

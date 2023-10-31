@@ -19,7 +19,6 @@ const Create = ({ modal, closeModal }) => {
     const errorhandel = store?.addProject;
     const loaderhandel = store?.addProject;
     const [addValue, setAddValue] = useState([]);
-    const [endDateDisable,setEndDateDisable]=useState(true)
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     // disable previous date
     const today = new Date().toISOString().split('T')[0];
@@ -40,6 +39,7 @@ const Create = ({ modal, closeModal }) => {
         reset,
         formState: { errors },
     } = useForm();
+    console.log(watch("startDate"),"watchhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
     console.log(addValue, 'select');
     const onSubmit = (data) => {
         let body = {
@@ -87,11 +87,7 @@ const Create = ({ modal, closeModal }) => {
         setAddValue([...addValue, add[0]._id]);
         console.log(addValue, 'addvalue info');
     };
-    const handelstartDate=(e)=>{
-        console.log(e.target.value,"pppppppppppppppppppppppppppppppppp")
-        setSelectedenDate(e?.target?.value)
-        setEndDateDisable(false)
-    }
+  
     useEffect(() => {
         const getTechnologyname = [];
         dispatch(getAllTechnology({ status: true }));
@@ -207,7 +203,6 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                onClick={(e)=>{handelstartDate(e)}}
                                                 min={today} // Set the minimum date to today
                                                 {...register('startDate', { required: true })}
                                                 placeholder="Please start Date "
@@ -224,8 +219,8 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                disabled={endDateDisable}
-                                                min={minimumEndDate} 
+                                                disabled={watch("startDate")== ""|| watch("startDate")== undefined }
+                                                min={watch("startDate")} 
                                                 {...register('endDate', { required: true })}
                                                 placeholder="Please end Date"
                                             />
@@ -251,6 +246,7 @@ const Create = ({ modal, closeModal }) => {
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>
+                                        
                                     </Col>
                                 </Row>
                                 <Row>

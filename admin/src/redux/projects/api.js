@@ -10,6 +10,7 @@ export function getProjectApi(data): any {
     return api.get(`${URL.GetAllProject}${data.payload.status}&skip=${data.payload?.skip}`)
 }
 export function updateProjectApi(data): any {
+    console.log("updatedataaaa",data.payload)
     return api.update(URL.UpdateProjectDetails, data.payload)
 }
 export function deleteProjectApi(data): any {

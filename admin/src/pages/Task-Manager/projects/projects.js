@@ -264,7 +264,7 @@ const Projects = () => {
                             }}>
                             No
                         </Button>
-                        <Button className=" web_button " variant="primary" onClick={() => handleYes()}>
+                        <Button className="web_button" variant="primary" onClick={() => handleYes()}>
                             Yes
                         </Button>
                     </Modal.Footer>

@@ -172,7 +172,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                min={handleDate(minimumEndDate)}
+                                                min={watch("startDate")}
                                                 {...register('endDate', { required: true })}
                                                 placeholder="Please end Date"
                                             />
