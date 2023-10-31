@@ -9,8 +9,9 @@ export function getSingleSprintTaskApi(data): any {
     return api.get(`${URL.SingleSprintTask}${data.payload.id}&activeStatus=${data.payload.activeStatus}&skip=${data.payload.skip}`);
 }
 export function getAllTaskApi(data): any {
-    return api.get(URL.GetAllTask, data.payload);
+    return api.get(URL.GetAllTask+"projectId="+data.payload.id+"&milestoneId="+data.payload.mileStoneId+"&sprintId="+data.payload.sprintId);
 }
+
 export function UpdateTaskApi(data): any {
     return api.update(URL.UpdateTask, data.payload);
 }
@@ -22,4 +23,5 @@ export function deleteTaskApi(data): any {
 export function updateTaskStatusApi(data): any {
     console.log("task",data.payload)
     return api.update(URL.UpdateTaskStatus, data.payload);
+
 }
