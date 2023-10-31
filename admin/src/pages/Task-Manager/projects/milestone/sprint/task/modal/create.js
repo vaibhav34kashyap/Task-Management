@@ -27,19 +27,19 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
     } = useForm();
 
     const onSubmit = (val) => {
-        let body = {
-            sprintId: sprintid,
-            milestoneId: milestoneid,
-            projectId: projectid,
-            description: description,
-            summary: val?.summary,
-            startDate: val?.startdate,
-            dueDate: val?.dueDate,
-            assigneeId: val?.Assignee,
-            reporterId: val?.Reporter,
-            priority: val?.Priority,
-            status:1
-        };
+        let body = new FormData();
+        body.append("projectId", projectid)
+        body.append("milestoneId", milestoneid)
+        body.append("sprintId", sprintid)
+        body.append("summary", val?.summary)
+        body.append("description",description)
+        body.append("assigneeId",val?.Assignee)
+        body.append("reporterId",val?.Reporter)
+        body.append("priority", val?.Priority)
+        body.append("startDate", val?.startdate)
+        body.append("dueDate", val?.dueDate)
+        body.append("status",1)
+        body.append("attachment",val?.attachment[0])
         dispatch(createTask(body));
     };
     const handleClose = () => {
@@ -271,7 +271,8 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                 </Form.Label>
                                                 <Form.Control
                                                     type="date"
-                                                    min={today}
+                                                    disabled={watch("startdate")== ""|| watch("startdate")== undefined }
+                                                min={watch("startdate")} 
                                                     {...register('dueDate', { required: true })}
                                                 />{' '}
                                                 {errors.dueDate?.type === 'required' && (
@@ -299,7 +300,22 @@ const Create = ({ modal, CloseModal, projectid, milestoneid, sprintid }) => {
                                                 )}
                                             </Form.Group>
                                         </Col>
-                                        
+                                        <Col lg={6}>
+                                            <Form.Group className="mb-1" controlId="exampleForm.ControlInput1">
+                                                <Form.Label>
+                                                    {' '}
+                                                    Attachment<span className="text-danger">*</span>:
+                                                </Form.Label>
+                                                <Form.Control
+                                                    type="file"
+                                                    
+                                                    {...register('attachment', { required: true })}
+                                                />
+                                                {errors.attachment?.type === 'required' && (
+                                                    <span className="text-danger"> This feild is required *</span>
+                                                )}
+                                            </Form.Group>
+                                        </Col>
                                     </Row>
                                 </Col>
                             </Row>

@@ -388,26 +388,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             {' '}
                             <Link to="/dashboard/boards">Board</Link>{' '}
                         </li>
-                        <li>
-                            {' '}
-                            <Link to="">Calendar</Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="">TimeLine</Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="">Pages</Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="">Report </Link>{' '}
-                        </li>
-                        <li>
-                            {' '}
-                            <Link to="">Issues</Link>{' '}
-                        </li>
+                       
                     </ul>
                 </div>
             </div>
