@@ -124,6 +124,19 @@ export default function RightBar(props) {
                                 <div class="">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
+                                        Attachment<span class="text-danger">*</span>:
+                                        </label>
+                                        <input
+                                            type="file"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('Attachment')}
+                                        />
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <div class="mb-2">
+                                        <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Assignee
                                             <span class="text-danger">*</span>:
                                         </label>
@@ -140,19 +153,7 @@ export default function RightBar(props) {
                                         </select>
                                     </div>
                                 </div>
-                                <div class="">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                        Attachment<span class="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            type="file"
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('Attachment')}
-                                        />
-                                    </div>
-                                </div>
+                            
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">

@@ -213,7 +213,19 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                             </div>
-                        
+                            <div class="">
+                                    <div class="mb-2">
+                                        <label class="form-label" for="exampleForm.ControlTextarea1">
+                                        Attachment<span class="text-danger">*</span>:
+                                        </label>
+                                        <input
+                                            type="file"
+                                            id="exampleForm.ControlTextarea1"
+                                            class="form-control"
+                                            {...register('Attachment')}
+                                        />
+                                    </div>
+                                </div>
                             <div class="">
                                 <div class="">
                                     <div class="mb-2">
@@ -236,7 +248,9 @@ export default function RightBar(props) {
 
                                         {/* <input placeholder="Please Enter Assignee" type="text" id="exampleForm.ControlTextarea1" class="form-control" {...register("Assignee")} /> */}
                                     </div>
+
                                 </div>
+                                
                                 <div class="row ">
                                     <div class="mb-2 col-lg-6">
                                         <label class="form-label" for="exampleForm.ControlInput1">
