@@ -14,18 +14,23 @@ import { Select } from 'react-select';
 const Create = ({ modal, closeModal }) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
-    const options = [
-        { label: 'React ', value: 'React' },
-        { label: 'Node', value: 'Node' },
-        { label: 'Angular', value: 'Angular' },
-        { label: 'Flutter', value: 'Flutter' },
-    ];
     const [selected, setSelected] = useState([]);
+    const [selectedenDate ,setSelectedenDate] = useState()
     const errorhandel = store?.addProject;
     const loaderhandel = store?.addProject;
-    //const [removeValue, setRemoveValue] = useState([]);
     const [addValue, setAddValue] = useState([]);
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
+    // disable previous date
+    const today = new Date().toISOString().split('T')[0];
+      // end date
+      function findMinimumEndDate(date1, date2) {
+        return new Date(Math.min(new Date(date1), new Date(date2)));
+    }
+    const date1 = new Date();
+    const date2 = selectedenDate;
+    const minimumEndDate = findMinimumEndDate(date1, date2);
+    console.log(minimumEndDate,"mindate")
+    // 
     const {
         register,
         handleSubmit,
@@ -34,17 +39,16 @@ const Create = ({ modal, closeModal }) => {
         reset,
         formState: { errors },
     } = useForm();
-    console.log(addValue,"select")
+    console.log(watch("startDate"),"watchhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+    console.log(addValue, 'select');
     const onSubmit = (data) => {
         let body = {
             projectName: data?.projectName,
             clientName: data?.clientName,
             startDate: data?.startDate,
             endDate: data?.endDate,
-            project_type: data?.project_type,
-            technology:addValue,
-            projectStatus: data?.projectDec,
-             
+            projectType: data?.project_type,
+            technology: addValue
         };
         dispatch(addProject(body));
     };
@@ -64,31 +68,26 @@ const Create = ({ modal, closeModal }) => {
     const removehandle = (selectedList, removedItem) => {
         const remove = getTechnology.filter((ele, ind) => {
             return ele?.techName == removedItem;
-        }); 
+        });
         // make a separate copy of the array
-        var index = addValue.indexOf(remove[0]._id)
+        var index = addValue.indexOf(remove[0]._id);
         if (index !== -1) {
             addValue.splice(index, 1);
-            setAddValue(addValue)
-            console.log("remove",addValue)
+            setAddValue(addValue);
+            console.log('remove', addValue);
+        } else {
+            setAddValue(null);
         }
-        else{
-            setAddValue(null)
-        }     
-       
-        
+    };
+
+    const addhandle = (selectedList, selectItem) => {
+        const add = getTechnology.filter((ele, ind) => {
+            return ele?.techName == selectItem;
+        });
+        setAddValue([...addValue, add[0]._id]);
+        console.log(addValue, 'addvalue info');
     };
   
-
-    const addhandle=(selectedList,selectItem)=> {
-             const add = getTechnology.filter((ele, ind) => {
-            return ele?.techName == selectItem;
-        }); 
-        setAddValue([...addValue, add[0]._id])
-        console.log(addValue,"addvalue info")
-        
-      
-    }
     useEffect(() => {
         const getTechnologyname = [];
         dispatch(getAllTechnology({ status: true }));
@@ -173,6 +172,7 @@ const Create = ({ modal, closeModal }) => {
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>
+                                        
                                     </Col>
                                     <Col lg={6}>
                                         <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
@@ -191,8 +191,6 @@ const Create = ({ modal, closeModal }) => {
                                                 options={selected}
                                                 showCheckbox
                                             />
-                                            
-
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -205,12 +203,13 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
+                                                min={today} // Set the minimum date to today
                                                 {...register('startDate', { required: true })}
                                                 placeholder="Please start Date "
                                             />
                                             {errors.startDate?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
-                                            )}
+                                            )} 
                                         </Form.Group>
                                     </Col>
                                     <Col lg={6}>
@@ -220,6 +219,8 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
+                                                disabled={watch("startDate")== ""|| watch("startDate")== undefined }
+                                                min={watch("startDate")} 
                                                 {...register('endDate', { required: true })}
                                                 placeholder="Please end Date"
                                             />
@@ -245,9 +246,8 @@ const Create = ({ modal, closeModal }) => {
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>
+                                        
                                     </Col>
-                                    
-                                  
                                 </Row>
                                 <Row>
                                     <Col className="text-start d-flex align-items-center justify-content-center">

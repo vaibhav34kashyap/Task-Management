@@ -11,7 +11,7 @@ import VerticalLayout from '../layouts/Vertical';
 import DetachedLayout from '../layouts/Detached';
 import HorizontalLayout from '../layouts/Horizontal';
 import FullLayout from '../layouts/Full';
-import All_Sprint from '../pages/Task-Manager/All-Sprint';
+
 
 // lazy load all the views
 
@@ -41,17 +41,18 @@ const EWalletDashboard = React.lazy(() => import('../pages/dashboard/E-Wallet'))
 const Boards = React.lazy(() => import('../pages/Task-Manager/board/board'));
 
 // AllMillStone
-const AllMillStone = React.lazy(() => import('../pages/Task-Manager/AllMillstones'));
+// const AllMillStone = React.lazy(() => import('../pages/Task-Manager/AllMillstones'));
 const MileStone = React.lazy(() => import('../pages/Task-Manager/projects/milestone/milestone'));
-const SingleMilestoneDetail = React.lazy(() => import('../pages/Task-Manager/AllMillstones/mileStone'));
-const SingleSprintDetail = React.lazy(() => import('../pages/Task-Manager/All-Sprint/Sprint'));
+// const SingleMilestoneDetail = React.lazy(() => import('../pages/Task-Manager/AllMillstones/mileStone'));
+// const SingleSprintDetail = React.lazy(() => import('../pages/Task-Manager/All-Sprint/Sprint'));
 const Sprint = React.lazy(() => import('../pages/Task-Manager/projects/milestone/sprint/sprint'));
 const Task = React.lazy(() => import('../pages/Task-Manager/projects/milestone/sprint/task/task'));
 const Technology  = React.lazy(() => import('../pages/Task-Manager/Technology/technology'));
 const TechnologyCategory  = React.lazy(() => import('../pages/Task-Manager/TechnologyCategory/category'));
-     
+const AllTaskList = React.lazy(() => import('../pages/Task-Manager/TaskList/list'));
+const Summary = React.lazy(() => import('../pages/Task-Manager/Summary/summary'));
 // AllSprint
-const AllSprint = React.lazy(() => import('../pages/Task-Manager/All-Sprint'));
+// const AllSprint = React.lazy(() => import('../pages/Task-Manager/All-Sprint'));
 
 // AllUsers
 const AllUsers = React.lazy(() => import('../pages/Task-Manager/AllUsers'));
@@ -287,26 +288,26 @@ const AllRoutes = () => {
                             path: 'projects/:id',
                             element: <LoadComponent component={MileStone} />,
                         },
-                        {
-                            path: 'milestone/:id',
-                            element: <LoadComponent component={SingleMilestoneDetail} />,
-                        },
-                        {
-                            path: 'sprint/:id',
-                            element: <LoadComponent component={SingleSprintDetail} />,
-                        },
+                        // {
+                        //     path: 'milestone/:id',
+                        //     element: <LoadComponent component={SingleMilestoneDetail} />,
+                        // },
+                        // {
+                        //     path: 'sprint/:id',
+                        //     element: <LoadComponent component={SingleSprintDetail} />,
+                        // },
                         {
                             path: 'boards',
                             element: <LoadComponent component={Boards} />,
                         },
-                        {
-                            path: 'allmillstones',
-                            element: <LoadComponent component={AllMillStone} />,
-                        },
-                        {
-                            path: 'allsprint',
-                            element: <LoadComponent component={AllSprint} />,
-                        },
+                        // {
+                        //     path: 'allmillstones',
+                        //     element: <LoadComponent component={AllMillStone} />,
+                        // },
+                        // {
+                        //     path: 'allsprint',
+                        //     element: <LoadComponent component={AllSprint} />,
+                        // },
                         {
                             path: 'alluser',
                             element: <LoadComponent component={AllUsers} />,
@@ -331,6 +332,7 @@ const AllRoutes = () => {
                             path: 'technologyCategory',
                             element: <LoadComponent component={TechnologyCategory} />,
                         },
+                      
                     ],
                 },
                 {
@@ -341,6 +343,14 @@ const AllRoutes = () => {
                             element: <LoadComponent component={UserNotFound} />,
                         }
                     ],
+                },
+                {
+                    path: '/taskList',
+                    element: <LoadComponent component={AllTaskList} />,
+                },
+                {
+                    path: '/summary',
+                    element: <LoadComponent component={Summary} />,
                 },
 
                 //new code add routing

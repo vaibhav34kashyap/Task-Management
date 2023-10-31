@@ -15,6 +15,11 @@ export function deleteSprintApi(data): any {
 export function getSingleSprintApi(data): any {
     return api.get( `${URL.ParticularSprintDetail}${data?.payload?.id}&status=${data.payload.status}`)
 }
+// -----------------------------------------------------
+export function getAllMilstoneSprints(data): any {
+    return api.get(URL.getAllMilstoneSprint+"?milestoneId="+data?.payload?.milestoneId+"&activeStatus="+data?.payload?.status)
+}
+//==================================================================================
 export function getAllSingleSprintApi(data): any {
     // return api.get(URL.getAllSingleSprint + data?.payload)
     return api.get(`${URL.getAllSingleSprint}${data?.payload?.id}&status=${data.payload.status}`)

@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 
 import Auth from './auth/reducers';
 import Layout from './layout/reducers';
-import { addProject, getProject, updateProject, deleteProject, getProjectById } from './projects/reducers';
+import { addProject, getProject, updateProject, deleteProject, getProjectById,getProjectId } from './projects/reducers';
 import {
     getAllMileStones,
     deleteMileStone,
@@ -11,6 +11,7 @@ import {
     updateMilestone,
     addAllmilstones,
     getSigleMileStone,
+    getMilestoneId
 } from './milestone/reducer';
 import {
     addSprint,
@@ -19,6 +20,7 @@ import {
     getSingleSprintReducer,
     updateSprint,
     getAllSingleSprints,
+    getSprintId
 } from './sprint/reducres';
 import { createTaskReducer, getSigleSprintTask, getAllTaskReducer, UpdateTaskReducer,deleteTask } from './task/reducer';
 import { getAllUsers, deleteUser, createUser ,getAllRoles} from './user/reducer';
@@ -32,6 +34,7 @@ import {
     UpdateTechnologyCategoryReducer,
     deleteTechnologyCategory,
 } from './technology/reducer';
+import { addComments,deleteComment,updateComment,getHistoryData } from './addcomment/reducers';
 export default (combineReducers({
     Auth,
     Layout,
@@ -68,5 +71,11 @@ export default (combineReducers({
     UpdateTechnologyCategoryReducer,
     deleteTechnologyCategory,
     getAllRoles,
-    deleteTask
+    deleteTask,
+    getProjectId,
+    getMilestoneId,
+    getSprintId,
+    addComments,
+    deleteComment,
+    updateComment,getHistoryData
 }): any);

@@ -28,3 +28,7 @@ export const getsingleMileStone = (data): AuthAction => ({
     type: MileStoneType.GET_SINGLE_MILESTONE,
     payload: data
 })
+export const getMilestonetId= (data): AuthAction => ({
+    type: "milestoneId",
+    payload: data
+})

@@ -8,9 +8,13 @@ import { getAllTask, updateTask } from '../../../redux/actions';
 import { v4 as uuidv4 } from 'uuid';
 import MainLoader from '../../../constants/Loader/loader';
 import RightBar from '../../../layouts/AddRightSideBar';
-import {updateTaskStatus} from '../../../../src/redux/task/action'
-
-
+import {updateTaskStatus} from '../../../../src/redux/task/action';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import {getsingleMileStone} from '../../../redux/milestone/action'
+import {getAllMilstoneSprints} from '../../../redux/sprint/action'
+import {getAllProjects} from '../../../redux/projects/action'
+import {getHistory} from '../../../redux/addcomment/actions'
 
 const Container = styled.div`
   display: flex;
@@ -44,23 +48,43 @@ const Title = styled.span`
 `;
 
 
-const Boards = (props) => {
+const Boards = (props) => {  
   const dispatch = useDispatch();
   const store = useSelector(state => state)
-  const successHandle = store?.getAllTaskReducer
+  
+  const successHandle = store?.getAllTaskReducer;
+  const statushandle = store?.updateTaskStatus;
+ 
+const projectId=store?.getProjectId?.data
+const milstoneId=store?.getMilestoneId?.data
+const SprintId=store?.getSprintId?.data
 
 
+
+  useEffect(() => {
+    dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
+    
+    let body = {
+      status :1,
+      skip: 0    
+  };
+
+  dispatch(getAllProjects(body));
+
+  
+  }, [SprintId])
 
   const [showModal, setShowModal] = useState(false);
+  const [destinationId, setDestinationId] = useState('');
   const [columns, setColumns] = useState(columnsFromBackend);
 
   const onDragEnd = (result, columns, setColumns) => {
-    console.log("colun", columns)
-
-
+  
     if (!result.destination) return;
     const { source, destination } = result;
+    
     if (source.droppableId !== destination.droppableId) {
+      
       const sourceColumn = columns[source.droppableId];
       const destColumn = columns[destination.droppableId];
       const sourceItems = [...sourceColumn.items];
@@ -78,8 +102,38 @@ const Boards = (props) => {
           items: destItems,
         },
       });
-      
-      handelupdatetask(destItems);
+      if(destColumn.title == "In Progress"){
+        let body = {
+          taskId: result.draggableId,
+          status: 2
+        }
+          dispatch(updateTaskStatus(body))
+          dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
+      }
+      else if(destColumn.title == "Hold"){
+        let body = {
+          taskId: result.draggableId,
+          status: 3
+        }
+        dispatch(updateTaskStatus(body))
+        dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
+      }
+      else if(destColumn.title == "Done"){
+        let body = {
+          taskId: result.draggableId,
+          status: 4
+        }
+        dispatch(updateTaskStatus(body))
+        dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
+      }
+     else if(destColumn.title == "To-do"){
+        let body = {
+          taskId: result.draggableId,
+          status: 1
+        }
+        dispatch(updateTaskStatus(body))
+        dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
+      }
     } 
     else {
       const column = columns[source.droppableId];
@@ -92,53 +146,70 @@ const Boards = (props) => {
           ...column,
           items: copiedItems,
         },
+        
       });
-      
+     
     }
   };
 
-  useEffect(() => {
-    dispatch(getAllTask())
+  useEffect(()=>{
+    dispatch(getHistory())
+  },[])
+
   
-  }, [])
   useEffect(() => {
+  
 
     if (successHandle?.data?.status == 200) {
       setColumns({
         [uuidv4()]: {
           title: 'To-do',
-          items: successHandle?.data?.Response?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.Response?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
         },
         [uuidv4()]: {
           title: 'In Progress',
-          items: successHandle?.data?.inProgress?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.inProgress?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
         },
+        
+        [uuidv4()]: {
+          title: 'Hold',
+          items: successHandle?.data?.hold?.tasks?.map((ele) => { return { ...ele, id: ele._id }}),
+      },
         [uuidv4()]: {
           title: 'Done',
-          items: successHandle?.data?.done?.map((ele) => { return { ...ele, id: ele._id } }),
+          items: successHandle?.data?.done?.tasks?.map((ele) => { return { ...ele, id: ele._id } }),
         },
       })
     }
   }, [successHandle])
+ // const [body,setBody] = useState({});
+
   const handelupdatetask = (ele) => {
-    let body = {
-      taskId: ele[0].id,
-      status: 2
-    }
-    
-    // console.log("body dataaaaa",body)
-    dispatch(updateTaskStatus(body))
+    if(sessionStorage.getItem('destinationCol') == "To-do"){
+      
+      let body = {
+        taskId: ele.draggableId,
+        status: 2
+      }
+      
+      setTimeout(()=>{
+        dispatch(updateTaskStatus(body))   
+        },5000)
+      
+    }  
    
+  }
+  
+  const callAlltaskData=()=>{
+     dispatch(getAllTask())
   }
 
-  const handel= () => {
-    
-    alert()
-    // console.log("body dataaaaa",body)
-    ///dispatch(updateTask(body))
-   
-  }
-  console.log("dsgsgsbhsr",columns)
+  
+ 
+  const [show, setShow] = useState(false);
+  
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   return (
 
     <>
@@ -150,14 +221,15 @@ const Boards = (props) => {
           onClick={() => {
             console.log("button click");
             setShowModal(!showModal);
+            
           }}
         >
           Add Task
         </button>
-        <RightBar className="d-none" projectId={props.projectId} mileStoneId={props.mileStoneId} sprintId={props.sprintId} showModal={showModal} setShowModal={setShowModal}/>
+        <RightBar  callAlltaskData={callAlltaskData} className="d-none" projectId={props.projectId} mileStoneId={props.mileStoneId} sprintId={props.sprintId} showModal={showModal} setShowModal={setShowModal}/>
      </div>
 
-      <DragDropContext  onDragEnd={(result) => onDragEnd(result, columns, setColumns)} 
+      <DragDropContext  onDragEnd={(result) => onDragEnd(result, columns, setColumns)} onDragStart={(result)=>handelupdatetask(result)}
 
       >
         {successHandle.loading ? (<MainLoader />) : <Container>
@@ -171,10 +243,11 @@ const Boards = (props) => {
                     <TaskList class="three" 
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                    >
+                      
+                    > 
                       <Title class="">{column.title}</Title>
                       {column.items.map((item, index) => (
-                        <TaskCard key={item} item={item} index={index}  />
+                        <TaskCard  key={item.id} item={item} index={index}  />
                       ))}
                       {provided.placeholder}
                     </TaskList>
@@ -186,6 +259,7 @@ const Boards = (props) => {
         </Container>}
 
       </DragDropContext>
+     
     
     </>
 

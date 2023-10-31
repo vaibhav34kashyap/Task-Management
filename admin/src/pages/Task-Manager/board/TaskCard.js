@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import styled from '@emotion/styled';
-import { deleteTask } from '../../../redux/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteTask } from '../../../redux/task/action';
+import Modal from 'react-bootstrap/Modal';
+import { Button } from 'react-bootstrap';
+import ToastHandle from '../../../constants/toaster/toaster';
+import UpdateTask from './update';
 // import CustomAvatar from '../TableComponents/CustomAvatar'
 // import { ReactComponent as RedArrow } from '../../assets/icons/High.svg'
 // import { ReactComponent as YellowArrow } from '../../assets/icons/Medium.svg'
 // import { ReactComponent as BlueArrow } from '../../assets/icons/Low.svg'
 import moment from 'moment';
+import TaskDetailPage from './taskDetailPage';
 const TaskInformation = styled.div`
     display: flex;
     flex-direction: column;
@@ -36,51 +41,112 @@ const TaskInformation = styled.div`
     svg{
       width: 12px !important;
       height: 12px !important;
-      margin-right: 12px; */
+      margin-right: import Column from './../Boards/board/Column';
+12px; */
     /* margin-top: 2px; */
     /* } */
     /* } */
 `;
 
-const TaskCard = ({ item, index}) => {
+const TaskCard = ({ item, index, Column, closeModal }) => {
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [deleteId, setDeleteId] = useState();
+    const [editData, setEditData] = useState();
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [openDetailPage, setOpenDetailPage] = useState(false);
+    const [detailData, setDetailData] = useState();
+    const store = useSelector((state) => state);
 
-  const dispatch = useDispatch();
-const deleteData=(id)=>{
-dispatch(deleteTask({taskId:id}))
-}
+    const dispatch = useDispatch();
+    const deleteData = (id) => {
+        setDeleteId(id);
+        setDeleteModal(true);
+    };
+    const handleYes = () => {
+        dispatch(deleteTask({ taskId: deleteId }));
+        setDeleteModal(false);
+    };
+    const handelUpdate = (data) => {
+        setEditData(data);
+        setOpenEditModal(true);
+    };
+    const closeupdatemodal = (val) => {
+        closeModal('render');
+        setOpenEditModal(false);
+    };
+    const handleDetailPage = (data) => {
+        setOpenDetailPage(true);
+        setDetailData(data);
+    };
+    const closeDetailPage = () => {
+        setOpenDetailPage(false);
+    };
 
-  return (
-   <>
-  
-     <Draggable key={item.id} draggableId={item.id} index={index} >
-      {(provided) => (
-        <div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          <TaskInformation>
-          <div className='action_icon'>
-          <button type='button' ><i class="uil-edit-alt m-0 p-0"></i></button>
-          <button type='button' onClick={()=>deleteData(item.id)} ><i class="mdi mdi-delete m-0 p-0"></i></button>
-          
-          </div>
+    return (
+        <>
+            <Draggable key={item.id} draggableId={item.id} index={index}>
+                {(provided) => (
+                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                        <TaskInformation>
+                            <div className="action_icon">
+                                <button type="button">
+                                    <i
+                                        class="uil-edit-alt m-0 p-0"
+                                        onClick={() => {
+                                            handelUpdate(item);
+                                        }}></i>
+                                </button>
+                                <button type="button" onClick={() => deleteData(item?.id)}>
+                                    <i class="mdi mdi-delete m-0 p-0"></i>
+                                </button>
+                            </div>
 
-            <p>{item.summary}</p>
-            <p>{item.description}</p>
-            <div className="secondary-details">
-              <p>
-                <span>
-                {item?.createdAt ? (moment(item?.createdAt).format('ll')) : ""}
-                </span>
-              </p>
-            </div>
-          </TaskInformation>
-        </div>
-      )}
-    </Draggable>
-   </>
-  );
+                            <a href="#"
+                                onClick={() => {
+                                    handleDetailPage(item);
+                                }}>
+                                {item.summary}
+                            </a>
+                            <p>
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: item?.description,
+                                    }}></div>
+                            </p>
+                            <div className=" d-flex">
+                                <h5 className="m-0 p-0"> Assignee :</h5>
+                                <p className="ms-2 p-0">{item?.assignees?.assigneeInfo?.userName}</p>
+                            </div>
+                            <div className="secondary-details">
+                                <p>
+                                    <span>{item?.startDate ? moment(item?.startDate).format('ll') : ''}</span>
+                                </p>
+                            </div>
+                        </TaskInformation>
+                    </div>
+                )}
+            </Draggable>
+            {/* delete modal */}
+            <Modal show={deleteModal} onHide={() => setDeleteModal(false)}>
+                <Modal.Body>Are you sure you want to delete this Task ?</Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            setDeleteModal(false);
+                        }}>
+                        No
+                    </Button>
+                    <Button className=" web_button " variant="primary" onClick={() => handleYes()}>
+                        Yes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <UpdateTask modal={openEditModal} closeModal={closeupdatemodal} editData={editData} />
+            <TaskDetailPage modal={openDetailPage} editData={detailData} closeModal={closeDetailPage} />
+        </>
+    );
 };
 
 export default TaskCard;

@@ -16,6 +16,13 @@ export const getSingleSprint = (data): AuthAction => ({
     payload: data
 })
 //end single springt------------------
+//===================getAllMilstoneSprints=================================
+export const getAllMilstoneSprints = (data): AuthAction => ({
+    type: SprintTypes.GET_ALL_MILESTONE_SPRINT,
+    payload: data
+})
+//===================================================
+
 export const deleteSprint = (data): AuthAction => ({
     type: SprintTypes.DELETE_SPRINT,
     payload: data
@@ -27,5 +34,10 @@ export const getSprintById = (data): AuthAction => ({
 
 export const updateSprint = (data): AuthAction => ({
     type: SprintTypes.UPDATE_SPRINT,
+    payload: data
+})
+
+export const getSprintId = (data): AuthAction => ({
+    type:'SprintId',
     payload: data
 })

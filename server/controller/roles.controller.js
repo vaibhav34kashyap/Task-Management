@@ -48,8 +48,8 @@ const deleteRole = async (req, res) => {
             res.status(200).json({ status: "400", message: "Role wasn,t found" })
         }
     } catch (err) {
-        return res.status(200).json({ status: "500", message: 'Something went wrong', error : err.message })
+        return res.status(200).json({ status: "500", message: 'Something went wrong', error: err.message })
     }
 }
 
-module.exports = { addRole, getRoles,getAllRoles, deleteRole }
+module.exports = { addRole, getRoles, getAllRoles, deleteRole }

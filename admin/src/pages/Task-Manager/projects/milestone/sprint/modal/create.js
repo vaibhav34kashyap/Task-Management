@@ -15,6 +15,9 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
     const store = useSelector((state) => state);
     const successHandle = store?.addSprint;
     const [description, setDescription] = useState('');
+    // disable previous date
+    const today = new Date().toISOString().split('T')[0];
+    //
     const {
         register,
         handleSubmit,
@@ -23,16 +26,15 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
         reset,
         formState: { errors },
     } = useForm();
-
+console.log(projectId,"projectId")
     const onSubmit = (val) => {
         let body = {
-            project_id: projectId,
-            milestone_id: milestoneId,
+            projectId: projectId,
+            milestoneId: milestoneId,
             sprintName: val?.Name,
-            sprintDesc:description,
+            sprintDesc: description,
             startDate: val?.Startdate,
             endDate: val?.Enddate,
-        
         };
         dispatch(addSprint(body));
     };
@@ -115,7 +117,11 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
                                                 {' '}
                                                 Start date <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control type="date" {...register('Startdate', { required: true })} />{' '}
+                                            <Form.Control
+                                                type="date"
+                                                min={today}
+                                                {...register('Startdate', { required: true })}
+                                            />{' '}
                                             {errors.Startdate?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
@@ -127,13 +133,17 @@ const Create = ({ modal, CloseModal, projectId, milestoneId }) => {
                                                 {' '}
                                                 End date <span className="text-danger">*</span>:
                                             </Form.Label>
-                                            <Form.Control type="date" {...register('Enddate', { required: true })} />{' '}
+                                            <Form.Control
+                                                type="date"
+                                                disabled={watch("Startdate")== ""|| watch("Startdate")== undefined }
+                                                min={watch("Startdate")} 
+                                                {...register('Enddate', { required: true })}
+                                            />{' '}
                                             {errors.Enddate?.type === 'required' && (
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>
                                     </Col>
-                 
                                 </Row>
                                 <Row>
                                     <Col className="text-start d-flex align-items-center justify-content-center">

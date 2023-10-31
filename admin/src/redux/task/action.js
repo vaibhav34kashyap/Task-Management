@@ -27,3 +27,7 @@ export const updateTaskStatus = (data): AuthAction => ({
     type: TASK_TYPES.UPDATE_TASK_STATUS,
     payload: data
 })
+export const TaskStatusAction = (data): AuthAction => ({
+    type: TASK_TYPES.TASK_STATUS,
+    payload: data
+})

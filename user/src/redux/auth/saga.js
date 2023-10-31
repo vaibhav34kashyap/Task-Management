@@ -70,6 +70,7 @@ function* login({ payload: { username, password } }) {
             const data = response?.data?.response;
             const tokenData = response?.data;
             const userData = {
+                userId:data?._id,
                 id: data?.roleId?._id,
                 username: data?.roleId?.role,
                 password: 'test',

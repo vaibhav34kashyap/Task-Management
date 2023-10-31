@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
+import MainLoader from '../constants/Loader/loader';
 
 
 // actions
@@ -33,6 +34,16 @@ import RightBar from './AddRightSideBar';
 import * as layoutConstants from '../constants/layout';
 import TimeLine from './../pages/profile2/TimeLine';
 import MileStone from './../pages/Task-Manager/AllMillstones/mileStone/index';
+import {getProjectMilestones} from '../../src/redux/milestone/action'
+import {getAllMilstoneSprints} from '../../src/redux/sprint/action'
+import { getsingleMileStone,getMileStonebyprojectid } from '../../src/redux/milestone/action';
+import {getProjectsById} from '../../src/redux/projects/action';
+import {getProjectId} from '../../src/redux/projects/action';
+import {getMilestoneId} from '../../src/redux/milestone/action';
+import {getSprintId} from '../../src/redux/sprint/action'
+
+
+
 
 
 
@@ -135,15 +146,18 @@ type TopbarProps = {
 const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: TopbarProps): React$Element<any> => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state);
+    console.log("storeeeeeee",store)
     const [isopen, setIsopen] = useState(false);
     const allProjects = store?.getProject?.data?.response;
-    const getAllMilestoneData = store?.getAllMileStones?.data?.response;
+    
+    const getAllMilestoneData = store?.getSigleMileStone?.data?.response;
     const getAllSingleSprints = store?.getAllSingleSprints?.data?.Response;
-    const [projectId ,setProjectId] = useState('');
-    const [projectNameHeading ,setProjectName] = useState('select Project Name');
-    const [mileStoneId ,setMileStoneId] = useState('');
-    const [sprintId ,setSprintId] = useState('');
-    const [mileStoneData,setmileStoneData]  = useState([]);    
+    //==============================================================================================
+    
+    //========================================================================================================
+
+
+    const [projectNameHeading ,setProjectName] = useState('Select Project Name');
     
     const navbarCssClasses = navCssClasses || '';
     const containerCssClasses = !hideLogo ? 'container-fluid' : '';
@@ -158,29 +172,30 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
             status: 1,
         };
         dispatch(getAllProjects(data))
-        dispatch(getallMileStones({status:1}))
-        console.log("all porjec",store)
-    },[])
+        //dispatch(getallMileStones({status:1}))
+        // dispatch(getProjectMilestones({projectId:projectId,status:1})) 
+           },[])
 
-    const onChangeProject =(e)=>{   
-       // setProjectId(e.target.value) 
+    const onChangeProject =(e)=>{  
         sessionStorage.setItem("projectId",e.target.value)
        const projectData = allProjects?.filter((item)=>item._id == e.target.value);
-       console.log("Data name",projectData)
        setProjectName(projectData[0].projectName)
-       const data =  getAllMilestoneData?.filter((item)=>{
-            return item.project_id === e.target.value;
-        })
-        setmileStoneData(data);
+       dispatch(getProjectId(e.target.value))
+       dispatch(getsingleMileStone({id:e.target.value,status:1})) 
         
+   
     }
     const onChangeMilestone =(e)=>{
         //setMileStoneId(e.target.value)
-        sessionStorage.setItem("mileStoneId",e.target.value)
-        dispatch(getSingleSprint({status:true ,id:e.target.value}));  
+        sessionStorage.setItem("mileStoneId",e.target.value)    
+        
+        dispatch(getMilestoneId(e.target.value))   
+        dispatch(getAllMilstoneSprints({milestoneId:e.target.value,status:1}))
+
     }
     const onChangeSprint =(e)=>{
         //setSprintId(e.target.value)
+        dispatch(getSprintId(e.target.value))
         sessionStorage.setItem("sprintId",e.target.value)
     }
 
@@ -251,10 +266,29 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             <li><Link to=''>Filters</Link></li>
                             <li><Link to=''>Dashboard</Link></li>
                             <li><Link to=''>Teams</Link></li>
-                            <li>
+                                <li><div class="project_names">
+                            <select name="Assignee" class="form-select " id="exampleForm.ControlInput1"  onChange={onChangeProject}>
+                                <option>Projects</option>
+                                {allProjects?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.projectName}</option>
+                                )}
+                            </select></div></li>
+                            <li><div class="project_names">   <select name="Assignee" class="form-select " id="exampleForm.ControlInput1" onChange={onChangeMilestone}>
+                                <option> MileStone</option>
+                                {getAllMilestoneData?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.title}</option>
+                                )}
+                            </select></div></li>
+                            <li><div class="project_names">
+                            <select name="Assignee" class="form-select " id="exampleForm.ControlInput1" onChange={onChangeSprint}>
+                                <option> Sprint</option>
+                                {getAllSingleSprints?.map((item,index)=>
+                                    <option key={index} value={item._id}>{item.sprintName}</option>
+                                )}
+                            </select></div></li>
+                            {/* <li>
                             <div class="project_names">
-                            {/* <label class="form-label" for="exampleForm.ControlInput1"> Projects <span class="text-danger">*</span>:</label> */}
-                            <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeProject}>
+                                                        <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeProject}>
                                 <option>--Select Project--</option>
                                 {allProjects?.map((item,index)=>
                                     <option key={index} value={item._id}>{item.projectName}</option>
@@ -262,7 +296,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </select>
                             <select name="Assignee" class="form-select" id="exampleForm.ControlInput1" onChange={onChangeMilestone}>
                                 <option>--Select MileStone--</option>
-                                {mileStoneData?.map((item,index)=>
+                                {getAllMilestoneData?.map((item,index)=>
                                     <option key={index} value={item._id}>{item.title}</option>
                                 )}
                             </select>
@@ -273,10 +307,11 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                                 )}
                             </select>
                             </div>
-                            </li>
+                            </li> */}
                     </ul>
                    </div>
                          </div> 
+                         
                   
 
                     <ul className="list-unstyled topbar-menu float-end mb-0 topbarr">
@@ -352,8 +387,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                 </div>
                 <div className='taskinfo' >
                     <ul>
-                        <li> <Link to="">List</Link>  </li>
-                        <li> <Link to="">Board</Link>  </li>
+                        <li> <Link to="summary">Summary</Link>  </li>
+                        <li> <Link to="summary">List</Link> </li>
+                        <li> <Link to="/boards">Board</Link>  </li>
                         <li> <Link to="">Calendar</Link>  </li>
                         <li> <Link to="">TimeLine</Link>  </li>
                         <li> <Link to="">Pages</Link>  </li>
