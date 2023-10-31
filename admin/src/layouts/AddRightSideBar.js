@@ -174,39 +174,6 @@ export default function RightBar(props) {
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            Start Date<span class="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            placeholder="Please start Date "
-                                            type="date"
-                                            min={today}
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('start_date')}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-2">
-                                        <label class="form-label" for="exampleForm.ControlTextarea1">
-                                            End Date<span class="text-danger">*</span>:
-                                        </label>
-                                        <input
-                                            placeholder="Please end Date"
-                                            type="date"
-                                            disabled={watch("start_date")== ""|| watch("start_date")== undefined }
-                                                min={watch("start_date")} 
-                                            id="exampleForm.ControlTextarea1"
-                                            class="form-control"
-                                            {...register('last_date')}
-                                        />
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
                                     <div class="mb-1">
                                         <label class="form-label" for="exampleForm.ControlInput1">
                                             {' '}
@@ -224,8 +191,8 @@ export default function RightBar(props) {
                                         </select>
                                     </div>
                                 </div>
-                              
                             </div>
+                          
                             <div class="row">
                             <div class="col-lg-6">
                                     <div class="mb-2">
@@ -260,7 +227,7 @@ export default function RightBar(props) {
                                 
                             </div>
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
                                             Status<span class="text-danger">*</span>:
