@@ -252,6 +252,7 @@ const Create = ({ modal, closeModal }) => {
                                                 <span className="text-danger"> This feild is required *</span>
                                             )}
                                         </Form.Group>
+                                        
                                     </Col>
                                 </Row>
                                 <Row>

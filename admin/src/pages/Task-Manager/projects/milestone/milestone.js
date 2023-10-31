@@ -46,7 +46,7 @@ const Milestone = () => {
                 id: id,
                 activeStatus: 1,
                 skip
-                ,mileStoneId:"" 
+                , mileStoneId: ""
             };
             dispatch(getsingleMileStone(data));
         } else {
@@ -54,14 +54,14 @@ const Milestone = () => {
             let data = {
                 id: id,
                 activeStatus: 0,
-                skip,mileStoneId:"" 
+                skip, mileStoneId: ""
             };
             dispatch(getsingleMileStone(data));
         }
     };
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setSkip(value);
-        dispatch(getsingleMileStone({ id: id, activeStatus: status ,skip: value ,mileStoneId:"" }));
+        dispatch(getsingleMileStone({ id: id, activeStatus: status, skip: value, mileStoneId: "" }));
     };
     const handleStatusChange = (e, data) => {
         if (e.target.checked) {
@@ -109,46 +109,43 @@ const Milestone = () => {
         }
     }, [deletehandle]);
     useEffect(() => {
-        dispatch(getsingleMileStone({ id: id, activeStatus: status ,skip ,mileStoneId:"" }));
+        dispatch(getsingleMileStone({ id: id, activeStatus: status, skip, mileStoneId: "" }));
     }, [render]);
 
     return (
         <>
             {/* {/ <h1>{id}</h1> /} */}
-            <Container className="my-3">
+            <div className="my-3">
                 <Row>
-                    <Col className="text-end" lg={12}>
+                    {/* <Col className="text-end" lg={12}>
                         <Button
                             onClick={() => {
                                 setOpenModel(true);
                             }}
-                            // onClick={handleCreate}
-
-                            // onClick={(e)=>{handleCreate(e,"ghjkl")}}
+                           
 
                             variant="info"
                             type="submit"
                             className="btn fs-5  text-white p-1   web_button">
                             Add Milestone
                         </Button>
-                    </Col>
+                    </Col> */}
                 </Row>
                 {loaderhandel.loading ? (
                     <MainLoader />
                 ) : (
                     <>
-                    
-                        <Card className="mt-3">
+
+                        <Card className="mx-0">
                             <Card.Body>
-                                <Col className="mx-auto" lg={12}>
-                                    <Row>
-                                        <div className="row mx-auto mt-2">
+                                <Col className="mx-0" lg={12}>
+                                    <Row >
+                                        <div className="row   ">
                                             <div className="d-flex col-4">
                                                 <div className="row d-flex align-items-center">
                                                     <div
-                                                        className={`col-auto  cp ${
-                                                            status == 1 ? 'Active_data' : 'InActive_data'
-                                                        }`}>
+                                                        className={`col-auto  cp ${status == 1 ? 'Active_data' : 'InActive_data'
+                                                            }`}>
                                                         <p
                                                             className="p-0 m-0 p-1 cp"
                                                             onClick={() => handleActive(true)}>
@@ -156,9 +153,8 @@ const Milestone = () => {
                                                         </p>
                                                     </div>
                                                     <div
-                                                        className={`col-auto  cp ${
-                                                            status == 0 ? 'Active_data' : 'InActive_data'
-                                                        }`}>
+                                                        className={`col-auto  cp ${status == 0 ? 'Active_data' : 'InActive_data'
+                                                            }`}>
                                                         <p
                                                             className=" p-0 m-0 p-1 cp"
                                                             onClick={() => handleActive(false)}>
@@ -169,6 +165,19 @@ const Milestone = () => {
                                             </div>
                                             <div className="col-4 d-flex align-items-center justify-content-center">
                                                 <h4 className="header-title heading_data"> Milestones</h4>
+                                            </div>
+                                            <div className="col-4 d-flex align-items-center justify-content-end">
+                                                <Button
+                                                    onClick={() => {
+                                                        setOpenModel(true);
+                                                    }}
+
+
+                                                    variant="info"
+                                                    type="submit"
+                                                    className="btn fs-5  text-white p-1   web_button">
+                                                    Add Milestone
+                                                </Button>
                                             </div>
                                         </div>
                                         <Col className="" lg={12}>
@@ -275,7 +284,7 @@ const Milestone = () => {
                         </Button>
                     </Modal.Footer>
                 </Modal>
-            </Container>
+            </div>
         </>
     );
 };
