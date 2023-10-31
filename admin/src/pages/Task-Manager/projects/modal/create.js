@@ -40,6 +40,7 @@ const Create = ({ modal, closeModal }) => {
         reset,
         formState: { errors },
     } = useForm();
+    console.log(watch("startDate"),"watchhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
     console.log(addValue, 'select');
     const onSubmit = (data) => {
         let body = {
@@ -207,7 +208,7 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                onClick={(e)=>{handelstartDate(e)}}
+                                                // onChange={(e)=>{handelstartDate(e)}}
                                                 min={today} // Set the minimum date to today
                                                 {...register('startDate', { required: true })}
                                                 placeholder="Please start Date "
@@ -224,8 +225,8 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                disabled={endDateDisable}
-                                                min={minimumEndDate} 
+                                                disabled={watch("startDate")== ""|| watch("startDate")== undefined }
+                                                min={watch("startDate")} 
                                                 {...register('endDate', { required: true })}
                                                 placeholder="Please end Date"
                                             />

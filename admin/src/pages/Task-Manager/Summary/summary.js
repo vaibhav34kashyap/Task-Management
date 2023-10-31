@@ -75,7 +75,7 @@ const Summary = () => {
         xaxis: {
             categories: barGraphData?.map((ele, ind) => ele?.name),
         },
-        colors: ['#727cf5', '#0acf97', '#fa5c7c', '#ffbc00'],
+        colors: ['#727cf5', '#0acf97', '#fa5c7c'],
     };
 
     const series = [
