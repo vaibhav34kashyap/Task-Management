@@ -496,8 +496,8 @@ const getTasksStatusCount = async (req, res) => {
 // Get count of all tasks
 const getTasksCount = async (req, res) => {
     try {
-        const count = await taskModel.countDocuments();
-        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: count });
+        const tasksCount = await taskModel.countDocuments();
+        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: {tasksCount} });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
@@ -511,7 +511,7 @@ const getTasksWeekCount = async (req, res) => {
 
         const doneCount = await taskModel.countDocuments({ status: 4, createdAt: { $gte: sevenDaysAgo } });
 
-        const updatedCount = await taskModel.countDocuments({ updatedAt: { $gte: sevenDaysAgo } })
+        const updatedCount = await taskModel.countDocuments({updatedAt: { $gte: sevenDaysAgo },createdAt: { $ne: "$updatedAt" }});
 
         const createdCount = await taskModel.countDocuments({ createdAt: { $gte: sevenDaysAgo } })
 

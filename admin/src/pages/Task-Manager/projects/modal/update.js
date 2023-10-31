@@ -25,26 +25,27 @@ const Update = ({ modal, closeModal, editData }) => {
     } = useForm();
 
     const [selected, setSelected] = useState([]);
+    const [finalTechnology, setFinalTechnology] = useState([]);
     const [addValue, setAddValue] = useState([]);
     const getTechnology = store?.getAllTechnologyReducer?.data?.response;
     // disable previous date
     const today = new Date().toISOString().split('T')[0];
-        // start date
-        function findMinimumStartDate(startdate1, startdate2) {
-            return new Date(Math.min(new Date(startdate1), new Date(startdate2)));
-        }
-        const startdate1 = new Date();
-        const startdate2 = editData?.startDate;
-        const minimumStartDate = findMinimumStartDate(startdate1, startdate2);
-        //
-        // end date
-        function findMinimumEndDate(date1, date2) {
-            return new Date(Math.min(new Date(date1), new Date(date2)));
-        }
-        const date1 = new Date();
-        const date2 = editData?.endDate;
-        const minimumEndDate = findMinimumEndDate(date1, date2);
-        // 
+    // start date
+    function findMinimumStartDate(startdate1, startdate2) {
+        return new Date(Math.min(new Date(startdate1), new Date(startdate2)));
+    }
+    const startdate1 = new Date();
+    const startdate2 = editData?.startDate;
+    const minimumStartDate = findMinimumStartDate(startdate1, startdate2);
+    //
+    // end date
+    function findMinimumEndDate(date1, date2) {
+        return new Date(Math.min(new Date(date1), new Date(date2)));
+    }
+    const date1 = new Date();
+    const date2 = editData?.endDate;
+    const minimumEndDate = findMinimumEndDate(date1, date2);
+    //
     const handleDate = (data) => {
         let date = new Date(data);
         let year = date.toLocaleString('default', { year: 'numeric' });
@@ -54,6 +55,8 @@ const Update = ({ modal, closeModal, editData }) => {
         return formattedDate;
     };
     useEffect(() => {
+        setFinalTechnology(editData?.technology);
+        setAddValue(editData?.technology);
         reset({
             projectName: editData?.projectName,
             clientName: editData?.clientName,
@@ -66,25 +69,29 @@ const Update = ({ modal, closeModal, editData }) => {
             technology: editData?.technology,
             projectstatus: editData?.projectStatus,
             expectedEndDate: handleDate(editData?.expectedDate),
-            // status :editData?.projectStatus
         });
     }, [modal]);
-
     const removehandle = (selectedList, removedItem) => {
+        console.log(selectedList);
         const remove = getTechnology.filter((ele, ind) => {
-            return ele?.techName == removedItem;
+            return ele?.techName !== removedItem;
         });
-        // make a separate copy of the array
-      var data =   addValue.filter((item)=>item !== remove[0]._id)
-      setAddValue(data);
-        console.log("asfasf",data)
+        const arr = [];
+        selectedList.forEach((element) => {
+            getTechnology.filter((ele) => {
+                if (ele?.techName === element) {
+                    arr.push(ele);
+                    return setAddValue(arr);
+                }
+            });
+        });
     };
-
     const addhandle = (selectedList, selectItem) => {
         const add = getTechnology.filter((ele, ind) => {
             return ele?.techName == selectItem;
         });
-         setAddValue([...addValue, add[0]._id]);
+        setAddValue([...addValue, add[0]]);
+        console.log(addValue, 'addvalue info');
     };
 
     const onSubmit = (data) => {
@@ -98,13 +105,12 @@ const Update = ({ modal, closeModal, editData }) => {
             technology: addValue,
             projectStatus: data?.projectstatus,
         };
-          console.log("fsadsadsadsa",addValue)
-       dispatch(updateProject(body));
+        console.log('fsadsadsadsa', addValue);
+        dispatch(updateProject(body));
     };
     const selectedValues = editData?.technology?.map((item) => {
         return item.techName;
     });
-
     useEffect(() => {
         if (sucesshandel?.data?.status == 200) {
             ToastHandle('success', 'Updated Successfully');

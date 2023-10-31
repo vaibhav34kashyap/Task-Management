@@ -37,6 +37,13 @@ import MileStone from './../pages/Task-Manager/AllMillstones/mileStone/index';
 import {getProjectMilestones} from '../../src/redux/milestone/action'
 import {getAllMilstoneSprints} from '../../src/redux/sprint/action'
 import { getsingleMileStone,getMileStonebyprojectid } from '../../src/redux/milestone/action';
+import {getProjectsById} from '../../src/redux/projects/action';
+import {getProjectId} from '../../src/redux/projects/action';
+import {getMilestoneId} from '../../src/redux/milestone/action';
+import {getSprintId} from '../../src/redux/sprint/action'
+
+
+
 
 
 
@@ -151,7 +158,6 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
 
 
     const [projectNameHeading ,setProjectName] = useState('Select Project Name');
-    const [mileStoneData,setmileStoneData]  = useState([]);    
     
     const navbarCssClasses = navCssClasses || '';
     const containerCssClasses = !hideLogo ? 'container-fluid' : '';
@@ -161,7 +167,6 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
         leftSideBarType: state.Layout.leftSideBarType,
     }));
 
-  const [projectId,setProjectId] = useState('');
     useEffect(()=>{
         let data = {
             status: 1,
@@ -172,21 +177,25 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
            },[])
 
     const onChangeProject =(e)=>{  
-        
-       setProjectId(e.target.value) 
         sessionStorage.setItem("projectId",e.target.value)
        const projectData = allProjects?.filter((item)=>item._id == e.target.value);
        setProjectName(projectData[0].projectName)
+       dispatch(getProjectId(e.target.value))
        dispatch(getsingleMileStone({id:e.target.value,status:1})) 
+        
    
     }
     const onChangeMilestone =(e)=>{
         //setMileStoneId(e.target.value)
-        sessionStorage.setItem("mileStoneId",e.target.value)
+        sessionStorage.setItem("mileStoneId",e.target.value)    
+        
+        dispatch(getMilestoneId(e.target.value))   
         dispatch(getAllMilstoneSprints({milestoneId:e.target.value,status:1}))
+
     }
     const onChangeSprint =(e)=>{
         //setSprintId(e.target.value)
+        dispatch(getSprintId(e.target.value))
         sessionStorage.setItem("sprintId",e.target.value)
     }
 
@@ -266,7 +275,7 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                             </select></div></li>
                             <li><div class="project_names">   <select name="Assignee" class="form-select " id="exampleForm.ControlInput1" onChange={onChangeMilestone}>
                                 <option> MileStone</option>
-                                {mileStoneData?.map((item,index)=>
+                                {getAllMilestoneData?.map((item,index)=>
                                     <option key={index} value={item._id}>{item.title}</option>
                                 )}
                             </select></div></li>
@@ -378,8 +387,9 @@ const Topbar = ({ hideLogo, navCssClasses, openLeftMenuCallBack, topbarDark }: T
                 </div>
                 <div className='taskinfo' >
                     <ul>
-                        <li> <Link to="">List</Link>  </li>
-                        <li> <Link to="">Board</Link>  </li>
+                        <li> <Link to="summary">Summary</Link>  </li>
+                        <li> <Link to="summary">List</Link> </li>
+                        <li> <Link to="/boards">Board</Link>  </li>
                         <li> <Link to="">Calendar</Link>  </li>
                         <li> <Link to="">TimeLine</Link>  </li>
                         <li> <Link to="">Pages</Link>  </li>
