@@ -135,7 +135,8 @@ console.log(projectId,"projectId")
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                min={today}
+                                                disabled={watch("Startdate")== ""|| watch("Startdate")== undefined }
+                                                min={watch("Startdate")} 
                                                 {...register('Enddate', { required: true })}
                                             />{' '}
                                             {errors.Enddate?.type === 'required' && (
