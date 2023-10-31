@@ -34,7 +34,7 @@ import {
     UpdateTechnologyCategoryReducer,
     deleteTechnologyCategory,
 } from './technology/reducer';
-import { addComments } from './addcomment/reducers';
+import { addComments,deleteComment,updateComment,getHistoryData } from './addcomment/reducers';
 export default (combineReducers({
     Auth,
     Layout,
@@ -75,5 +75,7 @@ export default (combineReducers({
     getProjectId,
     getMilestoneId,
     getSprintId,
-    addComments
+    addComments,
+    deleteComment,
+    updateComment,getHistoryData
 }): any);

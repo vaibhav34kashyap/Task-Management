@@ -49,3 +49,8 @@ export const GetAssignee ="/assignUser/getUserAssignments?assigneeId="
 export const AddTaskComment="/comments/addComment"
 // export const GetComment="/task/getTasksAccToStatus?projectId="
 
+export const delteTaskComment="/comments/deleteComment?";
+export const updateTaskComment="/comments/updateComment";
+
+export const getHistory="/history/getHistory";
+

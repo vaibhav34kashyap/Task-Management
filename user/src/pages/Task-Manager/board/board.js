@@ -14,6 +14,7 @@ import Modal from 'react-bootstrap/Modal';
 import {getsingleMileStone} from '../../../redux/milestone/action'
 import {getAllMilstoneSprints} from '../../../redux/sprint/action'
 import {getAllProjects} from '../../../redux/projects/action'
+import {getHistory} from '../../../redux/addcomment/actions'
 
 const Container = styled.div`
   display: flex;
@@ -57,6 +58,9 @@ const Boards = (props) => {
 const projectId=store?.getProjectId?.data
 const milstoneId=store?.getMilestoneId?.data
 const SprintId=store?.getSprintId?.data
+
+
+
   useEffect(() => {
     dispatch(getAllTask({id:projectId , mileStoneId:milstoneId,sprintId:SprintId,activeStatus: 1 }))
     
@@ -148,8 +152,13 @@ const SprintId=store?.getSprintId?.data
     }
   };
 
+  useEffect(()=>{
+    dispatch(getHistory())
+  },[])
+
   
   useEffect(() => {
+  
 
     if (successHandle?.data?.status == 200) {
       setColumns({
@@ -187,19 +196,16 @@ const SprintId=store?.getSprintId?.data
         dispatch(updateTaskStatus(body))   
         },5000)
       
-    }
+    }  
    
-    //console.log("body dataaaaa",ele)
-    //console.log(sessionStorage.getItem('des'))
-    
-   
+  }
+  
+  const callAlltaskData=()=>{
+     dispatch(getAllTask())
   }
 
   
-  const callAlltaskData=()=>{
-   // dispatch(getAllTask())
-  }
-
+ 
   const [show, setShow] = useState(false);
   
   const handleClose = () => setShow(false);
@@ -241,7 +247,7 @@ const SprintId=store?.getSprintId?.data
                     > 
                       <Title class="">{column.title}</Title>
                       {column.items.map((item, index) => (
-                        <TaskCard key={item.id} item={item} index={index}  />
+                        <TaskCard  key={item.id} item={item} index={index}  />
                       ))}
                       {provided.placeholder}
                     </TaskList>

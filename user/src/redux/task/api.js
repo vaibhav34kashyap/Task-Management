@@ -23,4 +23,5 @@ export function deleteTaskApi(data): any {
 export function updateTaskStatusApi(data): any {
     console.log("task",data.payload)
     return api.update(URL.UpdateTaskStatus, data.payload);
+
 }
