@@ -148,7 +148,8 @@ const Create = ({ modal, closeModal }) => {
                                             </Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                min={today}
+                                                disabled={watch("Start_date")== ""|| watch("Start_date")== undefined }
+                                                min={watch("Start_date")} 
                                                 {...register('End_date', { required: true })}
                                             />{' '}
                                             {errors.End_date?.type === 'required' && (

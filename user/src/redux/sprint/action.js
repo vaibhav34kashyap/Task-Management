@@ -36,3 +36,8 @@ export const updateSprint = (data): AuthAction => ({
     type: SprintTypes.UPDATE_SPRINT,
     payload: data
 })
+
+export const getSprintId = (data): AuthAction => ({
+    type:'SprintId',
+    payload: data
+})

@@ -319,7 +319,7 @@ const Update = ({ modal, CloseModal, editData }) => {
                                                     </Form.Label>
                                                     <Form.Control
                                                         type="date"
-                                                        min={handleDate(minimumEndDate)}
+                                                        min={watch("startDate")}
                                                         {...register('dueDate', { required: true })}
                                                     />{' '}
                                                     {errors.dueDate?.type === 'required' && (

@@ -9,7 +9,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 export default function RightBar(props) {
     const {
         register,
-        handleSubmit,
+        handleSubmit,watch,
         formState: { errors },
     } = useForm();
     const { showModal, setShowModal, content } = props;
@@ -209,6 +209,8 @@ export default function RightBar(props) {
                                         />
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-2">
                                         <label class="form-label" for="exampleForm.ControlTextarea1">
@@ -217,14 +219,32 @@ export default function RightBar(props) {
                                         <input
                                             placeholder="Please end Date"
                                             type="date"
-                                            min={today}
+                                            disabled={watch("start_date")== ""|| watch("start_date")== undefined }
+                                                min={watch("start_date")} 
                                             id="exampleForm.ControlTextarea1"
                                             class="form-control"
                                             {...register('last_date')}
                                         />
                                     </div>
                                 </div>
-                                
+                                <div class="col-lg-6">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="exampleForm.ControlInput1">
+                                            {' '}
+                                            Priority <span class="text-danger">*</span>:
+                                        </label>
+                                        <select
+                                            name="Priority"
+                                            class="form-select"
+                                            id="exampleForm.ControlInput1"
+                                            {...register('priority')}>
+                                            <option>-----select----</option>
+                                            <option value="1">High</option>
+                                            <option value="2">Medium</option>
+                                            <option value="3">Low</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">

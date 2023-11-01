@@ -83,7 +83,7 @@ const getUserTasks = async (req, res) => {
         let hold = [];
         let done = [];
         const query = {
-            assigneeId: new mongoose.Types.ObjectId(req.query.assigneeId)
+            assigneeId: new mongoose.Types.ObjectId(req.user._id)
         };
         if (req.query.projectId && req.query.milestoneId && req.query.sprintId) {
             const taskfind = await taskModel.find({ projectId: req.query.projectId, milestoneId: req.query.milestoneId, sprintId: req.query.sprintId });

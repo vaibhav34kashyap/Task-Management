@@ -19,6 +19,11 @@ export const deleteProject = (data): AuthAction => ({
     payload: data
 })
 export const getProjectsById= (data): AuthAction => ({
-    type: ProjectTypes. GET_PROJECT_BY_ID,
+    type: ProjectTypes.GET_PROJECT_BY_ID,
+    payload: data
+})
+
+export const getProjectId = (data): AuthAction => ({
+    type:'ProjectId',
     payload: data
 })

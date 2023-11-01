@@ -25,7 +25,7 @@ const createtask = async (req, res) => {
                 dueDate,
                 attachment: `http://localhost:8000/upload/${req.file.originalname}`,
             });
-            if (task) {
+            if (task && req.user.role === 1) {
                 const assignedUser = await assignUserModel.create({
                     assigneeId: assigneeId, // One who is doing work
                     reporterId: reporterId, // one who will assignee report after work done
@@ -235,7 +235,7 @@ const updateTaskStatus = async (req, res,) => {
             DELETED: 'deleted',
         };
         await historyModel.create({
-            type: HistoryTypeEnum.UPDATED, 
+            type: HistoryTypeEnum.UPDATED,
             taskId: req.body.taskId,
             previousStatus: existingTask.status,
             currentStatus: req.body.status
@@ -413,81 +413,73 @@ const getTasksAccToStatus = async (req, res) => {
 // Priority breakdown of Tasks for a User as well as For admin
 const getPriorityTasks = async (req, res) => {
     try {
-        const taskArr = [];
-        const firstPriority = await taskModel.countDocuments({ priority: 1 });
-        const firstPriorityData = {
-            name: "highPriority",
-            count: firstPriority
-        }
-        taskArr.push(firstPriorityData)
+        if (req.user.role === 1) {
+            const firstPriority = await taskModel.countDocuments({ priority: 1 });
+            const secondPriority = await taskModel.countDocuments({ priority: 2 });
+            const thirdPriority = await taskModel.countDocuments({ priority: 3 });
 
-        const secondPriority = await taskModel.countDocuments({ priority: 2 })
-        const secondPriorityData = {
-            name: "MediumPriority",
-            count: secondPriority
-        }
-        taskArr.push(secondPriorityData)
+            const taskPriorityCount = [
+                { name: 'highPriority', count: firstPriority },
+                { name: 'mediumPriority', count: secondPriority },
+                { name: 'lowPriority', count: thirdPriority }
+            ];
+            return res.status(200).json({ status: '200', message: "Prioity wise tasks for Admin fetched successfully", response: taskPriorityCount });
+        } else {
+            const assigneeTasks = await assignUserModel.find({ assigneeId: req.user._id });
+            let taskIds = assigneeTasks.map(id => id.taskId);
 
-        const thirdPriority = await taskModel.countDocuments({ priority: 3 })
-        const thirdPriorityData = {
-            name: "lowPriority",
-            count: thirdPriority
-        }
-        taskArr.push(thirdPriorityData)
+            const firstPriority = await taskModel.countDocuments({ _id: { $in: taskIds }, priority: 1 });
+            const secondPriority = await taskModel.countDocuments({ _id: { $in: taskIds }, priority: 2 });
+            const thirdPriority = await taskModel.countDocuments({ _id: { $in: taskIds }, priority: 3 });
 
-        return res.status(200).json({ status: '200', message: "Prioity wise tasks fetched successfully", response: taskArr });
+            const taskPriorityCount = [
+                { name: 'highPriority', count: firstPriority },
+                { name: 'mediumPriority', count: secondPriority },
+                { name: 'lowPriority', count: thirdPriority }
+            ];
+            return res.status(200).json({ status: '200', message: 'Priority wise tasks for User fetched successfully', response: taskPriorityCount })
+        }
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
 }
 
-// Get Status overview Count of tasks
+// Get overview of tasks Status Count 
 const getTasksStatusCount = async (req, res) => {
     try {
-        const taskArr = [];
         const now = new Date();
         const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // Calculate the date 7 days ago
 
-        const todoCount = await taskModel.countDocuments({
-            status: 1,
-            createdAt: { $gte: sevenDaysAgo }
-        });
-        const todoData = {
-            name: "todo",
-            count: todoCount
-        }
-        taskArr.push(todoData)
+        if (req.user.role === 1) {
+            const todoCount = await taskModel.countDocuments({ status: 1, createdAt: { $gte: sevenDaysAgo } });
+            const inProgressCount = await taskModel.countDocuments({ status: 2, createdAt: { $gte: sevenDaysAgo } });
+            const holdCount = await taskModel.countDocuments({ status: 3, createdAt: { $gte: sevenDaysAgo } });
+            const doneCount = await taskModel.countDocuments({ status: 4, createdAt: { $gte: sevenDaysAgo } });
 
-        const inProgressCount = await taskModel.countDocuments({
-            status: 2,
-            createdAt: { $gte: sevenDaysAgo }
-        });
-        const inProgressData = {
-            name: "inProgress",
-            count: inProgressCount
-        }
-        taskArr.push(inProgressData)
+            const taskStatusCount = [
+                { name: 'todo', count: todoCount },
+                { name: 'inProgress', count: inProgressCount },
+                { name: 'hold', count: holdCount },
+                { name: 'Done', count: doneCount }
+            ];
+            return res.status(200).json({ status: '200', message: "Tasks count for Admin fetched successfully", response: taskStatusCount });
+        } else {
+            const assigneeTasks = await assignUserModel.find({ assigneeId: req.user._id });
+            let taskIds = assigneeTasks.map(id => id.taskId);
 
-        const holdCount = await taskModel.countDocuments({
-            status: 3,
-            createdAt: { $gte: sevenDaysAgo }
-        });
-        const holdData = {
-            name: "hold",
-            count: holdCount
-        }
-        taskArr.push(holdData)
+            const todoCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 1, createdAt: { $gte: sevenDaysAgo } });
+            const inProgressCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 2, createdAt: { $gte: sevenDaysAgo } });
+            const holdCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 3, createdAt: { $gte: sevenDaysAgo } });
+            const doneCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 4, createdAt: { $gte: sevenDaysAgo } });
 
-        const doneCount = await taskModel.countDocuments({
-            status: 4,
-            createdAt: { $gte: sevenDaysAgo }
-        });
-        const doneData = {
-            name: "Done",
-            count: doneCount
+            const taskStatusCount = [
+                { name: 'todo', count: todoCount },
+                { name: 'inProgress', count: inProgressCount },
+                { name: 'hold', count: holdCount },
+                { name: 'Done', count: doneCount }
+            ];
+            return res.status(200).json({ status: '200', message: "Tasks count for User fetched successfully", response: taskStatusCount });
         }
-        taskArr.push(doneData)
-        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: taskArr });
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
@@ -496,8 +488,17 @@ const getTasksStatusCount = async (req, res) => {
 // Get count of all tasks
 const getTasksCount = async (req, res) => {
     try {
-        const count = await taskModel.countDocuments();
-        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: count });
+        if (req.user.role === 1) {
+            const tasksCount = await taskModel.countDocuments();
+            return res.status(200).json({ status: '200', message: "Tasks count for admin fetched successfully", response: { tasksCount } });
+        }
+        else {
+            const assigneeTasks = await assignUserModel.find({ assigneeId: req.user._id });
+            let taskIds = assigneeTasks.map(id => id.taskId);
+
+            const tasksCount = await taskModel.countDocuments({ _id: { $in: taskIds } });
+            return res.status(200).json({ status: '200', message: "Tasks count for user fetched successfully", response: { tasksCount } });
+        }
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }
@@ -509,15 +510,70 @@ const getTasksWeekCount = async (req, res) => {
         const now = new Date();
         const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // Calculate the date 7 days ago
 
-        const doneCount = await taskModel.countDocuments({ status: 4, createdAt: { $gte: sevenDaysAgo } });
+        if (req.user.role === 1) {
+            const doneCount = await taskModel.countDocuments({ status: 4, createdAt: { $gte: sevenDaysAgo } });
+            const updatedCount = await taskModel.aggregate([
+                {
+                    $match: {
+                        updatedAt: { $gte: sevenDaysAgo },
+                    },
+                },
+                {
+                    $addFields: {
+                        updatedAtDate: {
+                            $toDate: "$updatedAt",
+                        },
+                    },
+                },
+                {
+                    $match: {
+                        $expr: { $ne: ["$createdAt", "$updatedAtDate"] },
+                    },
+                },
+                {
+                    $count: "updatedCount",
+                },
+            ]);
+            const result = updatedCount.length > 0 ? updatedCount[0].updatedCount : 0;
 
-        const updatedCount = await taskModel.countDocuments({ updatedAt: { $gte: sevenDaysAgo } })
+            const createdCount = await taskModel.countDocuments({ createdAt: { $gte: sevenDaysAgo } })
+            const dueCount = await taskModel.countDocuments({ dueDate: { $lte: now, $gte: sevenDaysAgo } });
+            return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: { doneCount, updatedCount: result, createdCount, dueCount } });
+        }
+        else {
+            const assigneeTasks = await assignUserModel.find({ assigneeId: req.user._id });
+            let taskIds = assigneeTasks.map(id => id.taskId);
 
-        const createdCount = await taskModel.countDocuments({ createdAt: { $gte: sevenDaysAgo } })
+            const doneCount = await taskModel.countDocuments({ _id: { $in: taskIds }, status: 4, createdAt: { $gte: sevenDaysAgo } });
+            const updatedCount = await taskModel.aggregate([
+                {
+                    $match: {
+                        _id: { $in: taskIds },
+                        updatedAt: { $gte: sevenDaysAgo },
+                    },
+                },
+                {
+                    $addFields: {
+                        updatedAtDate: {
+                            $toDate: "$updatedAt",
+                        },
+                    },
+                },
+                {
+                    $match: {
+                        $expr: { $ne: ["$createdAt", "$updatedAtDate"] },
+                    },
+                },
+                {
+                    $count: "updatedCount",
+                },
+            ]);
+            const result = updatedCount.length > 0 ? updatedCount[0].updatedCount : 0;
 
-        const dueCount = await taskModel.countDocuments({ dueDate: { $lte: now, $gte: sevenDaysAgo } });
-
-        return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: { doneCount, updatedCount, createdCount, dueCount } });
+            const createdCount = await taskModel.countDocuments({ _id: { $in: taskIds }, createdAt: { $gte: sevenDaysAgo } });
+            const dueCount = await taskModel.countDocuments({ _id: { $in: taskIds }, dueDate: { $lte: now, $gte: sevenDaysAgo } });
+            return res.status(200).json({ status: '200', message: "Tasks count fetched successfully", response: { doneCount, updatedCount: result, createdCount, dueCount } });
+        }
     } catch (error) {
         return res.status(500).json({ status: "500", message: "Something went wrong", error: error.message });
     }

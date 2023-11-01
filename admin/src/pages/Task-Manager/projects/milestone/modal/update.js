@@ -28,14 +28,7 @@ const Update = ({ modal, closeModal, editData }) => {
     const startdate2 = editData?.startDate;
     const minimumStartDate = findMinimumStartDate(startdate1, startdate2);
     //
-    // end date
-    function findMinimumEndDate(date1, date2) {
-        return new Date(Math.min(new Date(date1), new Date(date2)));
-    }
-    const date1 = new Date();
-    const date2 = editData?.completionDate;
-    const minimumEndDate = findMinimumEndDate(date1, date2);
-    //
+    
     const [description, setDescription] = useState('');
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
     console.log(editorState, 'stttttt');
@@ -174,7 +167,7 @@ const Update = ({ modal, closeModal, editData }) => {
                                         </Form.Label>
                                         <Form.Control
                                             type="date"
-                                            min={handleDate(minimumEndDate)}
+                                            min={watch("startDate")}
                                             {...register('endDate', { required: true })}
                                             placeholder="Please end Date"
                                         />
